@@ -1,0 +1,50 @@
+import { Icon, type IconProps } from "../ui/Icon";
+
+export const GridIcon = (props: Omit<IconProps, "children" | "aria-label">) => (
+  <Icon aria-label="Grid Icon" fill="none" viewBox="0 0 24 24" {...props}>
+    <rect
+      height="7"
+      rx="1"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      width="7"
+      x="3"
+      y="3"
+    />
+    <rect
+      height="7"
+      rx="1"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      width="7"
+      x="14"
+      y="3"
+    />
+    <rect
+      height="7"
+      rx="1"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      width="7"
+      x="14"
+      y="14"
+    />
+    <rect
+      height="7"
+      rx="1"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      width="7"
+      x="3"
+      y="14"
+    />
+  </Icon>
+);

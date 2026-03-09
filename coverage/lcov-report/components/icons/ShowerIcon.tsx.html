@@ -1,0 +1,157 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for components/icons/ShowerIcon.tsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">components/icons</a> ShowerIcon.tsx</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>2/2</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/0</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>0/0</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>2/2</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line high'></div>
+    <pre><table class="coverage">
+<tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
+<a name='L2'></a><a href='#L2'>2</a>
+<a name='L3'></a><a href='#L3'>3</a>
+<a name='L4'></a><a href='#L4'>4</a>
+<a name='L5'></a><a href='#L5'>5</a>
+<a name='L6'></a><a href='#L6'>6</a>
+<a name='L7'></a><a href='#L7'>7</a>
+<a name='L8'></a><a href='#L8'>8</a>
+<a name='L9'></a><a href='#L9'>9</a>
+<a name='L10'></a><a href='#L10'>10</a>
+<a name='L11'></a><a href='#L11'>11</a>
+<a name='L12'></a><a href='#L12'>12</a>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">23x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Icon, type IconProps } from "../ui/Icon";
+&nbsp;
+export const ShowerIcon = (
+  props: Omit&lt;IconProps, "children" | "aria-label"&gt;
+) =&gt; (
+  &lt;Icon aria-label="Shower Icon" viewBox="0 0 14 17" {...props}&gt;
+    &lt;path
+      d="M2.5 16.9824C2.82227 16.9824 3.07617 16.7188 3.07617 16.4062C3.07617 16.084 2.82227 15.8301 2.5 15.8301C2.1875 15.8301 1.93359 16.084 1.93359 16.4062C1.93359 16.7188 2.1875 16.9824 2.5 16.9824ZM5.11719 16.9824C5.43945 16.9824 5.69336 16.7188 5.69336 16.4062C5.69336 16.084 5.43945 15.8301 5.11719 15.8301C4.80469 15.8301 4.54102 16.084 4.54102 16.4062C4.54102 16.7188 4.80469 16.9824 5.11719 16.9824ZM7.73438 16.9824C8.05664 16.9824 8.31055 16.7188 8.31055 16.4062C8.31055 16.084 8.05664 15.8301 7.73438 15.8301C7.42188 15.8301 7.1582 16.084 7.1582 16.4062C7.1582 16.7188 7.42188 16.9824 7.73438 16.9824Z"
+      fill="currentColor"
+    /&gt;
+    &lt;path
+      d="M2.5 14.6484C2.82227 14.6484 3.07617 14.3945 3.07617 14.0723C3.07617 13.7598 2.82227 13.4961 2.5 13.4961C2.1875 13.4961 1.93359 13.7598 1.93359 14.0723C1.93359 14.3945 2.1875 14.6484 2.5 14.6484ZM5.11719 14.6484C5.43945 14.6484 5.69336 14.3945 5.69336 14.0723C5.69336 13.7598 5.43945 13.4961 5.11719 13.4961C4.80469 13.4961 4.54102 13.7598 4.54102 14.0723C4.54102 14.3945 4.80469 14.6484 5.11719 14.6484ZM7.73438 14.6484C8.05664 14.6484 8.31055 14.3945 8.31055 14.0723C8.31055 13.7598 8.05664 13.4961 7.73438 13.4961C7.42188 13.4961 7.1582 13.7598 7.1582 14.0723C7.1582 14.3945 7.42188 14.6484 7.73438 14.6484Z"
+      fill="currentColor"
+    /&gt;
+    &lt;path
+      d="M2.5 12.3242C2.82227 12.3242 3.07617 12.0605 3.07617 11.748C3.07617 11.4258 2.82227 11.1719 2.5 11.1719C2.1875 11.1719 1.93359 11.4258 1.93359 11.748C1.93359 12.0605 2.1875 12.3242 2.5 12.3242ZM5.11719 12.3242C5.43945 12.3242 5.69336 12.0605 5.69336 11.748C5.69336 11.4258 5.43945 11.1719 5.11719 11.1719C4.80469 11.1719 4.54102 11.4258 4.54102 11.748C4.54102 12.0605 4.80469 12.3242 5.11719 12.3242ZM7.73438 12.3242C8.05664 12.3242 8.31055 12.0605 8.31055 11.748C8.31055 11.4258 8.05664 11.1719 7.73438 11.1719C7.42188 11.1719 7.1582 11.4258 7.1582 11.748C7.1582 12.0605 7.42188 12.3242 7.73438 12.3242Z"
+      fill="currentColor"
+    /&gt;
+    &lt;path
+      d="M8.81836 0.00976562H6.73828C5.3418 0.00976562 4.47266 0.859375 4.47266 2.22656V3.59375H5.79102V2.22656C5.79102 1.66992 6.15234 1.32812 6.73828 1.32812H8.81836C10.5078 1.32812 11.5723 2.4707 11.5723 4.28711V16.2988C11.5723 16.6797 11.8457 16.9629 12.2266 16.9629C12.6074 16.9629 12.8809 16.6797 12.8809 16.2988V4.28711C12.8809 1.66992 11.3086 0.00976562 8.81836 0.00976562ZM0 9.6582C0 9.9707 0.253906 10.2246 0.566406 10.2246H9.69727C10.0098 10.2246 10.2637 9.9707 10.2637 9.6582C10.2637 9.3457 10.0195 9.0918 9.7168 9.0918H9.6875C9.61914 7.39258 8.54492 5.94727 7.07031 5.24414V4.67773C7.07031 3.55469 6.26953 2.74414 5.12695 2.74414C3.98438 2.74414 3.19336 3.55469 3.19336 4.67773V5.24414C1.71875 5.94727 0.634766 7.39258 0.576172 9.0918H0.546875C0.244141 9.0918 0 9.3457 0 9.6582Z"
+      fill="currentColor"
+    /&gt;
+  &lt;/Icon&gt;
+);
+&nbsp;</pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at 2026-03-09T23:12:15.810Z
+            </div>
+        <script src="../../prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="../../sorter.js"></script>
+        <script src="../../block-navigation.js"></script>
+    </body>
+</html>
+    

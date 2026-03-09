@@ -1,0 +1,79 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.2.6/schema.json",
+  "extends": ["ultracite"],
+  "files": {
+    "includes": [
+      "src/**/*.{js,jsx,ts,tsx,css}",
+      ".storybook/**/*.{ts,tsx}",
+      "jest.*.ts"
+    ],
+    "ignoreUnknown": true,
+    "maxSize": 102400
+  },
+  "javascript": {
+    "globals": ["jest"]
+  },
+  "overrides": [
+    {
+      "includes": ["src/components/ui/InputTag/InputTag.tsx"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            // Index keys are needed here to support allowDuplicates prop
+            "noArrayIndexKey": "off"
+          }
+        }
+      }
+    }
+  ],
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "complexity": "off",
+      "style": {
+        "useFilenamingConvention": "off",
+        "useImportType": "error",
+        "noMagicNumbers": "off"
+      },
+      "suspicious": {
+        "useAwait": "off",
+        "noExplicitAny": "off",
+        "noConsole": "off",
+        "noShadowRestrictedNames": "off",
+        "noAlert": "off",
+        "noUnknownAtRules": "off"
+      },
+      "nursery": {
+        "noShadow": "off",
+        "noReactForwardRef": "off",
+        "useConsistentTypeDefinitions": "off",
+        "useImageSize": "off"
+      },
+      "correctness": {
+        "useExhaustiveDependencies": "warn"
+      },
+      "a11y": {
+        "noNoninteractiveTabindex": "off",
+        "noStaticElementInteractions": "off",
+        "noNoninteractiveElementInteractions": "off",
+        "useKeyWithClickEvents": "off"
+      },
+      "performance": {
+        "noNamespaceImport": "off",
+        "noBarrelFile": "off",
+        "noImgElement": "off",
+        "noDelete": "off"
+      }
+    }
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2
+  },
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  }
+}

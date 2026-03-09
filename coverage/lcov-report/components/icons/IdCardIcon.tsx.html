@@ -1,0 +1,121 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for components/icons/IdCardIcon.tsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">components/icons</a> IdCardIcon.tsx</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>2/2</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/0</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>0/0</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>2/2</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line high'></div>
+    <pre><table class="coverage">
+<tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
+<a name='L2'></a><a href='#L2'>2</a>
+<a name='L3'></a><a href='#L3'>3</a>
+<a name='L4'></a><a href='#L4'>4</a>
+<a name='L5'></a><a href='#L5'>5</a>
+<a name='L6'></a><a href='#L6'>6</a>
+<a name='L7'></a><a href='#L7'>7</a>
+<a name='L8'></a><a href='#L8'>8</a>
+<a name='L9'></a><a href='#L9'>9</a>
+<a name='L10'></a><a href='#L10'>10</a>
+<a name='L11'></a><a href='#L11'>11</a>
+<a name='L12'></a><a href='#L12'>12</a>
+<a name='L13'></a><a href='#L13'>13</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">23x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Icon, type IconProps } from "../ui/Icon";
+&nbsp;
+export const IdCardIcon = (
+  props: Omit&lt;IconProps, "children" | "aria-label"&gt;
+) =&gt; (
+  &lt;Icon aria-label="IdCard Icon" {...props}&gt;
+    &lt;path
+      d="M23 6.53863V17.3349C23 19.2362 22.0038 20.1868 19.9758 20.1868H4.02426C2.00809 20.1868 1 19.2362 1 17.3349V6.53863C1 4.63739 2.00809 3.68677 4.02426 3.68677H19.9758C22.0038 3.68677 23 4.63739 23 6.53863ZM4.17845 15.4903C4.17845 15.7733 4.34449 15.9996 4.67655 15.9996H11.745C12.0771 15.9996 12.255 15.7733 12.255 15.4903C12.255 14.6642 10.9623 12.5932 8.2108 12.5932C5.45931 12.5932 4.17845 14.6642 4.17845 15.4903ZM14.2 14.6981C13.8324 14.6981 13.5477 14.9697 13.5477 15.3205C13.5477 15.6601 13.8324 15.9203 14.2 15.9203H19.1812C19.5488 15.9203 19.8215 15.6601 19.8215 15.3205C19.8215 14.9697 19.5488 14.6981 19.1812 14.6981H14.2ZM14.2 11.3257C13.8324 11.3257 13.5477 11.586 13.5477 11.9255C13.5477 12.2763 13.8324 12.5479 14.2 12.5479H19.1812C19.5488 12.5479 19.8215 12.2763 19.8215 11.9255C19.8215 11.586 19.5488 11.3257 19.1812 11.3257H14.2ZM6.19461 9.88844C6.19461 11.0767 7.09597 11.9707 8.2108 11.9707C9.32562 11.9821 10.2151 11.0767 10.2151 9.88844C10.2151 8.75675 9.32562 7.82875 8.2108 7.82875C7.09597 7.82875 6.19461 8.75675 6.19461 9.88844ZM14.2 7.95325C13.8324 7.95325 13.5477 8.21354 13.5477 8.55303C13.5477 8.90386 13.8324 9.17546 14.2 9.17546H19.1812C19.5488 9.17546 19.8215 8.90386 19.8215 8.55303C19.8215 8.21354 19.5488 7.95325 19.1812 7.95325H14.2Z"
+      fill="currentColor"
+    /&gt;
+  &lt;/Icon&gt;
+);
+&nbsp;</pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at 2026-03-09T23:12:15.810Z
+            </div>
+        <script src="../../prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="../../sorter.js"></script>
+        <script src="../../block-navigation.js"></script>
+    </body>
+</html>
+    
