@@ -53,6 +53,8 @@
     "test": "TZ=UTC jest",
     "test:watch": "TZ=UTC jest --watch",
     "test:coverage": "jest --coverage",
+    "shadcn:add": "node scripts/add-shadcn-component.cjs",
+    "shadcn:organize": "node scripts/organize-shadcn.cjs",
     "test:generate-output": "TZ=UTC jest --json --outputFile=.jest-test-results.json || true",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "pnpm run test:generate-output && storybook build"

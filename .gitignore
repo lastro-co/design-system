@@ -4,3 +4,6 @@ storybook-static/
 *.tsbuildinfo
 .DS_Store
 .jest-test-results.json
+
+# testing
+/coverage

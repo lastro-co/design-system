@@ -152,13 +152,13 @@ git push --follow-tags`}
       />
     </Section>
 
-    <Section title="Recursos Úteis" last>
+    <Section last title="Recursos Úteis">
       <ul style={ulStyle}>
         <li>
           <a
             href="https://tailwindcss.com/docs"
-            target="_blank"
             rel="noopener noreferrer"
+            target="_blank"
           >
             Documentação Tailwind CSS
           </a>
@@ -166,8 +166,8 @@ git push --follow-tags`}
         <li>
           <a
             href="https://www.radix-ui.com"
-            target="_blank"
             rel="noopener noreferrer"
+            target="_blank"
           >
             Documentação Radix UI
           </a>
@@ -175,8 +175,8 @@ git push --follow-tags`}
         <li>
           <a
             href="https://storybook.js.org/docs"
-            target="_blank"
             rel="noopener noreferrer"
+            target="_blank"
           >
             Documentação Storybook
           </a>
@@ -184,8 +184,8 @@ git push --follow-tags`}
         <li>
           <a
             href="https://ui.shadcn.com"
-            target="_blank"
             rel="noopener noreferrer"
+            target="_blank"
           >
             Documentação Shadcn/ui
           </a>
@@ -220,7 +220,11 @@ const Section = ({
   title,
   children,
   last,
-}: { title: string; children: React.ReactNode; last?: boolean }) => (
+}: {
+  title: string;
+  children: React.ReactNode;
+  last?: boolean;
+}) => (
   <div
     style={{
       display: "flex",

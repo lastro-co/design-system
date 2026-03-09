@@ -1,6 +1,6 @@
 # @lastro-co/design-system
 
-Lastro Design System — 47 UI components, 93+ icons, and design tokens.
+Lastro Design System — 44 UI components, 94 icons, and design tokens.
 
 ## Installation
 
@@ -16,6 +16,17 @@ Then install:
 pnpm add @lastro-co/design-system
 ```
 
+### Peer Dependencies
+
+| Package | Version | Required |
+|---------|---------|----------|
+| `react` | >= 19.0.0 | Yes |
+| `react-dom` | >= 19.0.0 | Yes |
+| `tailwindcss` | >= 4.0.0 | Yes |
+| `react-hook-form` | * | Only if using Form |
+| `zod` | * | Only if using Form |
+| `@hookform/resolvers` | * | Only if using Form |
+
 ## Usage
 
 ```tsx
@@ -29,15 +40,15 @@ import { CheckIcon, HouseIcon, SearchIcon } from '@lastro-co/design-system/icons
 import { cn, formatFileSize } from '@lastro-co/design-system';
 ```
 
-Import the styles CSS in your app entry point:
+Import the styles in your app entry point:
 
 ```tsx
 import '@lastro-co/design-system/styles.css';
 ```
 
-## Tailwind Configuration
+### Tailwind Configuration
 
-Extend your Tailwind config with the design system's preset:
+Extend your Tailwind config with the design system preset:
 
 ```ts
 import designSystemConfig from '@lastro-co/design-system/tailwind.config';
@@ -48,56 +59,76 @@ export default {
 };
 ```
 
+### Package Exports
+
+| Path | Description |
+|------|-------------|
+| `@lastro-co/design-system` | All UI components + utilities (`cn`, `formatFileSize`) |
+| `@lastro-co/design-system/icons` | 94 SVG icons (92 standard + 2 colored) |
+| `@lastro-co/design-system/styles.css` | Design tokens and global styles |
+| `@lastro-co/design-system/tailwind.config` | Tailwind preset (keyframes, theme) |
+
 ## Development
 
 ```bash
-pnpm install
-pnpm run build        # build ESM + CJS + DTS
-pnpm run dev          # watch mode
-pnpm run type-check   # TypeScript check
-pnpm run lint         # Biome lint
-pnpm run lint:fix     # Biome auto-fix
+pnpm install              # install dependencies
+pnpm storybook            # start Storybook dev server at http://localhost:6006
+pnpm test                 # run all tests (43 suites / 892 tests)
+pnpm run test:watch       # run tests in watch mode
+pnpm run test:coverage    # generate coverage report
+pnpm run lint:fix         # lint and auto-fix with Biome
+pnpm run type-check       # TypeScript type checking
 ```
 
-## Testing
+### Build & Publish (usually via CI)
 
 ```bash
-pnpm test             # run all tests
-pnpm run test:watch   # watch mode
-pnpm run test:coverage # with coverage report
+pnpm run build            # compile src/ → dist/ (ESM + CJS + DTS)
+pnpm run dev              # build in watch mode (for local linking with other projects)
+pnpm run build-storybook  # run tests + build static Storybook
 ```
 
-43 test suites / 892 tests covering all UI components. Uses Jest 30 + @swc/jest + Testing Library.
+## Adding Components
+
+```bash
+pnpm run shadcn:add <component-name>    # install + organize into folder structure
+pnpm run shadcn:organize <component-name> # organize only (if already installed)
+```
 
 ## Storybook
 
-```bash
-pnpm run storybook        # dev server at http://localhost:6006
-pnpm run build-storybook  # static build
-```
+Features:
 
-43 stories covering all components and icons. Deployed automatically to GitHub Pages on push to `main`.
+- Autodocs for all components with props documentation
+- Jest test results displayed per component via `@storybook/addon-jest`
+- Introduction page with library usage documentation
+- Color palette page with all design tokens
+- Dark theme with Lastro branding
+
+> Run `pnpm run test:generate-output` before starting Storybook to see test results in the Tests panel.
 
 ## CI/CD
 
 A single workflow (`.github/workflows/publish.yml`) is triggered on `v*` tags and runs two jobs **in parallel**:
 
 - **publish** — builds and publishes the package to GitHub Packages
-- **storybook-build + storybook-deploy** — builds and deploys Storybook to GitHub Pages
+- **storybook** — runs tests, builds Storybook with test results, and deploys to GitHub Pages
 
 ```bash
 pnpm version patch  # or minor, major
 git push --follow-tags
 ```
 
-> **Note:** GitHub Pages must be enabled in the repo settings with Source set to **GitHub Actions**.
+> GitHub Pages must be enabled in the repo settings with Source set to **GitHub Actions**.
 
 ## Tech Stack
 
-- **Build:** tsup (ESM + CJS + DTS)
-- **Components:** Radix UI primitives + CVA
+- **Build:** tsup (ESM + CJS + DTS, `"use client"` banner)
+- **Components:** Radix UI primitives + CVA (shadcn/ui New York style)
 - **Styling:** Tailwind CSS v4 + tailwind-merge + clsx
 - **Testing:** Jest 30 + @swc/jest + Testing Library
-- **Storybook:** v10 with @storybook/react-vite
-- **Linting:** Biome
+- **Storybook:** v10 with @storybook/react-vite + addon-docs + addon-jest
+- **Linting:** Biome 2.2.6 (ultracite preset)
+- **TypeScript:** Strict mode, bundler resolution, path aliases (`@/*`)
 - **Package Manager:** pnpm
+- **Node:** >= 24.0.0
