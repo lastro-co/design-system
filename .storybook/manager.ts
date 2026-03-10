@@ -13,6 +13,6 @@ addons.setConfig({
     appContentBg: "#212134",
     barBg: "#212134",
     appBorderRadius: 8,
-    brandImage: "/logo.svg"
+    brandImage: "./logo.svg"
   },
 });
