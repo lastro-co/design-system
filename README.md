@@ -46,6 +46,8 @@ Import the styles in your app entry point:
 import '@lastro-co/design-system/styles.css';
 ```
 
+**Note:** The design system CSS depends on Tailwind. Your app must use Tailwind CSS v4+ and extend the design system preset (see below) so that tokens and component classes resolve correctly.
+
 ### Tailwind Configuration
 
 Extend your Tailwind config with the design system preset:
@@ -140,7 +142,7 @@ git push --follow-tags
 - **Styling:** Tailwind CSS v4 + tailwind-merge + clsx
 - **Testing:** Jest 30 + @swc/jest + Testing Library
 - **Storybook:** v10 with @storybook/react-vite + addon-docs + addon-jest
-- **Linting:** Biome 2.2.6 (ultracite preset)
+- **Linting:** Biome (ultracite preset)
 - **TypeScript:** Strict mode, bundler resolution, path aliases (`@/*`)
 - **Package Manager:** pnpm
 - **Node:** >= 24.0.0

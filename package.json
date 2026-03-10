@@ -44,7 +44,7 @@
     "src/styles"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && node scripts/build-css.mjs",
     "dev": "tsup --watch",
     "type-check": "tsc --noEmit",
     "lint": "biome check .",
@@ -62,7 +62,10 @@
   "peerDependencies": {
     "react": ">=19.0.0",
     "react-dom": ">=19.0.0",
-    "tailwindcss": ">=4.0.0"
+    "tailwindcss": ">=4.0.0",
+    "react-hook-form": "*",
+    "zod": "*",
+    "@hookform/resolvers": "*"
   },
   "peerDependenciesMeta": {
     "react-hook-form": {

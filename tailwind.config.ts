@@ -1,5 +1,10 @@
 import type { Config } from "tailwindcss";
 
+/**
+ * Tailwind preset for consumers of the design system.
+ * Design tokens (colors, fonts, shadows) are defined in src/styles/globals.css via @theme (Tailwind v4).
+ * This config provides keyframes, animations, and theme extensions for apps that use the preset.
+ */
 export default {
   darkMode: "class",
   content: [
