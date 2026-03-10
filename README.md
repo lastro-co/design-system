@@ -114,12 +114,24 @@ A single workflow (`.github/workflows/publish.yml`) is triggered on `v*` tags an
 - **publish** — builds and publishes the package to GitHub Packages
 - **storybook** — runs tests, builds Storybook with test results, and deploys to GitHub Pages
 
+### Versioning & Publishing
+
+Tags must start with `v` (semantic versioning): `v<major>.<minor>.<patch>`
+
 ```bash
-pnpm version patch  # or minor, major
+pnpm version patch   # v1.0.0 → v1.0.1 (bug fix)
+pnpm version minor   # v1.0.0 → v1.1.0 (new feature)
+pnpm version major   # v1.0.0 → v2.0.0 (breaking changes)
 git push --follow-tags
 ```
 
+`pnpm version` automatically creates the git tag with the `v` prefix and triggers the CI/CD pipeline.
+
+### GitHub Pages Setup
+
 > GitHub Pages must be enabled in the repo settings with Source set to **GitHub Actions**.
+>
+> If using tag-based deploys, add a `v*` tag pattern to the `github-pages` environment protection rules (Settings → Environments → github-pages → Deployment branches and tags).
 
 ## Tech Stack
 
