@@ -12,6 +12,7 @@ const config: StorybookConfig = {
     "../src/components/**/*.stories.@(js|jsx|mjs|ts|tsx)",
   ],
   addons: ["@storybook/addon-docs", "@storybook/addon-jest"],
+  staticDirs: ["./public"],
   core: {
     disableOnboarding: true,
   },
