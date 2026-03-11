@@ -1,7 +1,7 @@
 import userEvent from "@testing-library/user-event";
 import { SearchIcon } from "@/components/icons";
 import { render, screen } from "@/tests/app-test-utils";
-import { InputTag } from "./InputTag";
+import { InputTag } from ".";
 
 describe("InputTag", () => {
   it("renders with placeholder", () => {
@@ -47,6 +47,18 @@ describe("InputTag", () => {
     await user.keyboard("{Backspace}");
 
     expect(handleChange).toHaveBeenCalledWith(["tag1"]);
+  });
+
+  it("does nothing on Backspace when there are no tags", async () => {
+    const user = userEvent.setup();
+    const handleChange = jest.fn();
+    render(<InputTag onChange={handleChange} value={[]} />);
+
+    const input = screen.getByRole("textbox");
+    await user.click(input);
+    await user.keyboard("{Backspace}");
+
+    expect(handleChange).not.toHaveBeenCalled();
   });
 
   it("does not add duplicate tags when allowDuplicates is false", async () => {
@@ -171,6 +183,58 @@ describe("InputTag", () => {
     render(<InputTag ref={ref} />);
 
     expect(ref.current).toBeInstanceOf(HTMLInputElement);
+  });
+
+  describe("commitOnBlur", () => {
+    it("commits the current input value on blur when commitOnBlur is true", async () => {
+      const user = userEvent.setup();
+      const handleChange = jest.fn();
+      render(<InputTag commitOnBlur onChange={handleChange} value={[]} />);
+
+      const input = screen.getByRole("textbox");
+      await user.type(input, "blur-tag");
+      await user.tab();
+
+      expect(handleChange).toHaveBeenCalledWith(["blur-tag"]);
+    });
+
+    it("does not commit on blur when commitOnBlur is false", async () => {
+      const user = userEvent.setup();
+      const handleChange = jest.fn();
+      render(
+        <InputTag commitOnBlur={false} onChange={handleChange} value={[]} />
+      );
+
+      const input = screen.getByRole("textbox");
+      await user.type(input, "no-commit");
+      await user.tab();
+
+      expect(handleChange).not.toHaveBeenCalled();
+    });
+
+    it("does not commit empty value on blur when commitOnBlur is true", async () => {
+      const user = userEvent.setup();
+      const handleChange = jest.fn();
+      render(<InputTag commitOnBlur onChange={handleChange} value={[]} />);
+
+      const input = screen.getByRole("textbox");
+      await user.click(input);
+      await user.tab();
+
+      expect(handleChange).not.toHaveBeenCalled();
+    });
+
+    it("calls external onBlur handler when provided", async () => {
+      const user = userEvent.setup();
+      const externalOnBlur = jest.fn();
+      render(<InputTag onBlur={externalOnBlur} value={[]} />);
+
+      const input = screen.getByRole("textbox");
+      await user.click(input);
+      await user.tab();
+
+      expect(externalOnBlur).toHaveBeenCalledTimes(1);
+    });
   });
 
   it("index.ts exports work correctly", () => {

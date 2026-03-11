@@ -5,7 +5,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "./Accordion";
+} from ".";
 
 describe("Accordion", () => {
   it("should render without crashing", () => {

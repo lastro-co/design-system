@@ -296,4 +296,123 @@ describe("ContextMenu", () => {
     expect(indexExports.ContextMenuSeparator).toBeDefined();
     expect(indexExports.ContextMenuLabel).toBeDefined();
   });
+
+  it("stops propagation when content is clicked without onClick prop", async () => {
+    const user = userEvent.setup();
+    const parentClickHandler = jest.fn();
+
+    render(
+      <div onClick={parentClickHandler} role="none">
+        <ContextMenu>
+          <ContextMenuTrigger>Trigger</ContextMenuTrigger>
+          <ContextMenuContent>
+            <ContextMenuItem>Item</ContextMenuItem>
+          </ContextMenuContent>
+        </ContextMenu>
+      </div>
+    );
+
+    fireEvent.contextMenu(screen.getByText("Trigger"));
+
+    await waitFor(() => {
+      expect(screen.getByRole("menu")).toBeInTheDocument();
+    });
+
+    const menu = screen.getByRole("menu");
+    await user.click(menu);
+
+    expect(parentClickHandler).not.toHaveBeenCalled();
+  });
+
+  it("stops propagation when content is clicked with onClick prop", async () => {
+    const user = userEvent.setup();
+    const parentClickHandler = jest.fn();
+    const contentClickHandler = jest.fn();
+
+    render(
+      <div onClick={parentClickHandler} role="none">
+        <ContextMenu>
+          <ContextMenuTrigger>Trigger</ContextMenuTrigger>
+          <ContextMenuContent onClick={contentClickHandler}>
+            <ContextMenuItem>Item</ContextMenuItem>
+          </ContextMenuContent>
+        </ContextMenu>
+      </div>
+    );
+
+    fireEvent.contextMenu(screen.getByText("Trigger"));
+
+    await waitFor(() => {
+      expect(screen.getByRole("menu")).toBeInTheDocument();
+    });
+
+    const menu = screen.getByRole("menu");
+    await user.click(menu);
+
+    expect(contentClickHandler).toHaveBeenCalledTimes(1);
+    expect(parentClickHandler).not.toHaveBeenCalled();
+  });
+
+  it("stops propagation when menu item is clicked without onClick prop", async () => {
+    const user = userEvent.setup();
+    const parentClickHandler = jest.fn();
+
+    render(
+      <div onClick={parentClickHandler} role="none">
+        <ContextMenu>
+          <ContextMenuTrigger>Trigger</ContextMenuTrigger>
+          <ContextMenuContent>
+            <ContextMenuItem>No handler</ContextMenuItem>
+          </ContextMenuContent>
+        </ContextMenu>
+      </div>
+    );
+
+    fireEvent.contextMenu(screen.getByText("Trigger"));
+
+    await waitFor(() => {
+      expect(screen.getByText("No handler")).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByText("No handler"));
+
+    expect(parentClickHandler).not.toHaveBeenCalled();
+  });
+
+  it("renders disabled menu item", async () => {
+    render(
+      <ContextMenu>
+        <ContextMenuTrigger>Trigger</ContextMenuTrigger>
+        <ContextMenuContent>
+          <ContextMenuItem disabled>Disabled Item</ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenu>
+    );
+
+    fireEvent.contextMenu(screen.getByText("Trigger"));
+
+    await waitFor(() => {
+      const item = screen
+        .getByText("Disabled Item")
+        .closest('[data-slot="context-menu-item"]');
+      expect(item).toHaveAttribute("data-disabled");
+    });
+  });
+
+  it("applies custom className to separator", async () => {
+    render(
+      <ContextMenu>
+        <ContextMenuTrigger>Trigger</ContextMenuTrigger>
+        <ContextMenuContent>
+          <ContextMenuSeparator className="custom-sep" data-testid="sep" />
+        </ContextMenuContent>
+      </ContextMenu>
+    );
+
+    fireEvent.contextMenu(screen.getByText("Trigger"));
+
+    await waitFor(() => {
+      expect(screen.getByTestId("sep")).toHaveClass("custom-sep");
+    });
+  });
 });

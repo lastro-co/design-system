@@ -79,4 +79,47 @@ describe("Stepper", () => {
     const progressbar = document.querySelector('[role="progressbar"]');
     expect(progressbar).toHaveAttribute("aria-disabled", "true");
   });
+
+  it("falls back to 1 total step when totalSteps is NaN", () => {
+    render(<Stepper currentStep={1} totalSteps={Number.NaN} />);
+    const segments = document.querySelectorAll('[data-slot="stepper-segment"]');
+    expect(segments).toHaveLength(1);
+    expect(screen.getByText("Passo 1 de 1")).toBeVisible();
+  });
+
+  it("falls back to currentStep 1 when currentStep is NaN", () => {
+    render(<Stepper currentStep={Number.NaN} totalSteps={3} />);
+    expect(screen.getByText("Passo 1 de 3")).toBeVisible();
+  });
+
+  it("falls back to default label when label function returns empty string", () => {
+    render(<Stepper currentStep={2} label={() => ""} totalSteps={3} />);
+    expect(screen.getByText("Passo 2 de 3")).toBeVisible();
+  });
+
+  it("falls back to default label when label is whitespace-only string", () => {
+    render(<Stepper currentStep={1} label="   " totalSteps={2} />);
+    expect(screen.getByText("Passo 1 de 2")).toBeVisible();
+  });
+
+  it("truncates fractional totalSteps", () => {
+    render(<Stepper currentStep={1} totalSteps={3.9} />);
+    const segments = document.querySelectorAll('[data-slot="stepper-segment"]');
+    expect(segments).toHaveLength(3);
+  });
+
+  it("clamps totalSteps to minimum 1", () => {
+    render(<Stepper currentStep={1} totalSteps={0} />);
+    const segments = document.querySelectorAll('[data-slot="stepper-segment"]');
+    expect(segments).toHaveLength(1);
+  });
+
+  it("passes extra div props through", () => {
+    const { container } = render(
+      <Stepper currentStep={1} data-testid="custom-stepper" totalSteps={2} />
+    );
+    expect(
+      container.querySelector('[data-testid="custom-stepper"]')
+    ).toBeInTheDocument();
+  });
 });

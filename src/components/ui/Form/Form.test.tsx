@@ -11,7 +11,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./Form";
+} from ".";
 
 const TestSchema = z.object({
   username: z.string().min(2, {
@@ -22,7 +22,11 @@ const TestSchema = z.object({
   }),
 });
 
-function TestFormComponent({ onSubmit }: { onSubmit?: (data: any) => void }) {
+function TestFormComponent({
+  onSubmit,
+}: {
+  onSubmit?: (data: unknown) => void;
+}) {
   const form = useForm<z.infer<typeof TestSchema>>({
     resolver: zodResolver(TestSchema),
     defaultValues: {
@@ -79,6 +83,54 @@ function TestFormComponent({ onSubmit }: { onSubmit?: (data: any) => void }) {
         <button data-testid="submit-button" type="submit">
           Submit
         </button>
+      </form>
+    </Form>
+  );
+}
+
+/** Form with a FormMessage that has static children (no error context needed) */
+function FormMessageWithChildrenComponent() {
+  const form = useForm({ defaultValues: { name: "" } });
+  return (
+    <Form {...form}>
+      <form>
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <input {...field} />
+              </FormControl>
+              <FormMessage>Static hint message</FormMessage>
+            </FormItem>
+          )}
+        />
+      </form>
+    </Form>
+  );
+}
+
+/** Form with custom className on FormDescription */
+function FormDescriptionCustomClassComponent() {
+  const form = useForm({ defaultValues: { name: "" } });
+  return (
+    <Form {...form}>
+      <form>
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <input {...field} />
+              </FormControl>
+              <FormDescription className="custom-description">
+                Helper text
+              </FormDescription>
+            </FormItem>
+          )}
+        />
       </form>
     </Form>
   );
@@ -191,6 +243,42 @@ describe("Form Components Integration", () => {
       // Form should not have been submitted
       expect(onSubmit).not.toHaveBeenCalled();
     });
+
+    it("should display validation error message after failed submission", async () => {
+      const user = userEvent.setup();
+      render(<TestFormComponent />);
+
+      const usernameInput = screen.getByTestId("username-input");
+      const submitButton = screen.getByTestId("submit-button");
+
+      await user.type(usernameInput, "a");
+      await user.click(submitButton);
+
+      await waitFor(() => {
+        expect(
+          screen.getByText("Username must be at least 2 characters.")
+        ).toBeInTheDocument();
+      });
+    });
+
+    it("should not submit form with invalid email", async () => {
+      const user = userEvent.setup();
+      const onSubmit = jest.fn();
+      render(<TestFormComponent onSubmit={onSubmit} />);
+
+      const usernameInput = screen.getByTestId("username-input");
+      const emailInput = screen.getByTestId("email-input");
+      const submitButton = screen.getByTestId("submit-button");
+
+      await user.type(usernameInput, "valid_user");
+      await user.type(emailInput, "not-an-email");
+      await user.click(submitButton);
+
+      // Form should not have been submitted due to email validation
+      await waitFor(() => {
+        expect(onSubmit).not.toHaveBeenCalled();
+      });
+    });
   });
 
   describe("Accessibility", () => {
@@ -214,6 +302,99 @@ describe("Form Components Integration", () => {
       expect(usernameInput).toHaveAttribute("aria-describedby");
       const ariaDescribedBy = usernameInput.getAttribute("aria-describedby");
       expect(ariaDescribedBy).toContain("form-item-description");
+    });
+
+    it("should apply error style to FormLabel when field has an error", async () => {
+      const user = userEvent.setup();
+      render(<TestFormComponent />);
+
+      const usernameInput = screen.getByTestId("username-input");
+      const submitButton = screen.getByTestId("submit-button");
+
+      await user.type(usernameInput, "a");
+      await user.click(submitButton);
+
+      await waitFor(() => {
+        const usernameLabel = screen.getByText("Username");
+        expect(usernameLabel).toHaveAttribute("data-error", "true");
+      });
+    });
+
+    it("should have data-error false on FormLabel when field is valid", () => {
+      render(<TestFormComponent />);
+
+      const usernameLabel = screen.getByText("Username");
+      expect(usernameLabel).toHaveAttribute("data-error", "false");
+    });
+
+    it("should include message id in aria-describedby when field has an error", async () => {
+      const user = userEvent.setup();
+      render(<TestFormComponent />);
+
+      const usernameInput = screen.getByTestId("username-input");
+      const submitButton = screen.getByTestId("submit-button");
+
+      await user.type(usernameInput, "a");
+      await user.click(submitButton);
+
+      await waitFor(() => {
+        const ariaDescribedBy = usernameInput.getAttribute("aria-describedby");
+        expect(ariaDescribedBy).toContain("form-item-message");
+      });
+    });
+  });
+
+  describe("FormMessage with children", () => {
+    it("renders static children text when no error is present", () => {
+      render(<FormMessageWithChildrenComponent />);
+      expect(screen.getByText("Static hint message")).toBeInTheDocument();
+    });
+
+    it("applies data-slot attribute to FormMessage", () => {
+      render(<FormMessageWithChildrenComponent />);
+      const message = screen.getByText("Static hint message");
+      expect(message).toHaveAttribute("data-slot", "form-message");
+    });
+
+    it("renders null when FormMessage has no children and no error", () => {
+      // A FormMessage with no children and no error should not render anything
+      const NoChildrenForm = () => {
+        const f = useForm({ defaultValues: { name: "" } });
+        return (
+          <Form {...f}>
+            <form>
+              <FormField
+                control={f.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <input data-testid="name-input" {...field} />
+                    </FormControl>
+                    <FormMessage data-testid="empty-message" />
+                  </FormItem>
+                )}
+              />
+            </form>
+          </Form>
+        );
+      };
+      render(<NoChildrenForm />);
+      expect(screen.queryByTestId("empty-message")).not.toBeInTheDocument();
+    });
+  });
+
+  describe("FormDescription", () => {
+    it("applies custom className to FormDescription", () => {
+      render(<FormDescriptionCustomClassComponent />);
+      const desc = screen.getByText("Helper text");
+      expect(desc).toHaveClass("custom-description");
+    });
+
+    it("applies default muted styles to FormDescription", () => {
+      render(<FormDescriptionCustomClassComponent />);
+      const desc = screen.getByText("Helper text");
+      expect(desc).toHaveClass("text-muted-foreground", "text-sm");
     });
   });
 });
@@ -250,5 +431,36 @@ describe("Form Component Rendering", () => {
     expect(screen.getByTestId("username-input")).toBeInTheDocument();
     expect(screen.getByTestId("email-input")).toBeInTheDocument();
     expect(screen.getByTestId("submit-button")).toBeInTheDocument();
+  });
+
+  it("should render FormItem with correct data-slot and gap class", () => {
+    render(<TestFormComponent />);
+
+    const formItem = document.querySelector('[data-slot="form-item"]');
+    expect(formItem).toHaveClass("grid", "gap-2");
+  });
+
+  it("should render FormControl with data-slot attribute", () => {
+    render(<TestFormComponent />);
+
+    const formControls = document.querySelectorAll(
+      '[data-slot="form-control"]'
+    );
+    expect(formControls.length).toBeGreaterThan(0);
+    for (const control of formControls) {
+      expect(control).toHaveAttribute("data-slot", "form-control");
+    }
+  });
+
+  it("exports all named exports from index", () => {
+    const exports = require("./index");
+    expect(exports.Form).toBeDefined();
+    expect(exports.FormField).toBeDefined();
+    expect(exports.FormItem).toBeDefined();
+    expect(exports.FormLabel).toBeDefined();
+    expect(exports.FormControl).toBeDefined();
+    expect(exports.FormDescription).toBeDefined();
+    expect(exports.FormMessage).toBeDefined();
+    expect(exports.useFormField).toBeDefined();
   });
 });

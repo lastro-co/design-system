@@ -1,5 +1,5 @@
-import { render } from "@/tests/app-test-utils";
-import { Skeleton } from "./Skeleton";
+import { render, screen } from "@/tests/app-test-utils";
+import { Skeleton } from ".";
 
 describe("Skeleton", () => {
   it("should render", () => {
@@ -26,5 +26,29 @@ describe("Skeleton", () => {
       "h-4",
       "w-32"
     );
+  });
+
+  it("should render children content", () => {
+    render(
+      <Skeleton>
+        <span>inner</span>
+      </Skeleton>
+    );
+    expect(screen.getByText("inner")).toBeInTheDocument();
+  });
+
+  it("should forward additional HTML attributes", () => {
+    const { container } = render(
+      <Skeleton aria-label="Loading content" data-testid="my-skeleton" />
+    );
+    const skeleton = container.querySelector('[data-slot="skeleton"]');
+    expect(skeleton).toHaveAttribute("aria-label", "Loading content");
+    expect(skeleton).toHaveAttribute("data-testid", "my-skeleton");
+  });
+
+  it("should forward role attribute", () => {
+    const { container } = render(<Skeleton role="status" />);
+    const skeleton = container.querySelector('[data-slot="skeleton"]');
+    expect(skeleton).toHaveAttribute("role", "status");
   });
 });

@@ -1,11 +1,14 @@
-import { render, screen } from "@/tests/app-test-utils";
+import { render, screen, userEvent } from "@/tests/app-test-utils";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from "./Select";
+} from ".";
 
 describe("Select", () => {
   it("renders trigger with placeholder", () => {
@@ -56,5 +59,284 @@ describe("Select", () => {
       "data-slot",
       "select-trigger"
     );
+  });
+
+  it("applies custom className to trigger", () => {
+    render(
+      <Select>
+        <SelectTrigger className="custom-trigger">
+          <SelectValue placeholder="Placeholder" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="a">A</SelectItem>
+        </SelectContent>
+      </Select>
+    );
+
+    expect(screen.getByRole("combobox")).toHaveClass("custom-trigger");
+  });
+
+  it("renders with a default value selected", () => {
+    render(
+      <Select defaultValue="option2">
+        <SelectTrigger>
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="option1">Opção 1</SelectItem>
+          <SelectItem value="option2">Opção 2</SelectItem>
+        </SelectContent>
+      </Select>
+    );
+
+    expect(screen.getByText("Opção 2")).toBeVisible();
+  });
+
+  it("opens dropdown and shows items when trigger is clicked", async () => {
+    const user = userEvent.setup();
+    render(
+      <Select>
+        <SelectTrigger>
+          <SelectValue placeholder="Escolha" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="a">Item A</SelectItem>
+          <SelectItem value="b">Item B</SelectItem>
+        </SelectContent>
+      </Select>
+    );
+
+    await user.click(screen.getByRole("combobox"));
+    expect(screen.getByText("Item A")).toBeVisible();
+    expect(screen.getByText("Item B")).toBeVisible();
+  });
+
+  it("calls onValueChange when an item is selected", async () => {
+    const user = userEvent.setup();
+    const onValueChange = jest.fn();
+    render(
+      <Select onValueChange={onValueChange}>
+        <SelectTrigger>
+          <SelectValue placeholder="Escolha" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="option1">Opção 1</SelectItem>
+          <SelectItem value="option2">Opção 2</SelectItem>
+        </SelectContent>
+      </Select>
+    );
+
+    await user.click(screen.getByRole("combobox"));
+    await user.click(screen.getByText("Opção 1"));
+    expect(onValueChange).toHaveBeenCalledWith("option1");
+  });
+
+  it("renders SelectGroup with data-slot", async () => {
+    const user = userEvent.setup();
+    render(
+      <Select>
+        <SelectTrigger>
+          <SelectValue placeholder="Escolha" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectItem value="a">Item A</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    );
+
+    await user.click(screen.getByRole("combobox"));
+    const group = document.querySelector("[data-slot='select-group']");
+    expect(group).toBeInTheDocument();
+  });
+
+  it("renders SelectLabel inside group", async () => {
+    const user = userEvent.setup();
+    render(
+      <Select>
+        <SelectTrigger>
+          <SelectValue placeholder="Escolha" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Frutas</SelectLabel>
+            <SelectItem value="apple">Maçã</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    );
+
+    await user.click(screen.getByRole("combobox"));
+    expect(screen.getByText("Frutas")).toBeVisible();
+  });
+
+  it("renders SelectLabel with data-slot attribute", async () => {
+    const user = userEvent.setup();
+    render(
+      <Select>
+        <SelectTrigger>
+          <SelectValue placeholder="Escolha" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Categoria</SelectLabel>
+            <SelectItem value="a">A</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    );
+
+    await user.click(screen.getByRole("combobox"));
+    const label = document.querySelector("[data-slot='select-label']");
+    expect(label).toBeInTheDocument();
+  });
+
+  it("renders SelectLabel with custom className", async () => {
+    const user = userEvent.setup();
+    render(
+      <Select>
+        <SelectTrigger>
+          <SelectValue placeholder="Escolha" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel className="custom-label">Grupo</SelectLabel>
+            <SelectItem value="a">A</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    );
+
+    await user.click(screen.getByRole("combobox"));
+    const label = document.querySelector("[data-slot='select-label']");
+    expect(label).toHaveClass("custom-label");
+  });
+
+  it("renders SelectSeparator with data-slot attribute", async () => {
+    const user = userEvent.setup();
+    render(
+      <Select>
+        <SelectTrigger>
+          <SelectValue placeholder="Escolha" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="a">A</SelectItem>
+          <SelectSeparator />
+          <SelectItem value="b">B</SelectItem>
+        </SelectContent>
+      </Select>
+    );
+
+    await user.click(screen.getByRole("combobox"));
+    const separator = document.querySelector("[data-slot='select-separator']");
+    expect(separator).toBeInTheDocument();
+  });
+
+  it("renders SelectSeparator with custom className", async () => {
+    const user = userEvent.setup();
+    render(
+      <Select>
+        <SelectTrigger>
+          <SelectValue placeholder="Escolha" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="a">A</SelectItem>
+          <SelectSeparator className="custom-separator" />
+          <SelectItem value="b">B</SelectItem>
+        </SelectContent>
+      </Select>
+    );
+
+    await user.click(screen.getByRole("combobox"));
+    const separator = document.querySelector("[data-slot='select-separator']");
+    expect(separator).toHaveClass("custom-separator");
+  });
+
+  it("renders SelectItem with data-slot attribute", async () => {
+    const user = userEvent.setup();
+    render(
+      <Select>
+        <SelectTrigger>
+          <SelectValue placeholder="Escolha" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="a">Item A</SelectItem>
+        </SelectContent>
+      </Select>
+    );
+
+    await user.click(screen.getByRole("combobox"));
+    const items = document.querySelectorAll("[data-slot='select-item']");
+    expect(items.length).toBeGreaterThan(0);
+  });
+
+  it("renders SelectItem with custom className", async () => {
+    const user = userEvent.setup();
+    render(
+      <Select>
+        <SelectTrigger>
+          <SelectValue placeholder="Escolha" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem className="custom-item" value="a">
+            Item A
+          </SelectItem>
+        </SelectContent>
+      </Select>
+    );
+
+    await user.click(screen.getByRole("combobox"));
+    const item = document.querySelector("[data-slot='select-item']");
+    expect(item).toHaveClass("custom-item");
+  });
+
+  it("renders SelectContent with data-slot attribute", async () => {
+    const user = userEvent.setup();
+    render(
+      <Select>
+        <SelectTrigger>
+          <SelectValue placeholder="Escolha" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="a">A</SelectItem>
+        </SelectContent>
+      </Select>
+    );
+
+    await user.click(screen.getByRole("combobox"));
+    const content = document.querySelector("[data-slot='select-content']");
+    expect(content).toBeInTheDocument();
+  });
+
+  it("renders SelectValue with data-slot attribute", () => {
+    render(
+      <Select>
+        <SelectTrigger>
+          <SelectValue data-testid="select-value" placeholder="Placeholder" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="a">A</SelectItem>
+        </SelectContent>
+      </Select>
+    );
+
+    const value = document.querySelector("[data-slot='select-value']");
+    expect(value).toBeInTheDocument();
+  });
+
+  it("renders aria-invalid trigger when aria-invalid is set", () => {
+    render(
+      <Select>
+        <SelectTrigger aria-invalid>
+          <SelectValue placeholder="Error" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="a">A</SelectItem>
+        </SelectContent>
+      </Select>
+    );
+
+    expect(screen.getByRole("combobox")).toHaveAttribute("aria-invalid");
   });
 });

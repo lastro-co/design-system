@@ -13,7 +13,8 @@ function Input({ className, type, icon, onClear, ...props }: InputProps) {
     typeof onClear === "function" &&
     props.value &&
     !props.disabled;
-  if (icon) {
+
+  if (icon || showClearButton) {
     return (
       <div
         className={cn(
@@ -24,15 +25,17 @@ function Input({ className, type, icon, onClear, ...props }: InputProps) {
           className
         )}
       >
-        <span
-          className={cn(
-            "block text-gray-600 transition",
-            props.disabled && "text-gray-600",
-            props["aria-invalid"] && "text-red-600"
-          )}
-        >
-          {icon}
-        </span>
+        {icon && (
+          <span
+            className={cn(
+              "block text-gray-600 transition",
+              props.disabled && "text-gray-600",
+              props["aria-invalid"] && "text-red-600"
+            )}
+          >
+            {icon}
+          </span>
+        )}
         <input
           className={cn(
             "w-full bg-transparent p-0 text-base text-gray-900 leading-5 outline-none transition placeholder:text-gray-600",

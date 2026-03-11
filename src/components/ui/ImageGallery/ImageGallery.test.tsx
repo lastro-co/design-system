@@ -1,5 +1,5 @@
-import { render, screen, userEvent } from "@/tests/app-test-utils";
-import { ImageGallery } from "./ImageGallery";
+import { act, render, screen, userEvent } from "@/tests/app-test-utils";
+import { ImageGallery } from ".";
 
 // Top-level regex patterns for performance
 const ANTERIOR_REGEX = /anterior/i;
@@ -57,6 +57,11 @@ describe("ImageGallery", () => {
       expect(
         screen.queryByRole("button", { name: SELECIONAR_REGEX })
       ).not.toBeInTheDocument();
+    });
+
+    it("should not render image counter for single image", () => {
+      render(<ImageGallery alt="Property" images={["/single.jpg"]} />);
+      expect(screen.queryByText("1 / 1")).not.toBeInTheDocument();
     });
   });
 
@@ -146,6 +151,80 @@ describe("ImageGallery", () => {
     });
   });
 
+  describe("showCount prop", () => {
+    it("hides the image counter when showCount is false", () => {
+      render(
+        <ImageGallery alt="Property" images={SAMPLE_IMAGES} showCount={false} />
+      );
+      expect(screen.queryByText("1 / 3")).not.toBeInTheDocument();
+    });
+
+    it("shows the image counter by default (showCount defaults to true)", () => {
+      render(<ImageGallery alt="Property" images={SAMPLE_IMAGES} />);
+      expect(screen.getByText("1 / 3")).toBeInTheDocument();
+    });
+
+    it("shows the image counter when showCount is explicitly true", () => {
+      render(
+        <ImageGallery alt="Property" images={SAMPLE_IMAGES} showCount={true} />
+      );
+      expect(screen.getByText("1 / 3")).toBeInTheDocument();
+    });
+  });
+
+  describe("mainImageHeight prop", () => {
+    it("applies inline height style when mainImageHeight is provided", () => {
+      const { container } = render(
+        <ImageGallery
+          alt="Property"
+          images={SAMPLE_IMAGES}
+          mainImageHeight={400}
+        />
+      );
+      // The inner main image container is the first child of the space-y-3 div
+      const mainImageContainer = container.querySelector(
+        ".relative.overflow-hidden"
+      ) as HTMLElement;
+      expect(mainImageContainer).toHaveStyle({ height: "400px" });
+    });
+
+    it("applies inline height style to empty state when mainImageHeight is provided", () => {
+      const { container } = render(
+        <ImageGallery alt="Property" images={[]} mainImageHeight={300} />
+      );
+      const emptyContainer = container.firstChild as HTMLElement;
+      expect(emptyContainer).toHaveStyle({ height: "300px" });
+    });
+
+    it("does not apply inline height when mainImageHeight is not provided", () => {
+      const { container } = render(
+        <ImageGallery alt="Property" images={SAMPLE_IMAGES} />
+      );
+      const mainImageContainer = container.querySelector(
+        ".relative.overflow-hidden"
+      ) as HTMLElement;
+      expect(mainImageContainer.style.height).toBe("");
+    });
+  });
+
+  describe("Image loading", () => {
+    it("reveals main image after load event fires", () => {
+      render(<ImageGallery alt="Property" images={["/photo.jpg"]} />);
+
+      const img = screen.getByRole("img") as HTMLImageElement;
+      // Before load the image should be opacity-0
+      expect(img).toHaveClass("opacity-0");
+
+      // Simulate the image loading — wrap in act() so React flushes
+      // the setIsMainImageLoading(false) state update before asserting
+      act(() => {
+        img.dispatchEvent(new Event("load"));
+      });
+
+      expect(img).toHaveClass("opacity-100");
+    });
+  });
+
   describe("Overlays", () => {
     it("should render top-left overlay", () => {
       render(
@@ -186,6 +265,12 @@ describe("ImageGallery", () => {
       expect(screen.getByText("Left")).toBeInTheDocument();
       expect(screen.getByText("Right")).toBeInTheDocument();
     });
+
+    it("should not render overlay containers when overlays are not provided", () => {
+      render(<ImageGallery alt="Property" images={SAMPLE_IMAGES} />);
+      // No overlay content means the overlay divs should not be present
+      expect(screen.queryByText("Featured")).not.toBeInTheDocument();
+    });
   });
 
   describe("Accessibility", () => {
@@ -208,6 +293,16 @@ describe("ImageGallery", () => {
       expect(
         screen.getByRole("button", { name: "Selecionar imagem 3 de 3" })
       ).toBeInTheDocument();
+    });
+
+    it("should update alt text when navigating to a different image", async () => {
+      const user = userEvent.setup();
+      render(<ImageGallery alt="Apartamento" images={SAMPLE_IMAGES} />);
+
+      await user.click(screen.getByRole("button", { name: "Próxima imagem" }));
+
+      const img = screen.getByRole("img", { name: APARTAMENTO_REGEX });
+      expect(img).toHaveAttribute("alt", "Apartamento - 2 de 3");
     });
   });
 

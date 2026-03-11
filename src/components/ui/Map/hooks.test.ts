@@ -1,8 +1,13 @@
-import { renderHook } from "@testing-library/react";
+import { act, renderHook } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { createElement } from "react";
 import { MapContext, MarkerContext } from "./context";
-import { useMap, useMarkerContext, useResolvedTheme } from "./hooks";
+import {
+  useMap,
+  useMarkerContext,
+  usePopupAnchor,
+  useResolvedTheme,
+} from "./hooks";
 import type { MapContextValue, MarkerContextValue } from "./types";
 
 // Mock matchMedia globally
@@ -130,6 +135,153 @@ describe("Map Hooks", () => {
       const { result } = renderHook(() => useResolvedTheme());
       // Default is based on system preference (dark in this case)
       expect(result.current).toBe("dark");
+    });
+
+    it("updates theme when MutationObserver fires with a new document class", () => {
+      // Capture the MutationObserver callback by mocking the constructor
+      let observerCallback: MutationCallback | null = null;
+      const disconnectMock = jest.fn();
+      const observeMock = jest.fn();
+      const OriginalMutationObserver = global.MutationObserver;
+      global.MutationObserver = jest
+        .fn()
+        .mockImplementation((callback: MutationCallback) => {
+          observerCallback = callback;
+          return { observe: observeMock, disconnect: disconnectMock };
+        }) as unknown as typeof MutationObserver;
+
+      // Start with no class (light)
+      const { result } = renderHook(() => useResolvedTheme());
+      expect(result.current).toBe("light");
+
+      // Simulate next-themes toggling the dark class and the observer firing
+      act(() => {
+        document.documentElement.classList.add("dark");
+        observerCallback?.([], {} as MutationObserver);
+      });
+
+      expect(result.current).toBe("dark");
+
+      global.MutationObserver = OriginalMutationObserver;
+    });
+
+    it("updates theme when system preference changes and no document class is set", () => {
+      let systemChangeHandler: ((e: MediaQueryListEvent) => void) | null = null;
+
+      mockMatchMedia.mockImplementation((query: string) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: jest.fn(),
+        removeListener: jest.fn(),
+        addEventListener: jest
+          .fn()
+          .mockImplementation(
+            (_event: string, handler: (e: MediaQueryListEvent) => void) => {
+              if (query === "(prefers-color-scheme: dark)") {
+                systemChangeHandler = handler;
+              }
+            }
+          ),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      }));
+
+      const { result } = renderHook(() => useResolvedTheme());
+      expect(result.current).toBe("light");
+
+      act(() => {
+        systemChangeHandler?.({ matches: true } as MediaQueryListEvent);
+      });
+
+      expect(result.current).toBe("dark");
+    });
+
+    it("does not update theme via system change when a document class is set", () => {
+      document.documentElement.classList.add("light");
+      let systemChangeHandler: ((e: MediaQueryListEvent) => void) | null = null;
+
+      mockMatchMedia.mockImplementation((query: string) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: jest.fn(),
+        removeListener: jest.fn(),
+        addEventListener: jest
+          .fn()
+          .mockImplementation(
+            (_event: string, handler: (e: MediaQueryListEvent) => void) => {
+              if (query === "(prefers-color-scheme: dark)") {
+                systemChangeHandler = handler;
+              }
+            }
+          ),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      }));
+
+      const { result } = renderHook(() => useResolvedTheme());
+      expect(result.current).toBe("light");
+
+      act(() => {
+        // Fire system change to dark, but document class "light" should override
+        systemChangeHandler?.({ matches: true } as MediaQueryListEvent);
+      });
+
+      // Theme should remain "light" because the document class takes precedence
+      expect(result.current).toBe("light");
+    });
+  });
+
+  describe("usePopupAnchor", () => {
+    const createMockMap = (projectX: number, containerWidth: number) => ({
+      project: jest.fn().mockReturnValue({ x: projectX, y: 100 }),
+      getContainer: jest.fn().mockReturnValue({ clientWidth: containerWidth }),
+    });
+
+    const makeWrapper =
+      (map: ReturnType<typeof createMockMap>) =>
+      ({ children }: { children: ReactNode }) =>
+        createElement(
+          MapContext.Provider,
+          { value: { map: map as unknown as maplibregl.Map, isLoaded: true } },
+          children
+        );
+
+    it("returns left when point is in the left half of the map", () => {
+      const mockMap = createMockMap(100, 800); // x=100, width=800, so x < 400
+      const { result } = renderHook(() => usePopupAnchor(), {
+        wrapper: makeWrapper(mockMap),
+      });
+      expect(result.current(-46.63, -23.55)).toBe("left");
+    });
+
+    it("returns right when point is in the right half of the map", () => {
+      const mockMap = createMockMap(600, 800); // x=600, width=800, so x > 400
+      const { result } = renderHook(() => usePopupAnchor(), {
+        wrapper: makeWrapper(mockMap),
+      });
+      expect(result.current(-46.63, -23.55)).toBe("right");
+    });
+
+    it("returns left when map is null", () => {
+      const wrapper = ({ children }: { children: ReactNode }) =>
+        createElement(
+          MapContext.Provider,
+          { value: { map: null, isLoaded: false } },
+          children
+        );
+      const { result } = renderHook(() => usePopupAnchor(), { wrapper });
+      expect(result.current(-46.63, -23.55)).toBe("left");
+    });
+
+    it("passes longitude and latitude to map.project", () => {
+      const mockMap = createMockMap(100, 800);
+      const { result } = renderHook(() => usePopupAnchor(), {
+        wrapper: makeWrapper(mockMap),
+      });
+      result.current(-46.63, -23.55);
+      expect(mockMap.project).toHaveBeenCalledWith([-46.63, -23.55]);
     });
   });
 });
