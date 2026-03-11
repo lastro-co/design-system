@@ -10,9 +10,10 @@ import {
 } from "./Card";
 
 const meta: Meta<typeof Card> = {
-  title: "Components/UI/Card",
+  title: "Components/Card",
   component: Card,
   parameters: {
+    jest: "Card.test.tsx",
     layout: "centered",
   },
   tags: ["autodocs"],
