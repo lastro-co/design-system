@@ -2,6 +2,14 @@
 
 import MapLibreGL from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
+
+// Set the CSP worker URL before any Map instance is created.
+// The consumer app must serve this file at /maplibre-gl-csp-worker.js (via postinstall).
+// The Turbopack alias (maplibre-gl → maplibre-gl-csp.js) in the app's next.config.ts
+// activates the CSP build which uses this static worker instead of an inline blob.
+if (typeof window !== "undefined") {
+  MapLibreGL.setWorkerUrl("/maplibre-gl-csp-worker.js");
+}
 import {
   forwardRef,
   useCallback,
