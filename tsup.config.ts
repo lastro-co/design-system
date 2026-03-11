@@ -14,6 +14,7 @@ export default defineConfig({
     "react",
     "react-dom",
     "tailwindcss",
+    "maplibre-gl",
     "react-hook-form",
     "zod",
     "@hookform/resolvers",
