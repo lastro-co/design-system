@@ -4,13 +4,47 @@ Lastro Design System — 44 UI components, 94 icons, and design tokens.
 
 ## Installation
 
-Add the GitHub Packages registry to your `.npmrc`:
+### 1. Configure the registry
+
+Add the GitHub Packages registry to your project's `.npmrc`:
 
 ```
 @lastro-co:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
 
-Then install:
+### 2. Set up authentication
+
+The `GITHUB_TOKEN` variable must be available in your environment.
+
+#### Creating a GitHub Personal Access Token (classic)
+
+1. Go to **GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)**
+2. Click **Generate new token (classic)**
+3. Set a name (e.g. `npm-packages-read`) and an expiration
+4. Select the scope: **`read:packages`**
+5. Click **Generate token** and copy the value
+
+#### Locally
+
+Run this once to persist the token across terminal sessions:
+
+```bash
+echo 'export GITHUB_TOKEN=ghp_your_token_here' >> ~/.zshrc && source ~/.zshrc
+```
+
+#### CI (GitHub Actions)
+
+Add the token as a repository secret (**Settings → Secrets and variables → Actions → New repository secret**) named `GH_TOKEN_GO_MODULES`, then pass it in the install step:
+
+```yaml
+- name: Install dependencies
+  run: pnpm install --frozen-lockfile
+  env:
+    GITHUB_TOKEN: ${{ secrets.GH_TOKEN_GO_MODULES }}
+```
+
+### 3. Install the package
 
 ```bash
 pnpm add @lastro-co/design-system
