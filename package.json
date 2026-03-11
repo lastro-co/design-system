@@ -60,13 +60,13 @@
     "build-storybook": "pnpm run test:generate-output && storybook build"
   },
   "peerDependencies": {
+    "@hookform/resolvers": "*",
+    "maplibre-gl": ">=5.18.0",
     "react": ">=19.0.0",
     "react-dom": ">=19.0.0",
-    "tailwindcss": ">=4.0.0",
-    "maplibre-gl": ">=5.18.0",
     "react-hook-form": "*",
-    "zod": "*",
-    "@hookform/resolvers": "*"
+    "tailwindcss": ">=4.0.0",
+    "zod": "*"
   },
   "peerDependenciesMeta": {
     "maplibre-gl": {
