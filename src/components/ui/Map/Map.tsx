@@ -10,6 +10,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 if (typeof window !== "undefined") {
   MapLibreGL.setWorkerUrl("/maplibre-gl-csp-worker.js");
 }
+
 import {
   forwardRef,
   useCallback,

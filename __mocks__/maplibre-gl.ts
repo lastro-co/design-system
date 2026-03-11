@@ -48,8 +48,11 @@ export const Popup = jest.fn().mockImplementation(() => ({
   getLngLat: jest.fn().mockReturnValue({ lng: 0, lat: 0 }),
 }));
 
+export const setWorkerUrl = jest.fn();
+
 export default {
   Map,
   Marker,
   Popup,
+  setWorkerUrl,
 };

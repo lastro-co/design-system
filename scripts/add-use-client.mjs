@@ -1,6 +1,11 @@
 import { readFileSync, writeFileSync } from "node:fs";
 
-const files = ["dist/index.js", "dist/index.cjs", "dist/icons.js", "dist/icons.cjs"];
+const files = [
+  "dist/index.js",
+  "dist/index.cjs",
+  "dist/icons.js",
+  "dist/icons.cjs",
+];
 
 for (const file of files) {
   const content = readFileSync(file, "utf-8");

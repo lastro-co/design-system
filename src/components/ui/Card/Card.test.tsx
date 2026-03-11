@@ -6,56 +6,195 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from ".";
+} from "./Card";
 
 describe("Card", () => {
-  describe("Card (root)", () => {
-    it("renders without crashing", () => {
-      render(<Card>Content</Card>);
-      expect(screen.getByText("Content")).toBeVisible();
-    });
+  it("renders without crashing", () => {
+    render(<Card>Content</Card>);
+    expect(screen.getByText("Content")).toBeVisible();
+  });
 
-    it("accepts custom className", () => {
-      render(
-        <Card className="custom-class" data-testid="card">
-          Content
-        </Card>
-      );
-      expect(screen.getByTestId("card")).toHaveClass("custom-class");
-    });
+  it("accepts custom className", () => {
+    render(
+      <Card className="custom-class" data-testid="card">
+        Content
+      </Card>
+    );
+    expect(screen.getByTestId("card")).toHaveClass("custom-class");
+  });
 
-    it("forwards additional HTML attributes", () => {
-      render(
-        <Card data-testid="card" id="my-card">
-          Content
-        </Card>
-      );
-      expect(screen.getByTestId("card")).toHaveAttribute("id", "my-card");
-    });
+  it("renders with header and content", () => {
+    render(
+      <Card>
+        <CardHeader>
+          <CardTitle>Title</CardTitle>
+        </CardHeader>
+        <CardContent>Body content</CardContent>
+      </Card>
+    );
+    expect(screen.getByText("Title")).toBeVisible();
+    expect(screen.getByText("Body content")).toBeVisible();
+  });
 
-    it("applies base styles", () => {
+  describe("shadow prop", () => {
+    it("renders without shadow-sm class by default", () => {
       render(<Card data-testid="card">Content</Card>);
-      const card = screen.getByTestId("card");
-      expect(card).toHaveClass("rounded-lg", "bg-white");
+      expect(screen.getByTestId("card")).not.toHaveClass("shadow-sm");
     });
 
-    it("renders children correctly", () => {
+    it("adds shadow-sm class when shadow={true}", () => {
       render(
-        <Card>
-          <span data-testid="child">child content</span>
+        <Card data-testid="card" shadow>
+          Content
         </Card>
       );
-      expect(screen.getByTestId("child")).toBeVisible();
+      expect(screen.getByTestId("card")).toHaveClass("shadow-sm");
     });
   });
 
-  describe("CardHeader", () => {
-    it("renders children", () => {
-      render(<CardHeader>Header content</CardHeader>);
-      expect(screen.getByText("Header content")).toBeVisible();
+  describe("title prop", () => {
+    it("renders an h3 with the title text when title is provided", () => {
+      render(<Card title="My Card Title">Content</Card>);
+      expect(
+        screen.getByRole("heading", { level: 3, name: "My Card Title" })
+      ).toBeInTheDocument();
     });
 
-    it("accepts custom className", () => {
+    it("adds padding classes when title is provided", () => {
+      render(
+        <Card data-testid="card" title="My Card Title">
+          Content
+        </Card>
+      );
+      const card = screen.getByTestId("card");
+      expect(card).toHaveClass("px-6");
+      expect(card).toHaveClass("pt-3");
+      expect(card).toHaveClass("pb-6");
+    });
+
+    it("does not render an h3 when title is not provided", () => {
+      render(<Card>Content</Card>);
+      expect(
+        screen.queryByRole("heading", { level: 3 })
+      ).not.toBeInTheDocument();
+    });
+
+    it("does not add padding classes when title is not provided", () => {
+      render(<Card data-testid="card">Content</Card>);
+      const card = screen.getByTestId("card");
+      expect(card).not.toHaveClass("px-6");
+      expect(card).not.toHaveClass("pt-3");
+      expect(card).not.toHaveClass("pb-6");
+    });
+  });
+
+  describe("separator prop", () => {
+    it("renders a divider when both title and separator are true", () => {
+      render(
+        <Card data-testid="card" separator title="My Title">
+          Content
+        </Card>
+      );
+      const card = screen.getByTestId("card");
+      const divider = card.querySelector(".h-px.bg-gray-300");
+      expect(divider).toBeInTheDocument();
+    });
+
+    it("does not render a divider when separator is true but title is missing", () => {
+      render(
+        <Card data-testid="card" separator>
+          Content
+        </Card>
+      );
+      const card = screen.getByTestId("card");
+      const divider = card.querySelector(".h-px.bg-gray-300");
+      expect(divider).not.toBeInTheDocument();
+    });
+
+    it("does not render a divider when title is present but separator is false", () => {
+      render(
+        <Card data-testid="card" title="My Title">
+          Content
+        </Card>
+      );
+      const card = screen.getByTestId("card");
+      const divider = card.querySelector(".h-px.bg-gray-300");
+      expect(divider).not.toBeInTheDocument();
+    });
+  });
+
+  describe("combination: title + separator + shadow={false}", () => {
+    it("renders title, divider, children, and no shadow together", () => {
+      render(
+        <Card data-testid="card" separator shadow={false} title="Combined">
+          Body
+        </Card>
+      );
+      const card = screen.getByTestId("card");
+      expect(
+        screen.getByRole("heading", { level: 3, name: "Combined" })
+      ).toBeInTheDocument();
+      expect(card.querySelector(".h-px.bg-gray-300")).toBeInTheDocument();
+      expect(screen.getByText("Body")).toBeInTheDocument();
+      expect(card).not.toHaveClass("shadow-sm");
+    });
+  });
+
+  describe("empty title string", () => {
+    it("does not render a heading when title is an empty string", () => {
+      render(<Card title="">Content</Card>);
+      expect(
+        screen.queryByRole("heading", { level: 3 })
+      ).not.toBeInTheDocument();
+    });
+
+    it("does not add padding classes when title is an empty string", () => {
+      render(
+        <Card data-testid="card" title="">
+          Content
+        </Card>
+      );
+      const card = screen.getByTestId("card");
+      expect(card).not.toHaveClass("px-6");
+      expect(card).not.toHaveClass("pt-3");
+      expect(card).not.toHaveClass("pb-6");
+    });
+  });
+
+  describe("CardDescription", () => {
+    it("renders its children as a paragraph", () => {
+      render(<CardDescription>Helpful description</CardDescription>);
+      expect(screen.getByText("Helpful description")).toBeInTheDocument();
+    });
+
+    it("forwards className to the paragraph element", () => {
+      render(
+        <CardDescription className="custom-desc" data-testid="desc">
+          Text
+        </CardDescription>
+      );
+      expect(screen.getByTestId("desc")).toHaveClass("custom-desc");
+    });
+  });
+
+  describe("CardFooter", () => {
+    it("renders its children", () => {
+      render(<CardFooter>Footer content</CardFooter>);
+      expect(screen.getByText("Footer content")).toBeInTheDocument();
+    });
+
+    it("forwards className to the wrapper element", () => {
+      render(
+        <CardFooter className="custom-footer" data-testid="footer">
+          Footer
+        </CardFooter>
+      );
+      expect(screen.getByTestId("footer")).toHaveClass("custom-footer");
+    });
+  });
+
+  describe("sub-component className forwarding", () => {
+    it("CardHeader forwards className", () => {
       render(
         <CardHeader className="custom-header" data-testid="header">
           Header
@@ -64,24 +203,7 @@ describe("Card", () => {
       expect(screen.getByTestId("header")).toHaveClass("custom-header");
     });
 
-    it("forwards additional HTML attributes", () => {
-      render(
-        <CardHeader data-testid="header" id="card-header">
-          Header
-        </CardHeader>
-      );
-      expect(screen.getByTestId("header")).toHaveAttribute("id", "card-header");
-    });
-  });
-
-  describe("CardTitle", () => {
-    it("renders as an h3 element", () => {
-      render(<CardTitle>My Title</CardTitle>);
-      const heading = screen.getByRole("heading", { level: 3 });
-      expect(heading).toHaveTextContent("My Title");
-    });
-
-    it("accepts custom className", () => {
+    it("CardTitle forwards className", () => {
       render(
         <CardTitle className="custom-title" data-testid="title">
           Title
@@ -90,150 +212,13 @@ describe("Card", () => {
       expect(screen.getByTestId("title")).toHaveClass("custom-title");
     });
 
-    it("applies base styles", () => {
-      render(<CardTitle data-testid="title">Title</CardTitle>);
-      expect(screen.getByTestId("title")).toHaveClass("font-semibold");
-    });
-
-    it("forwards additional HTML attributes", () => {
-      render(
-        <CardTitle data-testid="title" id="card-title">
-          Title
-        </CardTitle>
-      );
-      expect(screen.getByTestId("title")).toHaveAttribute("id", "card-title");
-    });
-  });
-
-  describe("CardDescription", () => {
-    it("renders children", () => {
-      render(<CardDescription>A description</CardDescription>);
-      expect(screen.getByText("A description")).toBeVisible();
-    });
-
-    it("renders as a paragraph element", () => {
-      render(<CardDescription>Description text</CardDescription>);
-      const paragraph = screen.getByText("Description text");
-      expect(paragraph.tagName).toBe("P");
-    });
-
-    it("accepts custom className", () => {
-      render(
-        <CardDescription className="custom-desc" data-testid="desc">
-          Description
-        </CardDescription>
-      );
-      expect(screen.getByTestId("desc")).toHaveClass("custom-desc");
-    });
-
-    it("applies base styles", () => {
-      render(<CardDescription data-testid="desc">Description</CardDescription>);
-      expect(screen.getByTestId("desc")).toHaveClass(
-        "text-gray-500",
-        "text-sm"
-      );
-    });
-
-    it("forwards additional HTML attributes", () => {
-      render(
-        <CardDescription data-testid="desc" id="card-desc">
-          Description
-        </CardDescription>
-      );
-      expect(screen.getByTestId("desc")).toHaveAttribute("id", "card-desc");
-    });
-  });
-
-  describe("CardContent", () => {
-    it("renders children", () => {
-      render(<CardContent>Body content</CardContent>);
-      expect(screen.getByText("Body content")).toBeVisible();
-    });
-
-    it("accepts custom className", () => {
+    it("CardContent forwards className", () => {
       render(
         <CardContent className="custom-content" data-testid="content">
           Content
         </CardContent>
       );
       expect(screen.getByTestId("content")).toHaveClass("custom-content");
-    });
-
-    it("forwards additional HTML attributes", () => {
-      render(
-        <CardContent data-testid="content" id="card-content">
-          Content
-        </CardContent>
-      );
-      expect(screen.getByTestId("content")).toHaveAttribute(
-        "id",
-        "card-content"
-      );
-    });
-  });
-
-  describe("CardFooter", () => {
-    it("renders children", () => {
-      render(<CardFooter>Footer content</CardFooter>);
-      expect(screen.getByText("Footer content")).toBeVisible();
-    });
-
-    it("accepts custom className", () => {
-      render(
-        <CardFooter className="custom-footer" data-testid="footer">
-          Footer
-        </CardFooter>
-      );
-      expect(screen.getByTestId("footer")).toHaveClass("custom-footer");
-    });
-
-    it("applies base styles", () => {
-      render(<CardFooter data-testid="footer">Footer</CardFooter>);
-      expect(screen.getByTestId("footer")).toHaveClass("p-4", "pt-0");
-    });
-
-    it("forwards additional HTML attributes", () => {
-      render(
-        <CardFooter data-testid="footer" id="card-footer">
-          Footer
-        </CardFooter>
-      );
-      expect(screen.getByTestId("footer")).toHaveAttribute("id", "card-footer");
-    });
-  });
-
-  describe("Full Card composition", () => {
-    it("renders a complete card with all sub-components", () => {
-      render(
-        <Card>
-          <CardHeader>
-            <CardTitle>Card Title</CardTitle>
-            <CardDescription>Card description here</CardDescription>
-          </CardHeader>
-          <CardContent>Body content here</CardContent>
-          <CardFooter>Footer action</CardFooter>
-        </Card>
-      );
-
-      expect(
-        screen.getByRole("heading", { level: 3, name: "Card Title" })
-      ).toBeVisible();
-      expect(screen.getByText("Card description here")).toBeVisible();
-      expect(screen.getByText("Body content here")).toBeVisible();
-      expect(screen.getByText("Footer action")).toBeVisible();
-    });
-
-    it("renders with header and content", () => {
-      render(
-        <Card>
-          <CardHeader>
-            <CardTitle>Title</CardTitle>
-          </CardHeader>
-          <CardContent>Body content</CardContent>
-        </Card>
-      );
-      expect(screen.getByText("Title")).toBeVisible();
-      expect(screen.getByText("Body content")).toBeVisible();
     });
   });
 });

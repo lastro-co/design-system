@@ -78,6 +78,7 @@ jest.mock("maplibre-gl", () => {
       Marker: jest.fn().mockImplementation(() => markerInstance),
       Popup: jest.fn().mockImplementation(() => popupInstance),
       Map: jest.fn().mockImplementation(() => mapInstance),
+      setWorkerUrl: jest.fn(),
       _markerInstance: markerInstance,
       _popupInstance: popupInstance,
       _mapInstance: mapInstance,

@@ -10,10 +10,9 @@ import {
 } from "./Card";
 
 const meta: Meta<typeof Card> = {
-  title: "Components/Card",
+  title: "Components/UI/Card",
   component: Card,
   parameters: {
-    jest: "Card.test.tsx",
     layout: "centered",
   },
   tags: ["autodocs"],
@@ -24,7 +23,7 @@ type Story = StoryObj<typeof Card>;
 
 export const Default: Story = {
   render: () => (
-    <Card className="w-[350px] border-gray-300 bg-white">
+    <Card className="w-[350px] border-gray-300 bg-white" shadow>
       <CardHeader>
         <CardTitle>Título do Card</CardTitle>
         <CardDescription>Descrição do card aqui.</CardDescription>
@@ -41,8 +40,45 @@ export const Default: Story = {
 
 export const Simple: Story = {
   render: () => (
-    <Card className="w-[350px] border-gray-300 bg-white p-6">
+    <Card className="w-[350px] border-gray-300 bg-white p-6" shadow>
       <p>Card simples com conteúdo direto.</p>
+    </Card>
+  ),
+};
+
+export const WithTitle: Story = {
+  render: () => (
+    <Card className="w-[350px]" title="Título do Card">
+      <p>Conteúdo do card com título.</p>
+    </Card>
+  ),
+};
+
+export const WithTitleAndSeparator: Story = {
+  render: () => (
+    <Card className="w-[350px]" separator title="Título com Separador">
+      <p>Conteúdo abaixo do separador.</p>
+    </Card>
+  ),
+};
+
+export const WithShadow: Story = {
+  render: () => (
+    <Card className="w-[350px]" shadow title="Card com sombra">
+      <p>Card com shadow-sm habilitado.</p>
+    </Card>
+  ),
+};
+
+export const ContentCardStyle: Story = {
+  render: () => (
+    <Card
+      className="w-[350px] border-gray-300"
+      separator
+      shadow={false}
+      title="Estilo ContentCard"
+    >
+      <p>Conteúdo no estilo do antigo ContentCard.</p>
     </Card>
   ),
 };
@@ -64,8 +100,10 @@ export const WithImage: Story = {
       <div className="relative shrink-0">
         <img
           alt="Imagem do card"
-          className="h-[84px] w-[112px] object-contain"
-          src="https://placehold.co/112x84/e5e5e5/999?text=Image"
+          className="object-contain"
+          height={84}
+          src="/img/config-business.png"
+          width={112}
         />
       </div>
     </div>

@@ -1,19 +1,64 @@
 import type { ReactNode } from "react";
-import { cn } from "../../../lib/utils";
+import { InfoIcon } from "@/components/icons";
+import { cn } from "@/lib/utils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../Tooltip";
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
+  separator?: boolean;
+  shadow?: boolean;
+  title?: string;
+  titleTooltip?: string;
 }
 
-export function Card({ className, children, ...props }: CardProps) {
+export function Card({
+  children,
+  className,
+  separator = false,
+  shadow = false,
+  title,
+  titleTooltip,
+  ...props
+}: CardProps) {
   return (
     <div
       className={cn(
-        "rounded-lg border border-gray-200 bg-white shadow-sm",
+        "rounded-lg border border-gray-200 bg-white",
+        shadow && "shadow-sm",
+        title && "px-6 pt-3 pb-6",
         className
       )}
       {...props}
     >
+      {title && (
+        <>
+          <div className="flex items-center gap-2">
+            <h3 className="font-semibold text-black text-lg leading-[1.4]">
+              {title}
+            </h3>
+            {titleTooltip && (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button aria-label="Mais informações" type="button">
+                      <InfoIcon className="size-4 text-gray-400" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="max-w-[250px] text-xs">{titleTooltip}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
+          </div>
+          {separator && <div className="my-3 h-px bg-gray-300" />}
+        </>
+      )}
       {children}
     </div>
   );
