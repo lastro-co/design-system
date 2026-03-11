@@ -22,7 +22,14 @@ export {
 export { Badge, badgeVariants } from "./Badge";
 export { Button, buttonVariants } from "./Button";
 export type { MonthYearPickerProps } from "./Calendar";
-export { Calendar, CalendarDayButton, MonthYearPicker } from "./Calendar";
+export {
+  Calendar,
+  CalendarDayButton,
+  MONTHS_PT_BR,
+  MONTHS_PT_BR_SHORT,
+  MonthYearPicker,
+  WEEKDAYS_PT_BR,
+} from "./Calendar";
 export {
   Card,
   CardContent,
