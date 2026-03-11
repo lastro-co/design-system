@@ -21,7 +21,8 @@ export {
 } from "./AlertDialog";
 export { Badge, badgeVariants } from "./Badge";
 export { Button, buttonVariants } from "./Button";
-export { Calendar, CalendarDayButton } from "./Calendar";
+export type { MonthYearPickerProps } from "./Calendar";
+export { Calendar, CalendarDayButton, MonthYearPicker } from "./Calendar";
 export {
   Card,
   CardContent,
