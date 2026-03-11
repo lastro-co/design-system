@@ -44,7 +44,7 @@
     "src/styles"
   ],
   "scripts": {
-    "build": "tsup && node scripts/build-css.mjs",
+    "build": "tsup && node scripts/build-css.mjs && node scripts/add-use-client.mjs",
     "dev": "tsup --watch",
     "type-check": "tsc --noEmit",
     "lint": "biome check .",

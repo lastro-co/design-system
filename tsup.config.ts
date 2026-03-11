@@ -7,7 +7,7 @@ export default defineConfig({
   },
   format: ["esm", "cjs"],
   dts: true,
-  splitting: true,
+  splitting: false,
   treeshake: true,
   clean: true,
   external: [
@@ -18,7 +18,4 @@ export default defineConfig({
     "zod",
     "@hookform/resolvers",
   ],
-  banner: {
-    js: '"use client";',
-  },
 });
