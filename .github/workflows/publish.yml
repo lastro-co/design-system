@@ -33,14 +33,14 @@ jobs:
           scope: '@lastro-co'
           cache: 'pnpm'
 
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
       - name: Set version from release tag
         run: |
           VERSION="${{ github.event.release.tag_name }}"
           VERSION="${VERSION#v}"
           npm version "$VERSION" --no-git-tag-version
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
 
       - name: Build package
         run: pnpm run build
