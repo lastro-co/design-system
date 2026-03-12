@@ -35,10 +35,7 @@
         "default": "./dist/icons.cjs"
       }
     },
-    "./tokens.css": {
-      "style": "./dist/tokens.css",
-      "default": "./dist/tokens.css"
-    },
+    "./tokens.css": "./src/styles/tokens.css",
     "./styles.css": {
       "style": "./dist/styles.css",
       "default": "./dist/styles.css"
