@@ -241,7 +241,7 @@ describe("AlertDialog composable sub-components", () => {
   it("renders AlertDialogTrigger with data-slot attribute", () => {
     render(
       <AlertDialogRoot>
-        <AlertDialogTrigger>
+        <AlertDialogTrigger asChild>
           <button type="button">Trigger</button>
         </AlertDialogTrigger>
       </AlertDialogRoot>

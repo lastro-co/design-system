@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, formatFileSize } from "../../../lib/utils";
+import { cn, formatFileSize } from "@/lib/utils";
 import { TrashIcon } from "../../icons";
 import { IconButton } from "../IconButton";
 

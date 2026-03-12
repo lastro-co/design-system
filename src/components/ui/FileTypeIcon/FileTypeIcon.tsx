@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 import { FileIcon } from "../../icons";
 
 type FileType = "pdf" | "doc" | "xls" | "txt" | "image" | "default";

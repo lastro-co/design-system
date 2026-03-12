@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 import { PauseIcon, PlayIcon } from "../../icons";
 import { useWaveformPlayer } from "./hooks";
 import { formatDuration, type WaveformPlayerProps } from "./types";

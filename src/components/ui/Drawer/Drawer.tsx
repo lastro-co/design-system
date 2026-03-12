@@ -3,7 +3,7 @@
 import type * as React from "react";
 import { createContext, useContext } from "react";
 import { Drawer as DrawerPrimitive } from "vaul";
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 import { CloseIcon } from "../../icons";
 import { IconButton } from "../IconButton";
 

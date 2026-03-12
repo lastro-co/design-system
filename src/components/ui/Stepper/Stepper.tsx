@@ -2,7 +2,7 @@
 
 import type { ComponentProps } from "react";
 
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 
 const STEPPER_SEGMENT_BASE =
   "h-2 min-h-px min-w-px flex-1 rounded-lg transition-colors duration-300 ease-out";

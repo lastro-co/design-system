@@ -1,7 +1,7 @@
 "use client";
 
 import type { VariantProps } from "class-variance-authority";
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 import { Button } from "../Button";
 import type { buttonVariants } from "../Button/Button";
 

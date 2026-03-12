@@ -1,7 +1,7 @@
 import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
 import type { ComponentProps, FC } from "react";
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 
 const iconVariants = cva("flex items-center justify-center", {
   variants: {

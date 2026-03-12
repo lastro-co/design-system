@@ -1,4 +1,4 @@
-import { cn } from "../../../../lib/utils";
+import { cn } from "@/lib/utils";
 import { ChevronLeftIcon, ChevronRightIcon } from "../../../icons";
 import { MONTHS_PT_BR } from "../constants";
 

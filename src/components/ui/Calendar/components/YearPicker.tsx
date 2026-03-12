@@ -1,4 +1,4 @@
-import { cn } from "../../../../lib/utils";
+import { cn } from "@/lib/utils";
 import { ChevronLeftIcon, ChevronRightIcon } from "../../../icons";
 import { YEAR_RANGE } from "../constants";
 import { generateYearRange } from "../utils/date-utils";

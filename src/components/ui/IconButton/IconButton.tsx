@@ -2,7 +2,7 @@ import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { forwardRef } from "react";
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 
 const iconButtonVariants = cva(
   "inline-flex cursor-pointer items-center justify-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-600",

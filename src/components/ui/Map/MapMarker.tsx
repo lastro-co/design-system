@@ -3,7 +3,7 @@
 import MapLibreGL from "maplibre-gl";
 import { useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 import { CloseIcon } from "../../icons";
 
 import { DefaultMarkerIcon } from "./components";

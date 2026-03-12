@@ -88,6 +88,8 @@ async function renderAutoStart(props: Omit<ConsumerProps, "autoStart"> = {}) {
         {...props}
       />
     );
+    // Let the async initWaveSurfer settle (startRecording + state updates)
+    await new Promise((r) => setTimeout(r, 50));
   });
   return box;
 }
@@ -138,6 +140,7 @@ describe("useWaveformRecorder", () => {
     it("auto-starts recording when autoStart=true", async () => {
       await act(async () => {
         render(<RecorderConsumer autoStart={true} />);
+        await new Promise((r) => setTimeout(r, 50));
       });
 
       expect(mockRecordInstance.startRecording).toHaveBeenCalled();
@@ -176,6 +179,7 @@ describe("useWaveformRecorder", () => {
 
       await act(async () => {
         render(<RecorderConsumer autoStart={true} onError={onError} />);
+        await new Promise((r) => setTimeout(r, 50));
       });
 
       expect(onError).toHaveBeenCalledWith(error);
@@ -334,6 +338,7 @@ describe("useWaveformRecorder", () => {
             }}
           />
         );
+        await new Promise((r) => setTimeout(r, 50));
       });
 
       await waitFor(() => {
@@ -402,7 +407,7 @@ describe("useWaveformRecorder", () => {
     it("calls record.stopRecording()", async () => {
       const box = await renderAutoStart();
 
-      act(() => {
+      await act(async () => {
         box.current?.stopRecording();
       });
 
@@ -426,6 +431,7 @@ describe("useWaveformRecorder", () => {
 
       await act(async () => {
         render(<RecorderConsumer autoStart={true} onRecordEnd={onRecordEnd} />);
+        await new Promise((r) => setTimeout(r, 50));
       });
 
       await waitFor(() =>

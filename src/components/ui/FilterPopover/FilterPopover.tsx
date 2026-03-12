@@ -1,7 +1,7 @@
 "use client";
 
 import { forwardRef } from "react";
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 import { Button } from "../Button";
 import { FilterButton, type FilterButtonProps } from "../FilterButton";
 import { Popover, PopoverContent, PopoverTrigger } from "../Popover";

@@ -1,4 +1,4 @@
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 import { LoaderIcon } from "../../icons";
 import type { IconProps } from "../Icon";
 

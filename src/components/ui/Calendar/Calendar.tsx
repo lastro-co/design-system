@@ -9,7 +9,7 @@ import {
   getDefaultClassNames,
 } from "react-day-picker";
 import { ptBR } from "react-day-picker/locale";
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 import {
   CheckIcon,
   ChevronDownIcon,

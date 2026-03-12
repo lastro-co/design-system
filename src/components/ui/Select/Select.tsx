@@ -1,9 +1,54 @@
 "use client";
 
+import { ChevronDownIcon } from "@lastro-co/design-system/icons";
 import * as SelectPrimitive from "@radix-ui/react-select";
+import { cva, type VariantProps } from "class-variance-authority";
 import type * as React from "react";
-import { cn } from "../../../lib/utils";
-import { ChevronDownIcon } from "../../icons";
+import { cn } from "@/lib/utils";
+
+const selectTriggerVariants = cva(
+  [
+    "flex w-full cursor-pointer items-center justify-between gap-2 whitespace-nowrap rounded-md bg-white text-gray-900 outline-none transition",
+    "disabled:pointer-events-none disabled:cursor-not-allowed disabled:select-none disabled:bg-gray-100 disabled:text-gray-600 [&:disabled_svg]:text-gray-600 [&[data-disabled]_svg]:text-gray-600",
+    "aria-invalid:border-red-600",
+    "*:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2",
+    "*:data-[slot=select-value]:text-gray-900 [&[data-placeholder]_*[data-slot=select-value]]:text-gray-600",
+    "font-text [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  ].join(" "),
+  {
+    variants: {
+      size: {
+        sm: 'h-8 px-2 text-xs [&_svg:not([class*="size-"])]:size-3',
+        md: 'h-10 p-3 pl-4 text-sm [&_svg:not([class*="size-"])]:size-4',
+        lg: 'h-12 p-3 pl-4 text-sm [&_svg:not([class*="size-"])]:size-4',
+      },
+      variant: {
+        bordered: "border border-gray-300",
+        borderless: "border-none",
+      },
+    },
+    defaultVariants: {
+      size: "lg",
+      variant: "bordered",
+    },
+  }
+);
+
+const selectItemVariants = cva(
+  "relative flex w-full cursor-pointer select-none items-center gap-2 text-gray-900 outline-hidden transition-colors data-disabled:pointer-events-none data-[state=checked]:bg-purple-300 data-highlighted:bg-gray-300 data-[state=checked]:text-purple-800 data-disabled:opacity-50",
+  {
+    variants: {
+      size: {
+        sm: "p-2 text-xs",
+        md: "p-2.5 text-sm",
+        lg: "p-3 text-sm",
+      },
+    },
+    defaultVariants: {
+      size: "lg",
+    },
+  }
+);
 
 function Select({
   ...props
@@ -26,17 +71,16 @@ function SelectValue({
 function SelectTrigger({
   className,
   children,
+  size,
+  variant,
   ...props
-}: React.ComponentProps<typeof SelectPrimitive.Trigger>) {
+}: React.ComponentProps<typeof SelectPrimitive.Trigger> &
+  VariantProps<typeof selectTriggerVariants>) {
   return (
     <SelectPrimitive.Trigger
       className={cn(
-        "flex h-12 w-full cursor-pointer items-center justify-between gap-2 whitespace-nowrap rounded-md border border-gray-300 bg-white p-3 pl-4 text-gray-900 text-sm outline-none transition",
-        "disabled:pointer-events-none disabled:cursor-not-allowed disabled:select-none disabled:bg-gray-100 disabled:text-gray-600 [&:disabled_svg]:text-gray-600 [&[data-disabled]_svg]:text-gray-600",
-        "aria-invalid:border-red-600",
-        "*:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2",
-        "*:data-[slot=select-value]:text-gray-900 [&[data-placeholder]_*[data-slot=select-value]]:text-gray-600",
-        'font-text [&_svg:not([class*="size-"])]:size-4 [&_svg:not([class*="text-"])]:text-gray-600 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+        selectTriggerVariants({ size, variant }),
+        '[&_svg:not([class*="text-"])]:text-gray-600',
         className
       )}
       data-slot="select-trigger"
@@ -44,7 +88,10 @@ function SelectTrigger({
     >
       {children}
       <SelectPrimitive.Icon asChild>
-        <ChevronDownIcon className="size-8" color="purple-800" />
+        <ChevronDownIcon
+          className={size === "sm" ? "size-5" : "size-8"}
+          color="gray-900"
+        />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   );
@@ -102,14 +149,13 @@ function SelectLabel({
 function SelectItem({
   className,
   children,
+  size,
   ...props
-}: React.ComponentProps<typeof SelectPrimitive.Item>) {
+}: React.ComponentProps<typeof SelectPrimitive.Item> &
+  VariantProps<typeof selectItemVariants>) {
   return (
     <SelectPrimitive.Item
-      className={cn(
-        "relative flex w-full cursor-pointer select-none items-center gap-2 p-3 text-gray-900 text-sm outline-hidden transition-colors data-disabled:pointer-events-none data-[state=checked]:bg-purple-300 data-highlighted:bg-gray-300 data-[state=checked]:text-purple-800 data-disabled:opacity-50",
-        className
-      )}
+      className={cn(selectItemVariants({ size }), className)}
       data-slot="select-item"
       {...props}
     >

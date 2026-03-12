@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { createContext, useContext } from "react";
 import type { DropEvent, DropzoneOptions, FileRejection } from "react-dropzone";
 import { useDropzone } from "react-dropzone";
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 import { Button } from "../Button";
 
 type DropzoneContextType = {
