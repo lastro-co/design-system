@@ -145,29 +145,43 @@ Features:
 
 ## CI/CD
 
-A single workflow (`.github/workflows/publish.yml`) is triggered on `v*` tags and runs two jobs **in parallel**:
+### CI (`.github/workflows/ci.yml`)
 
-- **publish** — builds and publishes the package to GitHub Packages
-- **storybook** — runs tests, builds Storybook with test results, and deploys to GitHub Pages
+Runs on every pull request (`opened`, `synchronize`, `reopened`, `ready_for_review`):
+
+- **Biome** — lint and format check
+- **Tests** — runs all tests with coverage (minimum 85% threshold for branches, functions, lines, and statements)
+- **Type check** — TypeScript validation
+- **Build check** — ensures the package compiles
+
+### Publish (`.github/workflows/publish.yml`)
+
+Triggered when a **GitHub Release** is published. Runs two jobs **in parallel**:
+
+- **publish** — sets the package version from the release tag, builds, and publishes to GitHub Packages
+- **storybook** — runs tests, generates a coverage badge, builds Storybook with test results, and deploys to GitHub Pages
 
 ### Versioning & Publishing
 
-Tags must start with `v` (semantic versioning): `v<major>.<minor>.<patch>`
+1. Merge your changes to `main`
+2. Go to **GitHub → Releases → Draft a new release**
+3. Create a new tag following semver: `v<major>.<minor>.<patch>`
+4. Fill in the release title and notes
+5. Click **Publish release**
 
-```bash
-pnpm version patch   # v1.0.0 → v1.0.1 (bug fix)
-pnpm version minor   # v1.0.0 → v1.1.0 (new feature)
-pnpm version major   # v1.0.0 → v2.0.0 (breaking changes)
-git push --follow-tags
+The workflow automatically updates `package.json` to match the release tag version before publishing.
+
+### Coverage Badge
+
+A coverage badge is generated on each release and hosted alongside the Storybook on GitHub Pages:
+
+```md
+![Coverage](https://img.shields.io/endpoint?url=https://lastro-co.github.io/design-system/coverage-badge.json)
 ```
-
-`pnpm version` automatically creates the git tag with the `v` prefix and triggers the CI/CD pipeline.
 
 ### GitHub Pages Setup
 
 > GitHub Pages must be enabled in the repo settings with Source set to **GitHub Actions**.
->
-> If using tag-based deploys, add a `v*` tag pattern to the `github-pages` environment protection rules (Settings → Environments → github-pages → Deployment branches and tags).
 
 ## Tech Stack
 
