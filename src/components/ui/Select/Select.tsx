@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDownIcon } from "@lastro-co/design-system/icons";
+import { ChevronDownIcon } from "../../icons";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { cva, type VariantProps } from "class-variance-authority";
 import type * as React from "react";
