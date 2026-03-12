@@ -1,9 +1,8 @@
 name: Publish Package & Deploy Storybook
 
 on:
-  push:
-    tags:
-      - 'v*'
+  release:
+    types: [published]
 
 permissions:
   contents: read
@@ -33,6 +32,12 @@ jobs:
           registry-url: 'https://npm.pkg.github.com'
           scope: '@lastro-co'
           cache: 'pnpm'
+
+      - name: Set version from release tag
+        run: |
+          VERSION="${{ github.event.release.tag_name }}"
+          VERSION="${VERSION#v}"
+          npm version "$VERSION" --no-git-tag-version
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -64,8 +69,24 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Run tests with coverage
+        run: pnpm run test
+
+      - name: Generate coverage badge
+        run: |
+          COVERAGE=$(node -e "const r = require('./coverage/coverage-summary.json'); console.log(r.total.statements.pct)")
+          if (( $(echo "$COVERAGE >= 90" | bc -l) )); then COLOR="brightgreen"
+          elif (( $(echo "$COVERAGE >= 80" | bc -l) )); then COLOR="green"
+          elif (( $(echo "$COVERAGE >= 70" | bc -l) )); then COLOR="yellowgreen"
+          elif (( $(echo "$COVERAGE >= 60" | bc -l) )); then COLOR="yellow"
+          else COLOR="red"; fi
+          echo "{\"schemaVersion\":1,\"label\":\"coverage\",\"message\":\"${COVERAGE}%\",\"color\":\"${COLOR}\"}" > coverage-badge.json
+
       - name: Build Storybook
         run: pnpm run build-storybook
+
+      - name: Add coverage badge to Storybook
+        run: cp coverage-badge.json storybook-static/coverage-badge.json
 
       - uses: actions/upload-pages-artifact@v3
         with:
