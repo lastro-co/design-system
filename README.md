@@ -175,9 +175,7 @@ The workflow automatically updates `package.json` to match the release tag versi
 
 A coverage badge is generated on each release and hosted alongside the Storybook on GitHub Pages:
 
-```md
 ![Coverage](https://img.shields.io/endpoint?url=https://lastro-co.github.io/design-system/coverage-badge.json)
-```
 
 ### GitHub Pages Setup
 
