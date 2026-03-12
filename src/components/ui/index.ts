@@ -172,6 +172,8 @@ export type { StepperProps } from "./Stepper";
 export { Stepper } from "./Stepper";
 export type { SwitchProps } from "./Switch";
 export { Switch, switchVariants } from "./Switch";
+export type { TabItem, TabsProps } from "./Tabs";
+export { Tabs, tabsVariants, tabVariants } from "./Tabs";
 export { Textarea } from "./Textarea";
 export { Toaster } from "./Toaster";
 export { ToggleButtonGroup } from "./ToggleButtonGroup";
