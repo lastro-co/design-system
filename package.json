@@ -35,7 +35,14 @@
         "default": "./dist/icons.cjs"
       }
     },
-    "./styles.css": "./dist/styles.css",
+    "./tokens.css": {
+      "style": "./dist/tokens.css",
+      "default": "./dist/tokens.css"
+    },
+    "./styles.css": {
+      "style": "./dist/styles.css",
+      "default": "./dist/styles.css"
+    },
     "./tailwind.config": "./tailwind.config.ts"
   },
   "files": [

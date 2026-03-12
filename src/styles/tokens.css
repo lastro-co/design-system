@@ -1,0 +1,74 @@
+@theme {
+  --color-purple-900: #2e1f4d;
+  --color-purple-800: #49317a;
+  --color-purple-600: #6845ad;
+  --color-purple-500: #9664fa;
+  --color-purple-400: #d8ceee;
+  --color-purple-300: #eae0fe;
+
+  --color-gray-900: #323232;
+  --color-gray-800: #646464;
+  --color-gray-600: #999999;
+  --color-gray-300: #e5e5e5;
+  --color-gray-100: #f5f5f5;
+  --color-gray-50: #fafafa;
+
+  --color-white: #ffffff;
+  --color-black: #1a1a1a;
+
+  --color-blue-800: #0a4f7f;
+  --color-blue-600: #0068b3;
+  --color-blue-50: #eef8ff;
+
+  --color-green-800: #075539;
+  --color-green-600: #0a8558;
+  --color-green-50: #e7f8f3;
+
+  --color-yellow-800: #714d09;
+  --color-yellow-600: #ffb82e;
+  --color-yellow-50: #fff8e7;
+
+  --color-red-800: #8d0c0c;
+  --color-red-600: #b31919;
+  --color-red-50: #feefef;
+
+  --color-apricot-50: #fff1e7;
+  --color-apricot-500: #ff793e;
+  --color-apricot-800: #713409;
+  --color-mint-500: #28e4a8;
+  --color-aqua-500: #4dcffc;
+  --color-tea-300: #d0fece;
+  --color-emerald-600: #3a7f73;
+  --color-vermilion-500: #fe5e00;
+  --color-azure-400: #5e85d9;
+  --color-amber-400: #ea844a;
+  --color-jade-500: #0a954b;
+  --color-violet-500: #8354a7;
+  --color-gold-600: #dc9f00;
+  --color-citrine-400: #e6ce41;
+  --color-coral-500: #f9526f;
+  --color-indigo-400: #5e5edd;
+  --color-saffron-400: #fac52c;
+  --color-fuchsia-500: #dd2a7c;
+  --color-graphite-600: #545454;
+  --color-crimson-700: #a22833;
+  --color-rose-500: #df354b;
+  --color-tangerine-500: #f48126;
+  --color-scarlet-500: #fb4748;
+  --color-carmine-600: #d52741;
+  --color-rust-600: #dc5916;
+
+  --font-family-display: "Red Hat Display", sans-serif;
+  --font-family-text: "Red Hat Text", sans-serif;
+  --font-family-mono: "Red Hat Mono", monospace;
+
+  --font-display: var(--font-family-display);
+  --font-text: var(--font-family-text);
+  --font-mono: var(--font-family-mono);
+
+  --shadow-xxs: 0 1px 1px 0 rgba(0, 0, 0, 0.08);
+  --shadow-xs: 0 0 4px 0 rgba(0, 0, 0, 0.15);
+  --shadow-sm: 0 0 16px 0 rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 0 8px 0 rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 0 16px 0 rgba(0, 0, 0, 0.16);
+}
