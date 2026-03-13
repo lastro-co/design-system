@@ -30,7 +30,14 @@ The `GITHUB_TOKEN` variable must be available in your environment.
 Run this once to persist the token across terminal sessions:
 
 ```bash
+# zsh (default on macOS)
 echo 'export GITHUB_TOKEN=ghp_your_token_here' >> ~/.zshrc && source ~/.zshrc
+
+# bash
+echo 'export GITHUB_TOKEN=ghp_your_token_here' >> ~/.bashrc && source ~/.bashrc
+
+# bash (macOS login shell)
+echo 'export GITHUB_TOKEN=ghp_your_token_here' >> ~/.bash_profile && source ~/.bash_profile
 ```
 
 #### CI (GitHub Actions)
