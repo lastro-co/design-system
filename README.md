@@ -1,6 +1,6 @@
 # @lastro-co/design-system
 
-Lastro Design System — 44 UI components, 94 icons, and design tokens.
+Lastro Design System — UI components, icons, and design tokens.
 
 ## Installation
 
@@ -126,9 +126,13 @@ pnpm run build-storybook  # run tests + build static Storybook
 
 ## Adding Components
 
+Prefer using the shadcn-based scripts to add new components so they are created with the project's conventions, structure, and defaults.
+
+The `shadcn:add` command pulls the upstream shadcn/ui implementation, adapts it to this design system, and places it in the correct folder structure with our standards.
+
 ```bash
-pnpm run shadcn:add <component-name>    # install + organize into folder structure
-pnpm run shadcn:organize <component-name> # organize only (if already installed)
+pnpm run shadcn:add <component-name>       # fetch from shadcn/ui and scaffold with project defaults
+pnpm run shadcn:organize <component-name>  # re-organize an already installed component
 ```
 
 ## Storybook
@@ -143,24 +147,6 @@ Features:
 
 > Run `pnpm run test:generate-output` before starting Storybook to see test results in the Tests panel.
 
-## CI/CD
-
-### CI (`.github/workflows/ci.yml`)
-
-Runs on every pull request (`opened`, `synchronize`, `reopened`, `ready_for_review`):
-
-- **Biome** — lint and format check
-- **Tests** — runs all tests with coverage (minimum 85% threshold for branches, functions, lines, and statements)
-- **Type check** — TypeScript validation
-- **Build check** — ensures the package compiles
-
-### Publish (`.github/workflows/publish.yml`)
-
-Triggered when a **GitHub Release** is published. Runs two jobs **in parallel**:
-
-- **publish** — sets the package version from the release tag, builds, and publishes to GitHub Packages
-- **storybook** — runs tests, generates a coverage badge, builds Storybook with test results, and deploys to GitHub Pages
-
 ### Versioning & Publishing
 
 1. Merge your changes to `main`
@@ -171,15 +157,11 @@ Triggered when a **GitHub Release** is published. Runs two jobs **in parallel**:
 
 The workflow automatically updates `package.json` to match the release tag version before publishing.
 
-### Coverage Badge
+### Test coverage
 
-A coverage badge is generated on each release and hosted alongside the Storybook on GitHub Pages:
+Current test coverage:
 
 ![Coverage](https://img.shields.io/endpoint?url=https://lastro-co.github.io/design-system/coverage-badge.json)
-
-### GitHub Pages Setup
-
-> GitHub Pages must be enabled in the repo settings with Source set to **GitHub Actions**.
 
 ## Tech Stack
 
