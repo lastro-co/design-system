@@ -49,6 +49,7 @@ export {
   ContextMenuTrigger,
 } from "./ContextMenu";
 export { CopyButton } from "./CopyButton";
+export { DatePicker } from "./DatePicker";
 export {
   Dialog,
   DialogClose,
