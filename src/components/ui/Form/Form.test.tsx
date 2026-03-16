@@ -88,6 +88,52 @@ function TestFormComponent({
   );
 }
 
+/** Form with required FormLabel */
+function RequiredLabelFormComponent() {
+  const form = useForm({ defaultValues: { name: "" } });
+  return (
+    <Form {...form}>
+      <form>
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel required>Name</FormLabel>
+              <FormControl>
+                <input data-testid="name-input" {...field} />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+      </form>
+    </Form>
+  );
+}
+
+/** Form with non-required FormLabel */
+function OptionalLabelFormComponent() {
+  const form = useForm({ defaultValues: { name: "" } });
+  return (
+    <Form {...form}>
+      <form>
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <input data-testid="name-input" {...field} />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+      </form>
+    </Form>
+  );
+}
+
 /** Form with a FormMessage that has static children (no error context needed) */
 function FormMessageWithChildrenComponent() {
   const form = useForm({ defaultValues: { name: "" } });
@@ -381,6 +427,30 @@ describe("Form Components Integration", () => {
       };
       render(<NoChildrenForm />);
       expect(screen.queryByTestId("empty-message")).not.toBeInTheDocument();
+    });
+  });
+
+  describe("FormLabel required prop", () => {
+    it("should render asterisk when required is true", () => {
+      render(<RequiredLabelFormComponent />);
+
+      const asterisk = screen.getByText("*");
+      expect(asterisk).toBeInTheDocument();
+      expect(asterisk).toHaveAttribute("aria-hidden", "true");
+      expect(asterisk).toHaveClass("text-red-600");
+    });
+
+    it("should not render asterisk when required is not set", () => {
+      render(<OptionalLabelFormComponent />);
+
+      expect(screen.queryByText("*")).not.toBeInTheDocument();
+    });
+
+    it("should render label text alongside asterisk", () => {
+      render(<RequiredLabelFormComponent />);
+
+      expect(screen.getByText("Name")).toBeInTheDocument();
+      expect(screen.getByText("*")).toBeInTheDocument();
     });
   });
 
