@@ -11,6 +11,7 @@ interface DatePickerProps
   value?: Date;
   onChange?: (date: Date | undefined) => void;
   className?: string;
+  disabledDates?: Date[];
 }
 
 export function DatePicker({
@@ -19,6 +20,7 @@ export function DatePicker({
   placeholder = "Selecione uma data",
   className,
   disabled,
+  disabledDates,
   ...props
 }: DatePickerProps) {
   const {
@@ -76,6 +78,7 @@ export function DatePicker({
       >
         <Calendar
           captionLayout="dropdown"
+          disabled={disabledDates}
           mode="single"
           month={month}
           onMonthChange={setMonth}
