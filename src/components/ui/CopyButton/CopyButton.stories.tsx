@@ -21,25 +21,39 @@ const meta: Meta<typeof CopyButton> = {
 export default meta;
 
 export const Default = {
-  args: {
-    value: "Hello, World!",
-  },
+  render: () => (
+    <CopyButton value="Hello, World!">
+      <span className="text-gray-700 text-sm">Hello, World!</span>
+    </CopyButton>
+  ),
 };
 
 export const LongText = {
-  args: {
-    value:
-      "This is a longer text that will be copied to the clipboard when the button is clicked. It can contain multiple sentences and even special characters!",
-  },
+  render: () => (
+    <CopyButton value="This is a longer text that will be copied to the clipboard when the button is clicked. It can contain multiple sentences and even special characters!">
+      <span className="text-gray-700 text-sm">
+        This is a longer text that will be copied to the clipboard when the
+        button is clicked. It can contain multiple sentences and even special
+        characters!
+      </span>
+    </CopyButton>
+  ),
 };
 
 export const CodeSnippet = {
-  args: {
-    value: `const example = () => {
+  render: () => (
+    <CopyButton
+      value={`const example = () => {
   console.log('Hello, World!');
   return true;
-};`,
-  },
+};`}
+    >
+      <code className="text-sm">{`const example = () => {
+  console.log('Hello, World!');
+  return true;
+};`}</code>
+    </CopyButton>
+  ),
 };
 
 export const Interactive = {

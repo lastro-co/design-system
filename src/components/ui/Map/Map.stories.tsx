@@ -17,6 +17,9 @@ import {
 const meta: Meta<typeof MapComponent> = {
   title: "Components/Map",
   component: MapComponent,
+  args: {
+    theme: "light",
+  },
   parameters: {
     jest: "Map.test.tsx",
     layout: "fullscreen",
