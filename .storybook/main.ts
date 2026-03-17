@@ -33,6 +33,10 @@ const config: StorybookConfig = {
     config.resolve.alias = {
       ...config.resolve.alias,
       "@": resolve(__dirname, "../src"),
+      "maplibre-gl": resolve(
+        __dirname,
+        "../node_modules/maplibre-gl/dist/maplibre-gl-csp.js"
+      ),
     };
     config.plugins = config.plugins || [];
     config.plugins.push(tailwindcss());
