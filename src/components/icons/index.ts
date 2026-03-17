@@ -70,6 +70,7 @@ export { MoneyBagIcon } from "./MoneyBagIcon";
 export { MoneyIcon } from "./MoneyIcon";
 export { MoneyOutlineIcon } from "./MoneyOutlineIcon";
 export { NavigationIcon } from "./NavigationIcon";
+export { PadlockIcon } from "./PadlockIcon";
 export { PaperPlaneIcon } from "./PaperPlaneIcon";
 export { PauseIcon } from "./PauseIcon";
 export { PersonIcon } from "./PersonIcon";
