@@ -1,8 +1,8 @@
 export { AlarmClockIcon } from "./AlarmClockIcon";
 export { AlertBalloonIcon } from "./AlertBalloonIcon";
-export { ArrowRightIcon } from "./ArrowRightIcon";
 export { ArchiveIcon } from "./ArchiveIcon";
 export { AreaIcon } from "./AreaIcon";
+export { ArrowRightIcon } from "./ArrowRightIcon";
 export { BalloonIcon } from "./BalloonIcon";
 export { BedDoubleIcon } from "./BedDoubleIcon";
 export { BellIcon } from "./BellIcon";

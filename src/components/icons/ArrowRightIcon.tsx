@@ -12,7 +12,7 @@ export const ArrowRightIcon = (
     </g>
     <defs>
       <clipPath id="clip0_arrow_right">
-        <rect width="15" height="12" fill="white" transform="translate(5 6)" />
+        <rect fill="white" height="12" transform="translate(5 6)" width="15" />
       </clipPath>
     </defs>
   </Icon>
