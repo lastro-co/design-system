@@ -68,7 +68,7 @@ export { MapIcon } from "./MapIcon";
 export { MapPinIcon } from "./MapPinIcon";
 export { MaximizeIcon } from "./MaximizeIcon";
 export { MegaphoneIcon } from "./MegaphoneIcon";
-export { MenuCircle } from "./MenuCircleIcon";
+export { MenuCircleIcon } from "./MenuCircleIcon";
 export { MicIcon } from "./MicIcon";
 export { MinusIcon } from "./MinusIcon";
 export { MoneyBagIcon } from "./MoneyBagIcon";

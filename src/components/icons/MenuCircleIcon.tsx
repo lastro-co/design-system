@@ -1,6 +1,6 @@
 import { Icon, type IconProps } from "../ui/Icon";
 
-export const MenuCircle = (
+export const MenuCircleIcon = (
   props: Omit<IconProps, "children" | "aria-label">
 ) => (
   <Icon aria-label="Menu Circle Icon" {...props}>
