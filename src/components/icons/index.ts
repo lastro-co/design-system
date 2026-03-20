@@ -96,6 +96,7 @@ export { RotateCcwIcon } from "./RotateCcwIcon";
 export { ScanBarcodeIcon } from "./ScanBarcodeIcon";
 export { SearchIcon } from "./SearchIcon";
 export { SendIcon } from "./SendIcon";
+export { ShareIcon } from "./ShareIcon";
 export { ShowerIcon } from "./ShowerIcon";
 export { SparklesIcon } from "./SparklesIcon";
 export { StarIcon } from "./StarIcon";
