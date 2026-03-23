@@ -16,7 +16,7 @@ export const ConnectedAppsIcon = (
     </g>
     <defs>
       <clipPath id="clip0_connected_apps">
-        <rect x="2.1818" y="0" fill="#fff" height="23.1925" width="19.1975" />
+        <rect fill="#fff" height="23.1925" width="19.1975" x="2.1818" y="0" />
       </clipPath>
     </defs>
   </Icon>

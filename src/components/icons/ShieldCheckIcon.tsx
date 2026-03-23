@@ -12,7 +12,7 @@ export const ShieldCheckIcon = (
     </g>
     <defs>
       <clipPath id="clip0_shield_check">
-        <rect x="1.8" y="0" fill="#fff" height="23.6602" width="19.6055" />
+        <rect fill="#fff" height="23.6602" width="19.6055" x="1.8" y="0" />
       </clipPath>
     </defs>
   </Icon>
