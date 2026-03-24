@@ -55,6 +55,7 @@ export { HouseArrowUpIcon } from "./HouseArrowUpIcon";
 export { HouseFlagIcon } from "./HouseFlagIcon";
 export { HouseIcon } from "./HouseIcon";
 export { HousePlusIcon } from "./HousePlusIcon";
+export { IaMicIcon } from "./IaMicIcon";
 export { IdCardIcon } from "./IdCardIcon";
 export { IdOutlineIcon } from "./IdOutlineIcon";
 export { ImageIcon } from "./ImageIcon";
