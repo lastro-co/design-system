@@ -21,12 +21,7 @@ export const ClipboardOutlineIcon = (
       </g>
       <defs>
         <clipPath id={clipId}>
-          <rect
-            width="16"
-            height="24"
-            fill="white"
-            transform="translate(4)"
-          />
+          <rect fill="white" height="24" transform="translate(4)" width="16" />
         </clipPath>
       </defs>
     </Icon>

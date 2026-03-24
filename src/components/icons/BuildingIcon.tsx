@@ -22,10 +22,10 @@ export const BuildingIcon = (
       <defs>
         <clipPath id={clipId}>
           <rect
-            width="19.3652"
-            height="22.8613"
             fill="white"
+            height="22.8613"
             transform="translate(2.31738 0.569336)"
+            width="19.3652"
           />
         </clipPath>
       </defs>

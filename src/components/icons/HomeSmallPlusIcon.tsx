@@ -21,7 +21,12 @@ export const HomeSmallPlusIcon = (
       </g>
       <defs>
         <clipPath id={clipId}>
-          <rect width="28.2812" height="26.9043" fill="white" transform="translate(-2 -3)" />
+          <rect
+            fill="white"
+            height="26.9043"
+            transform="translate(-2 -3)"
+            width="28.2812"
+          />
         </clipPath>
       </defs>
     </Icon>

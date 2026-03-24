@@ -24,10 +24,10 @@ export const MoneyBagOutlineIcon = (
       <defs>
         <clipPath id={clipId}>
           <rect
-            width="20.2832"
-            height="19.9316"
             fill="white"
+            height="19.9316"
             transform="translate(1.8584 2.03418)"
+            width="20.2832"
           />
         </clipPath>
       </defs>

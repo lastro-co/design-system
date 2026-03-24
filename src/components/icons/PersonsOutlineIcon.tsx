@@ -21,7 +21,7 @@ export const PersonsOutlineIcon = (
       </g>
       <defs>
         <clipPath id={clipId}>
-          <rect width="24" height="24" fill="white" />
+          <rect fill="white" height="24" width="24" />
         </clipPath>
       </defs>
     </Icon>
