@@ -46,10 +46,11 @@ export function useWaveformRecorder({
   const [recordingState, setRecordingState] = useState<RecordingState>("idle");
   const [duration, setDuration] = useState(0);
 
+  const configKey = JSON.stringify(config);
   const mergedConfig = useMemo(
     () => ({ ...DEFAULT_WAVEFORM_CONFIG, ...config }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [config]
+    [configKey]
   );
 
   const startTimer = useCallback(() => {
