@@ -97,7 +97,7 @@ export function WaveformRecorder({
               loading ? "cursor-not-allowed" : "cursor-pointer"
             )}
             color="purple-800"
-            size="md"
+            size="sm"
           />
         ) : (
           <MicIcon
@@ -113,7 +113,7 @@ export function WaveformRecorder({
 
       <IconButton
         aria-label="Enviar áudio"
-        className="size-[36px] bg-purple-800 hover:bg-purple-700"
+        className="size-[36px] bg-purple-800 hover:bg-purple-900"
         disabled={loading || (!isRecording && !isPaused)}
         onClick={handleSend}
         shape="circular"
@@ -126,7 +126,7 @@ export function WaveformRecorder({
           <PaperPlaneIcon
             className="cursor-pointer transition-all duration-200 ease-out"
             color="white"
-            size="md"
+            size="sm"
           />
         )}
       </IconButton>
