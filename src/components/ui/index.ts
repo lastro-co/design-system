@@ -155,6 +155,8 @@ export {
   PopoverContent,
   PopoverTrigger,
 } from "./Popover";
+export type { ProgressProps } from "./Progress";
+export { Progress } from "./Progress";
 export { RadioGroup, RadioGroupItem } from "./RadioGroup";
 export { ScrollArea, ScrollBar } from "./ScrollArea";
 export {
