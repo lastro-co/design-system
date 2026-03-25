@@ -46,10 +46,11 @@ function useAnimatedValue(
 
     const start = performance.now();
     const from = 0;
+    const safeDuration = duration > 0 ? duration : 1;
 
     const step = (now: number) => {
       const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
+      const progress = Math.min(Math.max(elapsed / safeDuration, 0), 1);
       const eased = 1 - (1 - progress) ** 3;
       setCurrent(from + (target - from) * eased);
 
@@ -79,11 +80,13 @@ function Progress({
   ...props
 }: ProgressProps) {
   const { track, indicator } = colorClasses[color];
+  const clampedTarget = Math.min(100, Math.max(0, value || 0));
   const animatedValue = useAnimatedValue(
-    value || 0,
+    clampedTarget,
     animate,
     animationDuration
   );
+  const displayValue = Math.min(100, Math.max(0, animatedValue));
 
   return (
     <div className="flex w-full items-center gap-2">
@@ -96,6 +99,8 @@ function Progress({
           className
         )}
         data-slot="progress"
+        max={100}
+        value={displayValue}
         {...props}
       >
         <ProgressPrimitive.Indicator
@@ -107,13 +112,13 @@ function Progress({
             indicatorClassName
           )}
           style={{
-            transform: `translateX(-${100 - animatedValue}%)`,
+            transform: `translateX(-${100 - displayValue}%)`,
           }}
         />
       </ProgressPrimitive.Root>
       {showPercentage && (
         <span className="shrink-0 font-text text-gray-600 text-sm tabular-nums">
-          {Math.round(animatedValue)}%
+          {Math.round(displayValue)}%
         </span>
       )}
     </div>
