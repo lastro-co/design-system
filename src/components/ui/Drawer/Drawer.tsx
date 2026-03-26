@@ -92,7 +92,7 @@ function DrawerContent({
       <DrawerOverlay />
       <DrawerPrimitive.Content
         className={cn(
-          "group/drawer-content select-text! fixed z-50 flex h-auto flex-col gap-6 bg-white p-8",
+          "group/drawer-content select-text! fixed z-50 flex h-auto flex-col bg-white py-8",
           "data-[vaul-drawer-direction=top]:inset-x-0 data-[vaul-drawer-direction=top]:top-0 data-[vaul-drawer-direction=top]:max-h-[80vh]",
           "data-[vaul-drawer-direction=bottom]:inset-x-0 data-[vaul-drawer-direction=bottom]:bottom-0 data-[vaul-drawer-direction=bottom]:max-h-[80vh]",
           "data-[vaul-drawer-direction=left]:inset-y-0 data-[vaul-drawer-direction=right]:inset-y-0 data-[vaul-drawer-direction=right]:right-0 data-[vaul-drawer-direction=left]:left-0",
@@ -123,7 +123,7 @@ function DrawerContent({
 function DrawerHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn("flex flex-col gap-2", className)}
+      className={cn("flex flex-col gap-2 px-8 pb-6", className)}
       data-slot="drawer-header"
       {...props}
     />
@@ -133,7 +133,7 @@ function DrawerHeader({ className, ...props }: React.ComponentProps<"div">) {
 function DrawerMain({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn("min-h-0 flex-1 overflow-auto", className)}
+      className={cn("min-h-0 flex-1 overflow-auto px-8 py-6", className)}
       data-slot="drawer-main"
       {...props}
     />
@@ -143,7 +143,10 @@ function DrawerMain({ className, ...props }: React.ComponentProps<"div">) {
 function DrawerFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn("mt-auto flex flex-col gap-2", className)}
+      className={cn(
+        "mt-auto flex flex-col gap-2 border-gray-300 border-t p-8 pb-0",
+        className
+      )}
       data-slot="drawer-footer"
       {...props}
     />
