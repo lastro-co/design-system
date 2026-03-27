@@ -105,6 +105,7 @@ export { SearchIcon } from "./SearchIcon";
 export { SendIcon } from "./SendIcon";
 export { ShareIcon } from "./ShareIcon";
 export { ShieldCheckIcon } from "./ShieldCheckIcon";
+export { SignContractIcon } from "./SignContractIcon";
 export { ShowerIcon } from "./ShowerIcon";
 export { SparklesIcon } from "./SparklesIcon";
 export { StarIcon } from "./StarIcon";
