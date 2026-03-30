@@ -20,6 +20,8 @@ export {
   AlertDialogTrigger,
 } from "./AlertDialog";
 export { Badge, badgeVariants } from "./Badge";
+export type { BreadcrumbItem, BreadcrumbProps } from "./Breadcrumb";
+export { Breadcrumb } from "./Breadcrumb";
 export { Button, buttonVariants } from "./Button";
 export type { MonthYearPickerProps } from "./Calendar";
 export {
