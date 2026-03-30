@@ -41,6 +41,8 @@ export {
   CardTitle,
 } from "./Card";
 export { Checkbox } from "./Checkbox";
+export type { ColorPickerProps } from "./ColorPicker";
+export { ColorPicker } from "./ColorPicker";
 export type { ContextMenuItemProps } from "./ContextMenu";
 export {
   ContextMenu,
