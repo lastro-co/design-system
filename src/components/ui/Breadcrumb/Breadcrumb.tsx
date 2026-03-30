@@ -89,7 +89,7 @@ function Breadcrumb({
             <li
               className="flex items-center gap-1"
               data-slot="breadcrumb-item"
-              key={item.label}
+              key={`${index}-${item.label}`}
             >
               {index > 0 && (
                 <ChevronRightIcon
