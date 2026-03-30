@@ -26,10 +26,7 @@ export const Default: Story = {
 
 export const TwoItems: Story = {
   args: {
-    items: [
-      { label: "Home", href: "/" },
-      { label: "Current Page" },
-    ],
+    items: [{ label: "Home", href: "/" }, { label: "Current Page" }],
   },
 };
 
