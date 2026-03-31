@@ -423,9 +423,12 @@ describe("Select", () => {
       ) as HTMLInputElement;
 
       await user.type(searchInput, "BAN");
-      expect(screen.getByText("Banana")).toBeVisible();
-      expect(screen.queryByText("Maçã")).not.toBeInTheDocument();
-      expect(screen.queryByText("Laranja")).not.toBeInTheDocument();
+      const items = document.querySelectorAll("[data-slot='select-item']");
+      const visibleItems = Array.from(items).filter(
+        (el) => !el.classList.contains("hidden")
+      );
+      expect(visibleItems).toHaveLength(1);
+      expect(visibleItems[0]).toHaveTextContent("Banana");
     });
 
     it("filters ignoring accents and special characters", async () => {
@@ -449,9 +452,12 @@ describe("Select", () => {
       ) as HTMLInputElement;
 
       await user.type(searchInput, "sao");
-      expect(screen.getByText("São Paulo")).toBeVisible();
-      expect(screen.queryByText("Rio de Janeiro")).not.toBeInTheDocument();
-      expect(screen.queryByText("Brasília")).not.toBeInTheDocument();
+      const items = document.querySelectorAll("[data-slot='select-item']");
+      const visibleItems = Array.from(items).filter(
+        (el) => !el.classList.contains("hidden")
+      );
+      expect(visibleItems).toHaveLength(1);
+      expect(visibleItems[0]).toHaveTextContent("São Paulo");
     });
 
     it("shows all items when search is cleared", async () => {
@@ -474,11 +480,18 @@ describe("Select", () => {
       ) as HTMLInputElement;
 
       await user.type(searchInput, "ban");
-      expect(screen.queryByText("Maçã")).not.toBeInTheDocument();
+      let items = document.querySelectorAll("[data-slot='select-item']");
+      let visibleItems = Array.from(items).filter(
+        (el) => !el.classList.contains("hidden")
+      );
+      expect(visibleItems).toHaveLength(1);
 
       await user.clear(searchInput);
-      expect(screen.getByText("Banana")).toBeVisible();
-      expect(screen.getByText("Maçã")).toBeVisible();
+      items = document.querySelectorAll("[data-slot='select-item']");
+      visibleItems = Array.from(items).filter(
+        (el) => !el.classList.contains("hidden")
+      );
+      expect(visibleItems).toHaveLength(2);
     });
 
     it("renders search icon with purple color", async () => {
@@ -523,8 +536,12 @@ describe("Select", () => {
       ) as HTMLInputElement;
 
       await user.type(searchInput, "anj");
-      expect(screen.getByText("Laranja")).toBeVisible();
-      expect(screen.queryByText("Banana")).not.toBeInTheDocument();
+      const items = document.querySelectorAll("[data-slot='select-item']");
+      const visibleItems = Array.from(items).filter(
+        (el) => !el.classList.contains("hidden")
+      );
+      expect(visibleItems).toHaveLength(1);
+      expect(visibleItems[0]).toHaveTextContent("Laranja");
     });
 
     it("shows no items when search matches nothing", async () => {
@@ -547,8 +564,11 @@ describe("Select", () => {
       ) as HTMLInputElement;
 
       await user.type(searchInput, "xyz");
-      expect(screen.queryByText("Banana")).not.toBeInTheDocument();
-      expect(screen.queryByText("Laranja")).not.toBeInTheDocument();
+      const items = document.querySelectorAll("[data-slot='select-item']");
+      const visibleItems = Array.from(items).filter(
+        (el) => !el.classList.contains("hidden")
+      );
+      expect(visibleItems).toHaveLength(0);
     });
 
     it("allows selecting a filtered item and triggers onValueChange", async () => {

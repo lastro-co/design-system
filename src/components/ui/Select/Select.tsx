@@ -207,13 +207,13 @@ function SelectItem({
     return !normalizeText(childText).includes(normalizedSearch);
   }, [search, children]);
 
-  if (isHidden) {
-    return null;
-  }
-
   return (
     <SelectPrimitive.Item
-      className={cn(selectItemVariants({ size }), className)}
+      className={cn(
+        selectItemVariants({ size }),
+        isHidden && "hidden",
+        className
+      )}
       data-slot="select-item"
       {...props}
     >
