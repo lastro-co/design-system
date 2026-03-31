@@ -119,3 +119,28 @@ export const WithPlaceholder: Story = {
     );
   },
 };
+
+export const Searchable: Story = {
+  render: (args) => {
+    const { "aria-invalid": ariaInvalid, ...selectArgs } = args;
+    return (
+      <Select {...selectArgs}>
+        <SelectTrigger aria-invalid={ariaInvalid}>
+          <SelectValue placeholder="Selecione uma cidade..." />
+        </SelectTrigger>
+        <SelectContent searchable searchPlaceholder="Buscar cidade...">
+          <SelectItem value="sp">São Paulo</SelectItem>
+          <SelectItem value="rj">Rio de Janeiro</SelectItem>
+          <SelectItem value="bh">Belo Horizonte</SelectItem>
+          <SelectItem value="ctb">Curitiba</SelectItem>
+          <SelectItem value="poa">Porto Alegre</SelectItem>
+          <SelectItem value="sal">Salvador</SelectItem>
+          <SelectItem value="for">Fortaleza</SelectItem>
+          <SelectItem value="rec">Recife</SelectItem>
+          <SelectItem value="bsb">Brasília</SelectItem>
+          <SelectItem value="man">Manaus</SelectItem>
+        </SelectContent>
+      </Select>
+    );
+  },
+};

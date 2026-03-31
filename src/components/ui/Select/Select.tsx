@@ -2,9 +2,19 @@
 
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { cva, type VariantProps } from "class-variance-authority";
-import type * as React from "react";
+import * as React from "react";
 import { cn } from "@/lib/utils";
-import { ChevronDownIcon } from "../../icons";
+import { ChevronDownIcon, SearchIcon } from "../../icons";
+
+function normalizeText(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\s]/g, "");
+}
+
+const SelectSearchContext = React.createContext<string>("");
 
 const selectTriggerVariants = cva(
   [
@@ -103,33 +113,61 @@ function SelectContent({
   position = "popper",
   align = "start",
   side = "bottom",
+  searchable = false,
+  searchPlaceholder = "Buscar...",
   ...props
-}: React.ComponentProps<typeof SelectPrimitive.Content>) {
+}: React.ComponentProps<typeof SelectPrimitive.Content> & {
+  searchable?: boolean;
+  searchPlaceholder?: string;
+}) {
+  const [search, setSearch] = React.useState("");
+  const inputRef = React.useRef<HTMLInputElement>(null);
+
   return (
-    <SelectPrimitive.Portal>
-      <SelectPrimitive.Content
-        align={align}
-        avoidCollisions={false}
-        className={cn(
-          "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95",
-          "data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-          "relative z-50 max-h-(--radix-select-content-available-height) min-w-[4rem] origin-(--radix-select-content-transform-origin) overflow-y-auto overflow-x-hidden rounded-md border border-gray-300 bg-white font-text text-gray-900 shadow-sx data-[state=closed]:animate-out data-[state=open]:animate-in",
-          className
-        )}
-        data-slot="select-content"
-        position={position}
-        side={side}
-        {...props}
-      >
-        <SelectPrimitive.Viewport
+    <SelectSearchContext.Provider value={searchable ? search : ""}>
+      <SelectPrimitive.Portal>
+        <SelectPrimitive.Content
+          align={align}
+          avoidCollisions={false}
           className={cn(
-            "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)] scroll-my-1"
+            "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95",
+            "data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+            "relative z-50 max-h-(--radix-select-content-available-height) min-w-[4rem] origin-(--radix-select-content-transform-origin) overflow-x-hidden rounded-md border border-gray-300 bg-white font-text text-gray-900 shadow-sx data-[state=closed]:animate-out data-[state=open]:animate-in",
+            className
           )}
+          data-slot="select-content"
+          onCloseAutoFocus={() => setSearch("")}
+          position={position}
+          side={side}
+          {...props}
         >
-          {children}
-        </SelectPrimitive.Viewport>
-      </SelectPrimitive.Content>
-    </SelectPrimitive.Portal>
+          {searchable && (
+            <div
+              className="sticky top-0 z-10 flex items-center gap-2 border-gray-300 border-b bg-white p-3"
+              data-slot="select-search"
+            >
+              <SearchIcon className="size-4 shrink-0" color="purple-800" />
+              <input
+                autoFocus
+                className="w-full bg-transparent font-text text-gray-900 text-sm outline-none placeholder:text-gray-600"
+                onChange={(e) => setSearch(e.target.value)}
+                onKeyDown={(e) => e.stopPropagation()}
+                placeholder={searchPlaceholder}
+                ref={inputRef}
+                value={search}
+              />
+            </div>
+          )}
+          <SelectPrimitive.Viewport
+            className={cn(
+              "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)] scroll-my-1"
+            )}
+          >
+            {children}
+          </SelectPrimitive.Viewport>
+        </SelectPrimitive.Content>
+      </SelectPrimitive.Portal>
+    </SelectSearchContext.Provider>
   );
 }
 
@@ -153,6 +191,26 @@ function SelectItem({
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Item> &
   VariantProps<typeof selectItemVariants>) {
+  const search = React.useContext(SelectSearchContext);
+
+  const isHidden = React.useMemo(() => {
+    if (!search) {
+      return false;
+    }
+    const normalizedSearch = normalizeText(search);
+    let childText = "";
+    if (typeof children === "string") {
+      childText = children;
+    } else if (typeof children === "number") {
+      childText = String(children);
+    }
+    return !normalizeText(childText).includes(normalizedSearch);
+  }, [search, children]);
+
+  if (isHidden) {
+    return null;
+  }
+
   return (
     <SelectPrimitive.Item
       className={cn(selectItemVariants({ size }), className)}
