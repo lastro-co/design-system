@@ -502,5 +502,81 @@ describe("Select", () => {
       const icon = searchContainer?.querySelector("svg");
       expect(icon).toBeInTheDocument();
     });
+
+    it("filters by substring match, not just prefix", async () => {
+      const user = userEvent.setup();
+      render(
+        <Select>
+          <SelectTrigger>
+            <SelectValue placeholder="Escolha" />
+          </SelectTrigger>
+          <SelectContent searchable>
+            <SelectItem value="a">Laranja</SelectItem>
+            <SelectItem value="b">Banana</SelectItem>
+          </SelectContent>
+        </Select>
+      );
+
+      await user.click(screen.getByRole("combobox"));
+      const searchInput = document.querySelector(
+        "[data-slot='select-search'] input"
+      ) as HTMLInputElement;
+
+      await user.type(searchInput, "anj");
+      expect(screen.getByText("Laranja")).toBeVisible();
+      expect(screen.queryByText("Banana")).not.toBeInTheDocument();
+    });
+
+    it("shows no items when search matches nothing", async () => {
+      const user = userEvent.setup();
+      render(
+        <Select>
+          <SelectTrigger>
+            <SelectValue placeholder="Escolha" />
+          </SelectTrigger>
+          <SelectContent searchable>
+            <SelectItem value="a">Banana</SelectItem>
+            <SelectItem value="b">Laranja</SelectItem>
+          </SelectContent>
+        </Select>
+      );
+
+      await user.click(screen.getByRole("combobox"));
+      const searchInput = document.querySelector(
+        "[data-slot='select-search'] input"
+      ) as HTMLInputElement;
+
+      await user.type(searchInput, "xyz");
+      expect(screen.queryByText("Banana")).not.toBeInTheDocument();
+      expect(screen.queryByText("Laranja")).not.toBeInTheDocument();
+    });
+
+    it("allows selecting a filtered item and triggers onValueChange", async () => {
+      const user = userEvent.setup();
+      const onValueChange = jest.fn();
+      render(
+        <Select onValueChange={onValueChange}>
+          <SelectTrigger>
+            <SelectValue placeholder="Escolha" />
+          </SelectTrigger>
+          <SelectContent searchable>
+            <SelectItem value="a">Banana</SelectItem>
+            <SelectItem value="b">Laranja</SelectItem>
+            <SelectItem value="c">Maçã</SelectItem>
+          </SelectContent>
+        </Select>
+      );
+
+      await user.click(screen.getByRole("combobox"));
+      const searchInput = document.querySelector(
+        "[data-slot='select-search'] input"
+      ) as HTMLInputElement;
+
+      await user.type(searchInput, "lara");
+      expect(screen.getByText("Laranja")).toBeVisible();
+
+      await user.click(screen.getByText("Laranja"));
+      expect(onValueChange).toHaveBeenCalledWith("b");
+    });
   });
 });
