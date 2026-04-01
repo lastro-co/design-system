@@ -45,13 +45,13 @@ const selectTriggerVariants = cva(
 );
 
 const selectItemVariants = cva(
-  "relative flex w-full cursor-pointer select-none items-center gap-2 text-gray-900 outline-hidden transition-colors data-disabled:pointer-events-none data-[state=checked]:bg-purple-300 data-highlighted:bg-gray-300 data-[state=checked]:text-purple-800 data-disabled:opacity-50",
+  "relative flex w-full cursor-pointer select-none items-center gap-2 text-base text-gray-900 outline-hidden transition-colors data-disabled:pointer-events-none data-[state=checked]:bg-purple-300 data-highlighted:bg-gray-300 data-[state=checked]:text-purple-800 data-disabled:opacity-50",
   {
     variants: {
       size: {
         sm: "p-2 text-xs",
-        md: "p-2.5 text-sm",
-        lg: "p-3 text-sm",
+        md: "p-2.5",
+        lg: "p-3",
       },
     },
     defaultVariants: {
