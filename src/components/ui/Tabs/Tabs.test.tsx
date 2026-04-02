@@ -30,7 +30,7 @@ describe("Tabs", () => {
     );
 
     const activeTab = screen.getByText("Tab 2");
-    expect(activeTab).toHaveClass("text-gray-900");
+    expect(activeTab).toHaveClass("text-purple-800");
   });
 
   it("should call onValueChange when clicking a tab", async () => {
