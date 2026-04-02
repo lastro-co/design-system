@@ -14,7 +14,7 @@ const tabVariants = cva(
   {
     variants: {
       isActive: {
-        true: "text-gray-900",
+        true: "text-purple-800",
         false: "text-gray-600 hover:text-gray-800",
       },
     },
