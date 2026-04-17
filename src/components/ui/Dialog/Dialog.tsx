@@ -68,7 +68,6 @@ function Dialog({
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
 
       <DialogContent
-        container={container}
         actionColor={actionColor}
         actionDisabled={actionDisabled}
         actionLoading={actionLoading}
@@ -81,6 +80,7 @@ function Dialog({
         cancelText={cancelText}
         cancelVariant={cancelVariant}
         className={className}
+        container={container}
         description={description}
         footer={footer}
         onAction={onAction}
