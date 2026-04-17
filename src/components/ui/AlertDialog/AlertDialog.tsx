@@ -46,9 +46,13 @@ function AlertDialogOverlay({
 export interface AlertDialogContentProps
   extends React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content> {}
 
-function AlertDialogContent({ className, ...props }: AlertDialogContentProps) {
+function AlertDialogContent({
+  className,
+  container,
+  ...props
+}: AlertDialogContentProps & { container?: HTMLElement | null }) {
   return (
-    <AlertDialogPortal>
+    <AlertDialogPortal container={container}>
       <AlertDialogOverlay />
       <AlertDialogPrimitive.Content
         className={cn(

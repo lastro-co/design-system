@@ -84,11 +84,14 @@ function DrawerOverlay({
 function DrawerContent({
   className,
   children,
+  container,
   ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Content>) {
+}: React.ComponentProps<typeof DrawerPrimitive.Content> & {
+  container?: HTMLElement | null;
+}) {
   const { width } = useContext(DrawerContext);
   return (
-    <DrawerPortal data-slot="drawer-portal">
+    <DrawerPortal container={container} data-slot="drawer-portal">
       <DrawerOverlay />
       <DrawerPrimitive.Content
         className={cn(
