@@ -145,6 +145,7 @@ function DialogContent({
   actionLoading = false,
   onAction,
   onCancel,
+  container,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
   showCloseButton?: boolean;
@@ -164,12 +165,13 @@ function DialogContent({
   actionLoading?: boolean;
   onAction?: () => void;
   onCancel?: () => void;
+  container?: HTMLElement | null;
 }) {
   const hasFooterButtons = cancelText || actionText;
   const shouldRenderFooter = footer || hasFooterButtons;
 
   return (
-    <DialogPortal data-slot="dialog-portal">
+    <DialogPortal container={container} data-slot="dialog-portal">
       <DialogOverlay />
       <DialogPrimitive.Content
         className={cn(
