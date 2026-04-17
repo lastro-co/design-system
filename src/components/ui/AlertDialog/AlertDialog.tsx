@@ -198,6 +198,7 @@ interface AlertDialogProps
   actionLoading?: boolean;
   onAction?: () => void;
   onCancel?: () => void;
+  container?: HTMLElement | null;
 }
 
 function AlertDialog({
@@ -217,13 +218,14 @@ function AlertDialog({
   actionLoading = false,
   onAction,
   onCancel,
+  container,
   ...props
 }: AlertDialogProps) {
   return (
     <AlertDialogRoot {...props}>
       {children && <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>}
 
-      <AlertDialogContent>
+      <AlertDialogContent container={container}>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>

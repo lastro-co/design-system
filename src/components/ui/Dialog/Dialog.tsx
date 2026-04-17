@@ -36,6 +36,7 @@ interface DialogProps
   className?: string;
   onAction?: () => void;
   onCancel?: () => void;
+  container?: HTMLElement | null;
 }
 
 function Dialog({
@@ -59,6 +60,7 @@ function Dialog({
   className,
   onAction,
   onCancel,
+  container,
   ...props
 }: DialogProps) {
   return (
@@ -66,6 +68,7 @@ function Dialog({
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
 
       <DialogContent
+        container={container}
         actionColor={actionColor}
         actionDisabled={actionDisabled}
         actionLoading={actionLoading}
