@@ -36,6 +36,7 @@ interface DialogProps
   className?: string;
   onAction?: () => void;
   onCancel?: () => void;
+  container?: HTMLElement | null;
 }
 
 function Dialog({
@@ -59,6 +60,7 @@ function Dialog({
   className,
   onAction,
   onCancel,
+  container,
   ...props
 }: DialogProps) {
   return (
@@ -78,6 +80,7 @@ function Dialog({
         cancelText={cancelText}
         cancelVariant={cancelVariant}
         className={className}
+        container={container}
         description={description}
         footer={footer}
         onAction={onAction}
