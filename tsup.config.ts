@@ -4,6 +4,7 @@ export default defineConfig({
   entry: {
     index: "src/index.ts",
     icons: "src/icons.ts",
+    "icons.v2": "src/icons.v2.ts",
   },
   format: ["esm", "cjs"],
   dts: true,
@@ -18,5 +19,6 @@ export default defineConfig({
     "react-hook-form",
     "zod",
     "@hookform/resolvers",
+    "lucide-react",
   ],
 });

@@ -57,7 +57,16 @@ const preview: Preview = {
     options: {
       storySort: {
         method: "alphabetical",
-        order: ["Introdução", "Color Palette", "Components", "*"],
+        order: [
+          "Introdução",
+          "Color Palette",
+          "Icons",
+          "Icons V2",
+          "Lais Logo",
+          "Menu",
+          "Components",
+          "*",
+        ],
       },
     },
   },
