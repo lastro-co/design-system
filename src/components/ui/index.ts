@@ -118,6 +118,8 @@ export { Input } from "./Input";
 export type { InputTagProps } from "./InputTag";
 export { InputTag } from "./InputTag";
 export { Label } from "./Label";
+export type { LaisLogoProps } from "./LaisLogo";
+export { LaisLogo } from "./LaisLogo";
 export type { LoadingOverlayProps } from "./LoadingOverlay";
 export { LoadingOverlay } from "./LoadingOverlay";
 export type {
@@ -149,6 +151,28 @@ export {
   useMap,
   useMarkerContext,
 } from "./Map";
+export type {
+  MenuAccordionItemProps,
+  MenuHeaderProps,
+  MenuItemAnimation,
+  MenuItemProps,
+  MenuOrganizationOption,
+  MenuOrganizationProps,
+  MenuProps,
+  MenuSectionProps,
+  MenuSeparatorProps,
+  MenuSubItemProps,
+} from "./Menu";
+export {
+  Menu,
+  MenuAccordionItem,
+  MenuHeader,
+  MenuItem,
+  MenuOrganization,
+  MenuSection,
+  MenuSeparator,
+  MenuSubItem,
+} from "./Menu";
 export {
   DynamicPagination,
   generatePaginationRange,

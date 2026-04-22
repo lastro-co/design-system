@@ -35,6 +35,16 @@
         "default": "./dist/icons.cjs"
       }
     },
+    "./icons.v2": {
+      "import": {
+        "types": "./dist/icons.v2.d.ts",
+        "default": "./dist/icons.v2.js"
+      },
+      "require": {
+        "types": "./dist/icons.v2.d.cts",
+        "default": "./dist/icons.v2.cjs"
+      }
+    },
     "./tokens.css": "./src/styles/tokens.css",
     "./styles.css": {
       "style": "./dist/styles.css",
@@ -65,6 +75,7 @@
   },
   "peerDependencies": {
     "@hookform/resolvers": "*",
+    "lucide-react": ">=0.500.0",
     "maplibre-gl": ">=5.18.0",
     "react": ">=19.0.0",
     "react-dom": ">=19.0.0",
@@ -103,6 +114,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "motion": "^12.38.0",
     "radix-ui": "^1.4.3",
     "react-colorful": "^5.6.1",
     "react-day-picker": "^9.13.2",
@@ -136,6 +148,8 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
+    "lucide-react": "^0.577.0",
+    "maplibre-gl": "^5.18.0",
     "postcss": "^8.5.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
