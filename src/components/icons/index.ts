@@ -41,6 +41,7 @@ export { DistributionBranchIcon } from "./DistributionBranchIcon";
 export { DocumentIcon } from "./DocumentIcon";
 export { DoorClosedIcon } from "./DoorClosedIcon";
 export { DoorOpenIcon } from "./DoorOpenIcon";
+export { DotsIcon } from "./DotsIcon";
 export { EditIcon } from "./EditIcon";
 export { EmojiIcon } from "./EmojiIcon";
 export { ExitIcon } from "./ExitIcon";
