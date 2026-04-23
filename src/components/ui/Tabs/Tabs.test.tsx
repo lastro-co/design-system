@@ -65,4 +65,29 @@ describe("Tabs", () => {
     const indicator = container.querySelector(".bg-purple-800");
     expect(indicator).toBeInTheDocument();
   });
+
+  it("should render badge when provided on a tab item", () => {
+    const itemsWithBadge = [
+      { value: "users", label: "Usuários" },
+      { value: "teams", label: "Equipes", badge: "NOVO" },
+    ];
+
+    render(
+      <Tabs
+        items={itemsWithBadge}
+        onValueChange={mockOnValueChange}
+        value="users"
+      />
+    );
+
+    expect(screen.getByText("NOVO")).toBeVisible();
+  });
+
+  it("should not render badge when not provided", () => {
+    render(
+      <Tabs items={tabItems} onValueChange={mockOnValueChange} value="tab1" />
+    );
+
+    expect(screen.queryByText("NOVO")).not.toBeInTheDocument();
+  });
 });

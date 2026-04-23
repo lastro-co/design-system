@@ -70,3 +70,14 @@ export const ManyTabs: Story = {
     value: "home",
   },
 };
+
+export const WithBadge: Story = {
+  render: TabsWithState,
+  args: {
+    items: [
+      { value: "usuarios", label: "Usuários" },
+      { value: "equipes", label: "Equipes", badge: "NOVO" },
+    ],
+    value: "usuarios",
+  },
+};
