@@ -10,7 +10,7 @@ const tabsVariants = cva("flex gap-6 border-gray-200 border-b", {
 });
 
 const tabVariants = cva(
-  "relative cursor-pointer pb-2 font-medium text-base transition-colors",
+  "relative flex cursor-pointer items-center gap-2 pb-2 font-medium text-base transition-colors",
   {
     variants: {
       isActive: {
@@ -27,6 +27,7 @@ const tabVariants = cva(
 interface TabItem {
   value: string;
   label: string;
+  badge?: string;
 }
 
 interface TabsProps extends React.ComponentProps<"div"> {
@@ -47,6 +48,14 @@ function Tabs({ items, value, onValueChange, className, ...props }: TabsProps) {
           type="button"
         >
           {item.label}
+          {item.badge && (
+            <span
+              className="inline-flex items-center rounded-full border border-purple-800 px-2 font-semibold text-[10px] text-purple-800 leading-5 tracking-[0.1px]"
+              data-slot="tab-badge"
+            >
+              {item.badge}
+            </span>
+          )}
           {value === item.value && (
             <span className="-bottom-px absolute left-0 h-px w-full bg-purple-800" />
           )}
