@@ -89,6 +89,8 @@ export interface MenuItemProps {
   disabled?: boolean;
   onClick?: () => void;
   className?: string;
+  /** When `false`, the item is not rendered. Defaults to `true`. */
+  visible?: boolean;
 }
 
 export interface MenuAccordionItemProps
@@ -98,6 +100,12 @@ export interface MenuAccordionItemProps
   onOpenChange?: (open: boolean) => void;
   active?: boolean;
   children: React.ReactNode;
+  /**
+   * When `false`, the accordion is not rendered. If omitted, the accordion
+   * auto-hides when every child is invisible (e.g. all `MenuSubItem` children
+   * have `visible={false}`).
+   */
+  visible?: boolean;
 }
 
 export interface MenuSubItemProps {
@@ -106,6 +114,8 @@ export interface MenuSubItemProps {
   disabled?: boolean;
   onClick?: () => void;
   className?: string;
+  /** When `false`, the sub-item is not rendered. Defaults to `true`. */
+  visible?: boolean;
 }
 
 /* ------------------------------------------------------------------ */
@@ -511,10 +521,15 @@ function MenuItem({
   disabled = false,
   onClick,
   className,
+  visible = true,
 }: MenuItemProps) {
   const { collapsed } = useMenuContext();
   const [hovered, setHovered] = React.useState<boolean>(false);
   const hasBadge = badge !== undefined && badge !== "" && badge !== 0;
+
+  if (!visible) {
+    return null;
+  }
 
   if (collapsed) {
     return (
@@ -617,6 +632,26 @@ function getActiveSubItemLabel(children: React.ReactNode): string | undefined {
   return result;
 }
 
+function hasVisibleChildren(children: React.ReactNode): boolean {
+  let found = false;
+  React.Children.forEach(children, (child) => {
+    if (found) {
+      return;
+    }
+    if (!React.isValidElement<{ visible?: boolean }>(child)) {
+      // Non-element children (strings, fragments, etc.) count as visible.
+      if (child !== null && child !== undefined && child !== false) {
+        found = true;
+      }
+      return;
+    }
+    if (child.props.visible !== false) {
+      found = true;
+    }
+  });
+  return found;
+}
+
 function MenuAccordionItem({
   icon,
   animatedIcon,
@@ -630,10 +665,26 @@ function MenuAccordionItem({
   onOpenChange,
   className,
   children,
+  visible,
 }: MenuAccordionItemProps) {
   const { collapsed } = useMenuContext();
   const [hovered, setHovered] = React.useState<boolean>(false);
   const [popoverOpen, setPopoverOpen] = React.useState<boolean>(false);
+
+  // Explicit opt-out wins. Otherwise, auto-hide when the accordion was given
+  // children but they are all invisible — consumers don't have to track "all
+  // subitems flagged off" by hand. Zero children falls through to the existing
+  // "collapsed + no sub-items renders as MenuItem" behavior.
+  if (visible === false) {
+    return null;
+  }
+  if (
+    visible === undefined &&
+    React.Children.count(children) > 0 &&
+    !hasVisibleChildren(children)
+  ) {
+    return null;
+  }
 
   const activeSubItemLabel = getActiveSubItemLabel(children);
   const tooltipLabel = activeSubItemLabel ?? label;
@@ -845,7 +896,12 @@ function MenuSubItem({
   disabled = false,
   onClick,
   className,
+  visible = true,
 }: MenuSubItemProps) {
+  if (!visible) {
+    return null;
+  }
+
   return (
     <button
       aria-current={active ? "page" : undefined}

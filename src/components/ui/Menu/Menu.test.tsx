@@ -1524,6 +1524,125 @@ describe("Menu", () => {
       expect(screen.getByRole("complementary")).toHaveStyle({ width: "272px" });
     });
   });
+
+  describe("visible prop — feature-flag gating", () => {
+    it("MenuItem with visible={false} renders nothing", () => {
+      render(
+        <Menu>
+          <MenuSection>
+            <MenuItem label="Shown" />
+            <MenuItem label="Hidden" visible={false} />
+          </MenuSection>
+        </Menu>
+      );
+      expect(screen.getByText("Shown")).toBeInTheDocument();
+      expect(screen.queryByText("Hidden")).not.toBeInTheDocument();
+    });
+
+    it("MenuItem with visible={true} (explicit) still renders", () => {
+      render(
+        <Menu>
+          <MenuSection>
+            <MenuItem label="Explicit" visible={true} />
+          </MenuSection>
+        </Menu>
+      );
+      expect(screen.getByText("Explicit")).toBeInTheDocument();
+    });
+
+    it("MenuItem with visible={false} is hidden in collapsed mode as well", () => {
+      render(
+        <Menu defaultCollapsed>
+          <MenuSection>
+            <MenuItem icon={<svg data-testid="icon-a" />} label="Shown" />
+            <MenuItem
+              icon={<svg data-testid="icon-b" />}
+              label="Hidden"
+              visible={false}
+            />
+          </MenuSection>
+        </Menu>
+      );
+      expect(screen.getByTestId("icon-a")).toBeInTheDocument();
+      expect(screen.queryByTestId("icon-b")).not.toBeInTheDocument();
+    });
+
+    it("MenuSubItem with visible={false} renders nothing", () => {
+      render(
+        <Menu>
+          <MenuSection>
+            <MenuAccordionItem defaultOpen label="Parent">
+              <MenuSubItem label="Sub Shown" />
+              <MenuSubItem label="Sub Hidden" visible={false} />
+            </MenuAccordionItem>
+          </MenuSection>
+        </Menu>
+      );
+      expect(screen.getByText("Sub Shown")).toBeInTheDocument();
+      expect(screen.queryByText("Sub Hidden")).not.toBeInTheDocument();
+    });
+
+    it("MenuAccordionItem with visible={false} renders nothing", () => {
+      render(
+        <Menu>
+          <MenuSection>
+            <MenuAccordionItem label="Hidden Parent" visible={false}>
+              <MenuSubItem label="Sub" />
+            </MenuAccordionItem>
+          </MenuSection>
+        </Menu>
+      );
+      expect(screen.queryByText("Hidden Parent")).not.toBeInTheDocument();
+      expect(screen.queryByText("Sub")).not.toBeInTheDocument();
+    });
+
+    it("MenuAccordionItem auto-hides when all children are invisible", () => {
+      render(
+        <Menu>
+          <MenuSection>
+            <MenuAccordionItem label="Should Auto-Hide">
+              <MenuSubItem label="A" visible={false} />
+              <MenuSubItem label="B" visible={false} />
+            </MenuAccordionItem>
+          </MenuSection>
+        </Menu>
+      );
+      expect(screen.queryByText("Should Auto-Hide")).not.toBeInTheDocument();
+    });
+
+    it("MenuAccordionItem does NOT auto-hide if at least one child is visible", () => {
+      render(
+        <Menu>
+          <MenuSection>
+            <MenuAccordionItem defaultOpen label="Still Visible">
+              <MenuSubItem label="A" visible={false} />
+              <MenuSubItem label="B" />
+            </MenuAccordionItem>
+          </MenuSection>
+        </Menu>
+      );
+      expect(screen.getByText("Still Visible")).toBeInTheDocument();
+      expect(screen.getByText("B")).toBeInTheDocument();
+      expect(screen.queryByText("A")).not.toBeInTheDocument();
+    });
+
+    it("MenuAccordionItem with explicit visible={true} renders even if all children are hidden", () => {
+      render(
+        <Menu>
+          <MenuSection>
+            <MenuAccordionItem
+              defaultOpen
+              label="Forced Visible"
+              visible={true}
+            >
+              <MenuSubItem label="A" visible={false} />
+            </MenuAccordionItem>
+          </MenuSection>
+        </Menu>
+      );
+      expect(screen.getByText("Forced Visible")).toBeInTheDocument();
+    });
+  });
 });
 
 /* ------------------------------------------------------------------ */
