@@ -638,13 +638,28 @@ function hasVisibleChildren(children: React.ReactNode): boolean {
     if (found) {
       return;
     }
-    if (!React.isValidElement<{ visible?: boolean }>(child)) {
-      // Non-element children (strings, fragments, etc.) count as visible.
-      if (child !== null && child !== undefined && child !== false) {
+    // Non-renderable: null, undefined, booleans render nothing in React.
+    if (child == null || typeof child === "boolean") {
+      return;
+    }
+    // Strings and numbers are renderable content — count as visible.
+    if (
+      !React.isValidElement<{
+        visible?: boolean;
+        children?: React.ReactNode;
+      }>(child)
+    ) {
+      found = true;
+      return;
+    }
+    // Fragments: recurse rather than treat the wrapper itself as visible.
+    if (child.type === React.Fragment) {
+      if (hasVisibleChildren(child.props.children)) {
         found = true;
       }
       return;
     }
+    // Regular elements: respect the `visible` prop.
     if (child.props.visible !== false) {
       found = true;
     }

@@ -1626,6 +1626,54 @@ describe("Menu", () => {
       expect(screen.queryByText("A")).not.toBeInTheDocument();
     });
 
+    it("MenuAccordionItem auto-hides when a fragment wraps only invisible subitems", () => {
+      render(
+        <Menu>
+          <MenuSection>
+            <MenuAccordionItem label="Wrapped All Hidden">
+              <>
+                <MenuSubItem label="A" visible={false} />
+                <MenuSubItem label="B" visible={false} />
+              </>
+            </MenuAccordionItem>
+          </MenuSection>
+        </Menu>
+      );
+      expect(screen.queryByText("Wrapped All Hidden")).not.toBeInTheDocument();
+    });
+
+    it("MenuAccordionItem renders when a fragment wraps at least one visible subitem", () => {
+      render(
+        <Menu>
+          <MenuSection>
+            <MenuAccordionItem defaultOpen label="Wrapped One Visible">
+              <>
+                <MenuSubItem label="Hidden" visible={false} />
+                <MenuSubItem label="Shown" />
+              </>
+            </MenuAccordionItem>
+          </MenuSection>
+        </Menu>
+      );
+      expect(screen.getByText("Wrapped One Visible")).toBeInTheDocument();
+      expect(screen.getByText("Shown")).toBeInTheDocument();
+    });
+
+    it("MenuAccordionItem auto-hides when children are only null/false/undefined", () => {
+      const flag = false;
+      render(
+        <Menu>
+          <MenuSection>
+            <MenuAccordionItem label="Only Falsy">
+              {flag && <MenuSubItem label="Gated" />}
+              {null}
+            </MenuAccordionItem>
+          </MenuSection>
+        </Menu>
+      );
+      expect(screen.queryByText("Only Falsy")).not.toBeInTheDocument();
+    });
+
     it("MenuAccordionItem with explicit visible={true} renders even if all children are hidden", () => {
       render(
         <Menu>
