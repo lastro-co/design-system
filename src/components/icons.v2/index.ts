@@ -18,4 +18,5 @@ export {
   Settings as SettingsIcon,
   ShoppingBag as ShoppingBagIcon,
   Users as UsersIcon,
+  Zap as ZapIcon,
 } from "lucide-react";
