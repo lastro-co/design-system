@@ -621,15 +621,54 @@ function MenuItem({
 function getActiveSubItemLabel(children: React.ReactNode): string | undefined {
   let result: string | undefined;
   React.Children.forEach(children, (child) => {
-    if (
-      result === undefined &&
-      React.isValidElement<MenuSubItemProps>(child) &&
-      child.props.active
-    ) {
-      result = child.props.label;
+    if (result !== undefined || !React.isValidElement(child)) {
+      return;
+    }
+    // Fragments don't carry MenuSubItem props themselves — recurse into them.
+    if (child.type === React.Fragment) {
+      const nested = (
+        child as React.ReactElement<{ children?: React.ReactNode }>
+      ).props.children;
+      result = getActiveSubItemLabel(nested);
+      return;
+    }
+    const props = (child as React.ReactElement<MenuSubItemProps>).props;
+    if (props.active) {
+      result = props.label;
     }
   });
   return result;
+}
+
+function decorateSubItemsWithClose(
+  children: React.ReactNode,
+  closePopover: () => void
+): React.ReactNode {
+  return React.Children.map(children, (child) => {
+    if (!React.isValidElement(child)) {
+      return child;
+    }
+    // Unwrap fragments: clone with decorated descendants so nested
+    // MenuSubItems still close the popover when clicked.
+    if (child.type === React.Fragment) {
+      const fragment = child as React.ReactElement<{
+        children?: React.ReactNode;
+      }>;
+      return React.cloneElement(
+        fragment,
+        undefined,
+        decorateSubItemsWithClose(fragment.props.children, closePopover)
+      );
+    }
+    const element = child as React.ReactElement<MenuSubItemProps>;
+    const originalOnClick = element.props.onClick;
+    return React.cloneElement(element, {
+      onClick: () => {
+        originalOnClick?.();
+        closePopover();
+      },
+    });
+  });
 }
 
 function hasVisibleChildren(children: React.ReactNode): boolean {
@@ -774,18 +813,7 @@ function MenuAccordionItem({
           <div className="mb-1 truncate px-2 py-1 font-semibold text-[11px] text-gray-600 uppercase tracking-wide">
             {label}
           </div>
-          {React.Children.map(children, (child) => {
-            if (!React.isValidElement<MenuSubItemProps>(child)) {
-              return child;
-            }
-            const originalOnClick = child.props.onClick;
-            return React.cloneElement(child, {
-              onClick: () => {
-                originalOnClick?.();
-                setPopoverOpen(false);
-              },
-            });
-          })}
+          {decorateSubItemsWithClose(children, () => setPopoverOpen(false))}
         </PopoverContent>
       </Popover>
     );

@@ -1182,6 +1182,26 @@ describe("Menu", () => {
       );
     });
 
+    it("tooltip finds the active sub-item when it is wrapped in a fragment", async () => {
+      const user = userEvent.setup();
+      render(
+        <Menu defaultCollapsed>
+          <MenuSection>
+            <MenuAccordionItem icon={<svg />} label="Parent Group">
+              <>
+                <MenuSubItem label="Inactive" />
+                <MenuSubItem active label="Active Nested" />
+              </>
+            </MenuAccordionItem>
+          </MenuSection>
+        </Menu>
+      );
+      await user.hover(screen.getByRole("button"));
+      await waitFor(() => {
+        expect(screen.getByRole("tooltip")).toHaveTextContent("Active Nested");
+      });
+    });
+
     it("click opens a popover with the sub-items", async () => {
       const user = userEvent.setup();
       render(
@@ -1246,6 +1266,32 @@ describe("Menu", () => {
       expect(onClick).toHaveBeenCalledTimes(1);
       await waitFor(() => {
         expect(screen.queryByText("Leads")).not.toBeInTheDocument();
+      });
+    });
+
+    it("clicking a fragment-wrapped sub-item still closes the popover", async () => {
+      const user = userEvent.setup();
+      const onClick = jest.fn();
+      render(
+        <Menu defaultCollapsed>
+          <MenuSection>
+            <MenuAccordionItem icon={<svg />} label="Gestão">
+              <>
+                <MenuSubItem label="Wrapped Leads" onClick={onClick} />
+                <MenuSubItem label="Wrapped Visitas" />
+              </>
+            </MenuAccordionItem>
+          </MenuSection>
+        </Menu>
+      );
+      await user.click(screen.getByRole("button"));
+      await waitFor(() => {
+        expect(screen.getByText("Wrapped Leads")).toBeVisible();
+      });
+      await user.click(screen.getByText("Wrapped Leads"));
+      expect(onClick).toHaveBeenCalledTimes(1);
+      await waitFor(() => {
+        expect(screen.queryByText("Wrapped Leads")).not.toBeInTheDocument();
       });
     });
 
