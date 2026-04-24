@@ -6,6 +6,7 @@ import { Drawer as DrawerPrimitive } from "vaul";
 import { cn } from "@/lib/utils";
 import { CloseIcon } from "../../icons";
 import { IconButton } from "../IconButton";
+import { ScrollArea } from "../ScrollArea";
 
 const DRAWER_WIDTH_CLASSES = {
   default:
@@ -135,11 +136,12 @@ function DrawerHeader({ className, ...props }: React.ComponentProps<"div">) {
 
 function DrawerMain({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div
-      className={cn("min-h-0 flex-1 overflow-auto px-8 py-6", className)}
+    <ScrollArea
+      className={cn("min-h-0 flex-1", className)}
       data-slot="drawer-main"
-      {...props}
-    />
+    >
+      <div className="px-8 py-6" {...props} />
+    </ScrollArea>
   );
 }
 
