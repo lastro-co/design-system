@@ -9,7 +9,6 @@ export { BarChartIcon } from "./BarChartIcon";
 export { BedDoubleIcon } from "./BedDoubleIcon";
 export { BellIcon } from "./BellIcon";
 export { BellOutlineIcon } from "./BellOutlineIcon";
-export { BoltIcon } from "./BoltIcon";
 export { BriefcaseBusinessIcon } from "./BriefcaseBusinessIcon";
 export { BuildingIcon } from "./BuildingIcon";
 export { BuildingOutlineIcon } from "./BuildingOutlineIcon";
