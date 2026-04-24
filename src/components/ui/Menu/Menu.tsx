@@ -89,6 +89,8 @@ export interface MenuItemProps {
   disabled?: boolean;
   onClick?: () => void;
   className?: string;
+  /** When `false`, the item is not rendered. Defaults to `true`. */
+  visible?: boolean;
 }
 
 export interface MenuAccordionItemProps
@@ -98,6 +100,12 @@ export interface MenuAccordionItemProps
   onOpenChange?: (open: boolean) => void;
   active?: boolean;
   children: React.ReactNode;
+  /**
+   * When `false`, the accordion is not rendered. If omitted, the accordion
+   * auto-hides when every child is invisible (e.g. all `MenuSubItem` children
+   * have `visible={false}`).
+   */
+  visible?: boolean;
 }
 
 export interface MenuSubItemProps {
@@ -106,6 +114,8 @@ export interface MenuSubItemProps {
   disabled?: boolean;
   onClick?: () => void;
   className?: string;
+  /** When `false`, the sub-item is not rendered. Defaults to `true`. */
+  visible?: boolean;
 }
 
 /* ------------------------------------------------------------------ */
@@ -511,10 +521,15 @@ function MenuItem({
   disabled = false,
   onClick,
   className,
+  visible = true,
 }: MenuItemProps) {
   const { collapsed } = useMenuContext();
   const [hovered, setHovered] = React.useState<boolean>(false);
   const hasBadge = badge !== undefined && badge !== "" && badge !== 0;
+
+  if (!visible) {
+    return null;
+  }
 
   if (collapsed) {
     return (
@@ -606,15 +621,89 @@ function MenuItem({
 function getActiveSubItemLabel(children: React.ReactNode): string | undefined {
   let result: string | undefined;
   React.Children.forEach(children, (child) => {
-    if (
-      result === undefined &&
-      React.isValidElement<MenuSubItemProps>(child) &&
-      child.props.active
-    ) {
-      result = child.props.label;
+    if (result !== undefined || !React.isValidElement(child)) {
+      return;
+    }
+    // Fragments don't carry MenuSubItem props themselves — recurse into them.
+    if (child.type === React.Fragment) {
+      const nested = (
+        child as React.ReactElement<{ children?: React.ReactNode }>
+      ).props.children;
+      result = getActiveSubItemLabel(nested);
+      return;
+    }
+    const props = (child as React.ReactElement<MenuSubItemProps>).props;
+    if (props.active) {
+      result = props.label;
     }
   });
   return result;
+}
+
+function decorateSubItemsWithClose(
+  children: React.ReactNode,
+  closePopover: () => void
+): React.ReactNode {
+  return React.Children.map(children, (child) => {
+    if (!React.isValidElement(child)) {
+      return child;
+    }
+    // Unwrap fragments: clone with decorated descendants so nested
+    // MenuSubItems still close the popover when clicked.
+    if (child.type === React.Fragment) {
+      const fragment = child as React.ReactElement<{
+        children?: React.ReactNode;
+      }>;
+      return React.cloneElement(
+        fragment,
+        undefined,
+        decorateSubItemsWithClose(fragment.props.children, closePopover)
+      );
+    }
+    const element = child as React.ReactElement<MenuSubItemProps>;
+    const originalOnClick = element.props.onClick;
+    return React.cloneElement(element, {
+      onClick: () => {
+        originalOnClick?.();
+        closePopover();
+      },
+    });
+  });
+}
+
+function hasVisibleChildren(children: React.ReactNode): boolean {
+  let found = false;
+  React.Children.forEach(children, (child) => {
+    if (found) {
+      return;
+    }
+    // Non-renderable: null, undefined, booleans render nothing in React.
+    if (child == null || typeof child === "boolean") {
+      return;
+    }
+    // Strings and numbers are renderable content — count as visible.
+    if (
+      !React.isValidElement<{
+        visible?: boolean;
+        children?: React.ReactNode;
+      }>(child)
+    ) {
+      found = true;
+      return;
+    }
+    // Fragments: recurse rather than treat the wrapper itself as visible.
+    if (child.type === React.Fragment) {
+      if (hasVisibleChildren(child.props.children)) {
+        found = true;
+      }
+      return;
+    }
+    // Regular elements: respect the `visible` prop.
+    if (child.props.visible !== false) {
+      found = true;
+    }
+  });
+  return found;
 }
 
 function MenuAccordionItem({
@@ -630,10 +719,26 @@ function MenuAccordionItem({
   onOpenChange,
   className,
   children,
+  visible,
 }: MenuAccordionItemProps) {
   const { collapsed } = useMenuContext();
   const [hovered, setHovered] = React.useState<boolean>(false);
   const [popoverOpen, setPopoverOpen] = React.useState<boolean>(false);
+
+  // Explicit opt-out wins. Otherwise, auto-hide when the accordion was given
+  // children but they are all invisible — consumers don't have to track "all
+  // subitems flagged off" by hand. Zero children falls through to the existing
+  // "collapsed + no sub-items renders as MenuItem" behavior.
+  if (visible === false) {
+    return null;
+  }
+  if (
+    visible === undefined &&
+    React.Children.count(children) > 0 &&
+    !hasVisibleChildren(children)
+  ) {
+    return null;
+  }
 
   const activeSubItemLabel = getActiveSubItemLabel(children);
   const tooltipLabel = activeSubItemLabel ?? label;
@@ -708,18 +813,7 @@ function MenuAccordionItem({
           <div className="mb-1 truncate px-2 py-1 font-semibold text-[11px] text-gray-600 uppercase tracking-wide">
             {label}
           </div>
-          {React.Children.map(children, (child) => {
-            if (!React.isValidElement<MenuSubItemProps>(child)) {
-              return child;
-            }
-            const originalOnClick = child.props.onClick;
-            return React.cloneElement(child, {
-              onClick: () => {
-                originalOnClick?.();
-                setPopoverOpen(false);
-              },
-            });
-          })}
+          {decorateSubItemsWithClose(children, () => setPopoverOpen(false))}
         </PopoverContent>
       </Popover>
     );
@@ -845,7 +939,12 @@ function MenuSubItem({
   disabled = false,
   onClick,
   className,
+  visible = true,
 }: MenuSubItemProps) {
+  if (!visible) {
+    return null;
+  }
+
   return (
     <button
       aria-current={active ? "page" : undefined}

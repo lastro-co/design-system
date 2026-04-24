@@ -501,6 +501,113 @@ export const DisabledItem: Story = {
   ),
 };
 
+export const HiddenItems: Story = {
+  name: "Hidden (feature flag)",
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Use `visible={false}` em `MenuItem`, `MenuSubItem` ou `MenuAccordionItem` para esconder a entrada (ex.: quando uma feature flag como LaunchDarkly está desligada). Um `MenuAccordionItem` auto-esconde quando todos os seus filhos são invisíveis. Neste exemplo: `Análise de Crédito` está oculto, `Relatórios` é explicitamente ocultado, e `Gestão de imóveis` desaparece porque todos os seus subitens estão ocultos.",
+      },
+    },
+  },
+  render: () => {
+    const creditAnalysisEnabled = false;
+    const reportsEnabled = false;
+    const captureEnabled = false;
+    const updatesEnabled = false;
+    const projectsEnabled = false;
+    const integratedEnabled = false;
+
+    return (
+      <div className="flex min-h-svh w-full">
+        <Menu>
+          <MenuHeader />
+          <MenuOrganization
+            name="Lais da Imovy Corretora"
+            subtitle="Imovy Corretora"
+          />
+          <nav aria-label="Menu principal" className="flex-1 overflow-y-auto">
+            <MenuSection>
+              <MenuItem
+                active
+                animation="bounce"
+                icon={<HomeIcon />}
+                label="Início"
+              />
+              <MenuItem
+                animation="bounce"
+                icon={<DollarSignIcon />}
+                label="Análise de Crédito"
+                visible={creditAnalysisEnabled}
+              />
+            </MenuSection>
+
+            <MenuSeparator />
+
+            <MenuSection>
+              <MenuAccordionItem
+                animation="bounce"
+                defaultOpen
+                icon={<BriefcaseBusinessIcon />}
+                label="Gestão de leads"
+              >
+                <MenuSubItem label="Leads" />
+                <MenuSubItem label="Visitas" />
+              </MenuAccordionItem>
+
+              <MenuAccordionItem
+                animation="bounce"
+                icon={<Building2Icon />}
+                label="Gestão de imóveis"
+              >
+                <MenuSubItem label="Captação" visible={captureEnabled} />
+                <MenuSubItem
+                  label="Atualização de imóveis"
+                  visible={updatesEnabled}
+                />
+                <MenuSubItem
+                  label="Empreendimentos"
+                  visible={projectsEnabled}
+                />
+                <MenuSubItem
+                  label="Imóveis integrados"
+                  visible={integratedEnabled}
+                />
+              </MenuAccordionItem>
+
+              <MenuAccordionItem
+                animation="bounce"
+                icon={<FileTextIcon />}
+                label="Relatórios"
+                visible={reportsEnabled}
+              >
+                <MenuSubItem label="Bairros e imóveis" />
+              </MenuAccordionItem>
+            </MenuSection>
+          </nav>
+        </Menu>
+        <main className="flex-1 bg-gray-50 p-8">
+          <h1 className="font-semibold text-gray-900 text-xl">Feature flags</h1>
+          <ul className="mt-4 space-y-1 text-gray-800 text-sm">
+            <li>
+              <code>visible={"{false}"}</code> esconde o item por completo.
+            </li>
+            <li>
+              Accordion auto-esconde quando <strong>todos</strong> os subitens
+              estão invisíveis (ex.: <em>Gestão de imóveis</em>).
+            </li>
+            <li>
+              Combine com <code>useFeatureFlag()</code> do app consumidor para
+              amarrar a visibilidade a uma flag do LaunchDarkly.
+            </li>
+          </ul>
+        </main>
+      </div>
+    );
+  },
+};
+
 export const ResponsiveBreakpoint: Story = {
   parameters: {
     docs: {
