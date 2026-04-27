@@ -8,6 +8,7 @@ export {
   DollarSign as DollarSignIcon,
   ExternalLink as ExternalLinkIcon,
   Eye as EyeIcon,
+  EyeOff as EyeOffIcon,
   FileText as FileTextIcon,
   GraduationCap as GraduationCapIcon,
   HelpCircle as HelpCircleIcon,
