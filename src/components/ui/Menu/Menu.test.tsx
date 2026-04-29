@@ -2885,6 +2885,25 @@ describe("MenuAccordionItem — sticky gap coverage", () => {
     expect(screen.queryByText("Hidden Sub")).not.toBeInTheDocument();
   });
 
+  it("scanner skips a sticky defaultOpen accordion so a later defaultOpen sibling wins", () => {
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem defaultOpen label="Accordion Sticky">
+            <MenuSubItem active label="Sub Sticky" />
+          </MenuAccordionItem>
+          <MenuAccordionItem defaultOpen label="Accordion Browsing">
+            <MenuSubItem label="Sub Browsing" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+    // The sticky accordion is open via active-subitem (no slot needed).
+    expect(screen.getByText("Sub Sticky")).toBeVisible();
+    // The browsing slot was free, so the next defaultOpen sibling consumed it.
+    expect(screen.getByText("Sub Browsing")).toBeVisible();
+  });
+
   it("scanner skips a defaultOpen accordion auto-hidden by all-invisible subitems", () => {
     render(
       <Menu>

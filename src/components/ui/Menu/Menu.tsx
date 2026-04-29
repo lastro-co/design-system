@@ -571,7 +571,11 @@ function findInitialOpenAccordionLabel(
           props.defaultOpen === true &&
           props.open === undefined &&
           typeof props.label === "string" &&
-          isAccordionRenderedVisible(props)
+          isAccordionRenderedVisible(props) &&
+          // Skip accordions that already have an active subitem — they will
+          // be sticky-open without consuming the browsing-open slot, leaving
+          // it free for a later defaultOpen sibling.
+          !hasActiveSubItem(props.children)
         ) {
           result = props.label;
         }
