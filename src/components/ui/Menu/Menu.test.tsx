@@ -2631,3 +2631,213 @@ describe("MenuAccordionItem — sticky behavior", () => {
     expect(screen.queryByText("Sub A1")).not.toBeInTheDocument();
   });
 });
+
+/* ------------------------------------------------------------------ */
+/* MenuAccordionItem — sticky behavior, gap coverage                  */
+/* ------------------------------------------------------------------ */
+
+const CONTROLLED_STICKY_REGEX = /^Controlled Sticky$/i;
+
+describe("MenuAccordionItem — sticky gap coverage", () => {
+  it("active subitem inside a Fragment makes its parent accordion sticky-open", () => {
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem label="Accordion A">
+            <>
+              <MenuSubItem active label="Sub A Active" />
+              <MenuSubItem label="Sub A Other" />
+            </>
+          </MenuAccordionItem>
+          <MenuAccordionItem label="Accordion B">
+            <MenuSubItem label="Sub B" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+    // Accordion A must be sticky-open on initial render
+    expect(screen.getByText("Sub A Active")).toBeVisible();
+    expect(screen.getByText("Sub A Other")).toBeVisible();
+    // Accordion B is closed
+    expect(screen.queryByText("Sub B")).not.toBeInTheDocument();
+  });
+
+  it("opening a sibling does NOT close the sticky accordion whose active subitem is Fragment-wrapped", async () => {
+    const user = userEvent.setup();
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem label="Accordion A">
+            <>
+              <MenuSubItem active label="Sub A Active" />
+            </>
+          </MenuAccordionItem>
+          <MenuAccordionItem label="Accordion B">
+            <MenuSubItem label="Sub B" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+    expect(screen.getByText("Sub A Active")).toBeVisible();
+
+    await user.click(screen.getByRole("button", { name: ACCORDION_B_REGEX }));
+    await waitFor(() => {
+      expect(screen.getByText("Sub B")).toBeVisible();
+    });
+    // Fragment-wrapped active subitem keeps accordion A sticky
+    expect(screen.getByText("Sub A Active")).toBeVisible();
+  });
+
+  it("active={true} visible={false} subitem still makes its parent accordion sticky-open", () => {
+    // getActiveSubItemLabel does not check `visible`, so an invisible-but-active
+    // subitem triggers sticky. The subitem itself does not render, but the
+    // accordion stays open (sticky). This locks down the current behavior.
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem label="Accordion A">
+            <MenuSubItem active label="Sticky Sub" visible={false} />
+            <MenuSubItem label="Only Visible" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+    // The accordion is sticky-open even though the active subitem is invisible
+    expect(screen.getByText("Only Visible")).toBeVisible();
+    // The invisible subitem itself does not render
+    expect(screen.queryByText("Sticky Sub")).not.toBeInTheDocument();
+  });
+
+  it("controlled accordion with open={false} stays closed even when a child has active={true}", () => {
+    // When the `open` prop is present, isControlled=true, so sticky=false.
+    // The consumer holds full control; active on a subitem has no effect.
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem label="Controlled Sticky" open={false}>
+            <MenuSubItem active label="Sub Active" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+    // Even though the subitem is active, open={false} keeps the accordion closed
+    expect(screen.queryByText("Sub Active")).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: CONTROLLED_STICKY_REGEX })
+    ).toBeVisible();
+  });
+
+  it("MenuSubItem onClick fires exactly once and clears any browsing-open accordion", async () => {
+    const user = userEvent.setup();
+    const onSubItemClick = jest.fn();
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem label="Accordion A">
+            <MenuSubItem label="Sub A1" />
+            <MenuSubItem label="Sub A2" />
+          </MenuAccordionItem>
+          <MenuAccordionItem label="Accordion B">
+            {/* Two subitems so the trigger click does NOT auto-select either one */}
+            <MenuSubItem label="Sub B" onClick={onSubItemClick} />
+            <MenuSubItem label="Sub B2" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+
+    // Open A for browsing (2 subitems → no auto-select, A stays open)
+    await user.click(screen.getByRole("button", { name: ACCORDION_A_REGEX }));
+    await waitFor(() => {
+      expect(screen.getByText("Sub A1")).toBeVisible();
+    });
+
+    // Open B (2 subitems → no auto-select)
+    await user.click(screen.getByRole("button", { name: ACCORDION_B_REGEX }));
+    await waitFor(() => {
+      expect(screen.getByText("Sub B")).toBeVisible();
+    });
+    // A is now closed by mutual exclusion
+    expect(screen.queryByText("Sub A1")).not.toBeInTheDocument();
+
+    // Re-open A so it is browsing-open when we click Sub B
+    await user.click(screen.getByRole("button", { name: ACCORDION_A_REGEX }));
+    await waitFor(() => {
+      expect(screen.getByText("Sub A1")).toBeVisible();
+    });
+    // B is now closed
+    expect(screen.queryByText("Sub B")).not.toBeInTheDocument();
+
+    // Open B again while A is browsing-open
+    await user.click(screen.getByRole("button", { name: ACCORDION_B_REGEX }));
+    await waitFor(() => {
+      expect(screen.getByText("Sub B")).toBeVisible();
+    });
+
+    // Click Sub B — should fire onClick exactly once AND clear the browsing slot
+    await user.click(screen.getByText("Sub B"));
+    expect(onSubItemClick).toHaveBeenCalledTimes(1);
+  });
+
+  it("two accordions both with active subitems (consumer bug) both stay open simultaneously", () => {
+    // When a consumer accidentally marks subitems in two different accordions
+    // as active, both accordions become sticky and must both remain visible.
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem label="Accordion A">
+            <MenuSubItem active label="Sub A1" />
+          </MenuAccordionItem>
+          <MenuAccordionItem label="Accordion B">
+            <MenuSubItem active label="Sub B" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+    // Both sticky accordions are open at the same time
+    expect(screen.getByText("Sub A1")).toBeVisible();
+    expect(screen.getByText("Sub B")).toBeVisible();
+  });
+
+  it("sticky accordion and a defaultOpen accordion are both open on initial render", () => {
+    // findInitialOpenAccordionLabel sets triggerOpenLabel to the first defaultOpen
+    // accordion it finds, regardless of stickiness. Accordion A (defaultOpen) gets
+    // triggerOpenLabel; Accordion B (active subitem) is sticky independently.
+    // Both end up open on the first render.
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem defaultOpen label="Accordion A">
+            <MenuSubItem label="Sub A1" />
+          </MenuAccordionItem>
+          <MenuAccordionItem label="Accordion B">
+            <MenuSubItem active label="Sub B" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+    // A is browsing-open via defaultOpen
+    expect(screen.getByText("Sub A1")).toBeVisible();
+    // B is sticky-open independently
+    expect(screen.getByText("Sub B")).toBeVisible();
+  });
+
+  it("accordion with defaultOpen nested inside MenuSection is picked up by findInitialOpenAccordionLabel", () => {
+    // findInitialOpenAccordionLabel descends into MenuSection's children prop,
+    // so defaultOpen inside a MenuSection wrapper is still honored at mount.
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem label="Accordion A">
+            <MenuSubItem label="Sub A" />
+          </MenuAccordionItem>
+          <MenuAccordionItem defaultOpen label="Accordion B">
+            <MenuSubItem label="Sub B" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+    expect(screen.getByText("Sub B")).toBeVisible();
+    expect(screen.queryByText("Sub A")).not.toBeInTheDocument();
+  });
+});
