@@ -458,6 +458,114 @@ export const WithSubmenu: Story = {
   },
 };
 
+export const SingleSubItemAutoSelect: Story = {
+  name: "Single sub-item (auto-select)",
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Quando o `MenuAccordionItem` tem **apenas um** `MenuSubItem` visível, clicar no item com chevron já dispara o `onClick` do subitem (selecionando-o) e abre o accordion na mesma ação. Se o accordion já estiver aberto, clicar novamente apenas fecha — sem refire do `onClick` do subitem. Itens com 2+ subitens mantêm o comportamento padrão (somente toggle).",
+      },
+    },
+  },
+  render: () => {
+    const [active, setActive] = React.useState<string>("Início");
+    const [sub, setSub] = React.useState<string | undefined>();
+
+    return (
+      <div className="flex min-h-svh w-full">
+        <Menu>
+          <MenuHeader />
+          <MenuOrganization
+            name="Lais da Imovy Corretora"
+            subtitle="Imovy Corretora"
+          />
+          <nav aria-label="Menu principal" className="flex-1 overflow-y-auto">
+            <MenuSection>
+              <MenuItem
+                active={active === "Início"}
+                animation="bounce"
+                icon={<HomeIcon />}
+                label="Início"
+                onClick={() => {
+                  setActive("Início");
+                  setSub(undefined);
+                }}
+              />
+            </MenuSection>
+
+            <MenuSeparator />
+
+            <MenuSection>
+              <MenuAccordionItem
+                active={active === "Gestão de leads"}
+                animation="bounce"
+                icon={<BriefcaseBusinessIcon />}
+                label="Gestão de leads"
+              >
+                <MenuSubItem
+                  active={sub === "Leads"}
+                  label="Leads"
+                  onClick={() => {
+                    setActive("Gestão de leads");
+                    setSub("Leads");
+                  }}
+                />
+              </MenuAccordionItem>
+
+              <MenuAccordionItem
+                active={active === "Relatórios"}
+                animation="bounce"
+                icon={<FileTextIcon />}
+                label="Relatórios"
+              >
+                <MenuSubItem
+                  active={sub === "Bairros e imóveis"}
+                  label="Bairros e imóveis"
+                  onClick={() => {
+                    setActive("Relatórios");
+                    setSub("Bairros e imóveis");
+                  }}
+                />
+                <MenuSubItem
+                  active={sub === "Avaliações no Google"}
+                  label="Avaliações no Google"
+                  onClick={() => {
+                    setActive("Relatórios");
+                    setSub("Avaliações no Google");
+                  }}
+                />
+              </MenuAccordionItem>
+            </MenuSection>
+          </nav>
+        </Menu>
+        <main className="flex-1 bg-gray-50 p-8">
+          <h1 className="font-semibold text-gray-900 text-xl">
+            Auto-seleção de subitem único
+          </h1>
+          <p className="mt-2 text-gray-800 text-sm">
+            <strong>Gestão de leads</strong> tem 1 subitem → clicar no chevron
+            já seleciona <em>Leads</em>.
+          </p>
+          <p className="mt-1 text-gray-800 text-sm">
+            <strong>Relatórios</strong> tem 2 subitens → clicar no chevron só
+            abre, sem auto-selecionar.
+          </p>
+          <p className="mt-4 text-gray-800 text-sm">
+            Item ativo: <strong>{active}</strong>
+            {sub && (
+              <>
+                {" "}
+                — subitem: <strong>{sub}</strong>
+              </>
+            )}
+          </p>
+        </main>
+      </div>
+    );
+  },
+};
+
 export const CustomLogo: Story = {
   render: () => <FullMenu customLogos />,
 };

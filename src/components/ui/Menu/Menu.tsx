@@ -95,8 +95,22 @@ export interface MenuItemProps {
 
 export interface MenuAccordionItemProps
   extends Omit<MenuItemProps, "onClick" | "active"> {
+  /**
+   * Initial open state when uncontrolled. Inside a `MenuSection`, sibling
+   * accordions are mutually exclusive — if multiple siblings set
+   * `defaultOpen`, only the first wins.
+   */
   defaultOpen?: boolean;
+  /**
+   * Controlled open state. Bypasses the section's mutual exclusion: a
+   * controlled-open item can coexist with an uncontrolled-open sibling. The
+   * consumer is responsible for coordinating multiple controlled items.
+   */
   open?: boolean;
+  /**
+   * Fires whenever the open state of this accordion changes — including when
+   * a sibling opens and displaces this one inside a `MenuSection`.
+   */
   onOpenChange?: (open: boolean) => void;
   active?: boolean;
   children: React.ReactNode;
@@ -138,6 +152,14 @@ function useMenuContext(): MenuContextValue {
   }
   return ctx;
 }
+
+interface MenuAccordionContextValue {
+  openLabel: string | null;
+  setOpenLabel: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
+const MenuAccordionContext =
+  React.createContext<MenuAccordionContextValue | null>(null);
 
 /* ------------------------------------------------------------------ */
 /* Hooks                                                              */
@@ -225,21 +247,35 @@ function Menu({
     [effectiveCollapsed, setCollapsed]
   );
 
+  const [openAccordionLabel, setOpenAccordionLabel] = React.useState<
+    string | null
+  >(() => findInitialOpenAccordionLabel(children));
+
+  const accordionContextValue = React.useMemo<MenuAccordionContextValue>(
+    () => ({
+      openLabel: openAccordionLabel,
+      setOpenLabel: setOpenAccordionLabel,
+    }),
+    [openAccordionLabel]
+  );
+
   return (
     <MenuContext.Provider value={contextValue}>
-      <TooltipProvider delayDuration={0}>
-        <aside
-          className={cn(
-            "shrink-0 overflow-hidden border-gray-300 border-r bg-white transition-all duration-300 ease-in-out",
-            className
-          )}
-          data-slot="menu"
-          style={{ width: effectiveCollapsed ? 72 : 272 }}
-          {...props}
-        >
-          <div className="flex h-svh flex-col">{children}</div>
-        </aside>
-      </TooltipProvider>
+      <MenuAccordionContext.Provider value={accordionContextValue}>
+        <TooltipProvider delayDuration={0}>
+          <aside
+            className={cn(
+              "shrink-0 overflow-hidden border-gray-300 border-r bg-white transition-all duration-300 ease-in-out",
+              className
+            )}
+            data-slot="menu"
+            style={{ width: effectiveCollapsed ? 72 : 272 }}
+            {...props}
+          >
+            <div className="flex h-svh flex-col">{children}</div>
+          </aside>
+        </TooltipProvider>
+      </MenuAccordionContext.Provider>
     </MenuContext.Provider>
   );
 }
@@ -373,99 +409,103 @@ function MenuOrganization({
 
   if (!isInteractive) {
     return (
-      <div
-        className={cn(
-          "mx-3 mb-3 flex items-center gap-2 rounded-xl bg-gray-50 px-4 py-3",
-          className
-        )}
-        data-slot="menu-organization"
-      >
-        {cardContent}
+      <div className="px-3 pb-3" data-slot="menu-organization-wrapper">
+        <div
+          className={cn(
+            "flex w-full items-center gap-2 rounded-xl bg-gray-50 px-4 py-3",
+            className
+          )}
+          data-slot="menu-organization"
+        >
+          {cardContent}
+        </div>
       </div>
     );
   }
 
   return (
-    <Popover onOpenChange={setOpen} open={open}>
-      <PopoverTrigger asChild>
-        <button
-          aria-expanded={open}
-          className={cn(
-            "mx-3 mb-3 flex cursor-pointer items-center gap-2 rounded-xl bg-gray-50 px-4 py-3 text-left transition-colors hover:bg-gray-100",
-            className
-          )}
-          data-slot="menu-organization"
-          data-state={open ? "open" : "closed"}
-          type="button"
-        >
-          {cardContent}
-        </button>
-      </PopoverTrigger>
-      <PopoverContent
-        align="start"
-        className="w-(--radix-popover-trigger-width) min-w-[224px] p-0"
-        data-slot="menu-organization-popover"
-        side="bottom"
-        sideOffset={6}
-      >
-        {searchable && (
-          <div
-            className="border-gray-300 border-b p-2"
-            data-slot="menu-organization-search"
+    <div className="px-3 pb-3" data-slot="menu-organization-wrapper">
+      <Popover onOpenChange={setOpen} open={open}>
+        <PopoverTrigger asChild>
+          <button
+            aria-expanded={open}
+            className={cn(
+              "flex w-full cursor-pointer items-center gap-2 rounded-xl bg-gray-50 px-4 py-3 text-left transition-colors hover:bg-gray-100",
+              className
+            )}
+            data-slot="menu-organization"
+            data-state={open ? "open" : "closed"}
+            type="button"
           >
-            <div className="relative">
-              <SearchIcon
-                aria-hidden
-                className="-translate-y-1/2 pointer-events-none absolute top-1/2 left-2.5 size-4 text-purple-800"
-              />
-              <input
-                autoComplete="off"
-                // biome-ignore lint/a11y/noAutofocus: the popover opens on demand; autofocus puts keyboard users straight into the filter
-                autoFocus
-                className="h-9 w-full rounded-md border border-gray-300 bg-white pr-2 pl-8 text-sm outline-hidden placeholder:text-gray-600 focus:border-purple-800 focus:ring-2 focus:ring-purple-800/20"
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder={searchPlaceholder}
-                type="text"
-                value={query}
-              />
-            </div>
-          </div>
-        )}
-        <ul
-          className="max-h-[280px] overflow-y-auto py-1"
-          data-slot="menu-organization-options"
+            {cardContent}
+          </button>
+        </PopoverTrigger>
+        <PopoverContent
+          align="start"
+          className="w-(--radix-popover-trigger-width) min-w-[224px] p-0"
+          data-slot="menu-organization-popover"
+          side="bottom"
+          sideOffset={6}
         >
-          {filteredOptions.length === 0 ? (
-            <li className="px-3 py-2 text-gray-600 text-xs">
-              Nenhum resultado
-            </li>
-          ) : (
-            filteredOptions.map((opt) => (
-              <li key={opt.id}>
-                <button
-                  className="flex w-full cursor-pointer flex-col items-start gap-0.5 px-3 py-2 text-left transition-colors hover:bg-gray-50"
-                  data-slot="menu-organization-option"
-                  onClick={() => {
-                    onSelect?.(opt.id);
-                    setOpen(false);
-                  }}
-                  type="button"
-                >
-                  <span className="w-full truncate font-medium text-gray-900 text-sm">
-                    {opt.name}
-                  </span>
-                  {opt.subtitle && (
-                    <span className="w-full truncate text-gray-600 text-xs">
-                      {opt.subtitle}
-                    </span>
-                  )}
-                </button>
-              </li>
-            ))
+          {searchable && (
+            <div
+              className="border-gray-300 border-b p-2"
+              data-slot="menu-organization-search"
+            >
+              <div className="relative">
+                <SearchIcon
+                  aria-hidden
+                  className="-translate-y-1/2 pointer-events-none absolute top-1/2 left-2.5 size-4 text-purple-800"
+                />
+                <input
+                  autoComplete="off"
+                  // biome-ignore lint/a11y/noAutofocus: the popover opens on demand; autofocus puts keyboard users straight into the filter
+                  autoFocus
+                  className="h-9 w-full rounded-md border border-gray-300 bg-white pr-2 pl-8 text-sm outline-hidden placeholder:text-gray-600 focus:border-purple-800 focus:ring-2 focus:ring-purple-800/20"
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder={searchPlaceholder}
+                  type="text"
+                  value={query}
+                />
+              </div>
+            </div>
           )}
-        </ul>
-      </PopoverContent>
-    </Popover>
+          <ul
+            className="max-h-[280px] overflow-y-auto py-1"
+            data-slot="menu-organization-options"
+          >
+            {filteredOptions.length === 0 ? (
+              <li className="px-3 py-2 text-gray-600 text-xs">
+                Nenhum resultado
+              </li>
+            ) : (
+              filteredOptions.map((opt) => (
+                <li key={opt.id}>
+                  <button
+                    className="flex w-full cursor-pointer flex-col items-start gap-0.5 px-3 py-2 text-left transition-colors hover:bg-gray-50"
+                    data-slot="menu-organization-option"
+                    onClick={() => {
+                      onSelect?.(opt.id);
+                      setOpen(false);
+                    }}
+                    type="button"
+                  >
+                    <span className="w-full truncate font-medium text-gray-900 text-sm">
+                      {opt.name}
+                    </span>
+                    {opt.subtitle && (
+                      <span className="w-full truncate text-gray-600 text-xs">
+                        {opt.subtitle}
+                      </span>
+                    )}
+                  </button>
+                </li>
+              ))
+            )}
+          </ul>
+        </PopoverContent>
+      </Popover>
+    </div>
   );
 }
 
@@ -473,9 +513,39 @@ function MenuOrganization({
 /* MenuSection                                                        */
 /* ------------------------------------------------------------------ */
 
+function findInitialOpenAccordionLabel(
+  children: React.ReactNode
+): string | null {
+  let result: string | null = null;
+  function walk(nodes: React.ReactNode) {
+    React.Children.forEach(nodes, (child) => {
+      if (result !== null || !React.isValidElement(child)) {
+        return;
+      }
+      if (child.type === MenuAccordionItem) {
+        const props = child.props as Partial<MenuAccordionItemProps>;
+        if (
+          props.defaultOpen === true &&
+          props.open === undefined &&
+          typeof props.label === "string"
+        ) {
+          result = props.label;
+        }
+        // Don't descend into the accordion's own children (those are subitems).
+        return;
+      }
+      const inner = (child.props as { children?: React.ReactNode }).children;
+      if (inner !== undefined) {
+        walk(inner);
+      }
+    });
+  }
+  walk(children);
+  return result;
+}
+
 function MenuSection({ children, className }: MenuSectionProps) {
   const { collapsed } = useMenuContext();
-
   return (
     <div
       className={cn(
@@ -496,8 +566,12 @@ function MenuSection({ children, className }: MenuSectionProps) {
 /* ------------------------------------------------------------------ */
 
 function MenuSeparator({ className }: MenuSeparatorProps) {
+  const { collapsed } = useMenuContext();
   return (
-    <div className={cn("px-4 py-3", className)} data-slot="menu-separator">
+    <div
+      className={cn(collapsed ? "px-4 py-2" : "px-3 py-3", className)}
+      data-slot="menu-separator"
+    >
       <SeparatorPrimitive.Root
         className="h-px w-full bg-gray-300"
         decorative
@@ -524,8 +598,16 @@ function MenuItem({
   visible = true,
 }: MenuItemProps) {
   const { collapsed } = useMenuContext();
+  const accordionCtx = React.useContext(MenuAccordionContext);
   const [hovered, setHovered] = React.useState<boolean>(false);
   const hasBadge = badge !== undefined && badge !== "" && badge !== 0;
+
+  // Selecting a non-accordion item closes any accordion that's open elsewhere
+  // in the same Menu, so the navigation state stays consistent.
+  const handleClick = () => {
+    accordionCtx?.setOpenLabel(null);
+    onClick?.();
+  };
 
   if (!visible) {
     return null;
@@ -540,8 +622,8 @@ function MenuItem({
             className={cn(
               "flex size-11 cursor-pointer items-center justify-center rounded-lg transition-all duration-150",
               active
-                ? "bg-purple-800 text-white shadow-md shadow-purple-800/25"
-                : "text-gray-600 hover:bg-gray-50 hover:text-gray-800",
+                ? "bg-purple-800 text-white"
+                : "text-gray-800 hover:bg-gray-50 hover:text-gray-900",
               disabled && "pointer-events-none opacity-50",
               className
             )}
@@ -549,7 +631,7 @@ function MenuItem({
             data-disabled={disabled ? "true" : undefined}
             data-slot="menu-item"
             disabled={disabled}
-            onClick={onClick}
+            onClick={handleClick}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
             type="button"
@@ -557,7 +639,7 @@ function MenuItem({
             <MenuItemIcon
               animatedIcon={animatedIcon}
               animation={animation}
-              className={active ? "text-white" : "text-gray-600"}
+              className={active ? "text-white" : "text-gray-800"}
               hovered={hovered}
               icon={icon}
             />
@@ -576,8 +658,8 @@ function MenuItem({
       className={cn(
         "flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-left text-[13px] transition-all duration-150",
         active
-          ? "bg-purple-800 font-medium text-white shadow-md shadow-purple-800/20"
-          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+          ? "bg-purple-800 font-medium text-white"
+          : "text-gray-800 hover:bg-gray-50 hover:text-gray-900",
         disabled && "pointer-events-none opacity-50",
         className
       )}
@@ -585,7 +667,7 @@ function MenuItem({
       data-disabled={disabled ? "true" : undefined}
       data-slot="menu-item"
       disabled={disabled}
-      onClick={onClick}
+      onClick={handleClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       type="button"
@@ -593,7 +675,7 @@ function MenuItem({
       <MenuItemIcon
         animatedIcon={animatedIcon}
         animation={animation}
-        className={active ? "text-white" : "text-gray-600"}
+        className={active ? "text-white" : "text-gray-800"}
         hovered={hovered}
         icon={icon}
       />
@@ -671,6 +753,39 @@ function decorateSubItemsWithClose(
   });
 }
 
+function collectVisibleSubItems(
+  children: React.ReactNode,
+  out: React.ReactElement<MenuSubItemProps>[]
+): void {
+  React.Children.forEach(children, (child) => {
+    if (child == null || typeof child === "boolean") {
+      return;
+    }
+    if (!React.isValidElement(child)) {
+      return;
+    }
+    if (child.type === React.Fragment) {
+      const fragment = child as React.ReactElement<{
+        children?: React.ReactNode;
+      }>;
+      collectVisibleSubItems(fragment.props.children, out);
+      return;
+    }
+    const props = child.props as MenuSubItemProps;
+    if (props.visible !== false) {
+      out.push(child as React.ReactElement<MenuSubItemProps>);
+    }
+  });
+}
+
+function getSingleVisibleSubItem(
+  children: React.ReactNode
+): React.ReactElement<MenuSubItemProps> | null {
+  const items: React.ReactElement<MenuSubItemProps>[] = [];
+  collectVisibleSubItems(children, items);
+  return items.length === 1 ? items[0] : null;
+}
+
 function hasVisibleChildren(children: React.ReactNode): boolean {
   let found = false;
   React.Children.forEach(children, (child) => {
@@ -724,6 +839,38 @@ function MenuAccordionItem({
   const { collapsed } = useMenuContext();
   const [hovered, setHovered] = React.useState<boolean>(false);
   const [popoverOpen, setPopoverOpen] = React.useState<boolean>(false);
+  const sectionAccordionCtx = React.useContext(MenuAccordionContext);
+  const isControlled = open !== undefined;
+  const sectionOpen = sectionAccordionCtx?.openLabel === label;
+
+  // Self-register defaultOpen when nested inside a wrapper component that
+  // findInitialOpenAccordionLabel can't reach. Runs once; only takes effect if
+  // the section hasn't already picked an item to open.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: mount-only registration; later openLabel changes shouldn't re-register
+  React.useEffect(() => {
+    if (
+      isControlled ||
+      !sectionAccordionCtx ||
+      defaultOpen !== true ||
+      sectionAccordionCtx.openLabel !== null
+    ) {
+      return;
+    }
+    sectionAccordionCtx.setOpenLabel(label);
+  }, []);
+
+  // Notify the consumer when the section context flips this accordion's open
+  // state — including when a sibling opens and displaces this one.
+  const prevSectionOpenRef = React.useRef(sectionOpen);
+  React.useEffect(() => {
+    if (isControlled || !sectionAccordionCtx) {
+      return;
+    }
+    if (prevSectionOpenRef.current !== sectionOpen) {
+      prevSectionOpenRef.current = sectionOpen;
+      onOpenChange?.(sectionOpen);
+    }
+  }, [sectionOpen, isControlled, sectionAccordionCtx, onOpenChange]);
 
   // Explicit opt-out wins. Otherwise, auto-hide when the accordion was given
   // children but they are all invisible — consumers don't have to track "all
@@ -773,8 +920,8 @@ function MenuAccordionItem({
                 className={cn(
                   "flex size-11 cursor-pointer items-center justify-center rounded-lg transition-all duration-150",
                   active
-                    ? "bg-purple-800 text-white shadow-md shadow-purple-800/25"
-                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-800",
+                    ? "bg-purple-800 text-white"
+                    : "text-gray-800 hover:bg-gray-50 hover:text-gray-900",
                   disabled && "pointer-events-none opacity-50",
                   className
                 )}
@@ -790,7 +937,7 @@ function MenuAccordionItem({
                 <MenuItemIcon
                   animatedIcon={animatedIcon}
                   animation={animation}
-                  className={active ? "text-white" : "text-gray-600"}
+                  className={active ? "text-white" : "text-gray-800"}
                   hovered={hovered}
                   icon={icon}
                 />
@@ -819,20 +966,49 @@ function MenuAccordionItem({
     );
   }
 
-  const isControlled = open !== undefined;
-  const rootProps = isControlled
-    ? {
-        value: open ? label : "",
-        onValueChange: (value: string) => {
-          onOpenChange?.(value === label);
-        },
+  let rootProps: {
+    value?: string;
+    defaultValue?: string;
+    onValueChange: (value: string) => void;
+  };
+  if (isControlled) {
+    rootProps = {
+      value: open ? label : "",
+      onValueChange: (value: string) => {
+        onOpenChange?.(value === label);
+      },
+    };
+  } else if (sectionAccordionCtx) {
+    const ctx = sectionAccordionCtx;
+    rootProps = {
+      value: sectionOpen ? label : "",
+      onValueChange: (value: string) => {
+        ctx.setOpenLabel(value === label ? label : null);
+        // onOpenChange is fired by the effect above so both this accordion and
+        // any displaced sibling get notified when openLabel transitions.
+      },
+    };
+  } else {
+    rootProps = {
+      defaultValue: defaultOpen ? label : undefined,
+      onValueChange: (value: string) => {
+        onOpenChange?.(value === label);
+      },
+    };
+  }
+
+  const singleSubItem = getSingleVisibleSubItem(children);
+  const handleTriggerClick = singleSubItem
+    ? (event: React.MouseEvent<HTMLButtonElement>) => {
+        // Radix toggles after this handler runs, so data-state still reflects
+        // the previous state. Only fire the subitem onClick when opening.
+        const wasOpen =
+          event.currentTarget.getAttribute("data-state") === "open";
+        if (!wasOpen) {
+          singleSubItem.props.onClick?.();
+        }
       }
-    : {
-        defaultValue: defaultOpen ? label : undefined,
-        onValueChange: (value: string) => {
-          onOpenChange?.(value === label);
-        },
-      };
+    : undefined;
 
   return (
     <AccordionPrimitive.Root
@@ -851,7 +1027,7 @@ function MenuAccordionItem({
                   "group flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-left text-[13px] transition-all duration-150",
                   active
                     ? "font-medium text-black hover:bg-gray-50"
-                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+                    : "text-gray-800 hover:bg-gray-50 hover:text-gray-900",
                   disabled && "pointer-events-none opacity-50",
                   className
                 )}
@@ -859,6 +1035,7 @@ function MenuAccordionItem({
                 data-disabled={disabled ? "true" : undefined}
                 data-slot="menu-accordion-trigger"
                 disabled={disabled}
+                onClick={handleTriggerClick}
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
                 type="button"
@@ -910,7 +1087,7 @@ function AccordionTriggerContent({
       <MenuItemIcon
         animatedIcon={animatedIcon}
         animation={animation}
-        className="text-gray-600"
+        className="text-gray-800"
         hovered={hovered}
         icon={icon}
       />
@@ -924,7 +1101,7 @@ function AccordionTriggerContent({
           {badge}
         </Badge>
       )}
-      <ChevronDownIcon className="size-4 text-gray-600 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+      <ChevronDownIcon className="size-4 text-gray-800 transition-transform duration-200 group-data-[state=open]:rotate-180" />
     </>
   );
 }
@@ -951,7 +1128,7 @@ function MenuSubItem({
       className={cn(
         "w-full cursor-pointer rounded-md px-3 py-1.5 text-left text-[13px] transition-colors duration-150",
         active
-          ? "bg-purple-800 font-medium text-white shadow-md shadow-purple-800/20"
+          ? "bg-purple-800 font-medium text-white"
           : "text-gray-800 hover:bg-gray-50 hover:text-gray-900",
         disabled && "pointer-events-none opacity-50",
         className

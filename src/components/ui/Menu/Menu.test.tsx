@@ -24,11 +24,17 @@ const STATE_TEST_REGEX = /state test/i;
 const ACTIVE_ACCORDION_REGEX = /active accordion/i;
 const CONTROLLED_TOGGLE_REGEX = /controlled toggle/i;
 const DISABLED_ACCORDION_REGEX = /disabled accordion/i;
+const INICIO_REGEX = /Início/i;
 const MENU_OUTSIDE_CONTEXT_REGEX =
   /Menu sub-components must be rendered inside a <Menu> root\./;
 const STATIC_ORG_REGEX = /Static/;
 const IMOVY_ORG_REGEX = /Imovy Corretora/;
 const EMPTY_OPTS_REGEX = /Empty Opts/;
+const ACCORDION_A_REGEX = /^Accordion A$/i;
+const ACCORDION_B_REGEX = /^Accordion B$/i;
+const ACCORDION_C_REGEX = /^Accordion C$/i;
+const SINGLE_SUB_REGEX = /^Single Sub$/i;
+const TWO_SUBS_REGEX = /^Two Subs$/i;
 
 /* ------------------------------------------------------------------ */
 /* Helpers                                                            */
@@ -2021,5 +2027,456 @@ describe("MenuItem hover state", () => {
       fireEvent.mouseLeave(iconSpan);
     }
     expect(screen.getByTestId("accordion-hover-icon")).toBeVisible();
+  });
+});
+
+/* ------------------------------------------------------------------ */
+/* MenuSection — mutual exclusion of sibling MenuAccordionItems        */
+/* ------------------------------------------------------------------ */
+
+describe("MenuSection — mutual exclusion of accordion siblings", () => {
+  it("opening accordion B closes accordion A when both are in the same section", async () => {
+    const user = userEvent.setup();
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem label="Accordion A">
+            <MenuSubItem label="Sub A" />
+          </MenuAccordionItem>
+          <MenuAccordionItem label="Accordion B">
+            <MenuSubItem label="Sub B" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+
+    // Open A first
+    await user.click(screen.getByRole("button", { name: ACCORDION_A_REGEX }));
+    await waitFor(() => {
+      expect(screen.getByText("Sub A")).toBeVisible();
+    });
+    expect(screen.queryByText("Sub B")).not.toBeInTheDocument();
+
+    // Open B — A should close
+    await user.click(screen.getByRole("button", { name: ACCORDION_B_REGEX }));
+    await waitFor(() => {
+      expect(screen.getByText("Sub B")).toBeVisible();
+    });
+    expect(screen.queryByText("Sub A")).not.toBeInTheDocument();
+  });
+
+  it("closing the open accordion via its own trigger works and does not re-open a sibling", async () => {
+    const user = userEvent.setup();
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem label="Accordion A">
+            <MenuSubItem label="Sub A" />
+          </MenuAccordionItem>
+          <MenuAccordionItem label="Accordion B">
+            <MenuSubItem label="Sub B" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+
+    await user.click(screen.getByRole("button", { name: ACCORDION_A_REGEX }));
+    await waitFor(() => {
+      expect(screen.getByText("Sub A")).toBeVisible();
+    });
+
+    // Click A again to close it
+    await user.click(screen.getByRole("button", { name: ACCORDION_A_REGEX }));
+    await waitFor(() => {
+      expect(screen.queryByText("Sub A")).not.toBeInTheDocument();
+    });
+    // B was never opened
+    expect(screen.queryByText("Sub B")).not.toBeInTheDocument();
+  });
+
+  it("defaultOpen is honored — the item with defaultOpen starts open", () => {
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem label="Accordion A">
+            <MenuSubItem label="Sub A" />
+          </MenuAccordionItem>
+          <MenuAccordionItem defaultOpen label="Accordion B">
+            <MenuSubItem label="Sub B" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+    expect(screen.getByText("Sub B")).toBeVisible();
+    expect(screen.queryByText("Sub A")).not.toBeInTheDocument();
+  });
+
+  it("when two siblings both have defaultOpen, only the first one wins", () => {
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem defaultOpen label="Accordion A">
+            <MenuSubItem label="Sub A" />
+          </MenuAccordionItem>
+          <MenuAccordionItem defaultOpen label="Accordion B">
+            <MenuSubItem label="Sub B" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+    // Only A starts open because findInitialOpenAccordionLabel returns on first match
+    expect(screen.getByText("Sub A")).toBeVisible();
+    expect(screen.queryByText("Sub B")).not.toBeInTheDocument();
+  });
+
+  it("controlled accordion (open prop) is not closed by another sibling opening", async () => {
+    const user = userEvent.setup();
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem label="Accordion A" open>
+            <MenuSubItem label="Sub A Controlled" />
+          </MenuAccordionItem>
+          <MenuAccordionItem label="Accordion B">
+            <MenuSubItem label="Sub B Uncontrolled" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+
+    // A is open because it is controlled open
+    expect(screen.getByText("Sub A Controlled")).toBeVisible();
+
+    // Open uncontrolled B
+    await user.click(screen.getByRole("button", { name: ACCORDION_B_REGEX }));
+    await waitFor(() => {
+      expect(screen.getByText("Sub B Uncontrolled")).toBeVisible();
+    });
+
+    // Controlled A stays open — it is not part of the mutual-exclusion context
+    expect(screen.getByText("Sub A Controlled")).toBeVisible();
+  });
+
+  it("mutual exclusion applies across the whole Menu, not just inside a single MenuSection", async () => {
+    const user = userEvent.setup();
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem label="Accordion A">
+            <MenuSubItem label="Sub A" />
+          </MenuAccordionItem>
+        </MenuSection>
+        <MenuSection>
+          <MenuAccordionItem label="Accordion B">
+            <MenuSubItem label="Sub B" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+
+    await user.click(screen.getByRole("button", { name: ACCORDION_A_REGEX }));
+    await waitFor(() => {
+      expect(screen.getByText("Sub A")).toBeVisible();
+    });
+
+    await user.click(screen.getByRole("button", { name: ACCORDION_B_REGEX }));
+    await waitFor(() => {
+      expect(screen.getByText("Sub B")).toBeVisible();
+    });
+    expect(screen.queryByText("Sub A")).not.toBeInTheDocument();
+  });
+
+  it("clicking a MenuItem closes any accordion that's open elsewhere in the Menu", async () => {
+    const user = userEvent.setup();
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuItem label="Início" />
+        </MenuSection>
+        <MenuSection>
+          <MenuAccordionItem label="Accordion A">
+            <MenuSubItem label="Sub A" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+
+    await user.click(screen.getByRole("button", { name: ACCORDION_A_REGEX }));
+    await waitFor(() => {
+      expect(screen.getByText("Sub A")).toBeVisible();
+    });
+
+    await user.click(screen.getByRole("button", { name: INICIO_REGEX }));
+    await waitFor(() => {
+      expect(screen.queryByText("Sub A")).not.toBeInTheDocument();
+    });
+  });
+
+  it("clicking a MenuItem still calls its own onClick", async () => {
+    const user = userEvent.setup();
+    const onItemClick = jest.fn();
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuItem label="Início" onClick={onItemClick} />
+        </MenuSection>
+        <MenuSection>
+          <MenuAccordionItem label="Accordion A">
+            <MenuSubItem label="Sub A" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+
+    await user.click(screen.getByRole("button", { name: ACCORDION_A_REGEX }));
+    await user.click(screen.getByRole("button", { name: INICIO_REGEX }));
+    expect(onItemClick).toHaveBeenCalledTimes(1);
+  });
+
+  it("fragment-wrapped accordion items participate in mutual exclusion", async () => {
+    const user = userEvent.setup();
+    render(
+      <Menu>
+        <MenuSection>
+          <>
+            <MenuAccordionItem label="Accordion A">
+              <MenuSubItem label="Sub A Fragment" />
+            </MenuAccordionItem>
+            <MenuAccordionItem label="Accordion B">
+              <MenuSubItem label="Sub B Fragment" />
+            </MenuAccordionItem>
+          </>
+          <MenuAccordionItem label="Accordion C">
+            <MenuSubItem label="Sub C" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+
+    await user.click(screen.getByRole("button", { name: ACCORDION_A_REGEX }));
+    await waitFor(() => {
+      expect(screen.getByText("Sub A Fragment")).toBeVisible();
+    });
+
+    // Open C — A should close
+    await user.click(screen.getByRole("button", { name: ACCORDION_C_REGEX }));
+    await waitFor(() => {
+      expect(screen.getByText("Sub C")).toBeVisible();
+    });
+    expect(screen.queryByText("Sub A Fragment")).not.toBeInTheDocument();
+  });
+
+  it("onOpenChange fires with true when an accordion opens, and fires with false when it closes via its own trigger", async () => {
+    const user = userEvent.setup();
+    const onOpenChangeA = jest.fn();
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem label="Accordion A" onOpenChange={onOpenChangeA}>
+            <MenuSubItem label="Sub A" />
+          </MenuAccordionItem>
+          <MenuAccordionItem label="Accordion B">
+            <MenuSubItem label="Sub B" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+
+    // Open A — onOpenChange(true) should fire
+    await user.click(screen.getByRole("button", { name: ACCORDION_A_REGEX }));
+    await waitFor(() => {
+      expect(screen.getByText("Sub A")).toBeVisible();
+    });
+    expect(onOpenChangeA).toHaveBeenLastCalledWith(true);
+    onOpenChangeA.mockClear();
+
+    // Close A via its own trigger — onOpenChange(false) fires
+    await user.click(screen.getByRole("button", { name: ACCORDION_A_REGEX }));
+    await waitFor(() => {
+      expect(screen.queryByText("Sub A")).not.toBeInTheDocument();
+    });
+    expect(onOpenChangeA).toHaveBeenCalledWith(false);
+  });
+
+  it("onOpenChange(false) fires on the displaced accordion when a sibling opens", async () => {
+    const user = userEvent.setup();
+    const onOpenChangeA = jest.fn();
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem label="Accordion A" onOpenChange={onOpenChangeA}>
+            <MenuSubItem label="Sub A" />
+          </MenuAccordionItem>
+          <MenuAccordionItem label="Accordion B">
+            <MenuSubItem label="Sub B" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+
+    await user.click(screen.getByRole("button", { name: ACCORDION_A_REGEX }));
+    await waitFor(() => {
+      expect(screen.getByText("Sub A")).toBeVisible();
+    });
+    onOpenChangeA.mockClear();
+
+    await user.click(screen.getByRole("button", { name: ACCORDION_B_REGEX }));
+    await waitFor(() => {
+      expect(screen.getByText("Sub B")).toBeVisible();
+    });
+    expect(screen.queryByText("Sub A")).not.toBeInTheDocument();
+    expect(onOpenChangeA).toHaveBeenCalledWith(false);
+  });
+});
+
+/* ------------------------------------------------------------------ */
+/* MenuAccordionItem — single-subitem auto-select                      */
+/* ------------------------------------------------------------------ */
+
+describe("MenuAccordionItem — single-subitem auto-select", () => {
+  it("clicking trigger with exactly one visible subitem fires subitem onClick and opens accordion", async () => {
+    const user = userEvent.setup();
+    const onSubItemClick = jest.fn();
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem label="Single Sub">
+            <MenuSubItem label="Only Sub" onClick={onSubItemClick} />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+
+    const trigger = screen.getByRole("button", { name: SINGLE_SUB_REGEX });
+    expect(trigger).toHaveAttribute("data-state", "closed");
+
+    await user.click(trigger);
+
+    await waitFor(() => {
+      expect(screen.getByText("Only Sub")).toBeVisible();
+    });
+    expect(onSubItemClick).toHaveBeenCalledTimes(1);
+  });
+
+  it("clicking the already-open trigger closes the accordion without re-firing subitem onClick", async () => {
+    const user = userEvent.setup();
+    const onSubItemClick = jest.fn();
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem label="Single Sub">
+            <MenuSubItem label="Only Sub" onClick={onSubItemClick} />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+
+    const trigger = screen.getByRole("button", { name: SINGLE_SUB_REGEX });
+
+    // First click — opens and fires
+    await user.click(trigger);
+    await waitFor(() => {
+      expect(screen.getByText("Only Sub")).toBeVisible();
+    });
+    expect(onSubItemClick).toHaveBeenCalledTimes(1);
+    onSubItemClick.mockClear();
+
+    // Second click — closes; subitem onClick must NOT fire again
+    await user.click(trigger);
+    await waitFor(() => {
+      expect(screen.queryByText("Only Sub")).not.toBeInTheDocument();
+    });
+    expect(onSubItemClick).not.toHaveBeenCalled();
+  });
+
+  it("with two visible subitems, clicking trigger does NOT fire any subitem onClick", async () => {
+    const user = userEvent.setup();
+    const onSub1Click = jest.fn();
+    const onSub2Click = jest.fn();
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem label="Two Subs">
+            <MenuSubItem label="Sub 1" onClick={onSub1Click} />
+            <MenuSubItem label="Sub 2" onClick={onSub2Click} />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+
+    await user.click(screen.getByRole("button", { name: TWO_SUBS_REGEX }));
+    await waitFor(() => {
+      expect(screen.getByText("Sub 1")).toBeVisible();
+    });
+
+    expect(onSub1Click).not.toHaveBeenCalled();
+    expect(onSub2Click).not.toHaveBeenCalled();
+  });
+
+  it("with one visible and one visible={false} subitem, auto-select fires the visible one", async () => {
+    const user = userEvent.setup();
+    const onVisibleClick = jest.fn();
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem label="Single Sub">
+            <MenuSubItem label="Visible Sub" onClick={onVisibleClick} />
+            <MenuSubItem label="Hidden Sub" visible={false} />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+
+    await user.click(screen.getByRole("button", { name: SINGLE_SUB_REGEX }));
+    await waitFor(() => {
+      expect(screen.getByText("Visible Sub")).toBeVisible();
+    });
+    expect(onVisibleClick).toHaveBeenCalledTimes(1);
+  });
+
+  it("subitem inside a Fragment counts as the single visible subitem for auto-select", async () => {
+    const user = userEvent.setup();
+    const onFragmentSubClick = jest.fn();
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem label="Single Sub">
+            <>
+              <MenuSubItem label="Fragment Sub" onClick={onFragmentSubClick} />
+            </>
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+
+    await user.click(screen.getByRole("button", { name: SINGLE_SUB_REGEX }));
+    await waitFor(() => {
+      expect(screen.getByText("Fragment Sub")).toBeVisible();
+    });
+    expect(onFragmentSubClick).toHaveBeenCalledTimes(1);
+  });
+
+  it("accordion with no subitems does not trigger auto-select and does not throw", async () => {
+    const user = userEvent.setup();
+    const onOpenChange = jest.fn();
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem
+            label="Single Sub"
+            onOpenChange={onOpenChange}
+            visible={true}
+          >
+            {null}
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+
+    // The accordion renders but clicking it should not throw
+    const trigger = screen.getByRole("button", { name: SINGLE_SUB_REGEX });
+    await user.click(trigger);
+    // No sub-items — no auto-select. The accordion just opens/closes.
+    expect(onOpenChange).toHaveBeenCalledTimes(1);
   });
 });
