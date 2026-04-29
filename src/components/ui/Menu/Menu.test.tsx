@@ -1,4 +1,5 @@
 import userEvent from "@testing-library/user-event";
+import * as React from "react";
 import { fireEvent, render, screen, waitFor } from "@/tests/app-test-utils";
 import {
   Menu,
@@ -2478,5 +2479,155 @@ describe("MenuAccordionItem — single-subitem auto-select", () => {
     await user.click(trigger);
     // No sub-items — no auto-select. The accordion just opens/closes.
     expect(onOpenChange).toHaveBeenCalledTimes(1);
+  });
+});
+
+/* ------------------------------------------------------------------ */
+/* MenuAccordionItem — sticky-open with active sub-item                */
+/* ------------------------------------------------------------------ */
+
+describe("MenuAccordionItem — sticky behavior", () => {
+  it("accordion with an active subitem is open from initial render", () => {
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem label="Accordion A">
+            <MenuSubItem active label="Sub A1" />
+            <MenuSubItem label="Sub A2" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+    expect(screen.getByText("Sub A1")).toBeVisible();
+    expect(screen.getByText("Sub A2")).toBeVisible();
+  });
+
+  it("opening a sibling accordion does NOT close the sticky one", async () => {
+    const user = userEvent.setup();
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem label="Accordion A">
+            <MenuSubItem active label="Sub A1" />
+          </MenuAccordionItem>
+          <MenuAccordionItem label="Accordion B">
+            <MenuSubItem label="Sub B1" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+    expect(screen.getByText("Sub A1")).toBeVisible();
+
+    await user.click(screen.getByRole("button", { name: ACCORDION_B_REGEX }));
+    await waitFor(() => {
+      expect(screen.getByText("Sub B1")).toBeVisible();
+    });
+    // Sticky A stays open
+    expect(screen.getByText("Sub A1")).toBeVisible();
+  });
+
+  it("clicking trigger of the sticky accordion does NOT close it", async () => {
+    const user = userEvent.setup();
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem label="Accordion A">
+            <MenuSubItem active label="Sub A1" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+    expect(screen.getByText("Sub A1")).toBeVisible();
+
+    await user.click(screen.getByRole("button", { name: ACCORDION_A_REGEX }));
+    // Still visible — sticky cannot be closed via trigger
+    expect(screen.getByText("Sub A1")).toBeVisible();
+  });
+
+  it("clicking a subitem in another accordion closes the browsing-open one", async () => {
+    // Stand-in for the consumer flow: simulate that clicking Sub B1 makes
+    // it the new active subitem, demoting A to non-sticky.
+    const user = userEvent.setup();
+
+    function App() {
+      const [activeLabel, setActiveLabel] = React.useState("Sub A1");
+      return (
+        <Menu>
+          <MenuSection>
+            <MenuAccordionItem label="Accordion A">
+              <MenuSubItem
+                active={activeLabel === "Sub A1"}
+                label="Sub A1"
+                onClick={() => setActiveLabel("Sub A1")}
+              />
+              <MenuSubItem
+                active={activeLabel === "Sub A2"}
+                label="Sub A2"
+                onClick={() => setActiveLabel("Sub A2")}
+              />
+            </MenuAccordionItem>
+            <MenuAccordionItem label="Accordion B">
+              <MenuSubItem
+                active={activeLabel === "Sub B1"}
+                label="Sub B1"
+                onClick={() => setActiveLabel("Sub B1")}
+              />
+              <MenuSubItem
+                active={activeLabel === "Sub B2"}
+                label="Sub B2"
+                onClick={() => setActiveLabel("Sub B2")}
+              />
+            </MenuAccordionItem>
+          </MenuSection>
+        </Menu>
+      );
+    }
+
+    render(<App />);
+    expect(screen.getByText("Sub A1")).toBeVisible();
+
+    // Open B for browsing — A stays open (sticky)
+    await user.click(screen.getByRole("button", { name: ACCORDION_B_REGEX }));
+    await waitFor(() => {
+      expect(screen.getByText("Sub B1")).toBeVisible();
+    });
+    expect(screen.getByText("Sub A1")).toBeVisible();
+
+    // Click Sub B1 — consumer flips active to B1; A loses stickiness and closes
+    await user.click(screen.getByText("Sub B1"));
+    await waitFor(() => {
+      expect(screen.queryByText("Sub A1")).not.toBeInTheDocument();
+    });
+    expect(screen.getByText("Sub B1")).toBeVisible();
+  });
+
+  it("clicking a subitem closes any browsing-open sibling accordion", async () => {
+    const user = userEvent.setup();
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem label="Accordion A">
+            <MenuSubItem label="Sub A1" />
+            <MenuSubItem label="Sub A2" />
+          </MenuAccordionItem>
+          <MenuAccordionItem label="Accordion B">
+            <MenuSubItem label="Sub B1" />
+            <MenuSubItem label="Sub B2" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+
+    // Open A for browsing (2 subitems → no auto-select)
+    await user.click(screen.getByRole("button", { name: ACCORDION_A_REGEX }));
+    await waitFor(() => {
+      expect(screen.getByText("Sub A1")).toBeVisible();
+    });
+    // Open B — A closes (mutual exclusion among non-stickies)
+    await user.click(screen.getByRole("button", { name: ACCORDION_B_REGEX }));
+    await waitFor(() => {
+      expect(screen.getByText("Sub B1")).toBeVisible();
+    });
+    expect(screen.queryByText("Sub A1")).not.toBeInTheDocument();
   });
 });

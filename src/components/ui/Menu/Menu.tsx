@@ -96,9 +96,10 @@ export interface MenuItemProps {
 export interface MenuAccordionItemProps
   extends Omit<MenuItemProps, "onClick" | "active"> {
   /**
-   * Initial open state when uncontrolled. Inside a `MenuSection`, sibling
-   * accordions are mutually exclusive — if multiple siblings set
-   * `defaultOpen`, only the first wins.
+   * Initial open state when uncontrolled. Inside a `Menu`, sibling
+   * accordions share a single browsing-open slot — if multiple siblings set
+   * `defaultOpen`, only the first wins. Ignored when this accordion is
+   * sticky (contains a child `MenuSubItem` with `active`).
    */
   defaultOpen?: boolean;
   /**
@@ -154,8 +155,18 @@ function useMenuContext(): MenuContextValue {
 }
 
 interface MenuAccordionContextValue {
-  openLabel: string | null;
-  setOpenLabel: React.Dispatch<React.SetStateAction<string | null>>;
+  /**
+   * Label of the accordion the user explicitly trigger-opened for browsing.
+   * Mutual-exclusive: only one accordion can be browsing-open at a time.
+   * Sticky accordions (those containing the active subitem) stay open
+   * independently of this value.
+   */
+  triggerOpenLabel: string | null;
+  /**
+   * Set the browsing-open label. Pass `null` to close any browsing-open.
+   * Sticky accordions are unaffected.
+   */
+  setTriggerOpenLabel: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const MenuAccordionContext =
@@ -247,16 +258,19 @@ function Menu({
     [effectiveCollapsed, setCollapsed]
   );
 
-  const [openAccordionLabel, setOpenAccordionLabel] = React.useState<
-    string | null
-  >(() => findInitialOpenAccordionLabel(children));
+  // Initial browsing-open is the first defaultOpen accordion that doesn't
+  // already have an active subitem (the active one becomes sticky-open
+  // independently — see MenuAccordionItem).
+  const [triggerOpenLabel, setTriggerOpenLabel] = React.useState<string | null>(
+    () => findInitialOpenAccordionLabel(children)
+  );
 
   const accordionContextValue = React.useMemo<MenuAccordionContextValue>(
     () => ({
-      openLabel: openAccordionLabel,
-      setOpenLabel: setOpenAccordionLabel,
+      triggerOpenLabel,
+      setTriggerOpenLabel,
     }),
-    [openAccordionLabel]
+    [triggerOpenLabel]
   );
 
   return (
@@ -602,10 +616,11 @@ function MenuItem({
   const [hovered, setHovered] = React.useState<boolean>(false);
   const hasBadge = badge !== undefined && badge !== "" && badge !== 0;
 
-  // Selecting a non-accordion item closes any accordion that's open elsewhere
-  // in the same Menu, so the navigation state stays consistent.
+  // Selecting a non-accordion item closes any browsing-open accordion in the
+  // same Menu. Sticky accordions close naturally once the consumer updates
+  // active state to point at this item.
   const handleClick = () => {
-    accordionCtx?.setOpenLabel(null);
+    accordionCtx?.setTriggerOpenLabel(null);
     onClick?.();
   };
 
@@ -720,6 +735,10 @@ function getActiveSubItemLabel(children: React.ReactNode): string | undefined {
     }
   });
   return result;
+}
+
+function hasActiveSubItem(children: React.ReactNode): boolean {
+  return getActiveSubItemLabel(children) !== undefined;
 }
 
 function decorateSubItemsWithClose(
@@ -839,38 +858,42 @@ function MenuAccordionItem({
   const { collapsed } = useMenuContext();
   const [hovered, setHovered] = React.useState<boolean>(false);
   const [popoverOpen, setPopoverOpen] = React.useState<boolean>(false);
-  const sectionAccordionCtx = React.useContext(MenuAccordionContext);
+  const accordionCtx = React.useContext(MenuAccordionContext);
   const isControlled = open !== undefined;
-  const sectionOpen = sectionAccordionCtx?.openLabel === label;
+  // Sticky: this accordion contains the active subitem and must stay open
+  // until the user navigates somewhere else.
+  const sticky = !isControlled && hasActiveSubItem(children);
+  const browsingOpen = accordionCtx?.triggerOpenLabel === label;
+  const ctxOpen = sticky || browsingOpen;
 
   // Self-register defaultOpen when nested inside a wrapper component that
   // findInitialOpenAccordionLabel can't reach. Runs once; only takes effect if
-  // the section hasn't already picked an item to open.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: mount-only registration; later openLabel changes shouldn't re-register
+  // no other accordion is browsing-open yet.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: mount-only registration
   React.useEffect(() => {
     if (
       isControlled ||
-      !sectionAccordionCtx ||
+      !accordionCtx ||
       defaultOpen !== true ||
-      sectionAccordionCtx.openLabel !== null
+      accordionCtx.triggerOpenLabel !== null ||
+      sticky
     ) {
       return;
     }
-    sectionAccordionCtx.setOpenLabel(label);
+    accordionCtx.setTriggerOpenLabel(label);
   }, []);
 
-  // Notify the consumer when the section context flips this accordion's open
-  // state — including when a sibling opens and displaces this one.
-  const prevSectionOpenRef = React.useRef(sectionOpen);
+  // Notify consumer whenever the effective open state flips.
+  const prevCtxOpenRef = React.useRef(ctxOpen);
   React.useEffect(() => {
-    if (isControlled || !sectionAccordionCtx) {
+    if (isControlled || !accordionCtx) {
       return;
     }
-    if (prevSectionOpenRef.current !== sectionOpen) {
-      prevSectionOpenRef.current = sectionOpen;
-      onOpenChange?.(sectionOpen);
+    if (prevCtxOpenRef.current !== ctxOpen) {
+      prevCtxOpenRef.current = ctxOpen;
+      onOpenChange?.(ctxOpen);
     }
-  }, [sectionOpen, isControlled, sectionAccordionCtx, onOpenChange]);
+  }, [ctxOpen, isControlled, accordionCtx, onOpenChange]);
 
   // Explicit opt-out wins. Otherwise, auto-hide when the accordion was given
   // children but they are all invisible — consumers don't have to track "all
@@ -978,14 +1001,19 @@ function MenuAccordionItem({
         onOpenChange?.(value === label);
       },
     };
-  } else if (sectionAccordionCtx) {
-    const ctx = sectionAccordionCtx;
+  } else if (accordionCtx) {
+    const ctx = accordionCtx;
     rootProps = {
-      value: sectionOpen ? label : "",
+      value: ctxOpen ? label : "",
       onValueChange: (value: string) => {
-        ctx.setOpenLabel(value === label ? label : null);
-        // onOpenChange is fired by the effect above so both this accordion and
-        // any displaced sibling get notified when openLabel transitions.
+        // Sticky: trigger can't close the accordion containing the active
+        // subitem. Ignore the close attempt; the user must select another
+        // subitem (or a MenuItem) to navigate away.
+        if (sticky && value !== label) {
+          return;
+        }
+        ctx.setTriggerOpenLabel(value === label ? label : null);
+        // onOpenChange is fired by the effect above whenever ctxOpen flips.
       },
     };
   } else {
@@ -1118,6 +1146,16 @@ function MenuSubItem({
   className,
   visible = true,
 }: MenuSubItemProps) {
+  const accordionCtx = React.useContext(MenuAccordionContext);
+
+  // Selecting a subitem commits navigation. Close any browsing-open accordion;
+  // the parent of this subitem will become sticky-open on the next render
+  // once the consumer updates `active`.
+  const handleClick = () => {
+    accordionCtx?.setTriggerOpenLabel(null);
+    onClick?.();
+  };
+
   if (!visible) {
     return null;
   }
@@ -1137,7 +1175,7 @@ function MenuSubItem({
       data-disabled={disabled ? "true" : undefined}
       data-slot="menu-sub-item"
       disabled={disabled}
-      onClick={onClick}
+      onClick={handleClick}
       type="button"
     >
       {label}
