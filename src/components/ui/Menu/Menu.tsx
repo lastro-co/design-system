@@ -527,6 +527,24 @@ function MenuOrganization({
 /* MenuSection                                                        */
 /* ------------------------------------------------------------------ */
 
+function isAccordionRenderedVisible(
+  props: Partial<MenuAccordionItemProps>
+): boolean {
+  if (props.visible === false) {
+    return false;
+  }
+  // Mirror MenuAccordionItem's auto-hide: when `visible` is omitted and the
+  // accordion has children that are all invisible, it returns null.
+  if (
+    props.visible === undefined &&
+    React.Children.count(props.children) > 0 &&
+    !hasVisibleChildren(props.children)
+  ) {
+    return false;
+  }
+  return true;
+}
+
 function findInitialOpenAccordionLabel(
   children: React.ReactNode
 ): string | null {
@@ -541,7 +559,8 @@ function findInitialOpenAccordionLabel(
         if (
           props.defaultOpen === true &&
           props.open === undefined &&
-          typeof props.label === "string"
+          typeof props.label === "string" &&
+          isAccordionRenderedVisible(props)
         ) {
           result = props.label;
         }
@@ -1029,10 +1048,11 @@ function MenuAccordionItem({
   const handleTriggerClick = singleSubItem
     ? (event: React.MouseEvent<HTMLButtonElement>) => {
         // Radix toggles after this handler runs, so data-state still reflects
-        // the previous state. Only fire the subitem onClick when opening.
+        // the previous state. Only fire the subitem onClick when opening, and
+        // never bypass the subitem's own disabled state.
         const wasOpen =
           event.currentTarget.getAttribute("data-state") === "open";
-        if (!wasOpen) {
+        if (!wasOpen && !singleSubItem.props.disabled) {
           singleSubItem.props.onClick?.();
         }
       }

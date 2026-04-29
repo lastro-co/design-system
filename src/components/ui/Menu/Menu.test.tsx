@@ -2480,6 +2480,27 @@ describe("MenuAccordionItem — single-subitem auto-select", () => {
     // No sub-items — no auto-select. The accordion just opens/closes.
     expect(onOpenChange).toHaveBeenCalledTimes(1);
   });
+
+  it("does NOT auto-fire the subitem onClick when the only subitem is disabled", async () => {
+    const user = userEvent.setup();
+    const onSubItemClick = jest.fn();
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem label="Single Sub">
+            <MenuSubItem disabled label="Only Sub" onClick={onSubItemClick} />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+    const trigger = screen.getByRole("button", { name: SINGLE_SUB_REGEX });
+    await user.click(trigger);
+    // Accordion still opens, but the disabled subitem's onClick is not fired.
+    await waitFor(() => {
+      expect(screen.getByText("Only Sub")).toBeVisible();
+    });
+    expect(onSubItemClick).not.toHaveBeenCalled();
+  });
 });
 
 /* ------------------------------------------------------------------ */
@@ -2839,5 +2860,47 @@ describe("MenuAccordionItem — sticky gap coverage", () => {
     );
     expect(screen.getByText("Sub B")).toBeVisible();
     expect(screen.queryByText("Sub A")).not.toBeInTheDocument();
+  });
+
+  it("scanner skips a defaultOpen accordion that is visible={false}", () => {
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem
+            defaultOpen
+            label="Accordion Hidden"
+            visible={false}
+          >
+            <MenuSubItem label="Hidden Sub" />
+          </MenuAccordionItem>
+          <MenuAccordionItem defaultOpen label="Accordion Real">
+            <MenuSubItem label="Real Sub" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+    // The hidden one shouldn't consume the browsing-open slot;
+    // the next defaultOpen must win.
+    expect(screen.getByText("Real Sub")).toBeVisible();
+    expect(screen.queryByText("Hidden Sub")).not.toBeInTheDocument();
+  });
+
+  it("scanner skips a defaultOpen accordion auto-hidden by all-invisible subitems", () => {
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem defaultOpen label="Accordion Empty">
+            <MenuSubItem label="Sub A" visible={false} />
+            <MenuSubItem label="Sub B" visible={false} />
+          </MenuAccordionItem>
+          <MenuAccordionItem defaultOpen label="Accordion Real">
+            <MenuSubItem label="Real Sub" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+    expect(screen.getByText("Real Sub")).toBeVisible();
+    // The auto-hidden accordion's trigger isn't rendered either.
+    expect(screen.queryByText("Accordion Empty")).not.toBeInTheDocument();
   });
 });
