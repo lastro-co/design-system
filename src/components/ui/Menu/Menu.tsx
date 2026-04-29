@@ -94,7 +94,18 @@ export interface MenuItemProps {
 }
 
 export interface MenuAccordionItemProps
-  extends Omit<MenuItemProps, "onClick" | "active"> {
+  extends Omit<MenuItemProps, "onClick" | "active" | "label"> {
+  /**
+   * Display text and identity key for the accordion. Must be unique among
+   * `MenuAccordionItem` siblings within the same `Menu` — browsing-open
+   * mutual exclusion, sticky-open detection (via the collapsed-mode tooltip
+   * override), and `findInitialOpenAccordionLabel` all key by `label`.
+   * Duplicate labels would collide and open multiple accordions together.
+   * In practice this is also a WCAG 2.4.4 / 4.1.2 requirement — two
+   * navigation buttons with the same accessible name are an accessibility
+   * violation regardless.
+   */
+  label: string;
   /**
    * Initial open state when uncontrolled. Inside a `Menu`, sibling
    * accordions share a single browsing-open slot — if multiple siblings set
