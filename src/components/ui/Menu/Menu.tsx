@@ -617,7 +617,11 @@ function MenuSeparator({ className }: MenuSeparatorProps) {
   const { collapsed } = useMenuContext();
   return (
     <div
-      className={cn(collapsed ? "px-4 py-2" : "px-3 py-3", className)}
+      className={cn(
+        "w-full self-stretch",
+        collapsed ? "py-2" : "py-3",
+        className
+      )}
       data-slot="menu-separator"
     >
       <SeparatorPrimitive.Root
