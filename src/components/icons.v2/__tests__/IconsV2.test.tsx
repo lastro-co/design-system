@@ -6,6 +6,7 @@ import {
   ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  CrownIcon,
   DollarSignIcon,
   EyeIcon,
   FileTextIcon,
@@ -31,6 +32,7 @@ const LUCIDE_ICONS = [
   ["ChevronDownIcon", ChevronDownIcon],
   ["ChevronLeftIcon", ChevronLeftIcon],
   ["ChevronRightIcon", ChevronRightIcon],
+  ["CrownIcon", CrownIcon],
   ["DollarSignIcon", DollarSignIcon],
   ["EyeIcon", EyeIcon],
   ["FileTextIcon", FileTextIcon],
@@ -59,7 +61,7 @@ describe("icons.v2 — Lucide icons", () => {
     );
   });
 
-  it("all 18 lucide icons render without crashing", () => {
+  it("all 19 lucide icons render without crashing", () => {
     const { container } = render(
       <div>
         {LUCIDE_ICONS.map(([name, Icon]) => (
@@ -68,7 +70,7 @@ describe("icons.v2 — Lucide icons", () => {
       </div>
     );
     const svgs = container.querySelectorAll("svg");
-    expect(svgs).toHaveLength(18);
+    expect(svgs).toHaveLength(19);
   });
 
   it("icons accept className prop", () => {
