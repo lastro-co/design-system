@@ -9,4 +9,4 @@ storybook-static/
 /coverage
 package-lock.json
 
-.claude
+.claude/
