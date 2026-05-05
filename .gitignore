@@ -8,3 +8,5 @@ storybook-static/
 # testing
 /coverage
 package-lock.json
+
+.claude/
