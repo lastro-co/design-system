@@ -5,7 +5,8 @@
     "includes": [
       "src/**/*.{js,jsx,ts,tsx,css}",
       ".storybook/**/*.{ts,tsx}",
-      "jest.*.ts"
+      "jest.*.ts",
+      "!**/maplibre-gl-csp-worker.js"
     ],
     "ignoreUnknown": true,
     "maxSize": 102400

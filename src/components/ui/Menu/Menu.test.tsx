@@ -1,6 +1,12 @@
 import userEvent from "@testing-library/user-event";
 import * as React from "react";
-import { fireEvent, render, screen, waitFor } from "@/tests/app-test-utils";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@/tests/app-test-utils";
 import {
   Menu,
   MenuAccordionItem,
@@ -1556,7 +1562,9 @@ describe("Menu", () => {
 
       // Simulate viewport expanding via the change event
       mockMatches = true;
-      handlerBox.fn?.({ matches: true });
+      act(() => {
+        handlerBox.fn?.({ matches: true });
+      });
 
       await waitFor(() => {
         expect(screen.getByRole("complementary")).toHaveStyle({

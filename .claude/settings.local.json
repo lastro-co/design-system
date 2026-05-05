@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm lint:fix)",
+      "Bash(pnpm test *)",
+      "Bash(rtk read *)",
+      "Bash(rtk ls *)",
+      "Bash(rtk grep *)",
+      "Read(//tmp/**)",
+      "Read(//private/tmp/**)",
+      "Bash(rtk git *)"
+    ]
+  }
+}

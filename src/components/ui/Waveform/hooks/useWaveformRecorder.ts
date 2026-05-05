@@ -47,9 +47,9 @@ export function useWaveformRecorder({
   const [duration, setDuration] = useState(0);
 
   const configKey = JSON.stringify(config);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: configKey is the stable serialized form of config; tracking config directly would re-create mergedConfig on every render
   const mergedConfig = useMemo(
     () => ({ ...DEFAULT_WAVEFORM_CONFIG, ...config }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [configKey]
   );
 

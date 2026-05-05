@@ -484,7 +484,6 @@ function MenuOrganization({
                 />
                 <input
                   autoComplete="off"
-                  // biome-ignore lint/a11y/noAutofocus: the popover opens on demand; autofocus puts keyboard users straight into the filter
                   autoFocus
                   className="h-9 w-full rounded-md border border-gray-300 bg-white pr-2 pl-8 text-sm outline-hidden placeholder:text-gray-600 focus:border-purple-800 focus:ring-2 focus:ring-purple-800/20"
                   onChange={(event) => setQuery(event.target.value)}

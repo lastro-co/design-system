@@ -997,6 +997,12 @@ describe("MapControls interactions", () => {
 
   it("handles geolocation error without throwing", async () => {
     const user = userEvent.setup();
+    const consoleErrorSpy = jest
+      .spyOn(console, "error")
+      .mockImplementation(() => {
+        // intentional: the component logs the geolocation error and we are
+        // asserting it does not throw — silence the expected log
+      });
     Object.defineProperty(global.navigator, "geolocation", {
       writable: true,
       value: {
@@ -1010,6 +1016,8 @@ describe("MapControls interactions", () => {
     await expect(
       user.click(screen.getByLabelText("Find my location"))
     ).resolves.not.toThrow();
+
+    consoleErrorSpy.mockRestore();
   });
 
   it("calls document.exitFullscreen when already in fullscreen", async () => {
