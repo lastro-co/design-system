@@ -17,6 +17,7 @@ import {
   MessageSquareIcon,
   SettingsIcon,
   ShoppingBagIcon,
+  UserCheckIcon,
   UsersIcon,
   ZapIcon,
 } from "../index";
@@ -44,6 +45,7 @@ const LUCIDE_ICONS = [
   ["SettingsIcon", SettingsIcon],
   ["ShoppingBagIcon", ShoppingBagIcon],
   ["UsersIcon", UsersIcon],
+  ["UserCheckIcon", UserCheckIcon],
   ["ZapIcon", ZapIcon],
 ] as const;
 

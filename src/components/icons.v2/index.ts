@@ -19,6 +19,7 @@ export {
   Search as SearchIcon,
   Settings as SettingsIcon,
   ShoppingBag as ShoppingBagIcon,
+  UserCheck as UserCheckIcon,
   Users as UsersIcon,
   Zap as ZapIcon,
 } from "lucide-react";
