@@ -10,9 +10,12 @@ import {
   DollarSignIcon,
   EyeIcon,
   FileTextIcon,
+  FlameIcon,
   GraduationCapIcon,
   HelpCircleIcon,
   HomeIcon,
+  KanbanIcon,
+  ListIcon,
   MegaphoneIcon,
   MessageSquareIcon,
   SettingsIcon,
@@ -37,9 +40,12 @@ const LUCIDE_ICONS = [
   ["DollarSignIcon", DollarSignIcon],
   ["EyeIcon", EyeIcon],
   ["FileTextIcon", FileTextIcon],
+  ["FlameIcon", FlameIcon],
   ["GraduationCapIcon", GraduationCapIcon],
   ["HelpCircleIcon", HelpCircleIcon],
   ["HomeIcon", HomeIcon],
+  ["KanbanIcon", KanbanIcon],
+  ["ListIcon", ListIcon],
   ["MegaphoneIcon", MegaphoneIcon],
   ["MessageSquareIcon", MessageSquareIcon],
   ["SettingsIcon", SettingsIcon],
@@ -63,7 +69,7 @@ describe("icons.v2 — Lucide icons", () => {
     );
   });
 
-  it("all 20 lucide icons render without crashing", () => {
+  it("all 23 lucide icons render without crashing", () => {
     const { container } = render(
       <div>
         {LUCIDE_ICONS.map(([name, Icon]) => (
@@ -72,7 +78,7 @@ describe("icons.v2 — Lucide icons", () => {
       </div>
     );
     const svgs = container.querySelectorAll("svg");
-    expect(svgs).toHaveLength(20);
+    expect(svgs).toHaveLength(23);
   });
 
   it("icons accept className prop", () => {
