@@ -21,6 +21,7 @@ export {
   MessageSquare as MessageSquareIcon,
   Search as SearchIcon,
   Settings as SettingsIcon,
+  ShieldUser as ShieldUserIcon,
   ShoppingBag as ShoppingBagIcon,
   UserCheck as UserCheckIcon,
   Users as UsersIcon,
