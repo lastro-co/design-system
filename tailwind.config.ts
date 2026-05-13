@@ -66,6 +66,12 @@ export default {
           from: { maxHeight: "0", opacity: "0" },
           to: { maxHeight: "200px", opacity: "1" },
         },
+        wobble: {
+          "0%, 100%": { transform: "scale(1) rotate(0deg)" },
+          "25%": { transform: "scale(1.2) rotate(15deg)" },
+          "50%": { transform: "scale(1.2) rotate(0deg)" },
+          "75%": { transform: "scale(1.2) rotate(-15deg)" },
+        },
       },
       animation: {
         "slide-in-from-right": "slide-in-from-right 0.3s ease-in-out",
@@ -79,6 +85,7 @@ export default {
         "fade-in": "fade-in 0.2s ease-in-out",
         "fade-out": "fade-out 0.2s ease-in-out",
         "slide-down": "slide-down 0.4s ease-out forwards",
+        wobble: "wobble 0.5s ease-in-out",
       },
     },
   },
