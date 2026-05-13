@@ -23,6 +23,7 @@ export {
   Settings as SettingsIcon,
   ShieldUser as ShieldUserIcon,
   ShoppingBag as ShoppingBagIcon,
+  Star as StarIcon,
   UserCheck as UserCheckIcon,
   Users as UsersIcon,
   Zap as ZapIcon,
