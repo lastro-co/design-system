@@ -19,6 +19,7 @@ export {
   List as ListIcon,
   Megaphone as MegaphoneIcon,
   MessageSquare as MessageSquareIcon,
+  Phone as PhoneIcon,
   Search as SearchIcon,
   Settings as SettingsIcon,
   ShieldUser as ShieldUserIcon,
