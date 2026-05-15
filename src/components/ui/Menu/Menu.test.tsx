@@ -562,6 +562,136 @@ describe("Menu", () => {
         // All options visible again
         expect(screen.getByText("Beta Imóveis")).toBeVisible();
       });
+
+      it("search also matches against the option id", async () => {
+        const user = userEvent.setup();
+        render(
+          <Menu>
+            <MenuOrganization
+              name="Imovy Corretora"
+              options={options}
+              searchable
+              subtitle="Corretora A"
+            />
+          </Menu>
+        );
+        await user.click(screen.getByRole("button", { name: IMOVY_ORG_REGEX }));
+        const input = await screen.findByPlaceholderText("Pesquisar...");
+        await user.type(input, "gamma");
+        await waitFor(() => {
+          const optionsList = document.querySelector(
+            '[data-slot="menu-organization-options"]'
+          );
+          expect(optionsList).not.toBeNull();
+          expect(optionsList).toHaveTextContent("Gamma Realty");
+          expect(optionsList).not.toHaveTextContent("Beta Imóveis");
+        });
+        // Now search by the id of "beta" — the id, not the name, should match.
+        await user.clear(input);
+        await user.type(input, "beta");
+        await waitFor(() => {
+          const optionsList = document.querySelector(
+            '[data-slot="menu-organization-options"]'
+          );
+          expect(optionsList).not.toBeNull();
+          expect(optionsList).toHaveTextContent("Beta Imóveis");
+          expect(optionsList).not.toHaveTextContent("Gamma Realty");
+        });
+      });
+    });
+
+    describe("sortOrder", () => {
+      const unsortedOptions = [
+        { id: "gamma", name: "Gamma Realty", subtitle: "Corretora C" },
+        { id: "imovy", name: "Imovy Corretora", subtitle: "Corretora A" },
+        { id: "beta", name: "Beta Imóveis", subtitle: "Corretora B" },
+      ];
+
+      it("sortOrder='asc' renders options sorted A→Z by name", async () => {
+        const user = userEvent.setup();
+        render(
+          <Menu>
+            <MenuOrganization
+              name="Imovy Corretora"
+              options={unsortedOptions}
+              sortOrder="asc"
+              subtitle="Corretora A"
+            />
+          </Menu>
+        );
+        await user.click(screen.getByRole("button", { name: IMOVY_ORG_REGEX }));
+        await waitFor(() => {
+          expect(screen.getByText("Beta Imóveis")).toBeVisible();
+        });
+        const rendered = Array.from(
+          document.querySelectorAll(
+            '[data-slot="menu-organization-option"] span:first-child'
+          )
+        ).map((el) => el.textContent);
+        expect(rendered).toEqual([
+          "Beta Imóveis",
+          "Gamma Realty",
+          "Imovy Corretora",
+        ]);
+      });
+
+      it("sortOrder='desc' renders options sorted Z→A by name", async () => {
+        const user = userEvent.setup();
+        render(
+          <Menu>
+            <MenuOrganization
+              name="Imovy Corretora"
+              options={unsortedOptions}
+              sortOrder="desc"
+              subtitle="Corretora A"
+            />
+          </Menu>
+        );
+        await user.click(screen.getByRole("button", { name: IMOVY_ORG_REGEX }));
+        await waitFor(() => {
+          expect(screen.getByText("Beta Imóveis")).toBeVisible();
+        });
+        const rendered = Array.from(
+          document.querySelectorAll(
+            '[data-slot="menu-organization-option"] span:first-child'
+          )
+        ).map((el) => el.textContent);
+        expect(rendered).toEqual([
+          "Imovy Corretora",
+          "Gamma Realty",
+          "Beta Imóveis",
+        ]);
+      });
+
+      it("sortOrder still applies after filtering by search", async () => {
+        const user = userEvent.setup();
+        render(
+          <Menu>
+            <MenuOrganization
+              name="Imovy Corretora"
+              options={unsortedOptions}
+              searchable
+              sortOrder="asc"
+              subtitle="Corretora A"
+            />
+          </Menu>
+        );
+        await user.click(screen.getByRole("button", { name: IMOVY_ORG_REGEX }));
+        const input = await screen.findByPlaceholderText("Pesquisar...");
+        await user.type(input, "corretora");
+        await waitFor(() => {
+          const rendered = Array.from(
+            document.querySelectorAll(
+              '[data-slot="menu-organization-option"] span:first-child'
+            )
+          ).map((el) => el.textContent);
+          expect(rendered).toEqual([
+            "Beta Imóveis",
+            "Gamma Realty",
+            "Imovy Corretora",
+          ]);
+        });
+      });
     });
   });
 

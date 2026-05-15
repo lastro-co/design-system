@@ -274,10 +274,23 @@ const ORGANIZATIONS = [
   },
 ];
 
-function OrganizationDemoMenu({ searchable }: { searchable?: boolean }) {
-  const [selectedId, setSelectedId] = React.useState("imovy");
-  const selected =
-    ORGANIZATIONS.find((o) => o.id === selectedId) ?? ORGANIZATIONS[0];
+function OrganizationDemoMenu({
+  searchable,
+  sortOrder,
+  options = ORGANIZATIONS,
+  initialId,
+  hint,
+}: {
+  searchable?: boolean;
+  sortOrder?: "asc" | "desc";
+  options?: typeof ORGANIZATIONS;
+  initialId?: string;
+  hint?: string;
+}) {
+  const [selectedId, setSelectedId] = React.useState(
+    initialId ?? options[0].id
+  );
+  const selected = options.find((o) => o.id === selectedId) ?? options[0];
 
   return (
     <div className="flex min-h-svh w-full">
@@ -286,8 +299,9 @@ function OrganizationDemoMenu({ searchable }: { searchable?: boolean }) {
         <MenuOrganization
           name={selected.name}
           onSelect={setSelectedId}
-          options={ORGANIZATIONS}
+          options={options}
           searchable={searchable}
+          sortOrder={sortOrder}
           subtitle={selected.subtitle}
         />
         <nav aria-label="Menu principal" className="flex-1 overflow-y-auto">
@@ -308,11 +322,35 @@ function OrganizationDemoMenu({ searchable }: { searchable?: boolean }) {
             Organização selecionada:{" "}
             <span className="font-semibold text-gray-900">{selected.name}</span>
           </p>
+          {hint && <p className="mt-3 text-gray-600 text-xs">{hint}</p>}
         </div>
       </main>
     </div>
   );
 }
+
+const ORGANIZATIONS_WITH_CODES = [
+  {
+    id: "BR-001",
+    name: "Imovy Corretora",
+    subtitle: "Cod. BR-001 · Corretora A",
+  },
+  {
+    id: "BR-042",
+    name: "Beta Imóveis",
+    subtitle: "Cod. BR-042 · Corretora B",
+  },
+  {
+    id: "BR-117",
+    name: "Gamma Realty",
+    subtitle: "Cod. BR-117 · Corretora C",
+  },
+  {
+    id: "BR-208",
+    name: "Delta Plus",
+    subtitle: "Cod. BR-208 · Rede Delta",
+  },
+];
 
 export const OrganizationPicker: Story = {
   name: "Organization (clickable)",
@@ -334,7 +372,40 @@ export const OrganizationPickerSearchable: Story = {
     docs: {
       description: {
         story:
-          "Adicione `searchable` para exibir um campo de busca no topo do popover com um ícone de lupa roxo à esquerda. O filtro considera `name` + `subtitle`.",
+          "Adicione `searchable` para exibir um campo de busca no topo do popover com um ícone de lupa roxo à esquerda. O filtro considera `id` + `name` + `subtitle`.",
+      },
+    },
+  },
+};
+
+export const OrganizationPickerSearchById: Story = {
+  name: "Organization (busca por ID)",
+  render: () => (
+    <OrganizationDemoMenu
+      hint='Dica: tente buscar por "BR-117" — o filtro também considera o campo `id`, mesmo quando não está exibido na UI.'
+      initialId="BR-001"
+      options={ORGANIZATIONS_WITH_CODES}
+      searchable
+    />
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "O filtro também considera o campo `id` da opção, mesmo que ele não esteja visível na UI. Útil quando o consumidor usa códigos de negócio como identificador (ex.: `BR-117`, CNPJ, código interno). Abra o popover e digite `117` ou `BR-208`.",
+      },
+    },
+  },
+};
+
+export const OrganizationPickerSortedAsc: Story = {
+  name: "Organization (ordenado A→Z)",
+  render: () => <OrganizationDemoMenu searchable sortOrder="asc" />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Passe `sortOrder="asc"` para exibir as opções sempre ordenadas A→Z por `name`. A ordenação é aplicada após o filtro de busca.',
       },
     },
   },
