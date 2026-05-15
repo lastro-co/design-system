@@ -68,6 +68,11 @@ export interface MenuOrganizationProps {
   searchable?: boolean;
   /** Placeholder text for the search input. Default: `Pesquisar...`. */
   searchPlaceholder?: string;
+  /**
+   * When set, options are sorted by `name` (case-insensitive, locale-aware)
+   * in the given direction. `undefined` preserves the order passed in.
+   */
+  sortOrder?: "asc" | "desc";
 }
 
 export interface MenuSectionProps {
@@ -380,6 +385,7 @@ function MenuOrganization({
   onSelect,
   searchable = false,
   searchPlaceholder = "Pesquisar...",
+  sortOrder,
 }: MenuOrganizationProps) {
   const { collapsed } = useMenuContext();
   const [open, setOpen] = React.useState<boolean>(false);
@@ -392,14 +398,22 @@ function MenuOrganization({
       return [];
     }
     const trimmed = query.trim().toLowerCase();
-    if (!(searchable && trimmed)) {
-      return options;
+    const matched =
+      searchable && trimmed
+        ? options.filter((opt) => {
+            const haystack =
+              `${opt.id} ${opt.name} ${opt.subtitle ?? ""}`.toLowerCase();
+            return haystack.includes(trimmed);
+          })
+        : options;
+    if (!sortOrder) {
+      return matched;
     }
-    return options.filter((opt) => {
-      const haystack = `${opt.name} ${opt.subtitle ?? ""}`.toLowerCase();
-      return haystack.includes(trimmed);
-    });
-  }, [isInteractive, options, query, searchable]);
+    const direction = sortOrder === "desc" ? -1 : 1;
+    return [...matched].sort(
+      (a, b) => a.name.localeCompare(b.name) * direction
+    );
+  }, [isInteractive, options, query, searchable, sortOrder]);
 
   // Reset the query when the popover closes so the next open starts fresh.
   React.useEffect(() => {
