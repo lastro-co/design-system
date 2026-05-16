@@ -64,6 +64,7 @@ function FullMenu({
   activeLabel = "Início",
   activeSubItem,
   customLogos = false,
+  floatingActiveIndicator = false,
 }: {
   defaultCollapsed?: boolean;
   collapsed?: boolean;
@@ -71,15 +72,23 @@ function FullMenu({
   activeLabel?: string;
   activeSubItem?: string;
   customLogos?: boolean;
+  floatingActiveIndicator?: boolean;
 }) {
   const [active, setActive] = React.useState(activeLabel);
   const [sub, setSub] = React.useState<string | undefined>(activeSubItem);
+  // Selecting a top-level item must also clear the sub-item — otherwise the
+  // sub-item's `active` prop stays true and the menu shows two highlights.
+  const selectMain = React.useCallback((label: string) => {
+    setActive(label);
+    setSub(undefined);
+  }, []);
 
   return (
     <div className="flex min-h-svh w-full">
       <Menu
         collapsed={collapsed}
         defaultCollapsed={defaultCollapsed}
+        floatingActiveIndicator={floatingActiveIndicator}
         responsiveBreakpoint={responsiveBreakpoint}
       >
         {customLogos ? (
@@ -116,7 +125,7 @@ function FullMenu({
               animation="bounce"
               icon={<HomeIcon />}
               label="Início"
-              onClick={() => setActive("Início")}
+              onClick={() => selectMain("Início")}
             />
             <MenuItem
               active={active === "Conversas"}
@@ -124,7 +133,7 @@ function FullMenu({
               badge={3}
               icon={<MessageSquareIcon />}
               label="Conversas"
-              onClick={() => setActive("Conversas")}
+              onClick={() => selectMain("Conversas")}
             />
           </MenuSection>
 
@@ -196,21 +205,21 @@ function FullMenu({
               animation="spin"
               icon={<SettingsIcon />}
               label="Minha Lais"
-              onClick={() => setActive("Minha Lais")}
+              onClick={() => selectMain("Minha Lais")}
             />
             <MenuItem
               active={active === "Usuários e equipes"}
               animation="bounce"
               icon={<UsersIcon />}
               label="Usuários e equipes"
-              onClick={() => setActive("Usuários e equipes")}
+              onClick={() => selectMain("Usuários e equipes")}
             />
             <MenuItem
               active={active === "Plano e boleto"}
               animation="pulse"
               icon={<DollarSignIcon />}
               label="Plano e boleto"
-              onClick={() => setActive("Plano e boleto")}
+              onClick={() => selectMain("Plano e boleto")}
             />
           </MenuSection>
 
@@ -222,14 +231,14 @@ function FullMenu({
               animation="bounce"
               icon={<GraduationCapIcon />}
               label="Guia da Lais"
-              onClick={() => setActive("Guia da Lais")}
+              onClick={() => selectMain("Guia da Lais")}
             />
             <MenuItem
               active={active === "Ajuda"}
               animation="pulse"
               icon={<HelpCircleIcon />}
               label="Ajuda"
-              onClick={() => setActive("Ajuda")}
+              onClick={() => selectMain("Ajuda")}
             />
           </MenuSection>
         </nav>
@@ -421,6 +430,32 @@ export const Collapsed: Story = {
       description: {
         story:
           "Menu recolhido (72px). Passe o mouse em um item com submenu para ver o tooltip; clique para abrir o popover à direita com os subitens. Se um subitem estiver ativo, o tooltip mostra o nome dele em vez do nome do grupo.",
+      },
+    },
+  },
+};
+
+export const FloatingActiveIndicator: Story = {
+  name: "Active indicator flutuante",
+  render: () => <FullMenu floatingActiveIndicator />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Passe `floatingActiveIndicator` no `<Menu>` para que o "pill" roxo do item ativo deslize de um item para outro em vez de simplesmente sumir e reaparecer. Use um único `layoutId` compartilhado, então também funciona entre `MenuItem`, `MenuSubItem` e o trigger colapsado do `MenuAccordionItem`. Respeita `prefers-reduced-motion` automaticamente.',
+      },
+    },
+  },
+};
+
+export const FloatingActiveIndicatorCollapsed: Story = {
+  name: "Active indicator flutuante (recolhido)",
+  render: () => <FullMenu defaultCollapsed floatingActiveIndicator />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "O indicador flutuante também desliza entre os botões de ícone no modo recolhido. Clique em itens diferentes para ver o efeito.",
       },
     },
   },

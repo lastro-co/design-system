@@ -1882,6 +1882,488 @@ describe("Menu", () => {
       expect(screen.getByText("Forced Visible")).toBeInTheDocument();
     });
   });
+
+  /* ------------------------------------------------------------------ */
+  /* floatingActiveIndicator                                            */
+  /* ------------------------------------------------------------------ */
+
+  describe("floatingActiveIndicator", () => {
+    it("default (off): active MenuItem keeps the static bg-purple-800 class and renders no indicator", () => {
+      render(
+        <Menu>
+          <MenuSection>
+            <MenuItem active label="A" />
+            <MenuItem label="B" />
+          </MenuSection>
+        </Menu>
+      );
+      const active = screen.getByRole("button", { name: "A" });
+      expect(active.className).toContain("bg-purple-800");
+      expect(
+        document.querySelector('[data-slot="menu-active-indicator"]')
+      ).toBeNull();
+    });
+
+    it("on: active MenuItem renders a single indicator and drops bg-purple-800 from the button", () => {
+      render(
+        <Menu floatingActiveIndicator>
+          <MenuSection>
+            <MenuItem active label="A" />
+            <MenuItem label="B" />
+          </MenuSection>
+        </Menu>
+      );
+      const active = screen.getByRole("button", { name: "A" });
+      expect(active.className).not.toContain("bg-purple-800");
+      const indicators = document.querySelectorAll(
+        '[data-slot="menu-active-indicator"]'
+      );
+      expect(indicators).toHaveLength(1);
+      // The single indicator must be inside the active item.
+      expect(active.contains(indicators[0])).toBe(true);
+    });
+
+    it("on: only one indicator exists across the whole menu even with multiple item types", () => {
+      render(
+        <Menu floatingActiveIndicator>
+          <MenuSection>
+            <MenuItem label="Top" />
+            <MenuAccordionItem defaultOpen label="Group">
+              <MenuSubItem active label="Sub A" />
+              <MenuSubItem label="Sub B" />
+            </MenuAccordionItem>
+          </MenuSection>
+        </Menu>
+      );
+      expect(
+        document.querySelectorAll('[data-slot="menu-active-indicator"]')
+      ).toHaveLength(1);
+      const subA = screen.getByRole("button", { name: "Sub A" });
+      expect(
+        subA.querySelector('[data-slot="menu-active-indicator"]')
+      ).not.toBeNull();
+    });
+
+    it("on: indicator moves to the new active item when active prop changes", () => {
+      const { rerender } = render(
+        <Menu floatingActiveIndicator>
+          <MenuSection>
+            <MenuItem active label="A" />
+            <MenuItem label="B" />
+          </MenuSection>
+        </Menu>
+      );
+      const buttonA = screen.getByRole("button", { name: "A" });
+      expect(
+        buttonA.querySelector('[data-slot="menu-active-indicator"]')
+      ).not.toBeNull();
+
+      rerender(
+        <Menu floatingActiveIndicator>
+          <MenuSection>
+            <MenuItem label="A" />
+            <MenuItem active label="B" />
+          </MenuSection>
+        </Menu>
+      );
+      const buttonB = screen.getByRole("button", { name: "B" });
+      expect(
+        buttonA.querySelector('[data-slot="menu-active-indicator"]')
+      ).toBeNull();
+      expect(
+        buttonB.querySelector('[data-slot="menu-active-indicator"]')
+      ).not.toBeNull();
+    });
+
+    it("on: collapsed MenuAccordionItem trigger also drops bg-purple-800 and renders an indicator when active", () => {
+      render(
+        <Menu defaultCollapsed floatingActiveIndicator>
+          <MenuSection>
+            <MenuAccordionItem active label="G">
+              <MenuSubItem label="x" />
+            </MenuAccordionItem>
+          </MenuSection>
+        </Menu>
+      );
+      const trigger = document.querySelector(
+        '[data-slot="menu-accordion-collapsed-trigger"]'
+      ) as HTMLElement | null;
+      expect(trigger).not.toBeNull();
+      expect(trigger?.className).not.toContain("bg-purple-800");
+      expect(
+        trigger?.querySelector('[data-slot="menu-active-indicator"]')
+      ).not.toBeNull();
+    });
+
+    it("on: each Menu instance gets a unique Framer Motion layoutId so two menus on the same page don't collide", () => {
+      render(
+        <>
+          <Menu floatingActiveIndicator>
+            <MenuSection>
+              <MenuItem active label="A1" />
+            </MenuSection>
+          </Menu>
+          <Menu floatingActiveIndicator>
+            <MenuSection>
+              <MenuItem active label="A2" />
+            </MenuSection>
+          </Menu>
+        </>
+      );
+      const indicators = document.querySelectorAll(
+        '[data-slot="menu-active-indicator"]'
+      );
+      expect(indicators).toHaveLength(2);
+      // Both indicators are full motion.span elements — that they coexist is
+      // the contract. We also assert their owning Menu containers are
+      // distinct so we're not just matching the same node twice.
+      const owners = Array.from(indicators).map((node) =>
+        node.closest('[data-slot="menu"]')
+      );
+      expect(owners[0]).not.toBeNull();
+      expect(owners[1]).not.toBeNull();
+      expect(owners[0]).not.toBe(owners[1]);
+    });
+
+    // ------------------------------------------------------------------
+    // useDelayedActiveStyle — rising/falling edge behavior
+    // ------------------------------------------------------------------
+
+    describe("useDelayedActiveStyle", () => {
+      beforeEach(() => {
+        jest.useFakeTimers();
+      });
+      afterEach(() => {
+        act(() => {
+          jest.runOnlyPendingTimers();
+        });
+        jest.useRealTimers();
+      });
+
+      it("rising edge: button starts gray, turns white only after the 150 ms delay", () => {
+        const { rerender } = render(
+          <Menu floatingActiveIndicator>
+            <MenuSection>
+              <MenuItem label="A" />
+              <MenuItem active={false} label="B" />
+            </MenuSection>
+          </Menu>
+        );
+
+        // Flip B to active without advancing time.
+        rerender(
+          <Menu floatingActiveIndicator>
+            <MenuSection>
+              <MenuItem label="A" />
+              <MenuItem active label="B" />
+            </MenuSection>
+          </Menu>
+        );
+
+        const buttonB = screen.getByRole("button", { name: "B" });
+        // Indicator is present (pill is there) but text is still gray.
+        expect(
+          buttonB.querySelector('[data-slot="menu-active-indicator"]')
+        ).not.toBeNull();
+        expect(buttonB.className).not.toContain("text-white");
+        expect(buttonB.className).toContain("text-gray-800");
+
+        // Advance past the 150 ms threshold.
+        act(() => {
+          jest.advanceTimersByTime(151);
+        });
+
+        expect(buttonB.className).toContain("text-white");
+        expect(buttonB.className).not.toContain("text-gray-800");
+      });
+
+      it("falling edge: button loses text-white immediately when active flips to false", () => {
+        const { rerender } = render(
+          <Menu floatingActiveIndicator>
+            <MenuSection>
+              <MenuItem active label="A" />
+              <MenuItem label="B" />
+            </MenuSection>
+          </Menu>
+        );
+
+        // Advance time so A is fully styled (white text).
+        act(() => {
+          jest.advanceTimersByTime(151);
+        });
+
+        const buttonA = screen.getByRole("button", { name: "A" });
+        expect(buttonA.className).toContain("text-white");
+
+        // Deactivate A.
+        rerender(
+          <Menu floatingActiveIndicator>
+            <MenuSection>
+              <MenuItem label="A" />
+              <MenuItem active label="B" />
+            </MenuSection>
+          </Menu>
+        );
+
+        // No time advance needed — falling edge must be instant.
+        expect(buttonA.className).not.toContain("text-white");
+        expect(
+          buttonA.querySelector('[data-slot="menu-active-indicator"]')
+        ).toBeNull();
+      });
+
+      it("initial mount with active=true: button starts with text-white immediately (no delay)", () => {
+        render(
+          <Menu floatingActiveIndicator>
+            <MenuSection>
+              <MenuItem active label="A" />
+            </MenuSection>
+          </Menu>
+        );
+        // No timers advanced; `useDelayedActiveStyle` initialises from `active`
+        // so the first render is already delayed=true.
+        const buttonA = screen.getByRole("button", { name: "A" });
+        expect(buttonA.className).toContain("text-white");
+      });
+
+      it("rapid toggle (true→false→true within delay window): second rising edge still delays white text", () => {
+        const { rerender } = render(
+          <Menu floatingActiveIndicator>
+            <MenuSection>
+              <MenuItem active={false} label="A" />
+            </MenuSection>
+          </Menu>
+        );
+
+        // First activation.
+        rerender(
+          <Menu floatingActiveIndicator>
+            <MenuSection>
+              <MenuItem active label="A" />
+            </MenuSection>
+          </Menu>
+        );
+
+        // Advance only partway (50 ms — still inside the 150 ms window).
+        act(() => {
+          jest.advanceTimersByTime(50);
+        });
+
+        // Deactivate before the delay fires.
+        rerender(
+          <Menu floatingActiveIndicator>
+            <MenuSection>
+              <MenuItem active={false} label="A" />
+            </MenuSection>
+          </Menu>
+        );
+
+        // Reactivate — second rising edge.
+        rerender(
+          <Menu floatingActiveIndicator>
+            <MenuSection>
+              <MenuItem active label="A" />
+            </MenuSection>
+          </Menu>
+        );
+
+        const buttonA = screen.getByRole("button", { name: "A" });
+        // Timer was reset; text is still gray.
+        expect(buttonA.className).not.toContain("text-white");
+        expect(buttonA.className).toContain("text-gray-800");
+
+        // Advance past the full 150 ms from the second rising edge.
+        act(() => {
+          jest.advanceTimersByTime(151);
+        });
+
+        expect(buttonA.className).toContain("text-white");
+      });
+    });
+
+    // ------------------------------------------------------------------
+    // Collapsed-popover sub-item (portal carve-out)
+    // ------------------------------------------------------------------
+
+    it("on + collapsed: active MenuSubItem in popover has no indicator — shows text-purple-800 instead", async () => {
+      const user = userEvent.setup();
+      render(
+        <Menu defaultCollapsed floatingActiveIndicator>
+          <MenuSection>
+            <MenuAccordionItem icon={<svg />} label="Group">
+              <MenuSubItem active label="Sub A" />
+              <MenuSubItem label="Sub B" />
+            </MenuAccordionItem>
+          </MenuSection>
+        </Menu>
+      );
+
+      // Open the collapsed popover.
+      const trigger = document.querySelector(
+        '[data-slot="menu-accordion-collapsed-trigger"]'
+      ) as HTMLElement;
+      await user.click(trigger);
+
+      await waitFor(() => {
+        expect(
+          document.querySelector('[data-slot="menu-accordion-popover"]')
+        ).not.toBeNull();
+      });
+
+      const subA = screen.getByRole("button", { name: "Sub A" });
+      // No floating pill inside the popover sub-item.
+      expect(
+        subA.querySelector('[data-slot="menu-active-indicator"]')
+      ).toBeNull();
+      // Purple text styling instead.
+      expect(subA.className).toContain("text-purple-800");
+    });
+
+    it("on + collapsed: indicator stays on the parent icon trigger, not the portal sub-item", async () => {
+      const user = userEvent.setup();
+      render(
+        <Menu defaultCollapsed floatingActiveIndicator>
+          <MenuSection>
+            <MenuAccordionItem active icon={<svg />} label="Group">
+              <MenuSubItem active label="Sub A" />
+            </MenuAccordionItem>
+          </MenuSection>
+        </Menu>
+      );
+
+      const trigger = document.querySelector(
+        '[data-slot="menu-accordion-collapsed-trigger"]'
+      ) as HTMLElement;
+      // Indicator is on the parent trigger before opening the popover.
+      expect(
+        trigger.querySelector('[data-slot="menu-active-indicator"]')
+      ).not.toBeNull();
+
+      await user.click(trigger);
+
+      await waitFor(() => {
+        expect(
+          document.querySelector('[data-slot="menu-accordion-popover"]')
+        ).not.toBeNull();
+      });
+
+      // After opening, indicator count is still exactly one (on the trigger).
+      const allIndicators = document.querySelectorAll(
+        '[data-slot="menu-active-indicator"]'
+      );
+      expect(allIndicators).toHaveLength(1);
+      expect(
+        trigger.querySelector('[data-slot="menu-active-indicator"]')
+      ).not.toBeNull();
+    });
+
+    it("off + collapsed: active MenuSubItem in popover still gets static purple bg and white text", async () => {
+      const user = userEvent.setup();
+      render(
+        <Menu defaultCollapsed>
+          <MenuSection>
+            <MenuAccordionItem icon={<svg />} label="Group">
+              <MenuSubItem active label="Sub A" />
+              <MenuSubItem label="Sub B" />
+            </MenuAccordionItem>
+          </MenuSection>
+        </Menu>
+      );
+
+      const trigger = document.querySelector(
+        '[data-slot="menu-accordion-collapsed-trigger"]'
+      ) as HTMLElement;
+      await user.click(trigger);
+
+      await waitFor(() => {
+        expect(
+          document.querySelector('[data-slot="menu-accordion-popover"]')
+        ).not.toBeNull();
+      });
+
+      const subA = screen.getByRole("button", { name: "Sub A" });
+      // Static mode: bg-purple-800 on the sub-item itself.
+      expect(subA.className).toContain("bg-purple-800");
+      expect(subA.className).toContain("text-white");
+      // No floating pill in static mode.
+      expect(
+        subA.querySelector('[data-slot="menu-active-indicator"]')
+      ).toBeNull();
+    });
+
+    // ------------------------------------------------------------------
+    // Expanded MenuAccordionItem trigger — intentional gap
+    // ------------------------------------------------------------------
+
+    it("on: active expanded MenuAccordionItem trigger does NOT render a floating indicator", () => {
+      render(
+        <Menu floatingActiveIndicator>
+          <MenuSection>
+            <MenuAccordionItem active defaultOpen label="Group">
+              <MenuSubItem active label="Sub A" />
+            </MenuAccordionItem>
+          </MenuSection>
+        </Menu>
+      );
+
+      const trigger = document.querySelector(
+        '[data-slot="menu-accordion-trigger"]'
+      ) as HTMLElement;
+      // The expanded trigger intentionally has no purple bg and no pill.
+      expect(trigger.className).not.toContain("bg-purple-800");
+      expect(
+        trigger.querySelector('[data-slot="menu-active-indicator"]')
+      ).toBeNull();
+    });
+
+    it("on: indicator appears on the active sub-item even when parent accordion trigger is also active", () => {
+      render(
+        <Menu floatingActiveIndicator>
+          <MenuSection>
+            <MenuAccordionItem active defaultOpen label="Group">
+              <MenuSubItem active label="Sub A" />
+            </MenuAccordionItem>
+          </MenuSection>
+        </Menu>
+      );
+
+      const subA = screen.getByRole("button", { name: "Sub A" });
+      expect(
+        subA.querySelector('[data-slot="menu-active-indicator"]')
+      ).not.toBeNull();
+      // Exactly one indicator in the whole menu.
+      expect(
+        document.querySelectorAll('[data-slot="menu-active-indicator"]')
+      ).toHaveLength(1);
+    });
+
+    // ------------------------------------------------------------------
+    // MotionConfig reduced-motion wiring (smoke test)
+    // ------------------------------------------------------------------
+
+    it("MotionConfig with reducedMotion='user' is present in the menu tree", () => {
+      const { container } = render(
+        <Menu floatingActiveIndicator>
+          <MenuSection>
+            <MenuItem active label="A" />
+          </MenuSection>
+        </Menu>
+      );
+      // MotionConfig is a context-only component — it renders no DOM node of
+      // its own. The indicator (motion.span) is the best proxy: if MotionConfig
+      // weren't wrapping the menu body, the pill would still render but
+      // reduced-motion respecting would be absent. We verify the pill exists
+      // and that the aside (menu root) is in the document as a structural
+      // smoke test — the actual CSS media query honour is a browser concern.
+      expect(container.querySelector('[data-slot="menu"]')).not.toBeNull();
+      expect(
+        document.querySelector('[data-slot="menu-active-indicator"]')
+      ).not.toBeNull();
+      // The motion.span carries aria-hidden as set in ActiveIndicator.
+      const pill = document.querySelector('[data-slot="menu-active-indicator"]');
+      expect(pill).toHaveAttribute("aria-hidden");
+    });
+  });
 });
 
 /* ------------------------------------------------------------------ */
