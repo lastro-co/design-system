@@ -7,6 +7,7 @@ import {
   ChevronRight as ChevronRightIcon,
   Search as SearchIcon,
 } from "lucide-react";
+import { LayoutGroup, MotionConfig, motion } from "motion/react";
 import { Separator as SeparatorPrimitive } from "radix-ui";
 import * as React from "react";
 import { cn } from "@/lib/utils";
@@ -38,6 +39,13 @@ export interface MenuProps extends React.HTMLAttributes<HTMLElement> {
   defaultCollapsed?: boolean;
   onCollapsedChange?: (collapsed: boolean) => void;
   responsiveBreakpoint?: number;
+  /**
+   * When `true`, the purple active-state background animates between items
+   * using a single shared element instead of toggling per-item. Respects
+   * `prefers-reduced-motion` via Framer Motion's built-in handling.
+   * @default false
+   */
+  floatingActiveIndicator?: boolean;
   children?: React.ReactNode;
 }
 
@@ -156,6 +164,14 @@ export interface MenuSubItemProps {
 interface MenuContextValue {
   collapsed: boolean;
   setCollapsed: (collapsed: boolean) => void;
+  floatingActiveIndicator: boolean;
+  /**
+   * Unique Framer Motion `layoutId` scoped to this Menu instance. Required
+   * because `layoutId` is a global identifier across all `<LayoutGroup>`s
+   * on the page — without a per-Menu prefix, two `<Menu>` instances on the
+   * same screen would fight for the same shared pill element.
+   */
+  activeIndicatorLayoutId: string;
 }
 
 const MenuContext = React.createContext<MenuContextValue | null>(null);
@@ -218,6 +234,59 @@ function useMediaQuery(query: string | null): boolean {
   return matches;
 }
 
+/**
+ * Returns `true` only after `active` has been continuously `true` for
+ * `delayMs`. Used to defer the white-text styling on the *incoming* active
+ * item until the shared floating pill has visually arrived; otherwise the
+ * destination text flashes white-on-white for the duration of the slide
+ * (most visible on long jumps, e.g. sub-item → top-level item).
+ *
+ * Falling edge is immediate: `active=false` resets the state in the same
+ * effect tick AND is guarded again by `active && delayedTrue` at render
+ * time, so the *leaving* item drops white-text the same frame the pill
+ * departs (no 1-frame flash of white text on no background).
+ *
+ * The default delay of 150ms is intentionally shorter than the pill's
+ * 350ms tween: by 150ms the pill has visibly covered the destination
+ * (the ease curve `[0.32, 0.72, 0, 1]` is front-loaded), so the text can
+ * flip to white without appearing to "lead" the pill.
+ */
+function useDelayedActiveStyle(active: boolean, delayMs = 150): boolean {
+  const [delayedTrue, setDelayedTrue] = React.useState<boolean>(active);
+  React.useEffect(() => {
+    if (!active) {
+      setDelayedTrue(false);
+      return;
+    }
+    const timer = setTimeout(() => setDelayedTrue(true), delayMs);
+    return () => clearTimeout(timer);
+  }, [active, delayMs]);
+  return active && delayedTrue;
+}
+
+/**
+ * Resolves the active-state class bits for items participating in the
+ * shared floating pill. Returns:
+ * - `activeBg`: empty string when floating is on (pill carries the bg),
+ *   `"bg-purple-800"` otherwise so the per-item static background still
+ *   paints in non-floating mode.
+ * - `styleActive`: when to apply white-text/font-medium styling. In
+ *   floating mode this is gated by the rising-edge delay so the new item
+ *   doesn't flash white-on-white mid-slide; in static mode it tracks
+ *   `active` directly.
+ */
+function useFloatingActiveClasses(active: boolean): {
+  activeBg: string;
+  styleActive: boolean;
+} {
+  const { floatingActiveIndicator } = useMenuContext();
+  const delayedActive = useDelayedActiveStyle(active);
+  return {
+    activeBg: active && !floatingActiveIndicator ? "bg-purple-800" : "",
+    styleActive: floatingActiveIndicator ? delayedActive : active,
+  };
+}
+
 /* ------------------------------------------------------------------ */
 /* Menu (root)                                                        */
 /* ------------------------------------------------------------------ */
@@ -227,6 +296,7 @@ function Menu({
   defaultCollapsed = false,
   onCollapsedChange,
   responsiveBreakpoint,
+  floatingActiveIndicator = false,
   className,
   children,
   ...props
@@ -269,9 +339,27 @@ function Menu({
     [isControlled, mediaQuery, onCollapsedChange]
   );
 
+  // `useId()` gives a stable, SSR-safe identifier per Menu instance. We
+  // suffix the shared name so two menus on the same page don't share the
+  // same `layoutId` (which would make Framer Motion try to morph the pill
+  // across menus). The literal suffix is preserved for `data-slot` so
+  // tests/CSS hooks can still target the indicator by a stable attribute.
+  const reactId = React.useId();
+  const activeIndicatorLayoutId = `menu-active-indicator-${reactId}`;
+
   const contextValue = React.useMemo<MenuContextValue>(
-    () => ({ collapsed: effectiveCollapsed, setCollapsed }),
-    [effectiveCollapsed, setCollapsed]
+    () => ({
+      collapsed: effectiveCollapsed,
+      setCollapsed,
+      floatingActiveIndicator,
+      activeIndicatorLayoutId,
+    }),
+    [
+      effectiveCollapsed,
+      setCollapsed,
+      floatingActiveIndicator,
+      activeIndicatorLayoutId,
+    ]
   );
 
   // Initial browsing-open is the first defaultOpen accordion that doesn't
@@ -302,11 +390,48 @@ function Menu({
             style={{ width: effectiveCollapsed ? 72 : 272 }}
             {...props}
           >
-            <div className="flex h-svh flex-col">{children}</div>
+            {/* `reducedMotion="user"` respects the OS-level
+                `prefers-reduced-motion: reduce` setting for every Motion
+                primitive inside, including the shared-`layoutId` pill — the
+                slide collapses to an instant swap for users who opt out. */}
+            <MotionConfig reducedMotion="user">
+              <LayoutGroup>
+                <div className="flex h-svh flex-col">{children}</div>
+              </LayoutGroup>
+            </MotionConfig>
           </aside>
         </TooltipProvider>
       </MenuAccordionContext.Provider>
     </MenuContext.Provider>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* ActiveIndicator                                                    */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Shared purple pill that animates between the active items. Renders only
+ * when the enclosing Menu opted in via `floatingActiveIndicator` and the
+ * caller's item is currently active. Framer Motion's `layoutId` slides a
+ * single element between matching slots across the LayoutGroup.
+ *
+ * The `layoutId` is scoped to each Menu instance (see `MenuContextValue`)
+ * so multiple `<Menu>`s on the same page don't fight for the same pill.
+ */
+function ActiveIndicator({ visible }: { visible: boolean }) {
+  const { floatingActiveIndicator, activeIndicatorLayoutId } = useMenuContext();
+  if (!(visible && floatingActiveIndicator)) {
+    return null;
+  }
+  return (
+    <motion.span
+      aria-hidden
+      className="absolute inset-0 rounded-lg bg-purple-800 shadow-md shadow-purple-800/20"
+      data-slot="menu-active-indicator"
+      layoutId={activeIndicatorLayoutId}
+      transition={{ type: "tween", duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
+    />
   );
 }
 
@@ -666,6 +791,7 @@ function MenuItem({
   const accordionCtx = React.useContext(MenuAccordionContext);
   const [hovered, setHovered] = React.useState<boolean>(false);
   const hasBadge = badge !== undefined && badge !== "" && badge !== 0;
+  const { activeBg, styleActive } = useFloatingActiveClasses(active);
 
   // Selecting a non-accordion item closes any browsing-open accordion in the
   // same Menu. Sticky accordions close naturally once the consumer updates
@@ -686,9 +812,9 @@ function MenuItem({
           <button
             aria-current={active ? "page" : undefined}
             className={cn(
-              "flex size-11 cursor-pointer items-center justify-center rounded-lg transition-all duration-150",
+              "relative flex size-11 cursor-pointer items-center justify-center rounded-lg transition-all duration-150",
               active
-                ? "bg-purple-800 text-white"
+                ? cn(activeBg, styleActive ? "text-white" : "text-gray-800")
                 : "text-gray-800 hover:bg-gray-50 hover:text-gray-900",
               disabled && "pointer-events-none opacity-50",
               className
@@ -702,13 +828,16 @@ function MenuItem({
             onMouseLeave={() => setHovered(false)}
             type="button"
           >
-            <MenuItemIcon
-              animatedIcon={animatedIcon}
-              animation={animation}
-              className={active ? "text-white" : "text-gray-800"}
-              hovered={hovered}
-              icon={icon}
-            />
+            <ActiveIndicator visible={active} />
+            <span className="relative z-10 flex items-center justify-center">
+              <MenuItemIcon
+                animatedIcon={animatedIcon}
+                animation={animation}
+                className={styleActive ? "text-white" : "text-gray-800"}
+                hovered={hovered}
+                icon={icon}
+              />
+            </span>
           </button>
         </TooltipTrigger>
         <TooltipContent side="right" sideOffset={8}>
@@ -722,9 +851,12 @@ function MenuItem({
     <button
       aria-current={active ? "page" : undefined}
       className={cn(
-        "flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-left text-[13px] transition-all duration-150",
+        "relative flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-left text-[13px] transition-all duration-150",
         active
-          ? "bg-purple-800 font-medium text-white"
+          ? cn(
+              activeBg,
+              styleActive ? "font-medium text-white" : "text-gray-800"
+            )
           : "text-gray-800 hover:bg-gray-50 hover:text-gray-900",
         disabled && "pointer-events-none opacity-50",
         className
@@ -738,26 +870,29 @@ function MenuItem({
       onMouseLeave={() => setHovered(false)}
       type="button"
     >
-      <MenuItemIcon
-        animatedIcon={animatedIcon}
-        animation={animation}
-        className={active ? "text-white" : "text-gray-800"}
-        hovered={hovered}
-        icon={icon}
-      />
-      <span className="flex-1 truncate">{label}</span>
-      {hasBadge && (
-        <Badge
-          className={cn(
-            "h-5 min-w-5 justify-center px-1.5 py-0 text-[11px]",
-            active && "border-transparent bg-white/20 text-white"
-          )}
-          color={active ? "purple" : "gray"}
-          isNumber={typeof badge === "number"}
-        >
-          {badge}
-        </Badge>
-      )}
+      <ActiveIndicator visible={active} />
+      <span className="relative z-10 flex flex-1 items-center gap-3">
+        <MenuItemIcon
+          animatedIcon={animatedIcon}
+          animation={animation}
+          className={styleActive ? "text-white" : "text-gray-800"}
+          hovered={hovered}
+          icon={icon}
+        />
+        <span className="flex-1 truncate">{label}</span>
+        {hasBadge && (
+          <Badge
+            className={cn(
+              "h-5 min-w-5 justify-center px-1.5 py-0 text-[11px]",
+              styleActive && "border-transparent bg-white/20 text-white"
+            )}
+            color={styleActive ? "purple" : "gray"}
+            isNumber={typeof badge === "number"}
+          >
+            {badge}
+          </Badge>
+        )}
+      </span>
     </button>
   );
 }
@@ -911,6 +1046,10 @@ function MenuAccordionItem({
   const [popoverOpen, setPopoverOpen] = React.useState<boolean>(false);
   const accordionCtx = React.useContext(MenuAccordionContext);
   const isControlled = open !== undefined;
+  // Only the collapsed trigger paints a purple bg today; expanded mode has
+  // none (the chevron + indent treatment handles "open"). In floating mode
+  // the collapsed bg is delegated to <ActiveIndicator/>.
+  const { activeBg, styleActive } = useFloatingActiveClasses(active);
   // Sticky: this accordion contains the active subitem and must stay open
   // until the user navigates somewhere else.
   const sticky = !isControlled && hasActiveSubItem(children);
@@ -992,9 +1131,9 @@ function MenuAccordionItem({
                 aria-current={active ? "page" : undefined}
                 aria-expanded={popoverOpen}
                 className={cn(
-                  "flex size-11 cursor-pointer items-center justify-center rounded-lg transition-all duration-150",
+                  "relative flex size-11 cursor-pointer items-center justify-center rounded-lg transition-all duration-150",
                   active
-                    ? "bg-purple-800 text-white"
+                    ? cn(activeBg, styleActive ? "text-white" : "text-gray-800")
                     : "text-gray-800 hover:bg-gray-50 hover:text-gray-900",
                   disabled && "pointer-events-none opacity-50",
                   className
@@ -1008,13 +1147,16 @@ function MenuAccordionItem({
                 onMouseLeave={() => setHovered(false)}
                 type="button"
               >
-                <MenuItemIcon
-                  animatedIcon={animatedIcon}
-                  animation={animation}
-                  className={active ? "text-white" : "text-gray-800"}
-                  hovered={hovered}
-                  icon={icon}
-                />
+                <ActiveIndicator visible={active} />
+                <span className="relative z-10 flex items-center justify-center">
+                  <MenuItemIcon
+                    animatedIcon={animatedIcon}
+                    animation={animation}
+                    className={styleActive ? "text-white" : "text-gray-800"}
+                    hovered={hovered}
+                    icon={icon}
+                  />
+                </span>
               </button>
             </PopoverAnchor>
           </TooltipTrigger>
@@ -1198,7 +1340,17 @@ function MenuSubItem({
   className,
   visible = true,
 }: MenuSubItemProps) {
+  const { collapsed, floatingActiveIndicator } = useMenuContext();
   const accordionCtx = React.useContext(MenuAccordionContext);
+  // In collapsed mode the sub-item lives inside a Popover portal — the
+  // visible "active" anchor on screen is the parent icon (the collapsed
+  // accordion trigger), not this sub-item. We deliberately do NOT render
+  // the floating pill here because Framer Motion would try to morph it
+  // across the portal boundary; instead, surface the active state with
+  // purple text only.
+  const floatingPillEnabled = floatingActiveIndicator && !collapsed;
+  const collapsedPurpleTextOnly = floatingActiveIndicator && collapsed;
+  const { activeBg, styleActive } = useFloatingActiveClasses(active);
 
   // Selecting a subitem commits navigation. Close any browsing-open accordion;
   // the parent of this subitem will become sticky-open on the next render
@@ -1212,13 +1364,22 @@ function MenuSubItem({
     return null;
   }
 
+  let activeClasses: string;
+  if (collapsedPurpleTextOnly) {
+    activeClasses = "font-medium text-purple-800";
+  } else if (styleActive) {
+    activeClasses = cn(activeBg, "font-medium text-white");
+  } else {
+    activeClasses = cn(activeBg, "text-gray-800");
+  }
+
   return (
     <button
       aria-current={active ? "page" : undefined}
       className={cn(
-        "w-full cursor-pointer rounded-md px-3 py-1.5 text-left text-[13px] transition-colors duration-150",
+        "relative w-full cursor-pointer rounded-md px-3 py-1.5 text-left text-[13px] transition-colors duration-150",
         active
-          ? "bg-purple-800 font-medium text-white"
+          ? activeClasses
           : "text-gray-800 hover:bg-gray-50 hover:text-gray-900",
         disabled && "pointer-events-none opacity-50",
         className
@@ -1230,7 +1391,8 @@ function MenuSubItem({
       onClick={handleClick}
       type="button"
     >
-      {label}
+      {floatingPillEnabled && <ActiveIndicator visible={active} />}
+      <span className="relative z-10">{label}</span>
     </button>
   );
 }
