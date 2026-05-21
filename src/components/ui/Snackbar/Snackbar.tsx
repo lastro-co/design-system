@@ -39,6 +39,7 @@ function Snackbar({
   ...props
 }: SnackbarProps) {
   return (
+    // biome-ignore lint/a11y/useSemanticElements: role="status" is the intended ARIA semantic for a non-critical banner; <output> implies a form result and is the wrong fit here.
     <div
       aria-atomic="true"
       aria-live="polite"

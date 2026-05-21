@@ -36,8 +36,7 @@ export const Docs = {
         Ver boletos →
       </a>
     ),
-    onDismiss: () => {
-    },
+    onDismiss: () => alert("Dismissed"),
   },
 };
 
@@ -85,8 +84,7 @@ export const Dismissable = {
   args: {
     severity: "error",
     children: longMessage,
-    onDismiss: () => {
-    },
+    onDismiss: () => alert("Dismissed"),
   },
 };
 
@@ -99,7 +97,6 @@ export const ActionAndDismiss = {
         Ver boletos →
       </a>
     ),
-    onDismiss: () => {
-    },
+    onDismiss: () => alert("Dismissed"),
   },
 };
