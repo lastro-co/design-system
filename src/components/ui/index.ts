@@ -198,6 +198,8 @@ export {
   SelectValue,
 } from "./Select";
 export { Skeleton } from "./Skeleton";
+export type { SnackbarProps } from "./Snackbar";
+export { Snackbar } from "./Snackbar";
 export { Spinner } from "./Spinner";
 export type { StepperProps } from "./Stepper";
 export { Stepper } from "./Stepper";
