@@ -4,7 +4,7 @@ import { Snackbar } from "./Snackbar";
 describe("Snackbar", () => {
   it("renders the message children", () => {
     render(<Snackbar>Algo aconteceu</Snackbar>);
-    expect(screen.getByText("Algo aconteceu")).toBeInTheDocument();
+    expect(screen.getByText("Algo aconteceu")).toBeVisible();
   });
 
   it("defaults to info severity", () => {
@@ -38,7 +38,7 @@ describe("Snackbar", () => {
     render(
       <Snackbar action={<a href="/finance">Ver boletos →</a>}>Message</Snackbar>
     );
-    expect(screen.getByText("Ver boletos →")).toBeInTheDocument();
+    expect(screen.getByText("Ver boletos →")).toBeVisible();
   });
 
   it("does not render a dismiss button when onDismiss is omitted", () => {
@@ -63,7 +63,7 @@ describe("Snackbar", () => {
     );
     expect(
       screen.getByRole("button", { name: "Fechar aviso" })
-    ).toBeInTheDocument();
+    ).toBeVisible();
   });
 
   it("exposes aria-live polite and aria-atomic on the wrapper", () => {
