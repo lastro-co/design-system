@@ -61,9 +61,7 @@ describe("Snackbar", () => {
         Message
       </Snackbar>
     );
-    expect(
-      screen.getByRole("button", { name: "Fechar aviso" })
-    ).toBeVisible();
+    expect(screen.getByRole("button", { name: "Fechar aviso" })).toBeVisible();
   });
 
   it("exposes aria-live polite and aria-atomic on the wrapper", () => {
