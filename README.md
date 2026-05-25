@@ -144,6 +144,8 @@ pnpm run shadcn:organize <component-name>  # re-organize an already installed co
 
 ## Storybook
 
+Published at **https://design-system-lastro.vercel.app/**. Every PR also gets a unique preview URL via Vercel (commented automatically on the PR).
+
 Features:
 
 - Autodocs for all components with props documentation
@@ -168,7 +170,7 @@ The workflow automatically updates `package.json` to match the release tag versi
 
 Current test coverage:
 
-![Coverage](https://img.shields.io/endpoint?url=https://lastro-co.github.io/design-system/coverage-badge.json)
+![Coverage](https://img.shields.io/endpoint?url=https://design-system-lastro.vercel.app/coverage-badge.json)
 
 ## Tech Stack
 
