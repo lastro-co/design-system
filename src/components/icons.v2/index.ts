@@ -25,6 +25,7 @@ export {
   ShieldUser as ShieldUserIcon,
   ShoppingBag as ShoppingBagIcon,
   Star as StarIcon,
+  TrendingUp as TrendingUpIcon,
   UserCheck as UserCheckIcon,
   Users as UsersIcon,
   Zap as ZapIcon,
