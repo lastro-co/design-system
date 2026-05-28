@@ -24,6 +24,8 @@ export {
   Settings as SettingsIcon,
   ShieldUser as ShieldUserIcon,
   ShoppingBag as ShoppingBagIcon,
+  SmartphoneNfc as SmartphoneNfcIcon,
+  Split as SplitIcon,
   Star as StarIcon,
   TrendingUp as TrendingUpIcon,
   UserCheck as UserCheckIcon,
