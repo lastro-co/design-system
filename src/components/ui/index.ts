@@ -173,6 +173,11 @@ export {
   MenuSeparator,
   MenuSubItem,
 } from "./Menu";
+export type {
+  OpportunityCardAction,
+  OpportunityCardProps,
+} from "./OpportunityCard";
+export { OpportunityCard } from "./OpportunityCard";
 export {
   DynamicPagination,
   generatePaginationRange,
