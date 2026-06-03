@@ -205,6 +205,8 @@ export {
 export { Skeleton } from "./Skeleton";
 export type { SnackbarProps } from "./Snackbar";
 export { Snackbar } from "./Snackbar";
+export type { SortableTableHeaderProps } from "./SortableTableHeader";
+export { SortableTableHeader } from "./SortableTableHeader";
 export { Spinner } from "./Spinner";
 export type { StepperProps } from "./Stepper";
 export { Stepper } from "./Stepper";
@@ -215,6 +217,8 @@ export { Tabs, tabsVariants, tabVariants } from "./Tabs";
 export { Textarea } from "./Textarea";
 export { Toaster } from "./Toaster";
 export { ToggleButtonGroup } from "./ToggleButtonGroup";
+export type { ToggleChipProps } from "./ToggleChip";
+export { ToggleChip } from "./ToggleChip";
 export {
   Tooltip,
   TooltipContent,
