@@ -1,5 +1,9 @@
-import { ChevronDown, ChevronsUpDown, ChevronUp } from "lucide-react";
 import type * as React from "react";
+import {
+  ChevronDownIcon,
+  ChevronsUpDownIcon,
+  ChevronUpIcon,
+} from "@/components/icons.v2";
 import { cn } from "@/lib/utils";
 
 interface SortableTableHeaderProps<K extends string>
@@ -30,15 +34,15 @@ function SortableTableHeader<K extends string>({
   const dir = isActive ? activeDir : null;
 
   let ariaSort: "ascending" | "descending" | "none" = "none";
-  let SortIcon = ChevronsUpDown;
+  let SortIcon = ChevronsUpDownIcon;
   let iconClassName = "size-3 text-gray-400";
   if (dir === "asc") {
     ariaSort = "ascending";
-    SortIcon = ChevronUp;
+    SortIcon = ChevronUpIcon;
     iconClassName = "size-3";
   } else if (dir === "desc") {
     ariaSort = "descending";
-    SortIcon = ChevronDown;
+    SortIcon = ChevronDownIcon;
     iconClassName = "size-3";
   }
 
