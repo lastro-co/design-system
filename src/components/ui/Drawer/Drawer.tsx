@@ -134,10 +134,17 @@ function DrawerHeader({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function DrawerMain({ className, ...props }: React.ComponentProps<"div">) {
+function DrawerMain({
+  className,
+  contentClassName,
+  ...props
+}: React.ComponentProps<"div"> & { contentClassName?: string }) {
   return (
-    <ScrollArea className="min-h-0 flex-1" data-slot="drawer-main">
-      <div className={cn("px-8 py-6", className)} {...props} />
+    <ScrollArea
+      className={cn("min-h-0 flex-1", className)}
+      data-slot="drawer-main"
+    >
+      <div className={cn("px-8 py-6", contentClassName)} {...props} />
     </ScrollArea>
   );
 }
