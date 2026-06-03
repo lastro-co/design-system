@@ -5,6 +5,8 @@ export {
   ChevronDown as ChevronDownIcon,
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,
+  ChevronsUpDown as ChevronsUpDownIcon,
+  ChevronUp as ChevronUpIcon,
   Columns3 as Columns3Icon,
   Crown as CrownIcon,
   DollarSign as DollarSignIcon,
