@@ -85,6 +85,11 @@ const ColorPalettePage = () => (
           cssVar: "--color-purple-300",
           tailwindName: "purple-300",
         },
+        {
+          name: "purple 100",
+          cssVar: "--color-purple-100",
+          tailwindName: "purple-100",
+        },
       ]}
       title="Purple Colors"
     />
