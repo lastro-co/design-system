@@ -173,6 +173,8 @@ export {
   MenuSeparator,
   MenuSubItem,
 } from "./Menu";
+export type { NumberInputProps } from "./NumberInput";
+export { NumberInput } from "./NumberInput";
 export type {
   OpportunityCardAction,
   OpportunityCardProps,
