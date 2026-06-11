@@ -94,6 +94,28 @@ describe("AlertTitle", () => {
   });
 });
 
+describe("Alert iconPlacement=inline", () => {
+  it("renders the severity icon next to the description", () => {
+    render(
+      <Alert iconPlacement="inline" severity="info">
+        <AlertDescription>Inline body</AlertDescription>
+      </Alert>
+    );
+    expect(screen.getByText("Inline body")).toBeVisible();
+    expect(screen.getByRole("img")).toBeInTheDocument();
+  });
+
+  it("does not duplicate the icon when AlertTitle is rendered in inline mode", () => {
+    render(
+      <Alert iconPlacement="inline" severity="info">
+        <AlertTitle>Title</AlertTitle>
+        <AlertDescription>Body</AlertDescription>
+      </Alert>
+    );
+    expect(screen.getAllByRole("img")).toHaveLength(1);
+  });
+});
+
 describe("AlertDescription", () => {
   it("renders with correct data-slot", () => {
     render(
