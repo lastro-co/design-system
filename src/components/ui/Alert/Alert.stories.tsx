@@ -15,6 +15,12 @@ const meta: Meta<typeof Alert> = {
       options: ["success", "info", "warning", "error"],
       description: "Alert severity",
     },
+    iconPlacement: {
+      control: "radio",
+      options: ["title", "inline"],
+      description:
+        "Where the severity icon is rendered. `title` (default) keeps the icon inside the title row; `inline` renders it next to the description with no title.",
+    },
     className: {
       control: "text",
       description: "Additional CSS classes",
@@ -95,6 +101,19 @@ export const ErrorVariant = {
           novamente.
         </AlertDescription>
       </>
+    ),
+  },
+};
+
+export const InlineIcon = {
+  args: {
+    severity: "info",
+    iconPlacement: "inline",
+    children: (
+      <AlertDescription>
+        Alerta compacto com ícone alinhado ao texto, sem título — útil para
+        avisos curtos em formulários e drawers.
+      </AlertDescription>
     ),
   },
 };

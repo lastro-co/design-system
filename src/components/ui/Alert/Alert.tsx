@@ -11,8 +11,12 @@ import {
   ReportProblemIcon,
 } from "../../icons";
 
+type AlertSeverity = "success" | "info" | "warning" | "error";
+type AlertIconPlacement = "title" | "inline";
+
 type AlertContextType = {
-  severity: "success" | "info" | "warning" | "error";
+  severity: AlertSeverity;
+  iconPlacement: AlertIconPlacement;
 };
 
 const AlertContext = createContext<AlertContextType | undefined>(undefined);
@@ -26,6 +30,20 @@ const useAlertContext = () => {
   }
   return context;
 };
+
+const SEVERITY_ICON = {
+  success: CheckBoxIcon,
+  info: InfoIcon,
+  warning: ReportProblemIcon,
+  error: ReportIcon,
+} as const;
+
+const SEVERITY_ICON_COLOR = {
+  success: "green-600",
+  info: "blue-600",
+  warning: "yellow-600",
+  error: "red-600",
+} as const;
 
 const alertVariants = cva(
   "w-full items-start rounded-lg border border-gray-300 border-l-8 p-4 text-base leading-none",
@@ -44,43 +62,60 @@ const alertVariants = cva(
   }
 );
 
+type AlertProps = React.ComponentProps<"div"> &
+  VariantProps<typeof alertVariants> & {
+    /**
+     * Where the severity icon is rendered.
+     *
+     * - `title` (default) — icon lives inside `AlertTitle`. Use when the
+     *   alert has a heading row with a description below it.
+     * - `inline` — icon is rendered vertically centered next to the
+     *   description, with no title. Use for compact informational alerts
+     *   that don't need a heading.
+     */
+    iconPlacement?: AlertIconPlacement;
+  };
+
 function Alert({
+  children,
   className,
+  iconPlacement = "title",
   severity = "success",
   ...props
-}: React.ComponentProps<"div"> & VariantProps<typeof alertVariants>) {
+}: AlertProps) {
   const alertSeverity = severity || "success";
+  const Icon = SEVERITY_ICON[alertSeverity];
+  const iconColor = SEVERITY_ICON_COLOR[alertSeverity];
 
   return (
-    <AlertContext.Provider value={{ severity: alertSeverity }}>
+    <AlertContext.Provider value={{ severity: alertSeverity, iconPlacement }}>
       <div
         className={cn(alertVariants({ severity: alertSeverity }), className)}
         data-slot="alert"
         role="alert"
         {...props}
       >
-        <div className="grid gap-2">{props.children}</div>
+        {iconPlacement === "inline" ? (
+          <div className="flex items-center gap-3">
+            <Icon className="shrink-0" color={iconColor as never} size="xl" />
+            <div className="flex-1">{children}</div>
+          </div>
+        ) : (
+          <div className="grid gap-2">{children}</div>
+        )}
       </div>
     </AlertContext.Provider>
   );
 }
 
 function AlertTitle({ className, ...props }: React.ComponentProps<"div">) {
-  const { severity } = useAlertContext();
+  const { severity, iconPlacement } = useAlertContext();
 
-  const Icon = {
-    success: CheckBoxIcon,
-    info: InfoIcon,
-    warning: ReportProblemIcon,
-    error: ReportIcon,
-  }[severity];
-
-  const iconColorClasses = {
-    success: "green-600",
-    info: "blue-600",
-    warning: "yellow-600",
-    error: "red-600",
-  }[severity];
+  // In `inline` mode the icon is owned by the wrapper, so the title row
+  // just renders its text — using `AlertTitle` there is unusual but we
+  // still want it to compose cleanly without doubling the icon.
+  const Icon = SEVERITY_ICON[severity];
+  const iconColor = SEVERITY_ICON_COLOR[severity];
 
   return (
     <div
@@ -91,7 +126,9 @@ function AlertTitle({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="alert-title"
       {...props}
     >
-      <Icon color={iconColorClasses as any} size="xl" />
+      {iconPlacement === "title" && (
+        <Icon color={iconColor as never} size="xl" />
+      )}
       {props.children}
     </div>
   );
