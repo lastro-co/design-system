@@ -25,6 +25,18 @@
           }
         }
       }
+    },
+    {
+      // Animated icons vendored from lucide-animated.com ship raw decorative
+      // <svg> markup (same as lucide-react); consumers supply their own label.
+      "includes": ["src/components/icons.v2/animated/**"],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "noSvgWithoutTitle": "off"
+          }
+        }
+      }
     }
   ],
   "linter": {
