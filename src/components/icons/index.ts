@@ -36,6 +36,7 @@ export { CloseIcon } from "./CloseIcon";
 export { ConnectedAppsIcon } from "./ConnectedAppsIcon";
 export { CopyCheckIcon } from "./CopyCheckIcon";
 export { CopyIcon } from "./CopyIcon";
+export { CredalugaIcon } from "./CredalugaIcon";
 export { CredentialsIcon } from "./CredentialsIcon";
 export { CreditCardIcon } from "./CreditCardIcon";
 export { DistributionBranchIcon } from "./DistributionBranchIcon";
