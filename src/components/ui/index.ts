@@ -177,7 +177,9 @@ export type { NumberInputProps } from "./NumberInput";
 export { NumberInput } from "./NumberInput";
 export type {
   OpportunityCardAction,
+  OpportunityCardActionsAlignment,
   OpportunityCardProps,
+  OpportunityCardSize,
 } from "./OpportunityCard";
 export { OpportunityCard } from "./OpportunityCard";
 export {
