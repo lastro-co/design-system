@@ -105,4 +105,51 @@ describe("OpportunityCard", () => {
     render(<OpportunityCard {...baseProps} className="custom-class" />);
     expect(screen.getByRole("status")).toHaveClass("custom-class");
   });
+
+  describe("size", () => {
+    it('defaults to "medium" (360px) when omitted', () => {
+      render(<OpportunityCard {...baseProps} />);
+      expect(screen.getByRole("status")).toHaveClass("w-[360px]");
+    });
+
+    it('applies w-[360px] when size="medium"', () => {
+      render(<OpportunityCard {...baseProps} size="medium" />);
+      expect(screen.getByRole("status")).toHaveClass("w-[360px]");
+    });
+
+    it('applies w-[440px] when size="large"', () => {
+      render(<OpportunityCard {...baseProps} size="large" />);
+      const card = screen.getByRole("status");
+      expect(card).toHaveClass("w-[440px]");
+      expect(card).not.toHaveClass("w-[360px]");
+    });
+  });
+
+  describe("actionsAlignment", () => {
+    // Query by data-slot keeps the assertion stable if future layout changes
+    // add new sibling elements inside the card root.
+    function getActionsRow(container: HTMLElement): HTMLElement {
+      const row = container.querySelector(
+        '[data-slot="opportunity-card-actions"]'
+      );
+      if (!(row instanceof HTMLElement)) {
+        throw new Error("actions row not found");
+      }
+      return row;
+    }
+
+    it('defaults to "end" (justify-end) when omitted', () => {
+      const { container } = render(<OpportunityCard {...baseProps} />);
+      expect(getActionsRow(container)).toHaveClass("justify-end");
+    });
+
+    it('applies justify-between when actionsAlignment="between"', () => {
+      const { container } = render(
+        <OpportunityCard {...baseProps} actionsAlignment="between" />
+      );
+      const row = getActionsRow(container);
+      expect(row).toHaveClass("justify-between");
+      expect(row).not.toHaveClass("justify-end");
+    });
+  });
 });
