@@ -86,7 +86,6 @@ describe("icons.v2 — animated icons", () => {
   it.each(ANIMATED_ICONS)(
     "%s exposes a start/stop handle and forwards hover when controlled",
     (_name, Icon) => {
-      // biome-ignore lint/suspicious/noExplicitAny: handle type varies per icon
       const ref = createRef<any>();
       const onMouseEnter = jest.fn();
       const onMouseLeave = jest.fn();
