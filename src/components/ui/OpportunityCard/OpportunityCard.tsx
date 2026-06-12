@@ -77,11 +77,11 @@ export function OpportunityCard({
         )}
       </div>
 
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-2">
         <h3 className="font-bold font-display text-base text-white leading-tight">
           {title}
         </h3>
-        <p className="font-text text-sm text-white/90 leading-snug">
+        <p className="font-normal font-text text-sm text-white/90 leading-snug">
           {description}
         </p>
       </div>
