@@ -34,3 +34,7 @@ export {
   Users as UsersIcon,
   Zap as ZapIcon,
 } from "lucide-react";
+
+// Animated (hover-triggered) variants from lucide-animated.com. Opt-in via the
+// `Animated`-prefixed exports; the static lucide-react exports above are unchanged.
+export * from "./animated";

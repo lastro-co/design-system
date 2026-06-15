@@ -1,8 +1,6 @@
 import type { Meta } from "@storybook/react-vite";
 import type { LucideProps } from "lucide-react";
-import { motion, type TargetAndTransition } from "motion/react";
 import type { ComponentType } from "react";
-import { useState } from "react";
 import * as IconsV2 from "@/components/icons.v2";
 
 type LucideIconComponent = ComponentType<LucideProps>;
@@ -107,96 +105,58 @@ export const AllIcons = {
   },
 };
 
-type AnimationName = "bounce" | "rotate" | "spin" | "pulse";
+type AnimatedIconComponent = ComponentType<{
+  size?: number;
+  className?: string;
+}>;
 
-const ANIMATION_VARIANTS: Record<AnimationName, TargetAndTransition> = {
-  bounce: { y: [0, -4, 0], transition: { duration: 0.4 } },
-  rotate: { rotate: [0, 15, -15, 0], transition: { duration: 0.5 } },
-  spin: { rotate: [0, 180], transition: { duration: 0.5, ease: "easeInOut" } },
-  pulse: { scale: [1, 1.18, 1], transition: { duration: 0.4 } },
-};
-
-const ANIMATION_DOCS: Record<AnimationName, string> = {
-  bounce: "Sobe 4px e volta. Ideal para chamar atenção sem ser intrusivo.",
-  rotate: "Balanço leve (15° para cada lado). Bom para ações de ajuste.",
-  spin: "Meia volta e mantém. Usado em Configurações no menu principal.",
-  pulse: "Cresce 18% e volta. Reforça notificações e chamadas ativas.",
-};
-
-function AnimatedDemo({
-  animation,
-  Icon,
-  label,
-}: {
-  animation: AnimationName;
-  Icon: LucideIconComponent;
-  label: string;
-}) {
-  const [hovered, setHovered] = useState(false);
-  const idle: TargetAndTransition =
-    animation === "spin" ? {} : { rotate: 0, y: 0, scale: 1 };
-
-  return (
-    <div className="flex flex-col items-center gap-3">
-      <button
-        className="flex size-20 cursor-pointer items-center justify-center rounded-xl border border-gray-300 bg-white text-purple-800 transition-colors hover:bg-gray-50"
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        type="button"
-      >
-        <motion.div animate={hovered ? ANIMATION_VARIANTS[animation] : idle}>
-          <Icon size={28} strokeWidth={2} />
-        </motion.div>
-      </button>
-      <div className="flex flex-col items-center text-center">
-        <span className="font-medium text-gray-900 text-sm">{label}</span>
-        <span className="mt-0.5 max-w-[180px] text-gray-600 text-xs">
-          {ANIMATION_DOCS[animation]}
-        </span>
-      </div>
-    </div>
-  );
-}
+const animatedIconEntries = (
+  Object.entries(IconsV2).filter(([name]) => name.startsWith("Animated")) as [
+    string,
+    AnimatedIconComponent,
+  ][]
+).sort(([a], [b]) => a.localeCompare(b));
 
 export const AnimatedIcons = {
   name: "Ícones Animados",
   render: () => (
-    <div className="flex flex-col items-center gap-6 p-4">
-      <p className="max-w-[720px] text-center text-gray-600 text-sm">
-        Quatro variantes de animação em hover, disponibilizadas pelo componente
-        <code className="mx-1 rounded bg-gray-100 px-1.5 py-0.5 text-[12px]">
-          Menu
-        </code>
-        através da prop{" "}
-        <code className="mx-1 rounded bg-gray-100 px-1.5 py-0.5 text-[12px]">
-          animation
-        </code>
-        . Passe o mouse para ver.
-      </p>
-      <div className="flex flex-wrap items-start justify-center gap-10">
-        <AnimatedDemo
-          animation="bounce"
-          Icon={IconsV2.HomeIcon}
-          label="bounce"
-        />
-        <AnimatedDemo
-          animation="rotate"
-          Icon={IconsV2.UsersIcon}
-          label="rotate"
-        />
-        <AnimatedDemo
-          animation="spin"
-          Icon={IconsV2.SettingsIcon}
-          label="spin"
-        />
-        <AnimatedDemo animation="pulse" Icon={IconsV2.BellIcon} label="pulse" />
+    <div className="w-full max-w-[960px]">
+      <div className="mb-4 flex items-center justify-between gap-4">
+        <p className="max-w-[640px] text-gray-600 text-sm">
+          {animatedIconEntries.length} variantes animadas (Motion) de{" "}
+          <a
+            className="font-medium text-purple-800 hover:underline"
+            href="https://lucide-animated.com"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            lucide-animated
+          </a>
+          . A animação dispara no hover e retorna ao estado inicial ao sair.
+          Passe o mouse sobre cada ícone para ver.
+        </p>
       </div>
-      <pre className="mt-4 max-w-[720px] overflow-x-auto rounded-lg bg-gray-900 px-4 py-3 text-gray-100 text-xs">
-        {`<MenuItem
-  icon={<HomeIcon />}
-  animation="bounce"   // 'bounce' | 'rotate' | 'spin' | 'pulse' | 'none'
-  label="Início"
-/>`}
+      <div className="grid grid-cols-5 gap-3">
+        {animatedIconEntries.map(([name, Icon]) => (
+          <div
+            className="flex cursor-pointer flex-col items-center gap-2 rounded border p-4 text-gray-900 hover:bg-gray-50"
+            key={name}
+          >
+            <Icon size={24} />
+            <span className="break-all text-center text-[11px] text-gray-600">
+              {name}
+            </span>
+          </div>
+        ))}
+      </div>
+      <pre className="mt-6 max-w-[720px] overflow-x-auto rounded-lg bg-gray-900 px-4 py-3 text-gray-100 text-xs">
+        {`import { AnimatedHomeIcon } from "@lastro-co/design-system/icons.v2";
+
+// Hover-triggered out of the box:
+<AnimatedHomeIcon size={24} className="text-purple-800" />
+
+// Or feed it to a MenuItem's animatedIcon slot:
+<MenuItem animatedIcon={<AnimatedHomeIcon />} label="Início" />`}
       </pre>
     </div>
   ),
@@ -204,7 +164,7 @@ export const AnimatedIcons = {
     docs: {
       description: {
         story:
-          "Demonstração das 4 variantes de animação suportadas pelo `MenuItem`. A animação é disparada no hover e retorna ao estado idle ao sair — exceto `spin`, que permanece em 180° (comportamento idêntico ao protótipo).",
+          "Variantes animadas dos ícones curados, importadas de [lucide-animated.com](https://lucide-animated.com) (animações via Motion). Exportadas com prefixo `Animated` (ex: `AnimatedHomeIcon`), coexistindo com as versões estáticas. O hover é tratado internamente pelo componente — basta renderizar. Nem todos os ícones curados possuem variante animada; os que possuem aparecem acima.",
       },
     },
   },

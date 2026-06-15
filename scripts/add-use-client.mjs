@@ -5,6 +5,9 @@ const files = [
   "dist/index.cjs",
   "dist/icons.js",
   "dist/icons.cjs",
+  // icons.v2 bundles the lucide-animated client components (motion hooks).
+  "dist/icons.v2.js",
+  "dist/icons.v2.cjs",
 ];
 
 for (const file of files) {
