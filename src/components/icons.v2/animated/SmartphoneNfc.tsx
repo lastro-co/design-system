@@ -54,7 +54,7 @@ const SmartphoneNfcIcon = forwardRef<
       },
       stopAnimation: () => controls.start("normal"),
     };
-  });
+  }, [controls]);
 
   const handleMouseEnter = useCallback(
     async (e: React.MouseEvent<HTMLDivElement>) => {

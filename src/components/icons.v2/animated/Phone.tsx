@@ -40,7 +40,7 @@ const PhoneIcon = forwardRef<PhoneIconHandle, PhoneIconProps>(
         startAnimation: () => controls.start("animate"),
         stopAnimation: () => controls.start("normal"),
       };
-    });
+    }, [controls, ref]);
 
     const handleMouseEnter = useCallback(
       (e: React.MouseEvent<HTMLDivElement>) => {

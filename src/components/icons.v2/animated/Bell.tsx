@@ -33,7 +33,7 @@ const BellIcon = forwardRef<BellIconHandle, BellIconProps>(
         startAnimation: () => controls.start("animate"),
         stopAnimation: () => controls.start("normal"),
       };
-    });
+    }, [controls]);
 
     const handleMouseEnter = useCallback(
       (e: React.MouseEvent<HTMLDivElement>) => {

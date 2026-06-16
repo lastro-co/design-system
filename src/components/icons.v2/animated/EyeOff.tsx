@@ -38,7 +38,7 @@ const EyeOffIcon = forwardRef<EyeOffIconHandle, EyeOffIconProps>(
         startAnimation: () => controls.start("animate"),
         stopAnimation: () => controls.start("normal"),
       };
-    });
+    }, [controls]);
 
     const handleMouseEnter = useCallback(
       (e: React.MouseEvent<HTMLDivElement>) => {

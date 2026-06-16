@@ -70,7 +70,7 @@ const DollarSignIcon = forwardRef<DollarSignIconHandle, DollarSignIconProps>(
         startAnimation: () => controls.start("animate"),
         stopAnimation: () => controls.start("normal"),
       };
-    });
+    }, [controls]);
 
     const handleMouseEnter = useCallback(
       (e: React.MouseEvent<HTMLDivElement>) => {
