@@ -461,6 +461,7 @@ function MenuHeader({ logo, collapsedLogo, className }: MenuHeaderProps) {
         {!collapsed && (
           <IconButton
             aria-label="Recolher menu"
+            className="flex size-11 cursor-pointer items-center justify-center rounded-lg text-gray-600 transition-all duration-150 hover:bg-gray-50 hover:text-gray-800"
             color="default"
             onClick={() => setCollapsed(true)}
             shape="square"
