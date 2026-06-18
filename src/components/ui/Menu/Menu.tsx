@@ -461,10 +461,11 @@ function MenuHeader({ logo, collapsedLogo, className }: MenuHeaderProps) {
         {!collapsed && (
           <IconButton
             aria-label="Recolher menu"
+            className="text-gray-600 hover:bg-gray-50 hover:text-gray-800"
             color="default"
             onClick={() => setCollapsed(true)}
             shape="square"
-            size="medium"
+            size="large"
             variant="ghost"
           >
             <ChevronLeftIcon className="size-4" />
@@ -479,14 +480,17 @@ function MenuHeader({ logo, collapsedLogo, className }: MenuHeaderProps) {
         >
           <Tooltip>
             <TooltipTrigger asChild>
-              <button
+              <IconButton
                 aria-label="Expandir menu"
-                className="flex size-11 cursor-pointer items-center justify-center rounded-lg text-gray-600 transition-all duration-150 hover:bg-gray-50 hover:text-gray-800"
+                className="text-gray-600 hover:bg-gray-50 hover:text-gray-800"
+                color="default"
                 onClick={() => setCollapsed(false)}
-                type="button"
+                shape="square"
+                size="large"
+                variant="ghost"
               >
                 <ChevronRightIcon className="size-4" />
-              </button>
+              </IconButton>
             </TooltipTrigger>
             <TooltipContent side="right" sideOffset={8}>
               Expandir menu
