@@ -114,6 +114,8 @@ export type { ImageGalleryProps } from "./ImageGallery";
 export { ImageGallery } from "./ImageGallery";
 export type { ImagePreviewProps } from "./ImagePreview";
 export { ImagePreview } from "./ImagePreview";
+export type { InfoTooltipProps } from "./InfoTooltip";
+export { InfoTooltip } from "./InfoTooltip";
 export { Input } from "./Input";
 export type { InputTagProps } from "./InputTag";
 export { InputTag } from "./InputTag";
