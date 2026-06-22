@@ -1,8 +1,10 @@
 import { createRef } from "react";
 import { act, fireEvent, render } from "@/tests/app-test-utils";
 import {
+  AnimatedActivityIcon,
   AnimatedBellIcon,
   AnimatedBriefcaseBusinessIcon,
+  AnimatedChartBarIncreasingIcon,
   AnimatedChevronDownIcon,
   AnimatedChevronLeftIcon,
   AnimatedChevronRightIcon,
@@ -16,8 +18,10 @@ import {
   AnimatedGraduationCapIcon,
   AnimatedHelpCircleIcon,
   AnimatedHomeIcon,
+  AnimatedLayersIcon,
   AnimatedMessageSquareIcon,
   AnimatedPhoneIcon,
+  AnimatedPlugZapIcon,
   AnimatedSearchIcon,
   AnimatedSettingsIcon,
   AnimatedSmartphoneNfcIcon,
@@ -32,8 +36,10 @@ import {
 /* ------------------------------------------------------------------ */
 
 const ANIMATED_ICONS = [
+  ["AnimatedActivityIcon", AnimatedActivityIcon],
   ["AnimatedBellIcon", AnimatedBellIcon],
   ["AnimatedBriefcaseBusinessIcon", AnimatedBriefcaseBusinessIcon],
+  ["AnimatedChartBarIncreasingIcon", AnimatedChartBarIncreasingIcon],
   ["AnimatedChevronDownIcon", AnimatedChevronDownIcon],
   ["AnimatedChevronLeftIcon", AnimatedChevronLeftIcon],
   ["AnimatedChevronRightIcon", AnimatedChevronRightIcon],
@@ -47,8 +53,10 @@ const ANIMATED_ICONS = [
   ["AnimatedGraduationCapIcon", AnimatedGraduationCapIcon],
   ["AnimatedHelpCircleIcon", AnimatedHelpCircleIcon],
   ["AnimatedHomeIcon", AnimatedHomeIcon],
+  ["AnimatedLayersIcon", AnimatedLayersIcon],
   ["AnimatedMessageSquareIcon", AnimatedMessageSquareIcon],
   ["AnimatedPhoneIcon", AnimatedPhoneIcon],
+  ["AnimatedPlugZapIcon", AnimatedPlugZapIcon],
   ["AnimatedSearchIcon", AnimatedSearchIcon],
   ["AnimatedSettingsIcon", AnimatedSettingsIcon],
   ["AnimatedSmartphoneNfcIcon", AnimatedSmartphoneNfcIcon],
@@ -115,7 +123,7 @@ describe("icons.v2 — animated icons", () => {
     }
   );
 
-  it("all 24 animated icons render without crashing", () => {
+  it("all 28 animated icons render without crashing", () => {
     const { container } = render(
       <div>
         {ANIMATED_ICONS.map(([name, Icon]) => (
@@ -123,7 +131,7 @@ describe("icons.v2 — animated icons", () => {
         ))}
       </div>
     );
-    expect(container.querySelectorAll("svg")).toHaveLength(24);
+    expect(container.querySelectorAll("svg")).toHaveLength(28);
   });
 
   it("applies className to the wrapper element", () => {
