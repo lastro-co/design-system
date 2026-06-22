@@ -3,6 +3,10 @@
 // Re-exported with an `Animated` prefix to coexist with the static lucide-react exports.
 
 export {
+  ActivityIcon as AnimatedActivityIcon,
+  type ActivityIconHandle as AnimatedActivityIconHandle,
+} from "./Activity";
+export {
   BellIcon as AnimatedBellIcon,
   type BellIconHandle as AnimatedBellIconHandle,
 } from "./Bell";
@@ -10,6 +14,10 @@ export {
   BriefcaseBusinessIcon as AnimatedBriefcaseBusinessIcon,
   type BriefcaseBusinessIconHandle as AnimatedBriefcaseBusinessIconHandle,
 } from "./BriefcaseBusiness";
+export {
+  ChartBarIncreasingIcon as AnimatedChartBarIncreasingIcon,
+  type ChartBarIncreasingIconHandle as AnimatedChartBarIncreasingIconHandle,
+} from "./ChartBarIncreasing";
 export {
   ChevronDownIcon as AnimatedChevronDownIcon,
   type ChevronDownIconHandle as AnimatedChevronDownIconHandle,
@@ -63,6 +71,10 @@ export {
   type HomeIconHandle as AnimatedHomeIconHandle,
 } from "./Home";
 export {
+  LayersIcon as AnimatedLayersIcon,
+  type LayersIconHandle as AnimatedLayersIconHandle,
+} from "./Layers";
+export {
   MessageSquareIcon as AnimatedMessageSquareIcon,
   type MessageSquareIconHandle as AnimatedMessageSquareIconHandle,
 } from "./MessageSquare";
@@ -70,6 +82,10 @@ export {
   PhoneIcon as AnimatedPhoneIcon,
   type PhoneIconHandle as AnimatedPhoneIconHandle,
 } from "./Phone";
+export {
+  PlugZapIcon as AnimatedPlugZapIcon,
+  type PlugZapIconHandle as AnimatedPlugZapIconHandle,
+} from "./PlugZap";
 export {
   SearchIcon as AnimatedSearchIcon,
   type SearchIconHandle as AnimatedSearchIconHandle,
