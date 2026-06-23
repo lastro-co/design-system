@@ -1,4 +1,5 @@
 export {
+  ArrowLeft as ArrowLeftIcon,
   Bell as BellIcon,
   BriefcaseBusiness as BriefcaseBusinessIcon,
   Building2 as Building2Icon,
