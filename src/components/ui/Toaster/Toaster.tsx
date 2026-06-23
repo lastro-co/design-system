@@ -2,12 +2,12 @@
 
 import { Toaster as Sonner, type ToasterProps } from "sonner";
 import {
-  CheckBoxIcon,
-  CloseIcon,
   InfoIcon,
-  ReportIcon,
-  ReportProblemIcon,
-} from "../../icons";
+  OctagonAlertIcon,
+  SquareCheckIcon,
+  TriangleAlertIcon,
+  XIcon,
+} from "../../icons.v2";
 
 const Toaster = ({
   closeButton = true,
@@ -18,14 +18,14 @@ const Toaster = ({
     className="toaster group"
     closeButton={closeButton}
     icons={{
-      success: <CheckBoxIcon color="green-600" size="sm" />,
-      info: <InfoIcon color="blue-600" size="sm" />,
-      warning: <ReportProblemIcon color="yellow-600" size="sm" />,
-      error: <ReportIcon color="red-600" size="sm" />,
+      success: <SquareCheckIcon className="text-green-600" size={20} />,
+      info: <InfoIcon className="text-blue-600" size={20} />,
+      warning: <TriangleAlertIcon className="text-yellow-600" size={20} />,
+      error: <OctagonAlertIcon className="text-red-600" size={20} />,
       loading: (
         <div className="size-4 animate-spin rounded-full border-2 border-purple-600 border-t-transparent" />
       ),
-      close: <CloseIcon color="purple-800" size="sm" />,
+      close: <XIcon className="text-purple-800" size={20} />,
     }}
     position={position}
     toastOptions={{
