@@ -1,5 +1,6 @@
 import { render, screen } from "@/tests/app-test-utils";
 import {
+  ArrowLeftIcon,
   BellIcon,
   BriefcaseBusinessIcon,
   Building2Icon,
@@ -34,6 +35,7 @@ import {
 /* ------------------------------------------------------------------ */
 
 const LUCIDE_ICONS = [
+  ["ArrowLeftIcon", ArrowLeftIcon],
   ["BellIcon", BellIcon],
   ["BriefcaseBusinessIcon", BriefcaseBusinessIcon],
   ["Building2Icon", Building2Icon],
@@ -77,7 +79,7 @@ describe("icons.v2 — Lucide icons", () => {
     );
   });
 
-  it("all 27 lucide icons render without crashing", () => {
+  it("all 28 lucide icons render without crashing", () => {
     const { container } = render(
       <div>
         {LUCIDE_ICONS.map(([name, Icon]) => (
@@ -86,7 +88,7 @@ describe("icons.v2 — Lucide icons", () => {
       </div>
     );
     const svgs = container.querySelectorAll("svg");
-    expect(svgs).toHaveLength(27);
+    expect(svgs).toHaveLength(28);
   });
 
   it("icons accept className prop", () => {
