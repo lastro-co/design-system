@@ -5,11 +5,11 @@ import type * as React from "react";
 import { createContext, useContext } from "react";
 import { cn } from "@/lib/utils";
 import {
-  CheckBoxIcon,
   InfoIcon,
-  ReportIcon,
-  ReportProblemIcon,
-} from "../../icons";
+  OctagonAlertIcon,
+  SquareCheckIcon,
+  TriangleAlertIcon,
+} from "../../icons.v2";
 
 type AlertSeverity = "success" | "info" | "warning" | "error";
 type AlertIconPlacement = "title" | "inline";
@@ -32,17 +32,24 @@ const useAlertContext = () => {
 };
 
 const SEVERITY_ICON = {
-  success: CheckBoxIcon,
+  success: SquareCheckIcon,
   info: InfoIcon,
-  warning: ReportProblemIcon,
-  error: ReportIcon,
+  warning: TriangleAlertIcon,
+  error: OctagonAlertIcon,
+} as const;
+
+const SEVERITY_ICON_LABEL = {
+  success: "Success",
+  info: "Info",
+  warning: "Warning",
+  error: "Error",
 } as const;
 
 const SEVERITY_ICON_COLOR = {
-  success: "green-600",
-  info: "blue-600",
-  warning: "yellow-600",
-  error: "red-600",
+  success: "text-green-600",
+  info: "text-blue-600",
+  warning: "text-yellow-600",
+  error: "text-red-600",
 } as const;
 
 const alertVariants = cva(
@@ -86,6 +93,7 @@ function Alert({
   const alertSeverity = severity || "success";
   const Icon = SEVERITY_ICON[alertSeverity];
   const iconColor = SEVERITY_ICON_COLOR[alertSeverity];
+  const iconLabel = SEVERITY_ICON_LABEL[alertSeverity];
 
   return (
     <AlertContext.Provider value={{ severity: alertSeverity, iconPlacement }}>
@@ -97,7 +105,12 @@ function Alert({
       >
         {iconPlacement === "inline" ? (
           <div className="flex items-center gap-3">
-            <Icon className="shrink-0" color={iconColor as never} size="xl" />
+            <Icon
+              aria-label={iconLabel}
+              className={cn(iconColor, "shrink-0")}
+              role="img"
+              size={24}
+            />
             <div className="flex-1">{children}</div>
           </div>
         ) : (
@@ -116,18 +129,24 @@ function AlertTitle({ className, ...props }: React.ComponentProps<"div">) {
   // still want it to compose cleanly without doubling the icon.
   const Icon = SEVERITY_ICON[severity];
   const iconColor = SEVERITY_ICON_COLOR[severity];
+  const iconLabel = SEVERITY_ICON_LABEL[severity];
 
   return (
     <div
       className={cn(
-        "flex items-center gap-4 font-bold font-display [&>svg]:size-4",
+        "flex items-center gap-4 font-bold font-display [&>svg]:size-5",
         className
       )}
       data-slot="alert-title"
       {...props}
     >
       {iconPlacement === "title" && (
-        <Icon color={iconColor as never} size="xl" />
+        <Icon
+          aria-label={iconLabel}
+          className={cn(iconColor, "shrink-0")}
+          role="img"
+          size={24}
+        />
       )}
       {props.children}
     </div>
