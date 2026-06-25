@@ -24,7 +24,9 @@ import {
   SettingsIcon,
   ShieldUserIcon,
   ShoppingBagIcon,
+  SquarePenIcon,
   StarIcon,
+  TrashIcon,
   UserCheckIcon,
   UsersIcon,
   ZapIcon,
@@ -59,7 +61,9 @@ const LUCIDE_ICONS = [
   ["SettingsIcon", SettingsIcon],
   ["ShieldUserIcon", ShieldUserIcon],
   ["ShoppingBagIcon", ShoppingBagIcon],
+  ["SquarePenIcon", SquarePenIcon],
   ["StarIcon", StarIcon],
+  ["TrashIcon", TrashIcon],
   ["UsersIcon", UsersIcon],
   ["UserCheckIcon", UserCheckIcon],
   ["ZapIcon", ZapIcon],
@@ -79,7 +83,7 @@ describe("icons.v2 — Lucide icons", () => {
     );
   });
 
-  it("all 28 lucide icons render without crashing", () => {
+  it("all 30 lucide icons render without crashing", () => {
     const { container } = render(
       <div>
         {LUCIDE_ICONS.map(([name, Icon]) => (
@@ -88,7 +92,7 @@ describe("icons.v2 — Lucide icons", () => {
       </div>
     );
     const svgs = container.querySelectorAll("svg");
-    expect(svgs).toHaveLength(28);
+    expect(svgs).toHaveLength(30);
   });
 
   it("icons accept className prop", () => {
