@@ -43,6 +43,17 @@ export {
 export { Checkbox } from "./Checkbox";
 export type { ColorPickerProps } from "./ColorPicker";
 export { ColorPicker } from "./ColorPicker";
+export {
+  Command,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from "./Command";
 export type { ContextMenuItemProps } from "./ContextMenu";
 export {
   ContextMenu,
