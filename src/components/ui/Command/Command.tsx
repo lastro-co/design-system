@@ -148,7 +148,7 @@ function CommandItem({
   return (
     <CommandPrimitive.Item
       className={cn(
-        "relative flex cursor-default select-none items-center gap-3 rounded-lg px-2 py-2.5 text-black text-sm outline-none data-[disabled=true]:pointer-events-none data-[selected=true]:bg-purple-800 data-[selected=true]:text-white data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:text-gray-600 data-[selected=true]:[&_svg]:text-white",
+        "relative flex cursor-default select-none items-center gap-3 rounded-lg px-2 py-2.5 text-black text-sm outline-none data-[disabled=true]:pointer-events-none data-[selected=true]:bg-purple-800 data-[selected=true]:text-white data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:text-gray-600 data-[selected=true]:[&_svg]:text-white data-[selected=true]:[&_[data-slot=command-shortcut]]:text-purple-300",
         className
       )}
       data-slot="command-item"
