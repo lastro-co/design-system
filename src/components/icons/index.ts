@@ -102,7 +102,6 @@ export { PicturesIcon } from "./PicturesIcon";
 export { PlayIcon } from "./PlayIcon";
 export { PlusIcon } from "./PlusIcon";
 export { PropertiesIcon } from "./PropertiesIcon";
-export { ReplyBackIcon } from "./ReplyBackIcon";
 export { ReplyDoubleIcon } from "./ReplyDoubleIcon";
 export { ReplyIcon } from "./ReplyIcon";
 export { ReportIcon } from "./ReportIcon";
