@@ -44,6 +44,7 @@ export {
   TriangleAlert as TriangleAlertIcon,
   UserCheck as UserCheckIcon,
   Users as UsersIcon,
+  Video as VideoIcon,
   X as XIcon,
   Zap as ZapIcon,
 } from "lucide-react";

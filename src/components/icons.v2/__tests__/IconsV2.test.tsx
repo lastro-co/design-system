@@ -33,6 +33,7 @@ import {
   TrashIcon,
   UserCheckIcon,
   UsersIcon,
+  VideoIcon,
   ZapIcon,
 } from "../index";
 
@@ -74,6 +75,7 @@ const LUCIDE_ICONS = [
   ["TrashIcon", TrashIcon],
   ["UsersIcon", UsersIcon],
   ["UserCheckIcon", UserCheckIcon],
+  ["VideoIcon", VideoIcon],
   ["ZapIcon", ZapIcon],
 ] as const;
 
@@ -91,7 +93,7 @@ describe("icons.v2 — Lucide icons", () => {
     );
   });
 
-  it("all 34 lucide icons render without crashing", () => {
+  it("all 35 lucide icons render without crashing", () => {
     const { container } = render(
       <div>
         {LUCIDE_ICONS.map(([name, Icon]) => (
@@ -100,7 +102,7 @@ describe("icons.v2 — Lucide icons", () => {
       </div>
     );
     const svgs = container.querySelectorAll("svg");
-    expect(svgs).toHaveLength(34);
+    expect(svgs).toHaveLength(35);
   });
 
   it("icons accept className prop", () => {
