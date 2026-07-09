@@ -24,6 +24,7 @@ import {
   MegaphoneIcon,
   MessageSquareIcon,
   PaperclipIcon,
+  PinIcon,
   ReplyIcon,
   SettingsIcon,
   ShieldUserIcon,
@@ -66,6 +67,7 @@ const LUCIDE_ICONS = [
   ["MegaphoneIcon", MegaphoneIcon],
   ["MessageSquareIcon", MessageSquareIcon],
   ["PaperclipIcon", PaperclipIcon],
+  ["PinIcon", PinIcon],
   ["ReplyIcon", ReplyIcon],
   ["SettingsIcon", SettingsIcon],
   ["ShieldUserIcon", ShieldUserIcon],
@@ -93,7 +95,7 @@ describe("icons.v2 — Lucide icons", () => {
     );
   });
 
-  it("all 35 lucide icons render without crashing", () => {
+  it("all 36 lucide icons render without crashing", () => {
     const { container } = render(
       <div>
         {LUCIDE_ICONS.map(([name, Icon]) => (
@@ -102,7 +104,7 @@ describe("icons.v2 — Lucide icons", () => {
       </div>
     );
     const svgs = container.querySelectorAll("svg");
-    expect(svgs).toHaveLength(35);
+    expect(svgs).toHaveLength(36);
   });
 
   it("icons accept className prop", () => {

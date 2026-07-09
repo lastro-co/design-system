@@ -29,6 +29,7 @@ export {
   OctagonAlert as OctagonAlertIcon,
   Paperclip as PaperclipIcon,
   Phone as PhoneIcon,
+  Pin as PinIcon,
   Reply as ReplyIcon,
   Search as SearchIcon,
   Settings as SettingsIcon,
