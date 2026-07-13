@@ -10,3 +10,4 @@ storybook-static/
 package-lock.json
 
 .claude/
+CLAUDE.md
