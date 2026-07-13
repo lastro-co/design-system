@@ -1,0 +1,22 @@
+# Claude Code Review — automated PR review via code-agents reusable workflow
+# (auth via Cora GitHub App, secrets propagated via `secrets: inherit`)
+
+name: Claude Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review, converted_to_draft]
+    branches: [main]
+
+concurrency:
+  group: claude-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  code-review:
+    if: ${{ !github.event.pull_request.head.repo.fork && !github.event.pull_request.draft }}
+    permissions:
+      contents: read
+      pull-requests: write
+    uses: lastro-co/code-agents/.github/workflows/claude-code-review.yml@main
+    secrets: inherit

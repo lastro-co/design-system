@@ -327,8 +327,7 @@ describe("Drawer", () => {
         screen.getByRole("button", { name: CLOSE_BUTTON_REGEX })
       );
       await waitFor(() => {
-        const content = document.querySelector('[data-slot="drawer-content"]');
-        expect(content).toHaveAttribute("data-state", "closed");
+        expect(screen.queryByText("Drawer Body")).not.toBeInTheDocument();
       });
     });
 
@@ -361,8 +360,7 @@ describe("Drawer", () => {
 
       await user.click(screen.getByText("Dismiss"));
       await waitFor(() => {
-        const content = document.querySelector('[data-slot="drawer-content"]');
-        expect(content).toHaveAttribute("data-state", "closed");
+        expect(screen.queryByText("Drawer Body")).not.toBeInTheDocument();
       });
     });
   });

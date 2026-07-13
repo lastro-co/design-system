@@ -19,7 +19,7 @@
       "@/*": ["src/*"],
       "@/tests/*": ["src/tests/*"]
     },
-    "types": ["jest", "@testing-library/jest-dom"]
+    "types": ["jest", "@testing-library/jest-dom", "geojson"]
   },
   "include": [
     "src/**/*.ts",
