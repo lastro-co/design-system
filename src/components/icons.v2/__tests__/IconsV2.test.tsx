@@ -1,5 +1,6 @@
 import { render, screen } from "@/tests/app-test-utils";
 import {
+  ArrowLeftIcon,
   BellIcon,
   BriefcaseBusinessIcon,
   Building2Icon,
@@ -8,7 +9,9 @@ import {
   ChevronRightIcon,
   ChevronsUpDownIcon,
   ChevronUpIcon,
+  ClipboardIcon,
   Columns3Icon,
+  CornerUpRightIcon,
   CrownIcon,
   DollarSignIcon,
   EyeIcon,
@@ -20,12 +23,18 @@ import {
   ListIcon,
   MegaphoneIcon,
   MessageSquareIcon,
+  PaperclipIcon,
+  PinIcon,
+  ReplyIcon,
   SettingsIcon,
   ShieldUserIcon,
   ShoppingBagIcon,
+  SquarePenIcon,
   StarIcon,
+  TrashIcon,
   UserCheckIcon,
   UsersIcon,
+  VideoIcon,
   ZapIcon,
 } from "../index";
 
@@ -34,6 +43,7 @@ import {
 /* ------------------------------------------------------------------ */
 
 const LUCIDE_ICONS = [
+  ["ArrowLeftIcon", ArrowLeftIcon],
   ["BellIcon", BellIcon],
   ["BriefcaseBusinessIcon", BriefcaseBusinessIcon],
   ["Building2Icon", Building2Icon],
@@ -42,7 +52,9 @@ const LUCIDE_ICONS = [
   ["ChevronRightIcon", ChevronRightIcon],
   ["ChevronsUpDownIcon", ChevronsUpDownIcon],
   ["ChevronUpIcon", ChevronUpIcon],
+  ["ClipboardIcon", ClipboardIcon],
   ["Columns3Icon", Columns3Icon],
+  ["CornerUpRightIcon", CornerUpRightIcon],
   ["CrownIcon", CrownIcon],
   ["DollarSignIcon", DollarSignIcon],
   ["EyeIcon", EyeIcon],
@@ -54,12 +66,18 @@ const LUCIDE_ICONS = [
   ["ListIcon", ListIcon],
   ["MegaphoneIcon", MegaphoneIcon],
   ["MessageSquareIcon", MessageSquareIcon],
+  ["PaperclipIcon", PaperclipIcon],
+  ["PinIcon", PinIcon],
+  ["ReplyIcon", ReplyIcon],
   ["SettingsIcon", SettingsIcon],
   ["ShieldUserIcon", ShieldUserIcon],
   ["ShoppingBagIcon", ShoppingBagIcon],
+  ["SquarePenIcon", SquarePenIcon],
   ["StarIcon", StarIcon],
+  ["TrashIcon", TrashIcon],
   ["UsersIcon", UsersIcon],
   ["UserCheckIcon", UserCheckIcon],
+  ["VideoIcon", VideoIcon],
   ["ZapIcon", ZapIcon],
 ] as const;
 
@@ -77,7 +95,7 @@ describe("icons.v2 — Lucide icons", () => {
     );
   });
 
-  it("all 27 lucide icons render without crashing", () => {
+  it("all 36 lucide icons render without crashing", () => {
     const { container } = render(
       <div>
         {LUCIDE_ICONS.map(([name, Icon]) => (
@@ -86,7 +104,7 @@ describe("icons.v2 — Lucide icons", () => {
       </div>
     );
     const svgs = container.querySelectorAll("svg");
-    expect(svgs).toHaveLength(27);
+    expect(svgs).toHaveLength(36);
   });
 
   it("icons accept className prop", () => {
