@@ -22,6 +22,7 @@ export {
   GraduationCap as GraduationCapIcon,
   HelpCircle as HelpCircleIcon,
   Home as HomeIcon,
+  Image as ImageIcon,
   Info as InfoIcon,
   List as ListIcon,
   Megaphone as MegaphoneIcon,
