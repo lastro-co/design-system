@@ -20,6 +20,7 @@ import {
   GraduationCapIcon,
   HelpCircleIcon,
   HomeIcon,
+  ImageIcon,
   ListIcon,
   MegaphoneIcon,
   MessageSquareIcon,
@@ -63,6 +64,7 @@ const LUCIDE_ICONS = [
   ["GraduationCapIcon", GraduationCapIcon],
   ["HelpCircleIcon", HelpCircleIcon],
   ["HomeIcon", HomeIcon],
+  ["ImageIcon", ImageIcon],
   ["ListIcon", ListIcon],
   ["MegaphoneIcon", MegaphoneIcon],
   ["MessageSquareIcon", MessageSquareIcon],
@@ -95,7 +97,7 @@ describe("icons.v2 — Lucide icons", () => {
     );
   });
 
-  it("all 36 lucide icons render without crashing", () => {
+  it("all 37 lucide icons render without crashing", () => {
     const { container } = render(
       <div>
         {LUCIDE_ICONS.map(([name, Icon]) => (
@@ -104,7 +106,7 @@ describe("icons.v2 — Lucide icons", () => {
       </div>
     );
     const svgs = container.querySelectorAll("svg");
-    expect(svgs).toHaveLength(36);
+    expect(svgs).toHaveLength(37);
   });
 
   it("icons accept className prop", () => {
