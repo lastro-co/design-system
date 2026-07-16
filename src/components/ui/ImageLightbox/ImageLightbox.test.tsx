@@ -1,0 +1,286 @@
+import type { ComponentProps } from "react";
+import { fireEvent, render, screen, userEvent } from "@/tests/app-test-utils";
+import { ImageLightbox } from ".";
+
+const SCALE_REGEX = /scale\(([\d.]+)\)/;
+
+function getScale(element: HTMLElement): number {
+  const match = element.style.transform.match(SCALE_REGEX);
+  if (!match) {
+    throw new Error(`No scale found in transform: ${element.style.transform}`);
+  }
+  return Number(match[1]);
+}
+
+function renderLightbox(
+  props: Partial<ComponentProps<typeof ImageLightbox>> = {}
+) {
+  const onOpenChange = jest.fn();
+  const result = render(
+    <ImageLightbox
+      alt="Foto do imóvel"
+      onOpenChange={onOpenChange}
+      open
+      src="/image.jpg"
+      {...props}
+    />
+  );
+  return { ...result, onOpenChange };
+}
+
+describe("ImageLightbox", () => {
+  describe("Rendering", () => {
+    it("should not render when closed", () => {
+      renderLightbox({ open: false });
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    });
+
+    it("should render the image when open", () => {
+      renderLightbox();
+      expect(screen.getByRole("dialog")).toBeVisible();
+      expect(screen.getByAltText("Foto do imóvel")).toBeVisible();
+    });
+
+    it("should use the alt text as accessible dialog title", () => {
+      renderLightbox();
+      expect(
+        screen.getByRole("dialog", { name: "Foto do imóvel" })
+      ).toBeVisible();
+    });
+  });
+
+  describe("Click zoom", () => {
+    it("should start without zoom", () => {
+      renderLightbox();
+      const zoomButton = screen.getByRole("button", {
+        name: "Ampliar imagem",
+      });
+      expect(getScale(zoomButton)).toBe(1);
+    });
+
+    it("should zoom in when the image is clicked", async () => {
+      renderLightbox();
+      const zoomButton = screen.getByRole("button", {
+        name: "Ampliar imagem",
+      });
+
+      await userEvent.click(zoomButton);
+
+      expect(getScale(zoomButton)).toBe(2.5);
+      expect(
+        screen.getByRole("button", { name: "Reduzir imagem" })
+      ).toBeVisible();
+    });
+
+    it("should reset zoom when the zoomed image is clicked", async () => {
+      renderLightbox();
+      const zoomButton = screen.getByRole("button", {
+        name: "Ampliar imagem",
+      });
+
+      await userEvent.click(zoomButton);
+      await userEvent.click(
+        screen.getByRole("button", { name: "Reduzir imagem" })
+      );
+
+      expect(getScale(zoomButton)).toBe(1);
+      expect(zoomButton.style.transform).toContain("translate(0px, 0px)");
+    });
+
+    it("should anchor click zoom to the click position", () => {
+      renderLightbox();
+      const zoomButton = screen.getByRole("button", {
+        name: "Ampliar imagem",
+      });
+
+      fireEvent.click(zoomButton, { clientX: 100, clientY: 40 });
+
+      // jsdom viewport is 1024x768, so the click point measured from the
+      // viewport center is (-412, -344). That point stays fixed:
+      // offset = point * (1 - scale) = (618, 516)
+      expect(zoomButton.style.transform).toContain(
+        "translate(618px, 516px) scale(2.5)"
+      );
+    });
+  });
+
+  describe("Wheel zoom", () => {
+    it("should zoom in when scrolling up", () => {
+      renderLightbox();
+      const dialog = screen.getByRole("dialog");
+      const zoomButton = screen.getByRole("button", {
+        name: "Ampliar imagem",
+      });
+
+      fireEvent.wheel(dialog, { deltaY: -100 });
+
+      expect(getScale(zoomButton)).toBeCloseTo(Math.exp(0.2), 5);
+    });
+
+    it("should zoom out when scrolling down", () => {
+      renderLightbox();
+      const dialog = screen.getByRole("dialog");
+      const zoomButton = screen.getByRole("button", {
+        name: "Ampliar imagem",
+      });
+
+      fireEvent.wheel(dialog, { deltaY: -100 });
+      fireEvent.wheel(dialog, { deltaY: -100 });
+      const zoomedScale = getScale(zoomButton);
+
+      fireEvent.wheel(dialog, { deltaY: 100 });
+
+      expect(getScale(zoomButton)).toBeLessThan(zoomedScale);
+    });
+
+    it("should treat maxZoom below 1 as 1", () => {
+      renderLightbox({ maxZoom: 0.5 });
+      const dialog = screen.getByRole("dialog");
+      const zoomButton = screen.getByRole("button", {
+        name: "Ampliar imagem",
+      });
+
+      fireEvent.wheel(dialog, { deltaY: -500 });
+      fireEvent.click(zoomButton);
+
+      expect(getScale(zoomButton)).toBe(1);
+      expect(zoomButton.style.transform).toContain("translate(0px, 0px)");
+    });
+
+    it("should clamp zoom at maxZoom", () => {
+      renderLightbox({ maxZoom: 2 });
+      const dialog = screen.getByRole("dialog");
+      const zoomButton = screen.getByRole("button", {
+        name: "Ampliar imagem",
+      });
+
+      for (let i = 0; i < 10; i++) {
+        fireEvent.wheel(dialog, { deltaY: -500 });
+      }
+
+      expect(getScale(zoomButton)).toBe(2);
+    });
+
+    it("should not zoom out below 1 and should reset the position", () => {
+      renderLightbox();
+      const dialog = screen.getByRole("dialog");
+      const zoomButton = screen.getByRole("button", {
+        name: "Ampliar imagem",
+      });
+
+      fireEvent.wheel(dialog, { deltaY: -100, clientX: 50, clientY: 50 });
+      fireEvent.wheel(dialog, { deltaY: 1000 });
+
+      expect(getScale(zoomButton)).toBe(1);
+      expect(zoomButton.style.transform).toContain("translate(0px, 0px)");
+    });
+  });
+
+  describe("Customization", () => {
+    it("should merge overlayClassName over the default scrim", () => {
+      const { baseElement } = renderLightbox({
+        overlayClassName: "bg-white/60",
+      });
+
+      const overlay = baseElement.querySelector(
+        '[data-slot="image-lightbox-overlay"]'
+      );
+      expect(overlay).toHaveClass("bg-white/60");
+      expect(overlay).not.toHaveClass("bg-black/80");
+    });
+
+    it("should keep the default scrim when overlayClassName is not set", () => {
+      const { baseElement } = renderLightbox();
+
+      expect(
+        baseElement.querySelector('[data-slot="image-lightbox-overlay"]')
+      ).toHaveClass("bg-black/80");
+    });
+
+    it("should render a custom close button instead of the default", () => {
+      renderLightbox({
+        closeButton: <button type="button">Sair</button>,
+      });
+
+      expect(screen.getByRole("button", { name: "Sair" })).toBeVisible();
+      expect(
+        screen.queryByRole("button", { name: "Fechar" })
+      ).not.toBeInTheDocument();
+    });
+
+    it("should close the lightbox when the custom close button is clicked", async () => {
+      const { onOpenChange } = renderLightbox({
+        closeButton: <button type="button">Sair</button>,
+      });
+
+      await userEvent.click(screen.getByRole("button", { name: "Sair" }));
+
+      expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
+  });
+
+  describe("Closing", () => {
+    it("should call onOpenChange(false) when the close button is clicked", async () => {
+      const { onOpenChange } = renderLightbox();
+
+      await userEvent.click(screen.getByRole("button", { name: "Fechar" }));
+
+      expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
+
+    it("should call onOpenChange(false) when Escape is pressed", async () => {
+      const { onOpenChange } = renderLightbox();
+
+      await userEvent.keyboard("{Escape}");
+
+      expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
+
+    it("should call onOpenChange(false) when the backdrop is clicked", async () => {
+      const { onOpenChange } = renderLightbox();
+
+      await userEvent.click(screen.getByRole("dialog"));
+
+      expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
+
+    it("should not close when the image itself is clicked", async () => {
+      const { onOpenChange } = renderLightbox();
+
+      await userEvent.click(
+        screen.getByRole("button", { name: "Ampliar imagem" })
+      );
+
+      expect(onOpenChange).not.toHaveBeenCalledWith(false);
+    });
+
+    it("should reset zoom when reopened", async () => {
+      const { rerender } = renderLightbox();
+
+      await userEvent.click(
+        screen.getByRole("button", { name: "Ampliar imagem" })
+      );
+
+      rerender(
+        <ImageLightbox
+          alt="Foto do imóvel"
+          onOpenChange={jest.fn()}
+          open={false}
+          src="/image.jpg"
+        />
+      );
+      rerender(
+        <ImageLightbox
+          alt="Foto do imóvel"
+          onOpenChange={jest.fn()}
+          open
+          src="/image.jpg"
+        />
+      );
+
+      expect(
+        getScale(screen.getByRole("button", { name: "Ampliar imagem" }))
+      ).toBe(1);
+    });
+  });
+});
