@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
+import { CloseIcon } from "../../icons";
 import { Button } from "../Button";
+import { IconButton } from "../IconButton";
 import { ImageLightbox } from "./ImageLightbox";
 
 const SAMPLE_IMAGE =
@@ -53,4 +55,30 @@ export const Default: Story = {
 
 export const PortraitImage: Story = {
   render: () => <LightboxDemo alt="Sala de estar" src={PORTRAIT_IMAGE} />,
+};
+
+function CustomizedDemo() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Abrir imagem</Button>
+      <ImageLightbox
+        alt="Casa com jardim"
+        closeButton={
+          <IconButton aria-label="Fechar" color="purple" variant="contained">
+            <CloseIcon className="size-5" />
+          </IconButton>
+        }
+        onOpenChange={setOpen}
+        open={open}
+        overlayClassName="bg-purple-900/70"
+        src={SAMPLE_IMAGE}
+      />
+    </>
+  );
+}
+
+export const CustomOverlayAndCloseButton: Story = {
+  render: () => <CustomizedDemo />,
 };

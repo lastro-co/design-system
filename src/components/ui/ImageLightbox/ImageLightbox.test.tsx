@@ -160,6 +160,49 @@ describe("ImageLightbox", () => {
     });
   });
 
+  describe("Customization", () => {
+    it("should merge overlayClassName over the default scrim", () => {
+      const { baseElement } = renderLightbox({
+        overlayClassName: "bg-white/60",
+      });
+
+      const overlay = baseElement.querySelector(
+        '[data-slot="image-lightbox-overlay"]'
+      );
+      expect(overlay).toHaveClass("bg-white/60");
+      expect(overlay).not.toHaveClass("bg-black/80");
+    });
+
+    it("should keep the default scrim when overlayClassName is not set", () => {
+      const { baseElement } = renderLightbox();
+
+      expect(
+        baseElement.querySelector('[data-slot="image-lightbox-overlay"]')
+      ).toHaveClass("bg-black/80");
+    });
+
+    it("should render a custom close button instead of the default", () => {
+      renderLightbox({
+        closeButton: <button type="button">Sair</button>,
+      });
+
+      expect(screen.getByRole("button", { name: "Sair" })).toBeInTheDocument();
+      expect(
+        screen.queryByRole("button", { name: "Fechar" })
+      ).not.toBeInTheDocument();
+    });
+
+    it("should close the lightbox when the custom close button is clicked", async () => {
+      const { onOpenChange } = renderLightbox({
+        closeButton: <button type="button">Sair</button>,
+      });
+
+      await userEvent.click(screen.getByRole("button", { name: "Sair" }));
+
+      expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
+  });
+
   describe("Closing", () => {
     it("should call onOpenChange(false) when the close button is clicked", async () => {
       const { onOpenChange } = renderLightbox();

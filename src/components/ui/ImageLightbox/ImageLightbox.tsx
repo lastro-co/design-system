@@ -24,6 +24,18 @@ export interface ImageLightboxProps {
   maxZoom?: number;
   /** Additional CSS classes for the image */
   className?: string;
+  /**
+   * Additional CSS classes for the backdrop overlay — use it to change the
+   * scrim color/transparency (e.g. "bg-white/60"). Merged over the default
+   * `bg-black/80`.
+   */
+  overlayClassName?: string;
+  /**
+   * Custom close control rendered in the top-right corner (wrapped in the
+   * dialog Close slot, so clicking it closes the lightbox). Defaults to a
+   * ghost IconButton with the CloseIcon.
+   */
+  closeButton?: React.ReactElement;
 }
 
 interface Transform {
@@ -79,6 +91,8 @@ export function ImageLightbox({
   onOpenChange,
   maxZoom = 4,
   className,
+  overlayClassName,
+  closeButton,
 }: ImageLightboxProps) {
   // Callback-ref state: the Radix portal mounts the content a commit after
   // this component mounts, so a plain ref would be null in the effect below.
@@ -138,7 +152,10 @@ export function ImageLightbox({
     <DialogPrimitive.Root onOpenChange={onOpenChange} open={open}>
       <DialogPrimitive.Portal data-slot="image-lightbox-portal">
         <DialogPrimitive.Overlay
-          className="data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/80 data-[state=closed]:animate-out data-[state=open]:animate-in"
+          className={cn(
+            "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/80 data-[state=closed]:animate-out data-[state=open]:animate-in",
+            overlayClassName
+          )}
           data-slot="image-lightbox-overlay"
         />
         <DialogPrimitive.Content
@@ -151,17 +168,21 @@ export function ImageLightbox({
           <DialogPrimitive.Title className="sr-only">
             {alt}
           </DialogPrimitive.Title>
-          <DialogPrimitive.Close asChild>
-            <IconButton
-              aria-label="Fechar"
-              className="absolute top-4 right-4 z-10 bg-black/40 text-white hover:bg-black/60"
-              shape="circular"
-              size="medium"
-              variant="ghost"
-            >
-              <CloseIcon className="size-5" />
-            </IconButton>
-          </DialogPrimitive.Close>
+          <div className="absolute top-4 right-4 z-10">
+            <DialogPrimitive.Close asChild>
+              {closeButton ?? (
+                <IconButton
+                  aria-label="Fechar"
+                  className="bg-black/40 text-white hover:bg-black/60"
+                  shape="circular"
+                  size="medium"
+                  variant="ghost"
+                >
+                  <CloseIcon className="size-5" />
+                </IconButton>
+              )}
+            </DialogPrimitive.Close>
+          </div>
           <button
             aria-label={isZoomed ? "Reduzir imagem" : "Ampliar imagem"}
             className={cn(
