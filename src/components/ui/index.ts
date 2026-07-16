@@ -123,6 +123,8 @@ export type { IconButtonProps } from "./IconButton";
 export { IconButton, iconButtonVariants } from "./IconButton";
 export type { ImageGalleryProps } from "./ImageGallery";
 export { ImageGallery } from "./ImageGallery";
+export type { ImageLightboxProps } from "./ImageLightbox";
+export { ImageLightbox } from "./ImageLightbox";
 export type { ImagePreviewProps } from "./ImagePreview";
 export { ImagePreview } from "./ImagePreview";
 export { Input } from "./Input";
