@@ -1,4 +1,5 @@
 import userEvent from "@testing-library/user-event";
+import type { DateRange } from "react-day-picker";
 import { render, screen, waitFor } from "@/tests/app-test-utils";
 import { Calendar } from "./Calendar";
 
@@ -467,5 +468,91 @@ describe("Calendar", () => {
       const cells = screen.getAllByRole("gridcell");
       expect(cells.length).toBeGreaterThanOrEqual(28); // At least a month's worth
     });
+  });
+});
+
+describe("Calendar range presets", () => {
+  const range7: DateRange = {
+    from: new Date(2026, 6, 9),
+    to: new Date(2026, 6, 15),
+  };
+  const range30: DateRange = {
+    from: new Date(2026, 5, 16),
+    to: new Date(2026, 6, 15),
+  };
+  const presets = [
+    { label: "7 dias", range: range7 },
+    { label: "30 dias", range: range30 },
+  ];
+
+  it("renders a chip per preset when presets is provided", () => {
+    render(<Calendar mode="range" presets={presets} />);
+    expect(screen.getByRole("button", { name: "7 dias" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "30 dias" })).toBeInTheDocument();
+  });
+
+  it("renders no chips when presets is omitted", () => {
+    render(<Calendar mode="range" />);
+    expect(
+      screen.queryByRole("button", { name: "7 dias" })
+    ).not.toBeInTheDocument();
+  });
+
+  it("fires onPresetSelect with the preset range on chip click", async () => {
+    const onPresetSelect = jest.fn();
+    const user = userEvent.setup();
+    render(
+      <Calendar
+        mode="range"
+        onPresetSelect={onPresetSelect}
+        presets={presets}
+      />
+    );
+    await user.click(screen.getByRole("button", { name: "7 dias" }));
+    expect(onPresetSelect).toHaveBeenCalledWith(range7);
+  });
+
+  it("marks the chip matching the selected range as pressed", () => {
+    render(<Calendar mode="range" presets={presets} selected={range7} />);
+    expect(screen.getByRole("button", { name: "7 dias" })).toHaveAttribute(
+      "aria-pressed",
+      "true"
+    );
+    expect(screen.getByRole("button", { name: "30 dias" })).toHaveAttribute(
+      "aria-pressed",
+      "false"
+    );
+  });
+
+  it("shows a disabled custom chip when the selection matches no preset", () => {
+    const custom: DateRange = {
+      from: new Date(2026, 6, 1),
+      to: new Date(2026, 6, 5),
+    };
+    render(
+      <Calendar
+        customPresetLabel="Personalizado"
+        mode="range"
+        presets={presets}
+        selected={custom}
+      />
+    );
+    const chip = screen.getByRole("button", { name: "Personalizado" });
+    expect(chip).toBeDisabled();
+    expect(chip).toHaveAttribute("aria-pressed", "true");
+  });
+
+  it("hides the custom chip when a preset matches", () => {
+    render(
+      <Calendar
+        customPresetLabel="Personalizado"
+        mode="range"
+        presets={presets}
+        selected={range7}
+      />
+    );
+    expect(
+      screen.queryByRole("button", { name: "Personalizado" })
+    ).not.toBeInTheDocument();
   });
 });

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { subDays } from "date-fns";
 import { useState } from "react";
 import type { DateRange } from "react-day-picker";
 import { Calendar } from "./Calendar";
@@ -78,6 +79,28 @@ export const RangeSelection: Story = {
       <Calendar
         mode="range"
         onSelect={setSelected}
+        selected={selected}
+        showOutsideDays
+      />
+    );
+  },
+};
+
+export const RangeWithPresets: Story = {
+  render: () => {
+    const [selected, setSelected] = useState<DateRange | undefined>();
+    const today = new Date();
+    const presets = [7, 15, 30].map((days) => ({
+      label: `${days} dias`,
+      range: { from: subDays(today, days - 1), to: today },
+    }));
+    return (
+      <Calendar
+        customPresetLabel="Personalizado"
+        mode="range"
+        onPresetSelect={setSelected}
+        onSelect={setSelected}
+        presets={presets}
         selected={selected}
         showOutsideDays
       />
