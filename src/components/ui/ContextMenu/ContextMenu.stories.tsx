@@ -166,7 +166,7 @@ export const WithCustomColors: Story = {
         Clique com botão direito aqui
       </ContextMenuTrigger>
       <ContextMenuContent>
-        <ContextMenuItem color="#49317A">Ação Primária</ContextMenuItem>
+        <ContextMenuItem color="#49317a">Ação Primária</ContextMenuItem>
         <ContextMenuSeparator />
         <ContextMenuItem color="#2563EB">Ação Azul</ContextMenuItem>
         <ContextMenuSeparator />

@@ -1,37 +1,53 @@
 @theme {
+  --color-purple-950: #1e1338;
   --color-purple-900: #2e1f4d;
   --color-purple-800: #49317a;
+  --color-purple-700: #593d96;
   --color-purple-600: #6845ad;
-  --color-purple-500: #9664fa;
-  --color-purple-400: #d8ceee;
-  --color-purple-300: #eae0fe;
-  --color-purple-100: #f3e8ff;
+  --color-purple-500: #7e56c9;
+  --color-purple-400: #9664fa;
+  --color-purple-300: #b18dfb;
+  --color-purple-200: #cebafc;
+  --color-purple-100: #e6dbfe;
+  --color-purple-50: #f4f0ff;
 
-  --color-gray-900: #323232;
-  --color-gray-800: #646464;
-  --color-gray-600: #999999;
-  --color-gray-300: #e5e5e5;
-  --color-gray-100: #f5f5f5;
-  --color-gray-50: #fafafa;
+  --color-gray-900: #1a1a2e;
+  --color-gray-800: #2d2d3f;
+  --color-gray-700: #4a4a5a;
+  --color-gray-600: #6b6b7b;
+  --color-gray-500: #8e8e9e;
+  --color-gray-400: #b0b0bc;
+  --color-gray-300: #d1d1d9;
+  --color-gray-200: #e5e5eb;
+  --color-gray-100: #f0f0f4;
+  --color-gray-50: #f8f8fa;
 
   --color-white: #ffffff;
   --color-black: #1a1a1a;
 
-  --color-blue-800: #0a4f7f;
-  --color-blue-600: #0068b3;
-  --color-blue-50: #eef8ff;
+  --color-blue-800: #0c4a8a;
+  --color-blue-600: #1d6bb5;
+  --color-blue-500: #2563eb;
+  --color-blue-100: #dbeafe;
+  --color-blue-50: #eff6ff;
 
-  --color-green-800: #075539;
-  --color-green-600: #0a8558;
-  --color-green-50: #e7f8f3;
+  --color-green-800: #166534;
+  --color-green-600: #16a34a;
+  --color-green-500: #22c55e;
+  --color-green-100: #dcfce7;
+  --color-green-50: #f0fdf4;
 
-  --color-yellow-800: #714d09;
-  --color-yellow-600: #ffb82e;
-  --color-yellow-50: #fff8e7;
+  --color-yellow-800: #854d0e;
+  --color-yellow-600: #ca8a04;
+  --color-yellow-500: #eab308;
+  --color-yellow-100: #fef9c3;
+  --color-yellow-50: #fefce8;
 
-  --color-red-800: #8d0c0c;
-  --color-red-600: #b31919;
-  --color-red-50: #feefef;
+  --color-red-800: #991b1b;
+  --color-red-600: #b91c1c;
+  --color-red-500: #ef4444;
+  --color-red-100: #fee2e2;
+  --color-red-50: #fef2f2;
 
   --color-apricot-50: #fff1e7;
   --color-apricot-500: #ff793e;

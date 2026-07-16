@@ -15,7 +15,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        "brand-purple": "#49317A",
+        "brand-purple": "#49317a",
       },
       fontFamily: {
         "red-hat-text": ['"Red Hat Text"', "sans-serif"],

@@ -61,34 +61,59 @@ const ColorPalettePage = () => (
     <ColorGroup
       colors={[
         {
-          name: "purple 900",
+          name: "Purple 950",
+          cssVar: "--color-purple-950",
+          tailwindName: "purple-950",
+        },
+        {
+          name: "Purple 900",
           cssVar: "--color-purple-900",
           tailwindName: "purple-900",
         },
         {
-          name: "purple 800",
+          name: "Purple 800",
           cssVar: "--color-purple-800",
           tailwindName: "purple-800",
         },
         {
-          name: "purple 600",
+          name: "Purple 700",
+          cssVar: "--color-purple-700",
+          tailwindName: "purple-700",
+        },
+        {
+          name: "Purple 600",
           cssVar: "--color-purple-600",
           tailwindName: "purple-600",
         },
         {
-          name: "purple 500",
+          name: "Purple 500",
           cssVar: "--color-purple-500",
           tailwindName: "purple-500",
         },
         {
-          name: "purple 300",
+          name: "Purple 400",
+          cssVar: "--color-purple-400",
+          tailwindName: "purple-400",
+        },
+        {
+          name: "Purple 300",
           cssVar: "--color-purple-300",
           tailwindName: "purple-300",
         },
         {
-          name: "purple 100",
+          name: "Purple 200",
+          cssVar: "--color-purple-200",
+          tailwindName: "purple-200",
+        },
+        {
+          name: "Purple 100",
           cssVar: "--color-purple-100",
           tailwindName: "purple-100",
+        },
+        {
+          name: "Purple 50",
+          cssVar: "--color-purple-50",
+          tailwindName: "purple-50",
         },
       ]}
       title="Purple Colors"
@@ -107,14 +132,34 @@ const ColorPalettePage = () => (
           tailwindName: "gray-800",
         },
         {
+          name: "Gray 700",
+          cssVar: "--color-gray-700",
+          tailwindName: "gray-700",
+        },
+        {
           name: "Gray 600",
           cssVar: "--color-gray-600",
           tailwindName: "gray-600",
         },
         {
+          name: "Gray 500",
+          cssVar: "--color-gray-500",
+          tailwindName: "gray-500",
+        },
+        {
+          name: "Gray 400",
+          cssVar: "--color-gray-400",
+          tailwindName: "gray-400",
+        },
+        {
           name: "Gray 300",
           cssVar: "--color-gray-300",
           tailwindName: "gray-300",
+        },
+        {
+          name: "Gray 200",
+          cssVar: "--color-gray-200",
+          tailwindName: "gray-200",
         },
         {
           name: "Gray 100",
@@ -146,6 +191,16 @@ const ColorPalettePage = () => (
           cssVar: "--color-blue-600",
           tailwindName: "blue-600",
         },
+        {
+          name: "Blue 500",
+          cssVar: "--color-blue-500",
+          tailwindName: "blue-500",
+        },
+        {
+          name: "Blue 100",
+          cssVar: "--color-blue-100",
+          tailwindName: "blue-100",
+        },
         { name: "Blue 50", cssVar: "--color-blue-50", tailwindName: "blue-50" },
       ]}
       title="Blue"
@@ -162,6 +217,16 @@ const ColorPalettePage = () => (
           name: "Green 600",
           cssVar: "--color-green-600",
           tailwindName: "green-600",
+        },
+        {
+          name: "Green 500",
+          cssVar: "--color-green-500",
+          tailwindName: "green-500",
+        },
+        {
+          name: "Green 100",
+          cssVar: "--color-green-100",
+          tailwindName: "green-100",
         },
         {
           name: "Green 50",
@@ -185,6 +250,16 @@ const ColorPalettePage = () => (
           tailwindName: "yellow-600",
         },
         {
+          name: "Yellow 500",
+          cssVar: "--color-yellow-500",
+          tailwindName: "yellow-500",
+        },
+        {
+          name: "Yellow 100",
+          cssVar: "--color-yellow-100",
+          tailwindName: "yellow-100",
+        },
+        {
           name: "Yellow 50",
           cssVar: "--color-yellow-50",
           tailwindName: "yellow-50",
@@ -197,6 +272,12 @@ const ColorPalettePage = () => (
       colors={[
         { name: "Red 800", cssVar: "--color-red-800", tailwindName: "red-800" },
         { name: "Red 600", cssVar: "--color-red-600", tailwindName: "red-600" },
+        { name: "Red 500", cssVar: "--color-red-500", tailwindName: "red-500" },
+        {
+          name: "Red 100",
+          cssVar: "--color-red-100",
+          tailwindName: "red-100",
+        },
         { name: "Red 50", cssVar: "--color-red-50", tailwindName: "red-50" },
       ]}
       title="Red"
@@ -205,9 +286,19 @@ const ColorPalettePage = () => (
     <ColorGroup
       colors={[
         {
+          name: "Apricot 800",
+          cssVar: "--color-apricot-800",
+          tailwindName: "apricot-800",
+        },
+        {
           name: "Apricot 500",
           cssVar: "--color-apricot-500",
           tailwindName: "apricot-500",
+        },
+        {
+          name: "Apricot 50",
+          cssVar: "--color-apricot-50",
+          tailwindName: "apricot-50",
         },
         {
           name: "Mint 500",
