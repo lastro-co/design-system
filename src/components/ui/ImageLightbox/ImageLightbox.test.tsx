@@ -37,15 +37,15 @@ describe("ImageLightbox", () => {
 
     it("should render the image when open", () => {
       renderLightbox();
-      expect(screen.getByRole("dialog")).toBeInTheDocument();
-      expect(screen.getByAltText("Foto do imóvel")).toBeInTheDocument();
+      expect(screen.getByRole("dialog")).toBeVisible();
+      expect(screen.getByAltText("Foto do imóvel")).toBeVisible();
     });
 
     it("should use the alt text as accessible dialog title", () => {
       renderLightbox();
       expect(
         screen.getByRole("dialog", { name: "Foto do imóvel" })
-      ).toBeInTheDocument();
+      ).toBeVisible();
     });
   });
 
@@ -69,7 +69,7 @@ describe("ImageLightbox", () => {
       expect(getScale(zoomButton)).toBe(2.5);
       expect(
         screen.getByRole("button", { name: "Reduzir imagem" })
-      ).toBeInTheDocument();
+      ).toBeVisible();
     });
 
     it("should reset zoom when the zoomed image is clicked", async () => {
@@ -95,9 +95,11 @@ describe("ImageLightbox", () => {
 
       fireEvent.click(zoomButton, { clientX: 100, clientY: 40 });
 
-      // Point (100, 40) from center stays fixed: offset = point * (1 - scale)
+      // jsdom viewport is 1024x768, so the click point measured from the
+      // viewport center is (-412, -344). That point stays fixed:
+      // offset = point * (1 - scale) = (618, 516)
       expect(zoomButton.style.transform).toContain(
-        "translate(-150px, -60px) scale(2.5)"
+        "translate(618px, 516px) scale(2.5)"
       );
     });
   });
@@ -129,6 +131,20 @@ describe("ImageLightbox", () => {
       fireEvent.wheel(dialog, { deltaY: 100 });
 
       expect(getScale(zoomButton)).toBeLessThan(zoomedScale);
+    });
+
+    it("should treat maxZoom below 1 as 1", () => {
+      renderLightbox({ maxZoom: 0.5 });
+      const dialog = screen.getByRole("dialog");
+      const zoomButton = screen.getByRole("button", {
+        name: "Ampliar imagem",
+      });
+
+      fireEvent.wheel(dialog, { deltaY: -500 });
+      fireEvent.click(zoomButton);
+
+      expect(getScale(zoomButton)).toBe(1);
+      expect(zoomButton.style.transform).toContain("translate(0px, 0px)");
     });
 
     it("should clamp zoom at maxZoom", () => {
@@ -186,7 +202,7 @@ describe("ImageLightbox", () => {
         closeButton: <button type="button">Sair</button>,
       });
 
-      expect(screen.getByRole("button", { name: "Sair" })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "Sair" })).toBeVisible();
       expect(
         screen.queryByRole("button", { name: "Fechar" })
       ).not.toBeInTheDocument();

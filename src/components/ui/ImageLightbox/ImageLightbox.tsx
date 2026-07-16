@@ -56,7 +56,10 @@ function zoomTo(
   nextScale: number,
   maxZoom: number
 ): Transform {
-  const scale = Math.min(Math.max(nextScale, MIN_ZOOM), maxZoom);
+  const scale = Math.min(
+    Math.max(nextScale, MIN_ZOOM),
+    Math.max(maxZoom, MIN_ZOOM)
+  );
   if (scale === MIN_ZOOM) {
     return INITIAL_TRANSFORM;
   }
@@ -68,15 +71,15 @@ function zoomTo(
   };
 }
 
-function getPointFromCenter(
-  container: HTMLElement,
-  clientX: number,
-  clientY: number
-) {
-  const rect = container.getBoundingClientRect();
+/**
+ * Point measured from the viewport center. The lightbox content is fixed
+ * inset-0 (fullscreen), so the viewport center is also the untransformed
+ * center of the image.
+ */
+function getPointFromCenter(clientX: number, clientY: number) {
   return {
-    x: clientX - rect.left - rect.width / 2,
-    y: clientY - rect.top - rect.height / 2,
+    x: clientX - window.innerWidth / 2,
+    y: clientY - window.innerHeight / 2,
   };
 }
 
@@ -115,7 +118,7 @@ export function ImageLightbox({
     // ignore preventDefault and scroll the page behind the lightbox.
     const handleWheel = (event: WheelEvent) => {
       event.preventDefault();
-      const point = getPointFromCenter(container, event.clientX, event.clientY);
+      const point = getPointFromCenter(event.clientX, event.clientY);
       setTransform((prev) =>
         zoomTo(
           prev,
@@ -131,14 +134,11 @@ export function ImageLightbox({
   }, [container, maxZoom]);
 
   const handleImageClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    if (!container) {
-      return;
-    }
     if (isZoomed) {
       setTransform(INITIAL_TRANSFORM);
       return;
     }
-    const point = getPointFromCenter(container, event.clientX, event.clientY);
+    const point = getPointFromCenter(event.clientX, event.clientY);
     setTransform((prev) => zoomTo(prev, point, CLICK_ZOOM, maxZoom));
   };
 
