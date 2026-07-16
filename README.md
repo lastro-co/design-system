@@ -166,6 +166,62 @@ Features:
 
 The workflow automatically updates `package.json` to match the release tag version before publishing.
 
+### Testing changes before a stable release
+
+Consumer apps (e.g. `casa-da-lais`) run `pnpm update --latest` on every `pnpm dev` (via their
+`predev` script), so anything published to the `latest` dist-tag reaches every developer and any
+environment that reinstalls the dependency — including sandbox/production rebuilds. Don't publish
+work-in-progress changes there. Use one of the two flows below instead.
+
+#### 1. Local iteration (no publish)
+
+For fast day-to-day edits, link the local build into the consumer app instead of publishing:
+
+```bash
+pnpm run dev          # build in watch mode (this repo)
+pnpm link --global
+
+# in the consumer app (e.g. casa-da-lais)
+pnpm link --global @lastro-co/design-system
+```
+
+This overrides module resolution to point at your local `dist/` — `package.json`/lockfile in the
+consumer app stay untouched. Undo with:
+
+```bash
+pnpm unlink --global @lastro-co/design-system
+# then, in the consumer app:
+pnpm install
+```
+
+#### 2. Beta/canary release (published, but not `latest`)
+
+To validate in a Vercel preview or share with someone else, publish a pre-release under the `beta`
+dist-tag instead of `latest`:
+
+1. Go to **GitHub → Releases → Draft a new release**
+2. Use a pre-release tag, e.g. `v1.10.0-beta.0`
+3. Check **"Set as a pre-release"**
+4. Click **Publish release**
+
+The workflow detects the pre-release flag and publishes with `--tag beta`, so `latest` is
+untouched. In the consumer app:
+
+```bash
+pnpm add @lastro-co/design-system@beta
+```
+
+When done testing, revert with:
+
+```bash
+pnpm add @lastro-co/design-system@latest
+```
+
+**Careful:** the consumer app's `predev` always re-runs `pnpm update --latest` on `pnpm dev`, which
+will not touch a `beta`-installed version but also won't protect it from being overwritten by a
+manual `pnpm install` against a lockfile that doesn't pin it. Avoid re-running `pnpm dev` in that
+app while validating a beta if you want the pinned version to stick around.
+
 ### Test coverage
 
 Current test coverage:
