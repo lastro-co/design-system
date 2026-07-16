@@ -502,7 +502,9 @@ function Calendar({
     return dayPicker;
   }
 
-  const selectedRange = props.selected as DateRange | undefined;
+  // `props.selected` isn't on every DayPicker mode variant (mode-discriminated
+  // union), so read it through a narrow cast — presets are a range-mode feature.
+  const selectedRange = (props as { selected?: DateRange }).selected;
   const isComplete = Boolean(selectedRange?.from && selectedRange?.to);
   const matchesAnyPreset = presets.some((preset) =>
     rangeMatchesPreset(selectedRange, preset.range)
