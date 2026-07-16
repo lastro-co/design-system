@@ -4,6 +4,7 @@ import { format, isSameDay } from "date-fns";
 import { ptBR as ptBRLocale } from "date-fns/locale";
 import * as React from "react";
 import {
+  type DateRange,
   type DayButton,
   DayPicker,
   getDefaultClassNames,
@@ -16,6 +17,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "../../icons";
+import { ToggleChip } from "../ToggleChip/ToggleChip";
 import { MONTHS_PT_BR } from "./constants";
 import type { PickerView } from "./hooks";
 import { generateYearRange, parseDateString } from "./utils/date-utils";
@@ -297,6 +299,25 @@ const createCalendarCaptionWrapper =
     />
   );
 
+export type CalendarPreset = {
+  label: string;
+  range: DateRange;
+};
+
+function rangeMatchesPreset(
+  selected: DateRange | undefined,
+  preset: DateRange
+): boolean {
+  return Boolean(
+    selected?.from &&
+      selected.to &&
+      preset.from &&
+      preset.to &&
+      isSameDay(selected.from, preset.from) &&
+      isSameDay(selected.to, preset.to)
+  );
+}
+
 function Calendar({
   className,
   classNames,
@@ -308,9 +329,18 @@ function Calendar({
   month: controlledMonth,
   onMonthChange,
   enabledDates,
+  presets,
+  onPresetSelect,
+  customPresetLabel,
   ...props
 }: React.ComponentProps<typeof DayPicker> & {
   enabledDates?: Date[] | string[];
+  /** Opt-in range presets: renders a chip row above the grid. */
+  presets?: CalendarPreset[];
+  /** Fired when a preset chip is clicked. */
+  onPresetSelect?: (range: DateRange) => void;
+  /** Read-only chip shown when the current selection matches no preset (e.g. "Personalizado"). */
+  customPresetLabel?: string;
 }) {
   const defaultClassNames = getDefaultClassNames();
   const [internalMonth, setInternalMonth] = React.useState<Date>(
@@ -352,7 +382,7 @@ function Calendar({
     ...formatters,
   };
 
-  return (
+  const dayPicker = (
     <DayPicker
       captionLayout="label"
       className={cn(
@@ -466,6 +496,41 @@ function Calendar({
       showOutsideDays={showOutsideDays}
       {...props}
     />
+  );
+
+  if (!presets?.length) {
+    return dayPicker;
+  }
+
+  const selectedRange = props.selected as DateRange | undefined;
+  const isComplete = Boolean(selectedRange?.from && selectedRange?.to);
+  const matchesAnyPreset = presets.some((preset) =>
+    rangeMatchesPreset(selectedRange, preset.range)
+  );
+
+  return (
+    <div className="flex w-fit flex-col">
+      <div className="flex flex-wrap gap-2 p-3 pb-0">
+        {presets.map((preset) => (
+          <ToggleChip
+            key={preset.label}
+            onSelectedChange={() => onPresetSelect?.(preset.range)}
+            selected={rangeMatchesPreset(selectedRange, preset.range)}
+          >
+            {preset.label}
+          </ToggleChip>
+        ))}
+        {customPresetLabel && isComplete && !matchesAnyPreset && (
+          // Read-only status chip: disabled so it stays non-interactive (the
+          // custom range is derived from the grid, not a preset you pick).
+          // biome-ignore lint/suspicious/noEmptyBlockStatements: disabled chip, handler never fires
+          <ToggleChip disabled onSelectedChange={() => {}} selected>
+            {customPresetLabel}
+          </ToggleChip>
+        )}
+      </div>
+      {dayPicker}
+    </div>
   );
 }
 
