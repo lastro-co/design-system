@@ -37,6 +37,11 @@ jobs:
         run: pnpm run build
 
       - name: Publish package
-        run: pnpm publish --no-git-checks
+        run: |
+          if [ "${{ github.event.release.prerelease }}" = "true" ]; then
+            pnpm publish --no-git-checks --tag beta
+          else
+            pnpm publish --no-git-checks
+          fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
