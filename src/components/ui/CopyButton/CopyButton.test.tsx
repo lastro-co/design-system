@@ -19,7 +19,7 @@ describe("CopyButton", () => {
 
       const button = screen.getByRole("button", { name: COPY_BUTTON_LABEL });
       expect(button).toBeVisible();
-      expect(button).toHaveClass("bg-purple-300", "hover:bg-purple-300");
+      expect(button).toHaveClass("bg-purple-100", "hover:bg-purple-100");
     });
 
     it("shows copy icon initially", () => {

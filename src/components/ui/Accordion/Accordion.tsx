@@ -45,7 +45,7 @@ function AccordionTrigger({
       >
         {children}
         <span
-          className="inline-block overflow-hidden rounded-full transition-all group-hover:bg-purple-300"
+          className="inline-block overflow-hidden rounded-full transition-all group-hover:bg-purple-100"
           data-slot="accordion-icon"
         >
           <ChevronDownIcon

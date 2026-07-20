@@ -37,7 +37,7 @@ const buttonVariants = cva(
       {
         variant: "outlined",
         color: "purple",
-        class: "border-purple-800 bg-white text-purple-800 hover:bg-purple-300",
+        class: "border-purple-800 bg-white text-purple-800 hover:bg-purple-100",
       },
       // Error variants
       {

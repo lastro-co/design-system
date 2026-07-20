@@ -38,7 +38,7 @@ const iconButtonVariants = cva(
         variant: "outlined",
         color: "default",
         class:
-          "border-gray-300 bg-white hover:border-purple-300 hover:bg-purple-300",
+          "border-gray-300 bg-white hover:border-purple-100 hover:bg-purple-100",
       },
       // purple variants
       {
@@ -50,7 +50,7 @@ const iconButtonVariants = cva(
         variant: "outlined",
         color: "purple",
         class:
-          "border-purple-800 bg-white hover:border-purple-300 hover:bg-purple-300",
+          "border-purple-800 bg-white hover:border-purple-100 hover:bg-purple-100",
       },
       // Ghost variants
       {

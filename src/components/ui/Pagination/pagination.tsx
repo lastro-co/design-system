@@ -160,7 +160,7 @@ function DynamicPagination({
                 aria-current={currentPage === page ? "page" : undefined}
                 className={cn(
                   PAGINATION_BUTTON_BASE_STYLES,
-                  currentPage === page && "bg-purple-300"
+                  currentPage === page && "bg-purple-100"
                 )}
                 onClick={() => onPageChange(page)}
                 type="button"

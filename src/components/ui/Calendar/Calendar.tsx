@@ -68,7 +68,7 @@ const CalendarRoot = ({
               <button
                 className={cn(
                   "flex items-center gap-2 px-4 py-3 text-left font-normal text-base transition-colors",
-                  isSelected ? "bg-purple-300 text-sm" : "hover:bg-gray-100"
+                  isSelected ? "bg-purple-100 text-sm" : "hover:bg-gray-100"
                 )}
                 key={month}
                 onClick={() => handleMonthSelect(index)}
@@ -94,7 +94,7 @@ const CalendarRoot = ({
               <button
                 className={cn(
                   "flex items-center gap-2 px-4 py-3 text-left font-normal text-base transition-colors",
-                  isSelected ? "bg-purple-300 text-sm" : "hover:bg-gray-100"
+                  isSelected ? "bg-purple-100 text-sm" : "hover:bg-gray-100"
                 )}
                 key={year}
                 onClick={() => handleYearSelect(year)}
@@ -182,7 +182,7 @@ const CalendarMonthCaption = ({
       {/* Month Section */}
       <div className="flex items-center gap-1">
         <button
-          className="flex size-7 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-purple-300"
+          className="flex size-7 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-purple-100"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -210,7 +210,7 @@ const CalendarMonthCaption = ({
         </button>
 
         <button
-          className="flex size-7 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-purple-300"
+          className="flex size-7 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-purple-100"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -225,7 +225,7 @@ const CalendarMonthCaption = ({
       {/* Year Section */}
       <div className="flex items-center gap-1">
         <button
-          className="flex size-7 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-purple-300"
+          className="flex size-7 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-purple-100"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -250,7 +250,7 @@ const CalendarMonthCaption = ({
         </button>
 
         <button
-          className="flex size-7 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-purple-300"
+          className="flex size-7 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-purple-100"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -404,12 +404,12 @@ function Calendar({
           defaultClassNames.nav
         ),
         button_previous: cn(
-          "inline-flex items-center justify-center rounded-full transition-colors hover:bg-purple-300",
+          "inline-flex items-center justify-center rounded-full transition-colors hover:bg-purple-100",
           "size-7 select-none p-0 aria-disabled:opacity-50",
           defaultClassNames.button_previous
         ),
         button_next: cn(
-          "inline-flex items-center justify-center rounded-full transition-colors hover:bg-purple-300",
+          "inline-flex items-center justify-center rounded-full transition-colors hover:bg-purple-100",
           "size-7 select-none p-0 aria-disabled:opacity-50",
           defaultClassNames.button_next
         ),
@@ -422,7 +422,7 @@ function Calendar({
           defaultClassNames.dropdowns
         ),
         dropdown_root: cn(
-          "relative rounded-full px-2 hover:bg-purple-300",
+          "relative rounded-full px-2 hover:bg-purple-100",
           defaultClassNames.dropdown_root
         ),
         dropdown: cn(

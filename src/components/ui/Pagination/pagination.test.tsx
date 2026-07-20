@@ -212,6 +212,6 @@ describe("DynamicPagination", () => {
 
     const page3Button = screen.getByRole("button", { name: "3" });
     expect(page3Button).toHaveAttribute("aria-current", "page");
-    expect(page3Button).toHaveClass("bg-purple-300");
+    expect(page3Button).toHaveClass("bg-purple-100");
   });
 });
