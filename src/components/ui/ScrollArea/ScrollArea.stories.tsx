@@ -126,7 +126,7 @@ export const ChatList = {
             className="flex gap-3 p-4 transition-colors hover:bg-gray-50"
             key={item.id}
           >
-            <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-purple-300">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-purple-100">
               <span className="font-medium text-purple-900 text-sm">
                 {String.fromCharCode(65 + (item.index % 26))}
               </span>

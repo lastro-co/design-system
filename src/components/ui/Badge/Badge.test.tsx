@@ -74,7 +74,7 @@ describe("Badge", () => {
       gray: ["bg-gray-100", "text-gray-800"],
       green: ["bg-green-50", "text-green-800"],
       orange: ["bg-orange-50", "text-orange-800"],
-      purple: ["bg-purple-300", "text-purple-800"],
+      purple: ["bg-purple-100", "text-purple-800"],
       red: ["bg-red-50", "text-red-800"],
       white: ["bg-white", "text-gray-800"],
       yellow: ["bg-yellow-50", "text-yellow-800"],

@@ -93,7 +93,7 @@ export function ColorPicker({
         <button
           aria-label="Selecionar cor"
           className={cn(
-            "size-8 shrink-0 cursor-pointer rounded-md border border-gray-300 transition-shadow hover:ring-2 hover:ring-purple-300",
+            "size-8 shrink-0 cursor-pointer rounded-md border border-gray-300 transition-shadow hover:ring-2 hover:ring-purple-100",
             className
           )}
           style={{ backgroundColor: value }}

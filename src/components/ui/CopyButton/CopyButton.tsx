@@ -83,7 +83,7 @@ export function CopyButton({
   }
 
   const buttonClassName = cn(
-    "flex size-6 cursor-pointer bg-purple-300 transition-all duration-500 ease-out hover:bg-purple-300",
+    "flex size-6 cursor-pointer bg-purple-100 transition-all duration-500 ease-out hover:bg-purple-100",
     !alwaysVisible && "opacity-0 group-hover:opacity-100"
   );
 
