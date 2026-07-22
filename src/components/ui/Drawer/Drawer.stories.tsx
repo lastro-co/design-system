@@ -378,43 +378,17 @@ export const FromRight: Story = {
         </DrawerHeader>
 
         <DrawerMain>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
-          <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
+          <p>You have 3 unread notifications.</p>
+          <p>You have 3 unread notifications.</p>
+          <p>You have 3 unread notifications.</p>
+          <p>You have 3 unread notifications.</p>
+          <p>You have 3 unread notifications.</p>
+          <p>You have 3 unread notifications.</p>
+          <p>You have 3 unread notifications.</p>
+          <p>You have 3 unread notifications.</p>
+          <p>You have 3 unread notifications.</p>
+          <p>You have 3 unread notifications.</p>
+          <p>You have 3 unread notifications.</p>
         </DrawerMain>
 
         <DrawerFooter>
