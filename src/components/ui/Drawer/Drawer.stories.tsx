@@ -244,13 +244,14 @@ export const FromBottom: Story = {
 
       <DrawerContent>
         <DrawerHeader>
-          <Badge color="purple">New</Badge>
-        </DrawerHeader>
-
-        <DrawerMain>
+          <Badge className="mb-4" color="purple">
+            New
+          </Badge>
           <DrawerTitle>Quick Actions</DrawerTitle>
           <DrawerDescription>Choose an action below.</DrawerDescription>
-        </DrawerMain>
+        </DrawerHeader>
+
+        <DrawerMain>main content</DrawerMain>
 
         <DrawerFooter>
           <DrawerClose asChild>
@@ -277,10 +278,13 @@ export const FromTop: Story = {
       <DrawerContent>
         <DrawerHeader>
           <Badge color="purple">New</Badge>
+          <DrawerTitle>Notifications</DrawerTitle>
+          <DrawerDescription>
+            You have 3 unread notifications.
+          </DrawerDescription>
         </DrawerHeader>
 
         <DrawerMain>
-          <DrawerTitle>Notifications</DrawerTitle>
           <p>You have 3 unread notifications.</p>
           <p>You have 3 unread notifications.</p>
           <p>You have 3 unread notifications.</p>
@@ -318,15 +322,16 @@ export const FromLeft: Story = {
 
       <DrawerContent>
         <DrawerHeader>
-          <Badge color="purple">New</Badge>
-        </DrawerHeader>
-
-        <DrawerMain>
+          <Badge className="mb-4" color="purple">
+            New
+          </Badge>
           <DrawerTitle>Notifications</DrawerTitle>
           <DrawerDescription>
             You have 3 unread notifications.
           </DrawerDescription>
-        </DrawerMain>
+        </DrawerHeader>
+
+        <DrawerMain>main content</DrawerMain>
 
         <DrawerFooter>
           <DrawerClose asChild>
@@ -352,11 +357,16 @@ export const FromRight: Story = {
 
       <DrawerContent>
         <DrawerHeader>
-          <Badge color="purple">New</Badge>
+          <Badge className="mb-4" color="purple">
+            New
+          </Badge>
+          <DrawerTitle>Notifications</DrawerTitle>
+          <DrawerDescription>
+            You have 3 unread notifications.
+          </DrawerDescription>
         </DrawerHeader>
 
         <DrawerMain>
-          <DrawerTitle>Notifications</DrawerTitle>
           <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
           <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
           <p className="mb-1 bg-red-500">You have 3 unread notifications.</p>
@@ -436,14 +446,16 @@ function AllDirectionsStory(props: DrawerStoryProps) {
 
           <DrawerContent>
             <DrawerHeader>
-              <Badge color="purple">New</Badge>
-            </DrawerHeader>
-
-            <DrawerMain>
+              <Badge className="mb-4" color="purple">
+                New
+              </Badge>
               <DrawerTitle>{title}</DrawerTitle>
               <DrawerDescription>
                 This is a description of the drawer content.
               </DrawerDescription>
+            </DrawerHeader>
+
+            <DrawerMain>
               <p className="text-muted-foreground text-sm">
                 Opens from the {direction}
               </p>
