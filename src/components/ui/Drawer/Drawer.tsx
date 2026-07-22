@@ -4,7 +4,7 @@ import type * as React from "react";
 import { createContext, useContext } from "react";
 import { Drawer as DrawerPrimitive } from "vaul";
 import { cn } from "@/lib/utils";
-import { CloseIcon } from "../../icons";
+import { XIcon } from "../../icons.v2";
 import { IconButton } from "../IconButton";
 import { ScrollArea } from "../ScrollArea";
 
@@ -96,7 +96,7 @@ function DrawerContent({
       <DrawerOverlay />
       <DrawerPrimitive.Content
         className={cn(
-          "group/drawer-content select-text! fixed z-50 flex h-auto flex-col bg-white py-8",
+          "group/drawer-content select-text! fixed z-50 flex h-auto flex-col bg-white",
           "data-[vaul-drawer-direction=top]:inset-x-0 data-[vaul-drawer-direction=top]:top-0 data-[vaul-drawer-direction=top]:max-h-[80vh]",
           "data-[vaul-drawer-direction=bottom]:inset-x-0 data-[vaul-drawer-direction=bottom]:bottom-0 data-[vaul-drawer-direction=bottom]:max-h-[80vh]",
           "data-[vaul-drawer-direction=left]:inset-y-0 data-[vaul-drawer-direction=right]:inset-y-0 data-[vaul-drawer-direction=right]:right-0 data-[vaul-drawer-direction=left]:left-0",
@@ -110,13 +110,12 @@ function DrawerContent({
         <DrawerClose asChild data-slot="drawer-close">
           <IconButton
             aria-label="Close"
-            className="absolute top-6 right-6"
+            className="absolute top-6 right-6 size-7"
             color="purple"
             shape="circular"
-            size="small"
             variant="ghost"
           >
-            <CloseIcon size="sm" />
+            <XIcon className="text-gray-400" size={16} />
           </IconButton>
         </DrawerClose>
       </DrawerPrimitive.Content>
@@ -127,7 +126,7 @@ function DrawerContent({
 function DrawerHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn("flex flex-col gap-2 px-8 pb-6", className)}
+      className={cn("p-6 pb-4", className)}
       data-slot="drawer-header"
       {...props}
     />
@@ -144,7 +143,7 @@ function DrawerMain({
       className={cn("min-h-0 flex-1", className)}
       data-slot="drawer-main"
     >
-      <div className={cn("px-8 py-6", contentClassName)} {...props} />
+      <div className={cn("px-6 py-4", contentClassName)} {...props} />
     </ScrollArea>
   );
 }
@@ -153,7 +152,7 @@ function DrawerFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       className={cn(
-        "mt-auto flex flex-col gap-2 border-gray-300 border-t p-8 pb-0",
+        "mt-auto flex flex-col gap-2 border-gray-300 border-t px-6 py-4",
         className
       )}
       data-slot="drawer-footer"
@@ -169,7 +168,7 @@ function DrawerTitle({
   return (
     <DrawerPrimitive.Title
       className={cn(
-        "font-display font-extrabold text-3xl text-gray-900 leading-none",
+        "font-bold font-display text-2xl text-gray-800 leading-none",
         className
       )}
       data-slot="drawer-title"
@@ -184,7 +183,7 @@ function DrawerDescription({
 }: React.ComponentProps<typeof DrawerPrimitive.Description>) {
   return (
     <DrawerPrimitive.Description
-      className={cn("mt-1 text-gray-800 text-lg leading-normal", className)}
+      className={cn("mt-2 text-gray-600 text-sm leading-snug", className)}
       data-slot="drawer-description"
       {...props}
     />
