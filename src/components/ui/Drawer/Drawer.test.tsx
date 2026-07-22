@@ -13,6 +13,7 @@ import {
 } from "./Drawer";
 
 const CLOSE_BUTTON_REGEX = /close/i;
+const BACK_BUTTON_REGEX = /voltar/i;
 
 Object.defineProperty(window, "matchMedia", {
   writable: true,
@@ -241,6 +242,142 @@ describe("Drawer", () => {
       expect(screen.getByText("Drawer Description")).toBeVisible();
       expect(screen.getByText("Main Content")).toBeVisible();
       expect(screen.getByText("Footer Content")).toBeVisible();
+    });
+  });
+
+  describe("DrawerHeader back button and action props", () => {
+    it("renders the back button by default", async () => {
+      const user = userEvent.setup();
+      renderDrawer();
+      await openDrawer(user);
+
+      expect(
+        screen.getByRole("button", { name: BACK_BUTTON_REGEX })
+      ).toBeVisible();
+    });
+
+    it("closes the drawer when the default back button is clicked", async () => {
+      const user = userEvent.setup();
+      render(
+        <Drawer>
+          <DrawerTrigger asChild>
+            <button type="button">Open</button>
+          </DrawerTrigger>
+          <DrawerContent>
+            <DrawerHeader />
+            <DrawerMain>
+              <DrawerTitle>Drawer Title</DrawerTitle>
+              <DrawerDescription>Description</DrawerDescription>
+              <p>Drawer Body</p>
+            </DrawerMain>
+          </DrawerContent>
+        </Drawer>
+      );
+
+      await openDrawer(user);
+      await user.click(screen.getByRole("button", { name: BACK_BUTTON_REGEX }));
+
+      await waitFor(() => {
+        expect(screen.queryByText("Drawer Body")).not.toBeInTheDocument();
+      });
+    });
+
+    it("calls onBack instead of closing the drawer when onBack is passed", async () => {
+      const user = userEvent.setup();
+      const onBack = jest.fn();
+      render(
+        <Drawer>
+          <DrawerTrigger asChild>
+            <button type="button">Open</button>
+          </DrawerTrigger>
+          <DrawerContent>
+            <DrawerHeader onBack={onBack} />
+            <DrawerMain>
+              <DrawerTitle>Drawer Title</DrawerTitle>
+              <DrawerDescription>Description</DrawerDescription>
+              <p>Drawer Body</p>
+            </DrawerMain>
+          </DrawerContent>
+        </Drawer>
+      );
+
+      await openDrawer(user);
+      await user.click(screen.getByRole("button", { name: BACK_BUTTON_REGEX }));
+
+      expect(onBack).toHaveBeenCalledTimes(1);
+      expect(screen.getByText("Drawer Body")).toBeVisible();
+    });
+
+    it("hides the back button when hideBackButton is true", async () => {
+      const user = userEvent.setup();
+      render(
+        <Drawer>
+          <DrawerTrigger asChild>
+            <button type="button">Open</button>
+          </DrawerTrigger>
+          <DrawerContent>
+            <DrawerHeader hideBackButton />
+            <DrawerMain>
+              <DrawerTitle>Drawer Title</DrawerTitle>
+              <DrawerDescription>Description</DrawerDescription>
+            </DrawerMain>
+          </DrawerContent>
+        </Drawer>
+      );
+
+      await openDrawer(user);
+
+      expect(
+        screen.queryByRole("button", { name: BACK_BUTTON_REGEX })
+      ).not.toBeInTheDocument();
+    });
+
+    it("renders the action node", async () => {
+      const user = userEvent.setup();
+      render(
+        <Drawer>
+          <DrawerTrigger asChild>
+            <button type="button">Open</button>
+          </DrawerTrigger>
+          <DrawerContent>
+            <DrawerHeader action={<span>Header Action</span>} />
+            <DrawerMain>
+              <DrawerTitle>Drawer Title</DrawerTitle>
+              <DrawerDescription>Description</DrawerDescription>
+            </DrawerMain>
+          </DrawerContent>
+        </Drawer>
+      );
+
+      await openDrawer(user);
+
+      expect(screen.getByText("Header Action")).toBeVisible();
+    });
+
+    it("renders the action node alongside the hidden back button", async () => {
+      const user = userEvent.setup();
+      render(
+        <Drawer>
+          <DrawerTrigger asChild>
+            <button type="button">Open</button>
+          </DrawerTrigger>
+          <DrawerContent>
+            <DrawerHeader action={<span>Header Action</span>} hideBackButton>
+              <DrawerTitle>Drawer Title</DrawerTitle>
+            </DrawerHeader>
+            <DrawerMain>
+              <DrawerDescription>Description</DrawerDescription>
+            </DrawerMain>
+          </DrawerContent>
+        </Drawer>
+      );
+
+      await openDrawer(user);
+
+      expect(
+        screen.queryByRole("button", { name: BACK_BUTTON_REGEX })
+      ).not.toBeInTheDocument();
+      expect(screen.getByText("Header Action")).toBeVisible();
     });
   });
 

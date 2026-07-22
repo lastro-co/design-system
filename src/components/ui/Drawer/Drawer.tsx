@@ -4,18 +4,17 @@ import type * as React from "react";
 import { createContext, useContext } from "react";
 import { Drawer as DrawerPrimitive } from "vaul";
 import { cn } from "@/lib/utils";
-import { XIcon } from "../../icons.v2";
+import { ChevronLeftIcon, XIcon } from "../../icons.v2";
 import { IconButton } from "../IconButton";
 import { ScrollArea } from "../ScrollArea";
 
 const DRAWER_WIDTH_CLASSES = {
-  default:
-    "data-[vaul-drawer-direction=right]:w-3/4 data-[vaul-drawer-direction=right]:sm:max-w-[600px] data-[vaul-drawer-direction=left]:w-3/4 data-[vaul-drawer-direction=left]:sm:max-w-[600px]",
-  sm: "data-[vaul-drawer-direction=right]:w-3/4 data-[vaul-drawer-direction=right]:sm:max-w-sm data-[vaul-drawer-direction=left]:w-3/4 data-[vaul-drawer-direction=left]:sm:max-w-sm",
-  md: "data-[vaul-drawer-direction=right]:w-3/4 data-[vaul-drawer-direction=right]:sm:max-w-md data-[vaul-drawer-direction=left]:w-3/4 data-[vaul-drawer-direction=left]:sm:max-w-md",
-  lg: "data-[vaul-drawer-direction=right]:w-3/4 data-[vaul-drawer-direction=right]:sm:max-w-lg data-[vaul-drawer-direction=left]:w-3/4 data-[vaul-drawer-direction=left]:sm:max-w-lg",
-  xl: "data-[vaul-drawer-direction=right]:w-3/4 data-[vaul-drawer-direction=right]:sm:max-w-xl data-[vaul-drawer-direction=left]:w-3/4 data-[vaul-drawer-direction=left]:sm:max-w-xl",
-  full: "data-[vaul-drawer-direction=right]:w-full data-[vaul-drawer-direction=left]:w-full",
+  default: "w-3/4 sm:max-w-[600px]",
+  sm: "w-3/4 sm:max-w-sm",
+  md: "w-3/4 sm:max-w-md",
+  lg: "w-3/4 sm:max-w-lg",
+  xl: "w-3/4 sm:max-w-xl",
+  full: "w-full",
 } as const;
 
 export type DrawerWidth = keyof typeof DRAWER_WIDTH_CLASSES;
@@ -29,9 +28,9 @@ const DrawerContext = createContext<DrawerContextValue>({
 });
 
 function Drawer({
-  direction = "right",
   width = "default",
   handleOnly = true,
+  direction: _direction,
   ...props
 }: React.ComponentProps<typeof DrawerPrimitive.Root> & {
   width?: DrawerWidth;
@@ -40,7 +39,7 @@ function Drawer({
     <DrawerContext.Provider value={{ width }}>
       <DrawerPrimitive.Root
         data-slot="drawer"
-        direction={direction}
+        direction="right"
         handleOnly={handleOnly}
         {...props}
       />
@@ -96,10 +95,7 @@ function DrawerContent({
       <DrawerOverlay />
       <DrawerPrimitive.Content
         className={cn(
-          "group/drawer-content select-text! fixed z-50 flex h-auto flex-col bg-white",
-          "data-[vaul-drawer-direction=top]:inset-x-0 data-[vaul-drawer-direction=top]:top-0 data-[vaul-drawer-direction=top]:max-h-[80vh]",
-          "data-[vaul-drawer-direction=bottom]:inset-x-0 data-[vaul-drawer-direction=bottom]:bottom-0 data-[vaul-drawer-direction=bottom]:max-h-[80vh]",
-          "data-[vaul-drawer-direction=left]:inset-y-0 data-[vaul-drawer-direction=right]:inset-y-0 data-[vaul-drawer-direction=right]:right-0 data-[vaul-drawer-direction=left]:left-0",
+          "group/drawer-content select-text! fixed inset-y-0 right-0 z-50 flex h-auto flex-col bg-white",
           DRAWER_WIDTH_CLASSES[width],
           className
         )}
@@ -123,13 +119,60 @@ function DrawerContent({
   );
 }
 
-function DrawerHeader({ className, ...props }: React.ComponentProps<"div">) {
+const BACK_BUTTON_CLASSNAME =
+  "flex cursor-pointer items-center gap-0.5 font-medium text-purple-800 text-sm";
+
+function DrawerBackButton({ onBack }: { onBack?: () => void }) {
+  const content = (
+    <>
+      <ChevronLeftIcon className="size-4" />
+      Voltar
+    </>
+  );
+
+  if (onBack) {
+    return (
+      <button className={BACK_BUTTON_CLASSNAME} onClick={onBack} type="button">
+        {content}
+      </button>
+    );
+  }
+
+  return (
+    <DrawerClose asChild>
+      <button className={BACK_BUTTON_CLASSNAME} type="button">
+        {content}
+      </button>
+    </DrawerClose>
+  );
+}
+
+function DrawerHeader({
+  className,
+  hideBackButton = false,
+  onBack,
+  action,
+  children,
+  ...props
+}: React.ComponentProps<"div"> & {
+  hideBackButton?: boolean;
+  onBack?: () => void;
+  action?: React.ReactNode;
+}) {
   return (
     <div
       className={cn("mb-8 p-6 pb-0", className)}
       data-slot="drawer-header"
       {...props}
-    />
+    >
+      {(!hideBackButton || action) && (
+        <div className="mb-4 flex items-center justify-between">
+          {hideBackButton ? <span /> : <DrawerBackButton onBack={onBack} />}
+          {action}
+        </div>
+      )}
+      {children}
+    </div>
   );
 }
 
@@ -152,7 +195,7 @@ function DrawerFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       className={cn(
-        "mt-auto flex flex-col gap-2 border-gray-300 border-t px-6 py-4",
+        "mt-auto flex justify-end gap-2 border-gray-300 border-t px-6 py-4",
         className
       )}
       data-slot="drawer-footer"

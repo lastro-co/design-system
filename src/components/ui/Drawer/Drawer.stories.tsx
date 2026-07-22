@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "@/components/ui/Button";
-import { Badge } from "../Badge";
 import type { DrawerWidth } from "./Drawer";
 import {
   Drawer,
@@ -15,7 +14,6 @@ import {
 } from "./Drawer";
 
 interface DrawerStoryProps {
-  direction?: "top" | "bottom" | "left" | "right";
   modal?: boolean;
   width?: DrawerWidth;
   open?: boolean;
@@ -32,13 +30,13 @@ interface DrawerStoryProps {
   preventScrollRestoration?: boolean;
   autoFocus?: boolean;
   nested?: boolean;
+  hideBackButton?: boolean;
   onOpenChange?: (open: boolean) => void;
   onAnimationEnd?: (open: boolean) => void;
   onClose?: () => void;
 }
 
 function DrawerStory({
-  direction = "right",
   width = "default",
   modal = true,
   open,
@@ -55,6 +53,7 @@ function DrawerStory({
   preventScrollRestoration = false,
   autoFocus,
   nested = false,
+  hideBackButton = false,
   onOpenChange,
   onAnimationEnd,
   onClose,
@@ -65,7 +64,6 @@ function DrawerStory({
       autoFocus={autoFocus}
       closeThreshold={closeThreshold}
       defaultOpen={defaultOpen}
-      direction={direction}
       disablePreventScroll={disablePreventScroll}
       dismissible={dismissible}
       fixed={fixed}
@@ -89,16 +87,14 @@ function DrawerStory({
       </DrawerTrigger>
 
       <DrawerContent>
-        <DrawerHeader>
-          <Badge color="purple">New</Badge>
-        </DrawerHeader>
-
-        <DrawerMain>
+        <DrawerHeader hideBackButton={hideBackButton}>
           <DrawerTitle>Drawer Title</DrawerTitle>
           <DrawerDescription>
             This is a description of the drawer content.
           </DrawerDescription>
-        </DrawerMain>
+        </DrawerHeader>
+
+        <DrawerMain>main content</DrawerMain>
 
         <DrawerFooter>
           <DrawerClose asChild>
@@ -110,6 +106,7 @@ function DrawerStory({
     </Drawer>
   );
 }
+DrawerStory.displayName = "Drawer";
 
 const meta: Meta<typeof DrawerStory> = {
   title: "Components/Drawer",
@@ -120,11 +117,6 @@ const meta: Meta<typeof DrawerStory> = {
   },
   tags: ["autodocs"],
   argTypes: {
-    direction: {
-      control: "select",
-      options: ["top", "bottom", "left", "right"],
-      description: "Direction from which the drawer slides in",
-    },
     modal: {
       control: "boolean",
       description:
@@ -133,8 +125,7 @@ const meta: Meta<typeof DrawerStory> = {
     width: {
       control: "select",
       options: ["default", "sm", "md", "lg", "xl", "full"],
-      description:
-        "Width of the drawer (only applies when direction is right or left)",
+      description: "Width of the drawer",
     },
     open: {
       control: "boolean",
@@ -197,6 +188,10 @@ const meta: Meta<typeof DrawerStory> = {
       control: "boolean",
       description: "Use when drawer is nested inside another drawer",
     },
+    hideBackButton: {
+      control: "boolean",
+      description: "When true, hides the DrawerHeader back button",
+    },
     onOpenChange: {
       description: "Called when the open state changes",
     },
@@ -214,7 +209,6 @@ type Story = StoryObj<typeof DrawerStory>;
 
 export const Default: Story = {
   args: {
-    direction: "right",
     modal: true,
     width: "default",
     defaultOpen: false,
@@ -227,247 +221,50 @@ export const Default: Story = {
     disablePreventScroll: false,
     preventScrollRestoration: false,
     nested: false,
+    hideBackButton: false,
   },
 };
 
-export const FromBottom: Story = {
+export const WithLongContent: Story = {
   args: {
-    direction: "bottom",
     modal: true,
     width: "default",
   },
   render: (args) => (
     <Drawer {...args}>
       <DrawerTrigger asChild>
-        <Button variant="outlined">Open from Bottom</Button>
+        <Button variant="outlined">Open Drawer</Button>
       </DrawerTrigger>
 
       <DrawerContent>
         <DrawerHeader>
-          <Badge className="mb-4" color="purple">
-            New
-          </Badge>
-          <DrawerTitle>Quick Actions</DrawerTitle>
-          <DrawerDescription>Choose an action below.</DrawerDescription>
+          <DrawerTitle>Notifications</DrawerTitle>
+          <DrawerDescription>
+            You have 3 unread notifications.
+          </DrawerDescription>
         </DrawerHeader>
 
-        <DrawerMain>main content</DrawerMain>
+        <DrawerMain>
+          <p>You have 3 unread notifications.</p>
+          <p>You have 3 unread notifications.</p>
+          <p>You have 3 unread notifications.</p>
+          <p>You have 3 unread notifications.</p>
+          <p>You have 3 unread notifications.</p>
+          <p>You have 3 unread notifications.</p>
+          <p>You have 3 unread notifications.</p>
+          <p>You have 3 unread notifications.</p>
+          <p>You have 3 unread notifications.</p>
+          <p>You have 3 unread notifications.</p>
+          <p>You have 3 unread notifications.</p>
+        </DrawerMain>
 
         <DrawerFooter>
           <DrawerClose asChild>
-            <div className="flex justify-end gap-2">
-              <DrawerClose asChild>
-                <Button variant="outlined">Cancel</Button>
-              </DrawerClose>
-              <Button>Send</Button>
-            </div>
+            <Button variant="outlined">Cancel</Button>
           </DrawerClose>
+          <Button>Send</Button>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
   ),
-};
-
-export const FromTop: Story = {
-  args: {
-    direction: "top",
-    modal: true,
-    width: "default",
-  },
-  render: (args) => (
-    <Drawer {...args}>
-      <DrawerTrigger asChild>
-        <Button variant="outlined">Open from Top</Button>
-      </DrawerTrigger>
-
-      <DrawerContent>
-        <DrawerHeader>
-          <Badge color="purple">New</Badge>
-          <DrawerTitle>Notifications</DrawerTitle>
-          <DrawerDescription>
-            You have 3 unread notifications.
-          </DrawerDescription>
-        </DrawerHeader>
-
-        <DrawerMain>
-          <p>You have 3 unread notifications.</p>
-          <p>You have 3 unread notifications.</p>
-          <p>You have 3 unread notifications.</p>
-          <p>You have 3 unread notifications.</p>
-          <p>You have 3 unread notifications.</p>
-          <p>You have 3 unread notifications.</p>
-          <p>You have 3 unread notifications.</p>
-          <p>You have 3 unread notifications.</p>
-          <p>You have 3 unread notifications.</p>
-          <p>You have 3 unread notifications.</p>
-          <p>You have 3 unread notifications.</p>
-        </DrawerMain>
-
-        <DrawerFooter>
-          <div className="flex justify-end gap-2">
-            <DrawerClose asChild>
-              <Button variant="outlined">Cancel</Button>
-            </DrawerClose>
-            <Button>Send</Button>
-          </div>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
-  ),
-};
-
-export const FromLeft: Story = {
-  args: {
-    direction: "left",
-    modal: true,
-    width: "default",
-  },
-  render: (args) => (
-    <Drawer {...args}>
-      <DrawerTrigger asChild>
-        <Button variant="outlined">Open from Left</Button>
-      </DrawerTrigger>
-
-      <DrawerContent>
-        <DrawerHeader>
-          <Badge className="mb-4" color="purple">
-            New
-          </Badge>
-          <DrawerTitle>Notifications</DrawerTitle>
-          <DrawerDescription>
-            You have 3 unread notifications.
-          </DrawerDescription>
-        </DrawerHeader>
-
-        <DrawerMain>main content</DrawerMain>
-
-        <DrawerFooter>
-          <div className="flex justify-end gap-2">
-            <DrawerClose asChild>
-              <Button variant="outlined">Cancel</Button>
-            </DrawerClose>
-            <Button>Send</Button>
-          </div>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
-  ),
-};
-
-export const FromRight: Story = {
-  args: {
-    direction: "right",
-    modal: true,
-    width: "default",
-  },
-  render: (args) => (
-    <Drawer {...args}>
-      <DrawerTrigger asChild>
-        <Button variant="outlined">Open from Right</Button>
-      </DrawerTrigger>
-
-      <DrawerContent>
-        <DrawerHeader>
-          <Badge className="mb-4" color="purple">
-            New
-          </Badge>
-          <DrawerTitle>Notifications</DrawerTitle>
-          <DrawerDescription>
-            You have 3 unread notifications.
-          </DrawerDescription>
-        </DrawerHeader>
-
-        <DrawerMain>
-          <p>You have 3 unread notifications.</p>
-          <p>You have 3 unread notifications.</p>
-          <p>You have 3 unread notifications.</p>
-          <p>You have 3 unread notifications.</p>
-          <p>You have 3 unread notifications.</p>
-          <p>You have 3 unread notifications.</p>
-          <p>You have 3 unread notifications.</p>
-          <p>You have 3 unread notifications.</p>
-          <p>You have 3 unread notifications.</p>
-          <p>You have 3 unread notifications.</p>
-          <p>You have 3 unread notifications.</p>
-        </DrawerMain>
-
-        <DrawerFooter>
-          <div className="flex justify-end gap-2">
-            <DrawerClose asChild>
-              <Button variant="outlined">Cancel</Button>
-            </DrawerClose>
-            <Button>Send</Button>
-          </div>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
-  ),
-};
-
-function AllDirectionsStory(props: DrawerStoryProps) {
-  const {
-    modal = true,
-    width = "default",
-    direction: _direction,
-    ...drawerProps
-  } = props;
-  const directions = [
-    { direction: "bottom" as const, title: "Bottom Drawer" },
-    { direction: "top" as const, title: "Top Drawer" },
-    { direction: "left" as const, title: "Left Drawer" },
-    { direction: "right" as const, title: "Right Drawer" },
-  ];
-
-  return (
-    <div className="flex flex-wrap gap-4">
-      {directions.map(({ direction, title }) => (
-        <Drawer
-          direction={direction}
-          key={direction}
-          modal={modal}
-          width={width}
-          {...drawerProps}
-        >
-          <DrawerTrigger asChild>
-            <Button variant="outlined">{title}</Button>
-          </DrawerTrigger>
-
-          <DrawerContent>
-            <DrawerHeader>
-              <Badge className="mb-4" color="purple">
-                New
-              </Badge>
-              <DrawerTitle>{title}</DrawerTitle>
-              <DrawerDescription>
-                This is a description of the drawer content.
-              </DrawerDescription>
-            </DrawerHeader>
-
-            <DrawerMain>
-              <p className="text-muted-foreground text-sm">
-                Opens from the {direction}
-              </p>
-            </DrawerMain>
-
-            <DrawerFooter>
-              <div className="flex justify-end gap-2">
-                <DrawerClose asChild>
-                  <Button variant="outlined">Cancel</Button>
-                </DrawerClose>
-                <Button>Send</Button>
-              </div>
-            </DrawerFooter>
-          </DrawerContent>
-        </Drawer>
-      ))}
-    </div>
-  );
-}
-
-export const AllDirections: Story = {
-  args: {
-    modal: true,
-    width: "default",
-  },
-  render: (args) => <AllDirectionsStory {...args} />,
 };
