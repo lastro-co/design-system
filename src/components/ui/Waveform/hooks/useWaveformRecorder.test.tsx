@@ -12,6 +12,7 @@ const mockRecordInstance = {
   stopRecording: jest.fn(),
   pauseRecording: jest.fn(),
   resumeRecording: jest.fn(),
+  stopMic: jest.fn(),
   destroy: jest.fn(),
   on: jest.fn(),
   _listeners: {} as Record<string, RecordEventCallback>,
@@ -502,6 +503,66 @@ describe("useWaveformRecorder", () => {
       expect(mockWavesurferInstance.destroy).toHaveBeenCalledTimes(1);
     });
 
+    it("stops the mic before destroying the plugin", async () => {
+      let hookResult: ReturnType<typeof useWaveformRecorder> | null = null;
+
+      render(
+        <RecorderConsumer
+          autoStart={false}
+          onResult={(r) => {
+            hookResult = r;
+          }}
+        />
+      );
+
+      await waitFor(() => expect(mockWaveSurferCreate).toHaveBeenCalled());
+
+      mockRecordInstance.stopMic.mockClear();
+      mockRecordInstance.destroy.mockClear();
+
+      act(() => {
+        hookResult?.destroy();
+      });
+
+      // RecordPlugin.destroy() closes the mic AudioContext twice (once via the
+      // "destroy" event, once via stopMic()), and the second close rejects with
+      // InvalidStateError. stopMic() first clears micStream, so destroy() has
+      // nothing left to close — the order matters.
+      expect(mockRecordInstance.stopMic).toHaveBeenCalledTimes(1);
+      expect(
+        mockRecordInstance.stopMic.mock.invocationCallOrder[0]
+      ).toBeLessThan(mockRecordInstance.destroy.mock.invocationCallOrder[0]);
+    });
+
+    it("still destroys the plugin when record.stopMic() throws", async () => {
+      mockRecordInstance.stopMic.mockImplementationOnce(() => {
+        throw new Error("stopMic failed");
+      });
+
+      let hookResult: ReturnType<typeof useWaveformRecorder> | null = null;
+
+      render(
+        <RecorderConsumer
+          autoStart={false}
+          onResult={(r) => {
+            hookResult = r;
+          }}
+        />
+      );
+
+      await waitFor(() => expect(mockWaveSurferCreate).toHaveBeenCalled());
+
+      mockRecordInstance.destroy.mockClear();
+
+      expect(() => {
+        act(() => {
+          hookResult?.destroy();
+        });
+      }).not.toThrow();
+
+      expect(mockRecordInstance.destroy).toHaveBeenCalledTimes(1);
+    });
+
     it("ignores errors from record.destroy()", async () => {
       mockRecordInstance.destroy.mockImplementation(() => {
         throw new Error("record destroy failed");
@@ -550,6 +611,22 @@ describe("useWaveformRecorder", () => {
 
       expect(mockRecordInstance.destroy).toHaveBeenCalled();
       expect(mockWavesurferInstance.destroy).toHaveBeenCalled();
+    });
+
+    it("stops the mic before destroying the plugin on unmount", async () => {
+      const { unmount } = render(<RecorderConsumer autoStart={false} />);
+
+      await waitFor(() => expect(mockWaveSurferCreate).toHaveBeenCalled());
+
+      mockRecordInstance.stopMic.mockClear();
+      mockRecordInstance.destroy.mockClear();
+
+      unmount();
+
+      expect(mockRecordInstance.stopMic).toHaveBeenCalledTimes(1);
+      expect(
+        mockRecordInstance.stopMic.mock.invocationCallOrder[0]
+      ).toBeLessThan(mockRecordInstance.destroy.mock.invocationCallOrder[0]);
     });
   });
 

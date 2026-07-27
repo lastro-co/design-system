@@ -25,6 +25,40 @@ interface UseWaveformRecorderReturn {
   destroy: () => void;
 }
 
+/**
+ * Tears down the RecordPlugin without wavesurfer closing the mic AudioContext
+ * twice.
+ *
+ * `RecordPlugin.startMic()` registers the same `onDestroy` callback (which
+ * calls `audioContext.close()`) in two places: a one-shot `"destroy"` listener
+ * and `this.micStream`. `BasePlugin.destroy()` emits `"destroy"` — closing the
+ * context — and `RecordPlugin.destroy()` then calls `stopMic()`, which invokes
+ * `micStream.onDestroy()` a second time, because the event path never clears
+ * `micStream`. The second `close()` rejects with `InvalidStateError: Cannot
+ * close a closed AudioContext`; it is an unhandled rejection, so wrapping
+ * `destroy()` in a try/catch does not suppress it (it reached Sentry from
+ * production every time a recording was cancelled).
+ *
+ * `stopMic()` clears `micStream` and unsubscribes the `"destroy"` listener
+ * before closing, so the subsequent `destroy()` has nothing left to close.
+ */
+function teardownRecord(record: {
+  stopMic?: () => void;
+  destroy: () => void;
+}): void {
+  try {
+    record.stopMic?.();
+  } catch {
+    // Ignore — the mic may already be stopped
+  }
+
+  try {
+    record.destroy();
+  } catch {
+    // Ignore errors when destroying
+  }
+}
+
 export function useWaveformRecorder({
   config = {},
   autoStart = true,
@@ -78,11 +112,7 @@ export function useWaveformRecorder({
     stopTimer();
 
     if (recordRef.current) {
-      try {
-        recordRef.current.destroy();
-      } catch {
-        // Ignore errors when destroying
-      }
+      teardownRecord(recordRef.current);
       recordRef.current = null;
     }
 
@@ -215,11 +245,7 @@ export function useWaveformRecorder({
       stopTimer();
 
       if (recordRef.current) {
-        try {
-          recordRef.current.destroy();
-        } catch {
-          // Ignore
-        }
+        teardownRecord(recordRef.current);
         recordRef.current = null;
       }
 
