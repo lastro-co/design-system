@@ -29,6 +29,10 @@ const meta: Meta<typeof Button> = {
       control: "boolean",
       description: "Whether the button is disabled",
     },
+    loading: {
+      control: "boolean",
+      description: "Whether the button shows a loading spinner",
+    },
     className: {
       control: "text",
       description: "Additional CSS classes",
@@ -203,6 +207,7 @@ export const AllVariants = {
         <h3 className="font-medium text-lg">States</h3>
         <div className="flex flex-wrap gap-4">
           <Button>Normal</Button>
+          <Button loading>Loading</Button>
           <Button disabled>Disabled</Button>
         </div>
       </div>
