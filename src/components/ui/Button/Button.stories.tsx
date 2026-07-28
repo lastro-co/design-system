@@ -12,7 +12,7 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: "select",
-      options: ["contained", "outlined"],
+      options: ["contained", "outlined", "ghost", "link"],
       description: "Button visual style variant",
     },
     color: {
@@ -53,7 +53,7 @@ export const WithIcon = {
     <div className="flex flex-col gap-4">
       <div className="space-y-2">
         <h3 className="font-medium text-lg">Icon Positions</h3>
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap items-center gap-4">
           <Button>
             <svg
               aria-hidden="true"
@@ -125,23 +125,53 @@ export const WithIcon = {
   ),
 };
 
+export const AsChild = {
+  render: () => (
+    <Button asChild>
+      <a href="#storybook">Link styled as Button</a>
+    </Button>
+  ),
+};
+
+export const Loading = {
+  render: () => (
+    <div className="flex flex-wrap items-center gap-4">
+      <Button loading size="small">
+        Small
+      </Button>
+      <Button loading size="medium">
+        Medium
+      </Button>
+      <Button loading size="large">
+        Large
+      </Button>
+    </div>
+  ),
+};
+
 export const AllVariants = {
   render: () => (
     <div className="flex flex-col gap-6">
       <div className="space-y-2">
         <h3 className="font-medium text-lg">purple Color</h3>
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap items-center gap-4">
           <Button color="purple" variant="contained">
             Contained
           </Button>
           <Button color="purple" variant="outlined">
             Outlined
           </Button>
+          <Button color="purple" variant="ghost">
+            Ghost
+          </Button>
+          <Button color="purple" variant="link">
+            Link
+          </Button>
         </div>
       </div>
       <div className="space-y-2">
         <h3 className="font-medium text-lg">Error Color</h3>
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap items-center gap-4">
           <Button color="error" variant="contained">
             Contained
           </Button>
@@ -152,7 +182,7 @@ export const AllVariants = {
       </div>
       <div className="space-y-2">
         <h3 className="font-medium text-lg">Black Color</h3>
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap items-center gap-4">
           <Button color="black" variant="contained">
             Contained
           </Button>

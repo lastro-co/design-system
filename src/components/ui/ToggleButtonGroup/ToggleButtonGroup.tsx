@@ -38,7 +38,6 @@ export function ToggleButtonGroup<T extends string>({
             color="purple"
             key={option.value}
             onClick={() => onValueChange(option.value)}
-            shape="pill"
             size="small"
             type="button"
             variant={isSelected ? "contained" : "outlined"}

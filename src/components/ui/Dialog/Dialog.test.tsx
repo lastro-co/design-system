@@ -402,7 +402,8 @@ describe("Dialog", () => {
       );
 
       expect(submitButton).toBeDefined();
-      expect(submitButton).toBeDisabled();
+      expect(submitButton).toHaveAttribute("aria-disabled", "true");
+      expect(submitButton).toHaveAttribute("aria-busy", "true");
       expect(screen.getByRole("status")).toBeInTheDocument();
       expect(screen.getByRole("status")).toHaveClass("animate-spin");
     });

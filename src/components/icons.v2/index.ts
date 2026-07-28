@@ -25,6 +25,7 @@ export {
   Image as ImageIcon,
   Info as InfoIcon,
   List as ListIcon,
+  LoaderCircle as LoaderCircleIcon,
   Megaphone as MegaphoneIcon,
   MessageSquare as MessageSquareIcon,
   OctagonAlert as OctagonAlertIcon,
