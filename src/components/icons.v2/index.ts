@@ -48,6 +48,7 @@ export {
   Trash2 as TrashIcon,
   TrendingUp as TrendingUpIcon,
   TriangleAlert as TriangleAlertIcon,
+  User as UserIcon,
   UserCheck as UserCheckIcon,
   Users as UsersIcon,
   Video as VideoIcon,
