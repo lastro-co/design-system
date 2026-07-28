@@ -1,6 +1,7 @@
 import type { Meta } from "@storybook/react-vite";
 
-import { CloseIcon, InfoIcon } from "@/components/icons";
+import { InfoIcon } from "@/components/icons";
+import { PlusIcon } from "@/components/icons.v2";
 import { IconButton } from "./IconButton";
 
 const meta: Meta<typeof IconButton> = {
@@ -24,7 +25,7 @@ const meta: Meta<typeof IconButton> = {
     },
     color: {
       control: "select",
-      options: ["default", "purple"],
+      options: ["purple", "error", "black"],
       description: "IconButton color variant",
     },
     variant: {
@@ -61,58 +62,79 @@ export default meta;
 export const Default = {
   args: {
     "aria-label": "Close",
-    children: <CloseIcon size="sm" />,
+    children: <PlusIcon />,
   },
+};
+
+export const AsChild = {
+  render: () => (
+    <IconButton aria-label="Link styled as IconButton" asChild>
+      <a href="#storybook">
+        <PlusIcon />
+      </a>
+    </IconButton>
+  ),
 };
 
 export const AllVariants = {
   render: () => (
     <div className="flex flex-col gap-6">
       <div className="space-y-2">
-        <h3 className="font-medium text-lg">Variants</h3>
+        <h3 className="font-medium text-lg">black Color</h3>
         <div className="flex flex-wrap gap-4">
           <IconButton
-            aria-label="Default Contained"
-            color="default"
+            aria-label="Black Contained"
+            color="black"
             variant="contained"
           >
-            <InfoIcon size="sm" />
+            <PlusIcon color="white" />
           </IconButton>
           <IconButton
-            aria-label="Default Outlined"
-            color="default"
+            aria-label="Black Outlined"
+            color="black"
             variant="outlined"
           >
-            <InfoIcon size="sm" />
+            <PlusIcon />
           </IconButton>
-          <IconButton
-            aria-label="Default Ghost"
-            color="default"
-            variant="ghost"
-          >
-            <InfoIcon size="sm" />
+          <IconButton aria-label="Black Ghost" color="black" variant="ghost">
+            <PlusIcon />
           </IconButton>
         </div>
       </div>
       <div className="space-y-2">
-        <h3 className="font-medium text-lg">Colors</h3>
+        <h3 className="font-medium text-lg">purple Color</h3>
         <div className="flex flex-wrap gap-4">
           <IconButton
             aria-label="purple Contained"
             color="purple"
             variant="contained"
           >
-            <InfoIcon className="text-white" size="sm" />
+            <PlusIcon color="white" />
           </IconButton>
           <IconButton
             aria-label="purple Outlined"
             color="purple"
             variant="outlined"
           >
-            <InfoIcon size="sm" />
+            <PlusIcon />
           </IconButton>
           <IconButton aria-label="purple Ghost" color="purple" variant="ghost">
-            <InfoIcon size="sm" />
+            <PlusIcon />
+          </IconButton>
+        </div>
+      </div>
+      <div className="space-y-2">
+        <h3 className="font-medium text-lg">error Color</h3>
+        <div className="flex flex-wrap gap-4">
+          <IconButton
+            aria-label="Error Outlined"
+            color="error"
+            variant="outlined"
+          >
+            <PlusIcon />
+          </IconButton>
+          <IconButton aria-label="Error Ghost" color="error" variant="ghost">
+            <PlusIcon />
           </IconButton>
         </div>
       </div>
@@ -120,13 +142,13 @@ export const AllVariants = {
         <h3 className="font-medium text-lg">Sizes</h3>
         <div className="flex flex-wrap items-center gap-4">
           <IconButton aria-label="Small" size="small">
-            <InfoIcon size="sm" />
+            <PlusIcon />
           </IconButton>
           <IconButton aria-label="Medium" size="medium">
-            <InfoIcon size="sm" />
+            <PlusIcon />
           </IconButton>
           <IconButton aria-label="Large" size="large">
-            <InfoIcon size="sm" />
+            <PlusIcon />
           </IconButton>
         </div>
       </div>
@@ -134,10 +156,10 @@ export const AllVariants = {
         <h3 className="font-medium text-lg">Shapes</h3>
         <div className="flex flex-wrap gap-4">
           <IconButton aria-label="Circular" shape="circular">
-            <InfoIcon size="sm" />
+            <PlusIcon />
           </IconButton>
           <IconButton aria-label="Square" shape="square">
-            <InfoIcon size="sm" />
+            <PlusIcon />
           </IconButton>
         </div>
       </div>
@@ -145,13 +167,13 @@ export const AllVariants = {
         <h3 className="font-medium text-lg">States</h3>
         <div className="flex flex-wrap gap-4">
           <IconButton aria-label="Normal">
-            <InfoIcon size="sm" />
+            <PlusIcon />
           </IconButton>
           <IconButton aria-label="Loading" loading>
-            <InfoIcon size="sm" />
+            <PlusIcon />
           </IconButton>
           <IconButton aria-label="Disabled" disabled>
-            <InfoIcon size="sm" />
+            <PlusIcon />
           </IconButton>
         </div>
       </div>

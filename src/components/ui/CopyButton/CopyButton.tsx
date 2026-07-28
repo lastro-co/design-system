@@ -83,7 +83,7 @@ export function CopyButton({
   }
 
   const buttonClassName = cn(
-    "flex size-6 cursor-pointer bg-purple-100 transition-all duration-500 ease-out hover:bg-purple-100",
+    "flex size-6 cursor-pointer rounded-md bg-purple-100 transition-all duration-500 ease-out hover:bg-purple-100",
     !alwaysVisible && "opacity-0 group-hover:opacity-100"
   );
 
@@ -102,7 +102,11 @@ export function CopyButton({
         <span
           aria-label="Copy to clipboard"
           className={cn(
-            iconButtonVariants({ variant: "contained", size: "small" }),
+            iconButtonVariants({
+              variant: "contained",
+              size: "small",
+              shape: "square",
+            }),
             buttonClassName
           )}
           onClick={(e) => {
@@ -128,6 +132,7 @@ export function CopyButton({
             e.stopPropagation();
             handleCopy();
           }}
+          shape="square"
           variant="contained"
         >
           {iconElement}

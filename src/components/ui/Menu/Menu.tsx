@@ -462,7 +462,6 @@ function MenuHeader({ logo, collapsedLogo, className }: MenuHeaderProps) {
           <IconButton
             aria-label="Recolher menu"
             className="text-gray-600 hover:bg-gray-50 hover:text-gray-800"
-            color="default"
             onClick={() => setCollapsed(true)}
             shape="square"
             size="large"
@@ -483,7 +482,6 @@ function MenuHeader({ logo, collapsedLogo, className }: MenuHeaderProps) {
               <IconButton
                 aria-label="Expandir menu"
                 className="text-gray-600 hover:bg-gray-50 hover:text-gray-800"
-                color="default"
                 onClick={() => setCollapsed(false)}
                 shape="square"
                 size="large"

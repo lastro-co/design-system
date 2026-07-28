@@ -1,25 +1,28 @@
+import { Slot } from "@radix-ui/react-slot";
 import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { forwardRef } from "react";
 import { cn } from "@/lib/utils";
+import { LoaderCircleIcon } from "../../icons.v2";
 
 const iconButtonVariants = cva(
-  "inline-flex cursor-pointer items-center justify-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-600",
+  "[&_svg]:!size-4 inline-flex shrink-0 cursor-pointer items-center justify-center outline-none ring-0 transition-all duration-200 ease-out focus-visible:ring-2 focus-visible:ring-purple-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-45 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       size: {
         small: "size-8",
-        medium: "size-9",
-        large: "size-11",
+        medium: "size-10",
+        large: "size-12",
       },
       shape: {
         circular: "rounded-full",
-        square: "rounded-md",
+        square: "",
       },
       color: {
-        default: "",
         purple: "",
+        error: "",
+        black: "",
       },
       variant: {
         outlined: "border",
@@ -28,45 +31,80 @@ const iconButtonVariants = cva(
       },
     },
     compoundVariants: [
-      // Default variants
-      {
-        variant: "contained",
-        color: "default",
-        class: "bg-gray-300 hover:bg-gray-200",
-      },
-      {
-        variant: "outlined",
-        color: "default",
-        class:
-          "border-gray-300 bg-white hover:border-purple-100 hover:bg-purple-100",
-      },
       // purple variants
       {
         variant: "contained",
         color: "purple",
-        class: "bg-purple-800 hover:bg-purple-600",
+        class:
+          "bg-purple-800 text-white hover:bg-purple-900 active:bg-purple-950 disabled:bg-gray-300",
       },
       {
         variant: "outlined",
         color: "purple",
         class:
-          "border-purple-800 bg-white hover:border-purple-100 hover:bg-purple-100",
-      },
-      // Ghost variants
-      {
-        variant: "ghost",
-        color: "default",
-        class: "text-gray-900 hover:bg-gray-100",
+          "border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-50 disabled:border-gray-300 disabled:bg-white",
       },
       {
         variant: "ghost",
         color: "purple",
-        class: "text-purple-800 hover:bg-purple-50",
+        class: "text-purple-800 hover:bg-purple-50 active:bg-purple-50",
+      },
+      // black variants
+      {
+        variant: "contained",
+        color: "black",
+        class:
+          "bg-gray-700 text-white hover:bg-gray-900 active:bg-gray-900 disabled:bg-gray-300",
+      },
+      {
+        variant: "outlined",
+        color: "black",
+        class:
+          "border-gray-900 bg-white text-gray-900 hover:bg-gray-300 active:bg-gray-300 disabled:border-gray-300 disabled:bg-white",
+      },
+      {
+        variant: "ghost",
+        color: "black",
+        class: "text-gray-900 hover:bg-gray-100 active:bg-gray-100",
+      },
+      // error variants
+      {
+        variant: "contained",
+        color: "error",
+        class:
+          "bg-red-600 text-white hover:bg-red-800 active:bg-red-800 disabled:bg-gray-300",
+      },
+      {
+        variant: "outlined",
+        color: "error",
+        class:
+          "border-red-800 bg-white text-red-600 hover:bg-red-50 active:bg-red-50 disabled:border-gray-300 disabled:bg-white",
+      },
+      {
+        variant: "ghost",
+        color: "error",
+        class: "text-red-600 hover:bg-red-50 active:bg-red-50",
+      },
+      // square radius scales with size
+      {
+        shape: "square",
+        size: "small",
+        class: "rounded-lg",
+      },
+      {
+        shape: "square",
+        size: "medium",
+        class: "rounded-[10px]",
+      },
+      {
+        shape: "square",
+        size: "large",
+        class: "rounded-xl",
       },
     ],
     defaultVariants: {
       variant: "outlined",
-      color: "default",
+      color: "black",
       size: "medium",
       shape: "square",
     },
@@ -78,6 +116,7 @@ export interface IconButtonProps
     VariantProps<typeof iconButtonVariants> {
   children: ReactNode;
   loading?: boolean;
+  asChild?: boolean;
   "aria-label": string;
 }
 
@@ -89,42 +128,50 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
       shape,
       color,
       variant,
-      loading,
+      loading = false,
+      asChild = false,
       children,
       disabled,
       type = "button",
+      onClick,
       ...props
     },
     ref
   ) => {
-    const getSpinnerSize = () => {
-      if (size === "small") {
-        return "16px";
-      }
-      return "20px";
-    };
+    if (asChild) {
+      return (
+        <Slot
+          className={cn(
+            iconButtonVariants({ size, shape, color, variant, className })
+          )}
+          data-slot="icon-button"
+          ref={ref}
+          {...props}
+        >
+          {children}
+        </Slot>
+      );
+    }
 
-    const spinnerSize = getSpinnerSize();
+    const blockedByLoading = loading && !disabled;
 
     return (
       <button
+        aria-busy={loading || undefined}
+        aria-disabled={blockedByLoading ? true : undefined}
         className={cn(
-          iconButtonVariants({ size, shape, color, variant }),
-          className
+          iconButtonVariants({ size, shape, color, variant, className }),
+          blockedByLoading && "pointer-events-none"
         )}
-        disabled={disabled || loading}
+        data-slot="icon-button"
+        disabled={disabled}
+        onClick={blockedByLoading ? undefined : onClick}
         ref={ref}
         type={type}
         {...props}
       >
         {loading ? (
-          <div
-            className="animate-spin rounded-full border-2 border-current border-t-transparent"
-            style={{
-              width: spinnerSize,
-              height: spinnerSize,
-            }}
-          />
+          <LoaderCircleIcon className="size-4 animate-spin" role="status" />
         ) : (
           children
         )}
