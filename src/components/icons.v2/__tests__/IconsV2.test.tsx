@@ -14,15 +14,19 @@ import {
   CornerUpRightIcon,
   CrownIcon,
   DollarSignIcon,
+  DownloadIcon,
   EyeIcon,
   FileTextIcon,
   FlameIcon,
+  ForwardIcon,
   GraduationCapIcon,
   HelpCircleIcon,
   HomeIcon,
   ImageIcon,
+  LinkIcon,
   ListIcon,
   MegaphoneIcon,
+  MessageCircleIcon,
   MessageSquareIcon,
   PaperclipIcon,
   PinIcon,
@@ -34,6 +38,7 @@ import {
   StarIcon,
   TrashIcon,
   UserCheckIcon,
+  UserIcon,
   UsersIcon,
   VideoIcon,
   ZapIcon,
@@ -58,15 +63,19 @@ const LUCIDE_ICONS = [
   ["CornerUpRightIcon", CornerUpRightIcon],
   ["CrownIcon", CrownIcon],
   ["DollarSignIcon", DollarSignIcon],
+  ["DownloadIcon", DownloadIcon],
   ["EyeIcon", EyeIcon],
   ["FileTextIcon", FileTextIcon],
   ["FlameIcon", FlameIcon],
+  ["ForwardIcon", ForwardIcon],
   ["GraduationCapIcon", GraduationCapIcon],
   ["HelpCircleIcon", HelpCircleIcon],
   ["HomeIcon", HomeIcon],
   ["ImageIcon", ImageIcon],
+  ["LinkIcon", LinkIcon],
   ["ListIcon", ListIcon],
   ["MegaphoneIcon", MegaphoneIcon],
+  ["MessageCircleIcon", MessageCircleIcon],
   ["MessageSquareIcon", MessageSquareIcon],
   ["PaperclipIcon", PaperclipIcon],
   ["PinIcon", PinIcon],
@@ -77,6 +86,7 @@ const LUCIDE_ICONS = [
   ["SquarePenIcon", SquarePenIcon],
   ["StarIcon", StarIcon],
   ["TrashIcon", TrashIcon],
+  ["UserIcon", UserIcon],
   ["UsersIcon", UsersIcon],
   ["UserCheckIcon", UserCheckIcon],
   ["VideoIcon", VideoIcon],
@@ -97,7 +107,7 @@ describe("icons.v2 — Lucide icons", () => {
     );
   });
 
-  it("all 37 lucide icons render without crashing", () => {
+  it("all 42 lucide icons render without crashing", () => {
     const { container } = render(
       <div>
         {LUCIDE_ICONS.map(([name, Icon]) => (
@@ -106,7 +116,7 @@ describe("icons.v2 — Lucide icons", () => {
       </div>
     );
     const svgs = container.querySelectorAll("svg");
-    expect(svgs).toHaveLength(37);
+    expect(svgs).toHaveLength(42);
   });
 
   it("icons accept className prop", () => {
