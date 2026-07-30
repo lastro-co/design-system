@@ -113,12 +113,26 @@
 
 @utility link {
   color: var(--color-purple-800);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-sm);
+  line-height: calc(var(--spacing) * 5);
 
   &:hover {
     text-decoration-line: underline;
+    text-decoration-color: var(--color-purple-800);
   }
 
   &:active {
     text-decoration-line: underline;
+    text-decoration-color: var(--color-purple-800);
+  }
+
+  &[aria-disabled="true"] {
+    color: var(--color-gray-600);
+
+    &:hover,
+    &:active {
+      text-decoration-color: var(--color-gray-600);
+    }
   }
 }
