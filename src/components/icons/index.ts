@@ -18,6 +18,7 @@ export { ChatAlertIcon } from "./ChatAlertIcon";
 export { ChatBubbleIcon } from "./ChatBubbleIcon";
 export { ChatBubbleOutlineIcon } from "./ChatBubbleOutlineIcon";
 export { CheckBoxIcon } from "./CheckBoxIcon";
+export { CheckDoubleIcon } from "./CheckDoubleIcon";
 export { CheckIcon } from "./CheckIcon";
 export { CheckIconCircle } from "./CheckIconCircle";
 export { ChevronDownIcon } from "./ChevronDownIcon";
