@@ -233,7 +233,6 @@ function DialogContent({
             <IconButton
               aria-label="Close"
               className="absolute top-4 right-4"
-              color="purple"
               shape="circular"
               size="small"
               variant="ghost"
