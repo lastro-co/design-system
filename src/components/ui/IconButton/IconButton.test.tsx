@@ -37,7 +37,7 @@ describe("IconButton", () => {
     );
 
     rerender(
-      <IconButton aria-label="Close" size="large" variant="contained">
+      <IconButton aria-label="Close" size="large" variant="default">
         <CloseIcon />
       </IconButton>
     );
@@ -118,7 +118,7 @@ describe("IconButton", () => {
 
   it("applies active and focus-visible classes", () => {
     render(
-      <IconButton aria-label="Close" variant="contained">
+      <IconButton aria-label="Close" variant="default">
         <CloseIcon />
       </IconButton>
     );
@@ -134,7 +134,7 @@ describe("IconButton", () => {
 
   it("applies a distinct disabled style per variant", () => {
     const { rerender } = render(
-      <IconButton aria-label="Close" disabled variant="contained">
+      <IconButton aria-label="Close" disabled variant="default">
         <CloseIcon />
       </IconButton>
     );
@@ -243,9 +243,9 @@ describe("IconButton", () => {
     );
 
     // Test variant classes
-    expect(iconButtonVariants({ variant: "contained" })).toContain("border-0");
+    expect(iconButtonVariants({ variant: "default" })).toContain("border-0");
     expect(iconButtonVariants({ variant: "outline" })).toContain("border");
-    expect(iconButtonVariants({ variant: "contained" })).toContain(
+    expect(iconButtonVariants({ variant: "default" })).toContain(
       "bg-purple-800"
     );
     expect(iconButtonVariants({ variant: "outline" })).toContain(

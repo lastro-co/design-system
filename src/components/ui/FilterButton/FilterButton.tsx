@@ -89,7 +89,7 @@ export const FilterButton = forwardRef<HTMLButtonElement, FilterButtonProps>(
         disabled={disabled}
         ref={ref}
         size="small"
-        variant="outlined"
+        variant="outline"
         {...props}
       >
         {labelPosition === "left" ? (

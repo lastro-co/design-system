@@ -20,7 +20,7 @@ const iconButtonVariants = cva(
         square: "",
       },
       variant: {
-        contained:
+        default:
           "border-0 bg-purple-800 text-white hover:bg-purple-900 active:bg-purple-950 disabled:bg-gray-300",
         outline:
           "border border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-50 disabled:border-gray-300 disabled:bg-white",

@@ -126,7 +126,7 @@ function AlertDialogDescription({
 
 function AlertDialogAction({
   className,
-  variant = "contained",
+  variant = "default",
   size = "medium",
   loading,
   disabled,
@@ -155,7 +155,7 @@ function AlertDialogAction({
 
 function AlertDialogCancel({
   className,
-  variant = "outlined",
+  variant = "outline",
   size = "medium",
   disabled,
   children,
@@ -205,8 +205,8 @@ function AlertDialog({
   description,
   cancelText = "Cancel",
   actionText = "Confirm",
-  cancelVariant = "outlined",
-  actionVariant = "contained",
+  cancelVariant = "outline",
+  actionVariant = "default",
   cancelSize = "medium",
   actionSize = "medium",
   cancelDisabled = false,

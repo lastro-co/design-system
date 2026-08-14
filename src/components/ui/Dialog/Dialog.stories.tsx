@@ -41,8 +41,8 @@ const meta: Meta<typeof Dialog> = {
     cancelVariant: {
       control: "select",
       options: [
-        "contained",
-        "outlined",
+        "default",
+        "outline",
         "ghost",
         "link",
         "destructive",
@@ -54,8 +54,8 @@ const meta: Meta<typeof Dialog> = {
     actionVariant: {
       control: "select",
       options: [
-        "contained",
-        "outlined",
+        "default",
+        "outline",
         "ghost",
         "link",
         "destructive",
@@ -137,19 +137,19 @@ export const Docs: Story = {
             description="Este dialog possui um footer totalmente customizado."
             footer={
               <>
-                <Button size="medium" variant="outlined">
+                <Button size="medium" variant="outline">
                   Opção 1
                 </Button>
-                <Button size="medium" variant="outlined">
+                <Button size="medium" variant="outline">
                   Opção 2
                 </Button>
-                <Button size="medium" variant="contained">
+                <Button size="medium" variant="default">
                   Opção 3
                 </Button>
               </>
             }
             title="Dialog com Footer Customizado"
-            trigger={<Button variant="outlined">Footer customizado</Button>}
+            trigger={<Button variant="outline">Footer customizado</Button>}
           >
             <p>Dialog com múltiplos botões customizados no footer.</p>
           </Dialog>
@@ -160,7 +160,7 @@ export const Docs: Story = {
           <Dialog
             description="Dialog sem botões no footer."
             title="Dialog Simples"
-            trigger={<Button variant="outlined">Sem botões</Button>}
+            trigger={<Button variant="outline">Sem botões</Button>}
           >
             <p>Este dialog não possui botões de ação no footer.</p>
           </Dialog>
@@ -187,9 +187,9 @@ export const Docs: Story = {
               </div>
               <DialogFooter>
                 <DialogClose asChild>
-                  <Button variant="outlined">Fechar</Button>
+                  <Button variant="outline">Fechar</Button>
                 </DialogClose>
-                <Button variant="contained">Salvar</Button>
+                <Button variant="default">Salvar</Button>
               </DialogFooter>
             </DialogContent>
           </DialogRoot>

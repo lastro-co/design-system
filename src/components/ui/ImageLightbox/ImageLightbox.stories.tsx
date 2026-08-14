@@ -66,7 +66,7 @@ function CustomizedDemo() {
       <ImageLightbox
         alt="Casa com jardim"
         closeButton={
-          <IconButton aria-label="Fechar" variant="contained">
+          <IconButton aria-label="Fechar" variant="default">
             <CloseIcon className="size-5" />
           </IconButton>
         }

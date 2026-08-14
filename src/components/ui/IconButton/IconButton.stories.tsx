@@ -25,7 +25,7 @@ const meta: Meta<typeof IconButton> = {
     },
     variant: {
       control: "select",
-      options: ["contained", "outline", "ghost", "destructive"],
+      options: ["default", "outline", "ghost", "destructive"],
       description: "IconButton visual style variant",
     },
     loading: {
@@ -71,7 +71,7 @@ export const AsChild = {
   ),
 };
 
-const VARIANTS = ["contained", "outline", "ghost", "destructive"] as const;
+const VARIANTS = ["default", "outline", "ghost", "destructive"] as const;
 
 export const AllVariants = {
   render: () => (
@@ -106,9 +106,7 @@ export const AllVariants = {
                 key={`${variant}-default`}
                 variant={variant}
               >
-                <PlusIcon
-                  color={variant === "contained" ? "white" : undefined}
-                />
+                <PlusIcon color={variant === "default" ? "white" : undefined} />
               </IconButton>
               <IconButton
                 aria-label={`${variant} disabled`}
@@ -116,9 +114,7 @@ export const AllVariants = {
                 key={`${variant}-disabled`}
                 variant={variant}
               >
-                <PlusIcon
-                  color={variant === "contained" ? "white" : undefined}
-                />
+                <PlusIcon color={variant === "default" ? "white" : undefined} />
               </IconButton>
               <IconButton
                 aria-label={`${variant} loading`}
@@ -126,9 +122,7 @@ export const AllVariants = {
                 loading
                 variant={variant}
               >
-                <PlusIcon
-                  color={variant === "contained" ? "white" : undefined}
-                />
+                <PlusIcon color={variant === "default" ? "white" : undefined} />
               </IconButton>
             </>
           ))}

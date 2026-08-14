@@ -39,7 +39,7 @@ export function ToggleButtonGroup<T extends string>({
             onClick={() => onValueChange(option.value)}
             size="small"
             type="button"
-            variant={isSelected ? "contained" : "outlined"}
+            variant={isSelected ? "default" : "outline"}
           >
             {option.label}
           </Button>

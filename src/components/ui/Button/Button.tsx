@@ -10,9 +10,9 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        contained:
+        default:
           "bg-purple-800 text-white hover:bg-purple-900 active:bg-purple-950 disabled:bg-gray-300",
-        outlined:
+        outline:
           "border border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-50 disabled:border-gray-300 disabled:bg-white",
         ghost: "text-purple-800 hover:bg-purple-50 active:bg-purple-50",
         link: "text-purple-800 hover:underline active:underline disabled:text-gray-600",
@@ -36,7 +36,7 @@ const buttonVariants = cva(
       },
     ],
     defaultVariants: {
-      variant: "contained",
+      variant: "default",
       size: "medium",
     },
   }

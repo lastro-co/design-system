@@ -13,8 +13,8 @@ const meta: Meta<typeof Button> = {
     variant: {
       control: "select",
       options: [
-        "contained",
-        "outlined",
+        "default",
+        "outline",
         "ghost",
         "link",
         "destructive",
@@ -157,8 +157,8 @@ export const Loading = {
 };
 
 const VARIANTS = [
-  "contained",
-  "outlined",
+  "default",
+  "outline",
   "ghost",
   "link",
   "destructive",

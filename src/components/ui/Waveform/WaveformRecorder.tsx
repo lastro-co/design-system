@@ -118,7 +118,7 @@ export function WaveformRecorder({
         onClick={handleSend}
         shape="circular"
         size="small"
-        variant="contained"
+        variant="default"
       >
         {loading ? (
           <Spinner color="purple-800" size="md" />

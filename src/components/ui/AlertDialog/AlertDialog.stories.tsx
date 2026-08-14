@@ -30,8 +30,8 @@ const meta: Meta<typeof AlertDialog> = {
     cancelVariant: {
       control: "select",
       options: [
-        "contained",
-        "outlined",
+        "default",
+        "outline",
         "ghost",
         "link",
         "destructive",
@@ -43,8 +43,8 @@ const meta: Meta<typeof AlertDialog> = {
     actionVariant: {
       control: "select",
       options: [
-        "contained",
-        "outlined",
+        "default",
+        "outline",
         "ghost",
         "link",
         "destructive",

@@ -48,12 +48,12 @@ describe("Button", () => {
   });
 
   it("applies a distinct disabled style per variant", () => {
-    const { rerender } = render(<Button variant="contained">Contained</Button>);
+    const { rerender } = render(<Button variant="default">Default</Button>);
 
     let button = screen.getByRole("button");
     expect(button).toHaveClass("disabled:bg-gray-300", "disabled:opacity-45");
 
-    rerender(<Button variant="outlined">Outlined</Button>);
+    rerender(<Button variant="outline">Outline</Button>);
     button = screen.getByRole("button");
     expect(button).toHaveClass("disabled:border-gray-300", "disabled:bg-white");
 
@@ -134,7 +134,7 @@ describe("Button", () => {
   it("exports buttonVariants with correct classes per variant", () => {
     expect(buttonVariants).toBeDefined();
 
-    expect(buttonVariants({ variant: "contained" })).toContain("bg-purple-800");
+    expect(buttonVariants({ variant: "default" })).toContain("bg-purple-800");
     expect(buttonVariants({ variant: "destructive" })).toContain("bg-red-600");
     expect(buttonVariants({ size: "small" })).toContain("h-8");
   });

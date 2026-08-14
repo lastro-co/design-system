@@ -103,7 +103,7 @@ export function CopyButton({
           aria-label="Copy to clipboard"
           className={cn(
             iconButtonVariants({
-              variant: "contained",
+              variant: "default",
               size: "small",
               shape: "square",
             }),
@@ -133,7 +133,7 @@ export function CopyButton({
             handleCopy();
           }}
           shape="square"
-          variant="contained"
+          variant="default"
         >
           {iconElement}
         </IconButton>

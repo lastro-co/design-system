@@ -52,7 +52,7 @@ export function MonthYearPicker({
   return (
     <Popover onOpenChange={handleOpenChange} open={open}>
       <PopoverTrigger asChild>
-        <Button size={size} variant="outlined">
+        <Button size={size} variant="outline">
           {MONTHS_PT_BR[month - 1]}, {year}
           <ChevronDownIcon className="size-5 text-purple-600" />
         </Button>
