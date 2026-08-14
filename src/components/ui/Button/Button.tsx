@@ -10,15 +10,16 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        contained: "",
-        outlined: "border",
-        ghost: "",
-        link: "",
-      },
-      color: {
-        purple: "",
-        error: "",
-        black: "",
+        contained:
+          "bg-purple-800 text-white hover:bg-purple-900 active:bg-purple-950 disabled:bg-gray-300",
+        outlined:
+          "border border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-50 disabled:border-gray-300 disabled:bg-white",
+        ghost: "text-purple-800 hover:bg-purple-50 active:bg-purple-50",
+        link: "text-purple-800 hover:underline active:underline disabled:text-gray-600",
+        destructive:
+          "bg-red-600 text-white hover:bg-red-800 active:bg-red-800 disabled:bg-gray-300",
+        "ghost-destructive": "text-red-600 hover:bg-red-50 active:bg-red-50",
+        dark: "bg-gray-700 text-white hover:bg-gray-900 active:bg-gray-900 disabled:bg-gray-300",
       },
       size: {
         small: "h-8 px-3 py-1 text-[13px] leading-[18px] has-[>svg]:px-2.5",
@@ -27,56 +28,6 @@ const buttonVariants = cva(
       },
     },
     compoundVariants: [
-      // purple variants
-      {
-        variant: "contained",
-        color: "purple",
-        class:
-          "bg-purple-800 text-white hover:bg-purple-900 active:bg-purple-950 disabled:bg-gray-300",
-      },
-      {
-        variant: "outlined",
-        color: "purple",
-        class:
-          "border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-50 disabled:border-gray-300 disabled:bg-white",
-      },
-      {
-        variant: "ghost",
-        color: "purple",
-        class: "text-purple-800 hover:bg-purple-50 active:bg-purple-50",
-      },
-      {
-        variant: "link",
-        color: "purple",
-        class:
-          "text-purple-800 hover:underline active:underline disabled:text-gray-600",
-      },
-      // Error variants
-      {
-        variant: "contained",
-        color: "error",
-        class:
-          "bg-red-600 text-white hover:bg-red-800 active:bg-red-800 disabled:bg-gray-300",
-      },
-      {
-        variant: "outlined",
-        color: "error",
-        class:
-          "border-red-800 bg-white text-red-800 hover:bg-red-50 active:bg-red-50 disabled:border-gray-300 disabled:bg-white",
-      },
-      // Black variants
-      {
-        variant: "contained",
-        color: "black",
-        class:
-          "bg-gray-700 text-white hover:bg-gray-900 active:bg-gray-900 disabled:bg-gray-300",
-      },
-      {
-        variant: "outlined",
-        color: "black",
-        class:
-          "border-gray-900 bg-white text-gray-900 hover:bg-gray-300 active:bg-gray-300 disabled:border-gray-300 disabled:bg-white",
-      },
       // Link ignores size-driven height/padding — dimension follows content
       {
         variant: "link",
@@ -86,7 +37,6 @@ const buttonVariants = cva(
     ],
     defaultVariants: {
       variant: "contained",
-      color: "purple",
       size: "medium",
     },
   }
@@ -105,7 +55,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       className,
       variant,
       size,
-      color,
       loading = false,
       asChild = false,
       children,
@@ -119,7 +68,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     if (asChild) {
       return (
         <Slot
-          className={cn(buttonVariants({ variant, size, color, className }))}
+          className={cn(buttonVariants({ variant, size, className }))}
           data-slot="button"
           ref={ref}
           {...props}
@@ -136,7 +85,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         aria-busy={loading || undefined}
         aria-disabled={blockedByLoading ? true : undefined}
         className={cn(
-          buttonVariants({ variant, size, color, className }),
+          buttonVariants({ variant, size, className }),
           blockedByLoading && "pointer-events-none"
         )}
         data-slot="button"

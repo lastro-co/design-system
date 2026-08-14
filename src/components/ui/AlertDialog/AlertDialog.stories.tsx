@@ -27,24 +27,30 @@ const meta: Meta<typeof AlertDialog> = {
       control: "text",
       description: "Texto do botão de ação",
     },
-    cancelColor: {
-      control: "select",
-      options: ["purple", "error", "black"],
-      description: "Cor do botão cancelar",
-    },
-    actionColor: {
-      control: "select",
-      options: ["purple", "error", "black"],
-      description: "Cor do botão de ação",
-    },
     cancelVariant: {
       control: "select",
-      options: ["contained", "outlined"],
+      options: [
+        "contained",
+        "outlined",
+        "ghost",
+        "link",
+        "destructive",
+        "ghost-destructive",
+        "dark",
+      ],
       description: "Variante do botão cancelar",
     },
     actionVariant: {
       control: "select",
-      options: ["contained", "outlined"],
+      options: [
+        "contained",
+        "outlined",
+        "ghost",
+        "link",
+        "destructive",
+        "ghost-destructive",
+        "dark",
+      ],
       description: "Variante do botão de ação",
     },
     cancelSize: {

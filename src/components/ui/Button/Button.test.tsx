@@ -11,17 +11,17 @@ describe("Button", () => {
     expect(button).toHaveClass("bg-purple-800", "h-10", "px-4");
 
     rerender(
-      <Button color="error" size="small" variant="outlined">
-        Small Outlined Error
+      <Button size="small" variant="destructive">
+        Small Destructive
       </Button>
     );
 
     button = screen.getByRole("button");
-    expect(button).toHaveClass("border-red-800", "h-8", "px-3");
+    expect(button).toHaveClass("bg-red-600", "h-8", "px-3");
 
     rerender(
-      <Button color="black" size="large">
-        Large Black
+      <Button size="large" variant="dark">
+        Large Dark
       </Button>
     );
 
@@ -29,11 +29,16 @@ describe("Button", () => {
     expect(button).toHaveClass("bg-gray-700", "h-11", "px-6");
   });
 
-  it("renders ghost and link variants", () => {
+  it("renders ghost, ghost-destructive and link variants", () => {
     const { rerender } = render(<Button variant="ghost">Ghost</Button>);
 
     let button = screen.getByRole("button");
     expect(button).toHaveClass("text-purple-800", "hover:bg-purple-50");
+
+    rerender(<Button variant="ghost-destructive">Ghost Destructive</Button>);
+
+    button = screen.getByRole("button");
+    expect(button).toHaveClass("text-red-600", "hover:bg-red-50");
 
     rerender(<Button variant="link">Link</Button>);
 
@@ -60,6 +65,14 @@ describe("Button", () => {
     button = screen.getByRole("button");
     expect(button).toHaveClass("disabled:text-gray-600");
     expect(button).not.toHaveClass("disabled:bg-gray-300");
+
+    rerender(<Button variant="destructive">Destructive</Button>);
+    button = screen.getByRole("button");
+    expect(button).toHaveClass("disabled:bg-gray-300");
+
+    rerender(<Button variant="dark">Dark</Button>);
+    button = screen.getByRole("button");
+    expect(button).toHaveClass("disabled:bg-gray-300");
   });
 
   it("applies active and focus-visible classes", () => {
@@ -118,15 +131,11 @@ describe("Button", () => {
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
-  it("exports buttonVariants with correct compound variants", () => {
+  it("exports buttonVariants with correct classes per variant", () => {
     expect(buttonVariants).toBeDefined();
 
-    expect(buttonVariants({ variant: "contained", color: "purple" })).toContain(
-      "bg-purple-800"
-    );
-    expect(buttonVariants({ variant: "outlined", color: "error" })).toContain(
-      "border-red-800"
-    );
+    expect(buttonVariants({ variant: "contained" })).toContain("bg-purple-800");
+    expect(buttonVariants({ variant: "destructive" })).toContain("bg-red-600");
     expect(buttonVariants({ size: "small" })).toContain("h-8");
   });
 
