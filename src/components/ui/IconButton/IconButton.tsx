@@ -19,72 +19,18 @@ const iconButtonVariants = cva(
         circular: "rounded-full",
         square: "",
       },
-      color: {
-        purple: "",
-        error: "",
-        black: "",
-      },
       variant: {
-        outlined: "border",
-        contained: "border-0",
-        ghost: "border border-transparent bg-transparent",
+        contained:
+          "border-0 bg-purple-800 text-white hover:bg-purple-900 active:bg-purple-950 disabled:bg-gray-300",
+        outline:
+          "border border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-50 disabled:border-gray-300 disabled:bg-white",
+        ghost:
+          "border border-transparent bg-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-800 active:bg-gray-50 active:text-gray-800",
+        destructive:
+          "border-0 bg-white text-red-600 hover:bg-red-50 hover:text-red-800 active:bg-red-50 active:text-red-800",
       },
     },
     compoundVariants: [
-      // purple variants
-      {
-        variant: "contained",
-        color: "purple",
-        class:
-          "bg-purple-800 text-white hover:bg-purple-900 active:bg-purple-950 disabled:bg-gray-300",
-      },
-      {
-        variant: "outlined",
-        color: "purple",
-        class:
-          "border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-50 disabled:border-gray-300 disabled:bg-white",
-      },
-      {
-        variant: "ghost",
-        color: "purple",
-        class: "text-purple-800 hover:bg-purple-50 active:bg-purple-50",
-      },
-      // black variants
-      {
-        variant: "contained",
-        color: "black",
-        class:
-          "bg-gray-700 text-white hover:bg-gray-900 active:bg-gray-900 disabled:bg-gray-300",
-      },
-      {
-        variant: "outlined",
-        color: "black",
-        class:
-          "border-gray-900 bg-white text-gray-900 hover:bg-gray-300 active:bg-gray-300 disabled:border-gray-300 disabled:bg-white",
-      },
-      {
-        variant: "ghost",
-        color: "black",
-        class: "text-gray-900 hover:bg-gray-100 active:bg-gray-100",
-      },
-      // error variants
-      {
-        variant: "contained",
-        color: "error",
-        class:
-          "bg-red-600 text-white hover:bg-red-800 active:bg-red-800 disabled:bg-gray-300",
-      },
-      {
-        variant: "outlined",
-        color: "error",
-        class:
-          "border-red-800 bg-white text-red-600 hover:bg-red-50 active:bg-red-50 disabled:border-gray-300 disabled:bg-white",
-      },
-      {
-        variant: "ghost",
-        color: "error",
-        class: "text-red-600 hover:bg-red-50 active:bg-red-50",
-      },
       // square radius scales with size
       {
         shape: "square",
@@ -103,8 +49,7 @@ const iconButtonVariants = cva(
       },
     ],
     defaultVariants: {
-      variant: "outlined",
-      color: "black",
+      variant: "outline",
       size: "medium",
       shape: "square",
     },
@@ -126,7 +71,6 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
       className,
       size,
       shape,
-      color,
       variant,
       loading = false,
       asChild = false,
@@ -142,7 +86,7 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
       return (
         <Slot
           className={cn(
-            iconButtonVariants({ size, shape, color, variant, className })
+            iconButtonVariants({ size, shape, variant, className })
           )}
           data-slot="icon-button"
           ref={ref}
@@ -160,7 +104,7 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
         aria-busy={loading || undefined}
         aria-disabled={blockedByLoading ? true : undefined}
         className={cn(
-          iconButtonVariants({ size, shape, color, variant, className }),
+          iconButtonVariants({ size, shape, variant, className }),
           blockedByLoading && "pointer-events-none"
         )}
         data-slot="icon-button"

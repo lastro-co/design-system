@@ -19,10 +19,9 @@ describe("IconButton", () => {
     const { rerender } = render(
       <IconButton
         aria-label="Close"
-        color="purple"
         shape="circular"
         size="small"
-        variant="outlined"
+        variant="outline"
       >
         <CloseIcon />
       </IconButton>
@@ -38,18 +37,13 @@ describe("IconButton", () => {
     );
 
     rerender(
-      <IconButton
-        aria-label="Close"
-        color="black"
-        size="large"
-        variant="contained"
-      >
+      <IconButton aria-label="Close" size="large" variant="contained">
         <CloseIcon />
       </IconButton>
     );
 
     button = screen.getByRole("button");
-    expect(button).toHaveClass("size-12", "border-0", "bg-gray-700");
+    expect(button).toHaveClass("size-12", "border-0", "bg-purple-800");
 
     rerender(
       <IconButton aria-label="Close" shape="square" size="medium">
@@ -90,29 +84,41 @@ describe("IconButton", () => {
     expect(button).toHaveClass("rounded-xl");
   });
 
-  it("renders the error color for outlined and ghost variants", () => {
-    const { rerender } = render(
-      <IconButton aria-label="Delete" color="error" variant="outlined">
+  it("renders the destructive variant", () => {
+    render(
+      <IconButton aria-label="Delete" variant="destructive">
         <CloseIcon />
       </IconButton>
     );
 
-    let button = screen.getByRole("button");
-    expect(button).toHaveClass("text-red-600", "hover:bg-red-50");
+    const button = screen.getByRole("button");
+    expect(button).toHaveClass(
+      "bg-white",
+      "text-red-600",
+      "hover:bg-red-50",
+      "hover:text-red-800"
+    );
+  });
 
-    rerender(
-      <IconButton aria-label="Delete" color="error" variant="ghost">
+  it("renders the ghost variant", () => {
+    render(
+      <IconButton aria-label="Close" variant="ghost">
         <CloseIcon />
       </IconButton>
     );
 
-    button = screen.getByRole("button");
-    expect(button).toHaveClass("text-red-600", "hover:bg-red-50");
+    const button = screen.getByRole("button");
+    expect(button).toHaveClass(
+      "bg-transparent",
+      "text-gray-600",
+      "hover:bg-gray-50",
+      "hover:text-gray-800"
+    );
   });
 
   it("applies active and focus-visible classes", () => {
     render(
-      <IconButton aria-label="Close" color="purple" variant="contained">
+      <IconButton aria-label="Close" variant="contained">
         <CloseIcon />
       </IconButton>
     );
@@ -138,7 +144,7 @@ describe("IconButton", () => {
     expect(button).toHaveClass("disabled:bg-gray-300", "disabled:opacity-45");
 
     rerender(
-      <IconButton aria-label="Close" disabled variant="outlined">
+      <IconButton aria-label="Close" disabled variant="outline">
         <CloseIcon />
       </IconButton>
     );
@@ -236,20 +242,21 @@ describe("IconButton", () => {
       "rounded-xl"
     );
 
-    // Test variant combinations
+    // Test variant classes
     expect(iconButtonVariants({ variant: "contained" })).toContain("border-0");
-    expect(iconButtonVariants({ variant: "outlined" })).toContain("border");
-
-    // Test compound variants
-    expect(
-      iconButtonVariants({ variant: "contained", color: "black" })
-    ).toContain("bg-gray-700");
-    expect(
-      iconButtonVariants({ variant: "outlined", color: "purple" })
-    ).toContain("border-gray-300");
-    expect(
-      iconButtonVariants({ variant: "contained", color: "purple" })
-    ).toContain("bg-purple-800");
+    expect(iconButtonVariants({ variant: "outline" })).toContain("border");
+    expect(iconButtonVariants({ variant: "contained" })).toContain(
+      "bg-purple-800"
+    );
+    expect(iconButtonVariants({ variant: "outline" })).toContain(
+      "border-gray-300"
+    );
+    expect(iconButtonVariants({ variant: "ghost" })).toContain(
+      "bg-transparent"
+    );
+    expect(iconButtonVariants({ variant: "destructive" })).toContain(
+      "text-red-600"
+    );
   });
 
   it("index.ts exports work correctly", () => {

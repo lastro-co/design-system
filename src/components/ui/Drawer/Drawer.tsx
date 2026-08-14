@@ -111,7 +111,6 @@ function DrawerContent({
           <IconButton
             aria-label="Close"
             className="absolute top-6 right-6"
-            color="purple"
             shape="circular"
             size="small"
             variant="ghost"

@@ -83,13 +83,12 @@ export function WaveformRecorder({
 
       <IconButton
         aria-label={isRecording ? "Pausar" : "Continuar gravação"}
-        className="size-[36px] rounded-full border border-gray-300 hover:border-purple-100 hover:bg-purple-50"
-        color="purple"
+        className="size-[36px]"
         disabled={loading}
         onClick={handlePauseResume}
         shape="circular"
         size="small"
-        variant="ghost"
+        variant="outline"
       >
         {isRecording ? (
           <PauseIcon
@@ -114,8 +113,7 @@ export function WaveformRecorder({
 
       <IconButton
         aria-label="Enviar áudio"
-        className="size-[36px] bg-purple-800 hover:bg-purple-900"
-        color="purple"
+        className="size-[36px]"
         disabled={loading || (!isRecording && !isPaused)}
         onClick={handleSend}
         shape="circular"

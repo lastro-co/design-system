@@ -23,14 +23,9 @@ const meta: Meta<typeof IconButton> = {
       options: ["circular", "square"],
       description: "IconButton shape variant",
     },
-    color: {
-      control: "select",
-      options: ["purple", "error", "black"],
-      description: "IconButton color variant",
-    },
     variant: {
       control: "select",
-      options: ["outlined", "contained", "ghost"],
+      options: ["contained", "outline", "ghost", "destructive"],
       description: "IconButton visual style variant",
     },
     loading: {
@@ -76,66 +71,67 @@ export const AsChild = {
   ),
 };
 
+const VARIANTS = ["contained", "outline", "ghost", "destructive"] as const;
+
 export const AllVariants = {
   render: () => (
     <div className="flex flex-col gap-6">
       <div className="space-y-2">
-        <h3 className="font-medium text-lg">black Color</h3>
-        <div className="flex flex-wrap gap-4">
-          <IconButton
-            aria-label="Black Contained"
-            color="black"
-            variant="contained"
-          >
-            <PlusIcon color="white" />
-          </IconButton>
-          <IconButton
-            aria-label="Black Outlined"
-            color="black"
-            variant="outlined"
-          >
-            <PlusIcon />
-          </IconButton>
-          <IconButton aria-label="Black Ghost" color="black" variant="ghost">
-            <PlusIcon />
-          </IconButton>
-        </div>
-      </div>
-      <div className="space-y-2">
-        <h3 className="font-medium text-lg">purple Color</h3>
-        <div className="flex flex-wrap gap-4">
-          <IconButton
-            aria-label="purple Contained"
-            color="purple"
-            variant="contained"
-          >
-            <PlusIcon color="white" />
-          </IconButton>
-          <IconButton
-            aria-label="purple Outlined"
-            color="purple"
-            variant="outlined"
-          >
-            <PlusIcon />
-          </IconButton>
-          <IconButton aria-label="purple Ghost" color="purple" variant="ghost">
-            <PlusIcon />
-          </IconButton>
-        </div>
-      </div>
-      <div className="space-y-2">
-        <h3 className="font-medium text-lg">error Color</h3>
-        <div className="flex flex-wrap gap-4">
-          <IconButton
-            aria-label="Error Outlined"
-            color="error"
-            variant="outlined"
-          >
-            <PlusIcon />
-          </IconButton>
-          <IconButton aria-label="Error Ghost" color="error" variant="ghost">
-            <PlusIcon />
-          </IconButton>
+        <h3 className="font-medium text-lg">Variants × Behaviors</h3>
+        <p className="text-gray-600 text-sm">
+          Hover/active/focus are triggered by interacting with each button —
+          they are not separate rows since they are not controlled via props.
+        </p>
+        <div className="grid grid-cols-[max-content_repeat(3,max-content)] items-center gap-x-8 gap-y-4">
+          <span />
+          <span className="font-medium text-gray-600 text-xs uppercase">
+            Default
+          </span>
+          <span className="font-medium text-gray-600 text-xs uppercase">
+            Disabled
+          </span>
+          <span className="font-medium text-gray-600 text-xs uppercase">
+            Loading
+          </span>
+          {VARIANTS.map((variant) => (
+            <>
+              <span
+                className="font-medium text-gray-900 text-sm capitalize"
+                key={`${variant}-label`}
+              >
+                {variant}
+              </span>
+              <IconButton
+                aria-label={`${variant} default`}
+                key={`${variant}-default`}
+                variant={variant}
+              >
+                <PlusIcon
+                  color={variant === "contained" ? "white" : undefined}
+                />
+              </IconButton>
+              <IconButton
+                aria-label={`${variant} disabled`}
+                disabled
+                key={`${variant}-disabled`}
+                variant={variant}
+              >
+                <PlusIcon
+                  color={variant === "contained" ? "white" : undefined}
+                />
+              </IconButton>
+              <IconButton
+                aria-label={`${variant} loading`}
+                key={`${variant}-loading`}
+                loading
+                variant={variant}
+              >
+                <PlusIcon
+                  color={variant === "contained" ? "white" : undefined}
+                />
+              </IconButton>
+            </>
+          ))}
         </div>
       </div>
       <div className="space-y-2">
@@ -159,20 +155,6 @@ export const AllVariants = {
             <PlusIcon />
           </IconButton>
           <IconButton aria-label="Square" shape="square">
-            <PlusIcon />
-          </IconButton>
-        </div>
-      </div>
-      <div className="space-y-2">
-        <h3 className="font-medium text-lg">States</h3>
-        <div className="flex flex-wrap gap-4">
-          <IconButton aria-label="Normal">
-            <PlusIcon />
-          </IconButton>
-          <IconButton aria-label="Loading" loading>
-            <PlusIcon />
-          </IconButton>
-          <IconButton aria-label="Disabled" disabled>
             <PlusIcon />
           </IconButton>
         </div>
