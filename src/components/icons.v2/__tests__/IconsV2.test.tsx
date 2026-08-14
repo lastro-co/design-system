@@ -9,6 +9,7 @@ import {
   ChevronRightIcon,
   ChevronsUpDownIcon,
   ChevronUpIcon,
+  CircleUserRoundIcon,
   ClipboardIcon,
   Columns3Icon,
   CornerUpRightIcon,
@@ -25,6 +26,7 @@ import {
   ImageIcon,
   LinkIcon,
   ListIcon,
+  MapPinIcon,
   MegaphoneIcon,
   MessageCircleIcon,
   MessageSquareIcon,
@@ -58,6 +60,7 @@ const LUCIDE_ICONS = [
   ["ChevronRightIcon", ChevronRightIcon],
   ["ChevronsUpDownIcon", ChevronsUpDownIcon],
   ["ChevronUpIcon", ChevronUpIcon],
+  ["CircleUserRoundIcon", CircleUserRoundIcon],
   ["ClipboardIcon", ClipboardIcon],
   ["Columns3Icon", Columns3Icon],
   ["CornerUpRightIcon", CornerUpRightIcon],
@@ -74,6 +77,7 @@ const LUCIDE_ICONS = [
   ["ImageIcon", ImageIcon],
   ["LinkIcon", LinkIcon],
   ["ListIcon", ListIcon],
+  ["MapPinIcon", MapPinIcon],
   ["MegaphoneIcon", MegaphoneIcon],
   ["MessageCircleIcon", MessageCircleIcon],
   ["MessageSquareIcon", MessageSquareIcon],
@@ -107,7 +111,7 @@ describe("icons.v2 — Lucide icons", () => {
     );
   });
 
-  it("all 42 lucide icons render without crashing", () => {
+  it("all 44 lucide icons render without crashing", () => {
     const { container } = render(
       <div>
         {LUCIDE_ICONS.map(([name, Icon]) => (
@@ -116,7 +120,7 @@ describe("icons.v2 — Lucide icons", () => {
       </div>
     );
     const svgs = container.querySelectorAll("svg");
-    expect(svgs).toHaveLength(42);
+    expect(svgs).toHaveLength(44);
   });
 
   it("icons accept className prop", () => {
