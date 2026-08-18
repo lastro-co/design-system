@@ -8,25 +8,106 @@ describe("Button", () => {
 
     let button = screen.getByRole("button");
     expect(button).toBeVisible();
-    expect(button).toHaveClass("bg-purple-800", "h-9", "px-6");
+    expect(button).toHaveClass("bg-purple-800", "h-10", "px-4");
 
     rerender(
-      <Button color="error" size="small" variant="outlined">
-        Small Outlined Error
+      <Button size="small" variant="destructive">
+        Small Destructive
       </Button>
     );
 
     button = screen.getByRole("button");
-    expect(button).toHaveClass("border-red-800", "h-8", "p-3");
+    expect(button).toHaveClass("bg-red-600", "h-8", "px-3");
 
     rerender(
-      <Button color="black" size="large">
-        Large Black
+      <Button size="large" variant="dark">
+        Large Dark
       </Button>
     );
 
     button = screen.getByRole("button");
-    expect(button).toHaveClass("bg-gray-900", "h-11", "px-8");
+    expect(button).toHaveClass("bg-gray-700", "h-11", "px-6");
+  });
+
+  it("renders ghost, ghost-destructive and link variants", () => {
+    const { rerender } = render(<Button variant="ghost">Ghost</Button>);
+
+    let button = screen.getByRole("button");
+    expect(button).toHaveClass("text-purple-800", "hover:bg-purple-50");
+
+    rerender(<Button variant="ghost-destructive">Ghost Destructive</Button>);
+
+    button = screen.getByRole("button");
+    expect(button).toHaveClass("text-red-600", "hover:bg-red-50");
+
+    rerender(<Button variant="link">Link</Button>);
+
+    button = screen.getByRole("button");
+    expect(button).toHaveClass("text-purple-800", "hover:underline");
+    expect(button).toHaveClass("h-auto");
+  });
+
+  it("applies a distinct disabled style per variant", () => {
+    const { rerender } = render(<Button variant="default">Default</Button>);
+
+    let button = screen.getByRole("button");
+    expect(button).toHaveClass("disabled:bg-gray-300", "disabled:opacity-45");
+
+    rerender(<Button variant="outline">Outline</Button>);
+    button = screen.getByRole("button");
+    expect(button).toHaveClass("disabled:border-gray-300", "disabled:bg-white");
+
+    rerender(<Button variant="ghost">Ghost</Button>);
+    button = screen.getByRole("button");
+    expect(button).not.toHaveClass("disabled:bg-gray-300");
+
+    rerender(<Button variant="link">Link</Button>);
+    button = screen.getByRole("button");
+    expect(button).toHaveClass(
+      "disabled:text-gray-600",
+      "aria-disabled:text-gray-600"
+    );
+    expect(button).not.toHaveClass("disabled:bg-gray-300");
+
+    rerender(<Button variant="destructive">Destructive</Button>);
+    button = screen.getByRole("button");
+    expect(button).toHaveClass("disabled:bg-gray-300");
+
+    rerender(<Button variant="dark">Dark</Button>);
+    button = screen.getByRole("button");
+    expect(button).toHaveClass("disabled:bg-gray-300");
+  });
+
+  it("applies active and focus-visible classes", () => {
+    render(<Button>Focusable</Button>);
+
+    const button = screen.getByRole("button");
+    expect(button).toHaveClass("active:bg-purple-950");
+    expect(button).toHaveClass(
+      "focus-visible:ring-2",
+      "focus-visible:ring-purple-400",
+      "focus-visible:ring-offset-2"
+    );
+  });
+
+  it("forwards ref to the underlying button element", () => {
+    const ref = { current: null as HTMLButtonElement | null };
+    render(<Button ref={ref}>Ref Button</Button>);
+
+    expect(ref.current).toBeInstanceOf(HTMLButtonElement);
+  });
+
+  it("renders as a child element when asChild is true", () => {
+    render(
+      <Button asChild>
+        <a href="/somewhere">Link Button</a>
+      </Button>
+    );
+
+    const link = screen.getByRole("link", { name: "Link Button" });
+    expect(link.tagName).toBe("A");
+    expect(link).toHaveClass("bg-purple-800");
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 
   it("handles disabled state and click events", async () => {
@@ -53,15 +134,11 @@ describe("Button", () => {
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
-  it("exports buttonVariants with correct compound variants", () => {
+  it("exports buttonVariants with correct classes per variant", () => {
     expect(buttonVariants).toBeDefined();
 
-    expect(buttonVariants({ variant: "contained", color: "purple" })).toContain(
-      "bg-purple-800"
-    );
-    expect(buttonVariants({ variant: "outlined", color: "error" })).toContain(
-      "border-red-800"
-    );
+    expect(buttonVariants({ variant: "default" })).toContain("bg-purple-800");
+    expect(buttonVariants({ variant: "destructive" })).toContain("bg-red-600");
     expect(buttonVariants({ size: "small" })).toContain("h-8");
   });
 
@@ -76,7 +153,9 @@ describe("Button", () => {
     render(<Button loading>Loading Button</Button>);
 
     const button = screen.getByRole("button");
-    expect(button).toBeDisabled();
+    expect(button).not.toBeDisabled();
+    expect(button).toHaveAttribute("aria-busy", "true");
+    expect(button).toHaveAttribute("aria-disabled", "true");
     // Spinner component renders with role="status"
     expect(screen.getByRole("status")).toBeInTheDocument();
     expect(screen.getByRole("status")).toHaveClass("animate-spin");
@@ -87,10 +166,11 @@ describe("Button", () => {
 
     const button = screen.getByRole("button");
     expect(button).not.toBeDisabled();
+    expect(button).not.toHaveAttribute("aria-busy");
     expect(screen.queryByRole("status")).not.toBeInTheDocument();
   });
 
-  it("disables button when loading is true", async () => {
+  it("blocks clicks when loading is true, without applying disabled styles", async () => {
     const handleClick = jest.fn();
     const user = userEvent.setup();
 
@@ -101,31 +181,29 @@ describe("Button", () => {
     );
 
     const button = screen.getByRole("button");
-    expect(button).toBeDisabled();
+    expect(button).not.toBeDisabled();
+    expect(button).toHaveClass("pointer-events-none", "bg-purple-800");
     await user.click(button);
     expect(handleClick).not.toHaveBeenCalled();
   });
 
-  it("renders correct spinner size based on button size", () => {
+  it("uses real disabled attribute (and its styles) when disabled is explicitly set", () => {
+    render(<Button disabled>Disabled</Button>);
+
+    const button = screen.getByRole("button");
+    expect(button).toBeDisabled();
+    expect(button).not.toHaveAttribute("aria-disabled");
+  });
+
+  it("renders the spinner at a fixed size regardless of button size", () => {
     const { rerender } = render(
       <Button loading size="small">
         Small
       </Button>
     );
 
-    // Small button uses 'sm' spinner size (h-4 w-4)
     let spinner = screen.getByRole("status");
-    expect(spinner).toHaveClass("h-4", "w-4");
-
-    rerender(
-      <Button loading size="medium">
-        Medium
-      </Button>
-    );
-
-    // Medium button uses 'md' spinner size (h-5 w-5)
-    spinner = screen.getByRole("status");
-    expect(spinner).toHaveClass("h-5", "w-5");
+    expect(spinner).toHaveClass("size-4");
 
     rerender(
       <Button loading size="large">
@@ -133,38 +211,60 @@ describe("Button", () => {
       </Button>
     );
 
-    // Large button uses 'lg' spinner size (h-6 w-6)
     spinner = screen.getByRole("status");
-    expect(spinner).toHaveClass("h-6", "w-6");
+    expect(spinner).toHaveClass("size-4");
   });
 
-  it("hides children with opacity-0 when loading", () => {
+  it("renders spinner and label together when loading", () => {
     render(<Button loading>Loading Button</Button>);
 
     const button = screen.getByRole("button");
-    const childrenWrapper = button.querySelector("span");
-
-    expect(childrenWrapper).toHaveClass("opacity-0");
-    expect(childrenWrapper).toHaveClass(
-      "inline-flex",
-      "items-center",
-      "justify-center",
-      "gap-2"
-    );
+    expect(screen.getByRole("status")).toBeInTheDocument();
+    expect(button).toHaveTextContent("Loading Button");
   });
 
-  it("shows children without opacity-0 when not loading", () => {
-    render(<Button>Normal Button</Button>);
+  it("forwards onClick to the child element when asChild is true", async () => {
+    const handleClick = jest.fn();
+    const user = userEvent.setup();
 
-    const button = screen.getByRole("button");
-    const childrenWrapper = button.querySelector("span");
-
-    expect(childrenWrapper).not.toHaveClass("opacity-0");
-    expect(childrenWrapper).toHaveClass(
-      "inline-flex",
-      "items-center",
-      "justify-center",
-      "gap-2"
+    render(
+      <Button asChild onClick={handleClick}>
+        <a href="/somewhere">Link Button</a>
+      </Button>
     );
+
+    await user.click(screen.getByRole("link", { name: "Link Button" }));
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+
+  it("marks the child element as aria-disabled when asChild and disabled are set together", () => {
+    render(
+      <Button asChild disabled>
+        <a href="/somewhere">Link Button</a>
+      </Button>
+    );
+
+    const link = screen.getByRole("link", { name: "Link Button" });
+    expect(link).toHaveAttribute("aria-disabled", "true");
+  });
+
+  it("blocks Enter/Space activation when loading, preventing implicit form submit", async () => {
+    const handleSubmit = jest.fn((e: React.FormEvent) => e.preventDefault());
+    const user = userEvent.setup();
+
+    render(
+      <form onSubmit={handleSubmit}>
+        <input aria-label="name" name="name" />
+        <Button loading type="submit">
+          Save
+        </Button>
+      </form>
+    );
+
+    const input = screen.getByLabelText("name");
+    input.focus();
+    await user.keyboard("{Enter}");
+
+    expect(handleSubmit).not.toHaveBeenCalled();
   });
 });

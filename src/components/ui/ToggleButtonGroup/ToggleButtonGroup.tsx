@@ -35,13 +35,12 @@ export function ToggleButtonGroup<T extends string>({
         return (
           <Button
             {...buttonProps}
-            color="purple"
+            className={cn("rounded-full", buttonProps.className)}
             key={option.value}
             onClick={() => onValueChange(option.value)}
-            shape="pill"
             size="small"
             type="button"
-            variant={isSelected ? "contained" : "outlined"}
+            variant={isSelected ? "default" : "outline"}
           >
             {option.label}
           </Button>

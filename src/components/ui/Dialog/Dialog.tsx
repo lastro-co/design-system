@@ -1,11 +1,14 @@
 "use client";
 
 import * as DialogPrimitive from "@radix-ui/react-dialog";
+import type { VariantProps } from "class-variance-authority";
 import type * as React from "react";
 import { cn } from "@/lib/utils";
 import { CloseIcon } from "../../icons";
-import { Button } from "../Button";
+import { Button, type buttonVariants } from "../Button";
 import { IconButton } from "../IconButton";
+
+type ButtonVariant = VariantProps<typeof buttonVariants>["variant"];
 
 function DialogRoot({
   ...props
@@ -22,10 +25,8 @@ interface DialogProps
   description?: string;
   cancelText?: string;
   actionText?: string;
-  cancelVariant?: "contained" | "outlined";
-  actionVariant?: "contained" | "outlined";
-  cancelColor?: "purple" | "error" | "black";
-  actionColor?: "purple" | "error" | "black";
+  cancelVariant?: ButtonVariant;
+  actionVariant?: ButtonVariant;
   cancelSize?: "small" | "medium" | "large";
   actionSize?: "small" | "medium" | "large";
   cancelDisabled?: boolean;
@@ -46,10 +47,8 @@ function Dialog({
   description,
   cancelText,
   actionText,
-  cancelVariant = "outlined",
-  actionVariant = "contained",
-  cancelColor = "purple",
-  actionColor = "purple",
+  cancelVariant = "outline",
+  actionVariant = "default",
   cancelSize = "medium",
   actionSize = "medium",
   cancelDisabled = false,
@@ -68,13 +67,11 @@ function Dialog({
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
 
       <DialogContent
-        actionColor={actionColor}
         actionDisabled={actionDisabled}
         actionLoading={actionLoading}
         actionSize={actionSize}
         actionText={actionText}
         actionVariant={actionVariant}
-        cancelColor={cancelColor}
         cancelDisabled={cancelDisabled}
         cancelSize={cancelSize}
         cancelText={cancelText}
@@ -137,10 +134,8 @@ function DialogContent({
   footer,
   cancelText,
   actionText,
-  cancelVariant = "outlined",
-  actionVariant = "contained",
-  cancelColor = "purple",
-  actionColor = "purple",
+  cancelVariant = "outline",
+  actionVariant = "default",
   cancelSize = "medium",
   actionSize = "medium",
   cancelDisabled = false,
@@ -157,10 +152,8 @@ function DialogContent({
   footer?: React.ReactNode;
   cancelText?: string;
   actionText?: string;
-  cancelVariant?: "contained" | "outlined";
-  actionVariant?: "contained" | "outlined";
-  cancelColor?: "purple" | "error" | "black";
-  actionColor?: "purple" | "error" | "black";
+  cancelVariant?: ButtonVariant;
+  actionVariant?: ButtonVariant;
   cancelSize?: "small" | "medium" | "large";
   actionSize?: "small" | "medium" | "large";
   cancelDisabled?: boolean;
@@ -202,7 +195,6 @@ function DialogContent({
                 {cancelText && (
                   <DialogPrimitive.Close asChild disabled={cancelDisabled}>
                     <Button
-                      color={cancelColor}
                       disabled={cancelDisabled}
                       onClick={onCancel}
                       size={cancelSize}
@@ -214,7 +206,6 @@ function DialogContent({
                 )}
                 {actionText && (
                   <Button
-                    color={actionColor}
                     disabled={actionDisabled}
                     loading={actionLoading}
                     onClick={onAction}
@@ -233,7 +224,6 @@ function DialogContent({
             <IconButton
               aria-label="Close"
               className="absolute top-4 right-4"
-              color="purple"
               shape="circular"
               size="small"
               variant="ghost"

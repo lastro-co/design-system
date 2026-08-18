@@ -77,7 +77,7 @@ export const Dropzone = ({
         )}
         disabled={disabled}
         type="button"
-        variant="outlined"
+        variant="outline"
         {...(getRootProps() as Omit<ReturnType<typeof getRootProps>, "color">)}
       >
         <input {...getInputProps()} disabled={disabled} />

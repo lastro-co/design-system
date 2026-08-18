@@ -166,7 +166,7 @@ export function ColorPicker({
             className="h-9 w-full"
             onClick={handleConfirm}
             size="medium"
-            variant="outlined"
+            variant="outline"
           >
             Confirmar
           </Button>

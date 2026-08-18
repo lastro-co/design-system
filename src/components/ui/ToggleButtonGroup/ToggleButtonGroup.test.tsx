@@ -38,7 +38,7 @@ describe("ToggleButtonGroup", () => {
     // Selected button should have contained variant (no border class, but has bg)
     expect(weekButton).toHaveClass("bg-purple-800");
     // Unselected button should have outlined variant
-    expect(monthButton).toHaveClass("border-purple-800");
+    expect(monthButton).toHaveClass("border-gray-300");
   });
 
   it("calls onValueChange when option is clicked", async () => {
@@ -69,7 +69,7 @@ describe("ToggleButtonGroup", () => {
     // All buttons should be outlined (not contained)
     const buttons = screen.getAllByRole("button");
     buttons.forEach((button) => {
-      expect(button).toHaveClass("border-purple-800");
+      expect(button).toHaveClass("border-gray-300");
     });
   });
 
@@ -143,5 +143,19 @@ describe("ToggleButtonGroup", () => {
   it("index.ts exports work correctly", () => {
     const indexExports = require("./index");
     expect(indexExports.ToggleButtonGroup).toBeDefined();
+  });
+
+  it("renders pill-shaped buttons", () => {
+    render(
+      <ToggleButtonGroup
+        onValueChange={jest.fn()}
+        options={defaultOptions}
+        value="month"
+      />
+    );
+
+    for (const button of screen.getAllByRole("button")) {
+      expect(button).toHaveClass("rounded-full");
+    }
   });
 });

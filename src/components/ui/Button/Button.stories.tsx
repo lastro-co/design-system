@@ -1,4 +1,5 @@
 import type { Meta } from "@storybook/react-vite";
+import { Fragment } from "react";
 import { Button } from "./Button";
 
 const meta: Meta<typeof Button> = {
@@ -12,13 +13,16 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: "select",
-      options: ["contained", "outlined"],
+      options: [
+        "default",
+        "outline",
+        "ghost",
+        "link",
+        "destructive",
+        "ghost-destructive",
+        "dark",
+      ],
       description: "Button visual style variant",
-    },
-    color: {
-      control: "select",
-      options: ["purple", "error", "black"],
-      description: "Button color variant",
     },
     size: {
       control: "select",
@@ -28,6 +32,10 @@ const meta: Meta<typeof Button> = {
     disabled: {
       control: "boolean",
       description: "Whether the button is disabled",
+    },
+    loading: {
+      control: "boolean",
+      description: "Whether the button shows a loading spinner",
     },
     className: {
       control: "text",
@@ -53,7 +61,7 @@ export const WithIcon = {
     <div className="flex flex-col gap-4">
       <div className="space-y-2">
         <h3 className="font-medium text-lg">Icon Positions</h3>
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap items-center gap-4">
           <Button>
             <svg
               aria-hidden="true"
@@ -125,40 +133,74 @@ export const WithIcon = {
   ),
 };
 
+export const AsChild = {
+  render: () => (
+    <Button asChild>
+      <a href="#storybook">Link styled as Button</a>
+    </Button>
+  ),
+};
+
+export const Loading = {
+  render: () => (
+    <div className="flex flex-wrap items-center gap-4">
+      <Button loading size="small">
+        Small
+      </Button>
+      <Button loading size="medium">
+        Medium
+      </Button>
+      <Button loading size="large">
+        Large
+      </Button>
+    </div>
+  ),
+};
+
+const VARIANTS = [
+  "default",
+  "outline",
+  "ghost",
+  "link",
+  "destructive",
+  "ghost-destructive",
+  "dark",
+] as const;
+
 export const AllVariants = {
   render: () => (
     <div className="flex flex-col gap-6">
       <div className="space-y-2">
-        <h3 className="font-medium text-lg">purple Color</h3>
-        <div className="flex flex-wrap gap-4">
-          <Button color="purple" variant="contained">
-            Contained
-          </Button>
-          <Button color="purple" variant="outlined">
-            Outlined
-          </Button>
-        </div>
-      </div>
-      <div className="space-y-2">
-        <h3 className="font-medium text-lg">Error Color</h3>
-        <div className="flex flex-wrap gap-4">
-          <Button color="error" variant="contained">
-            Contained
-          </Button>
-          <Button color="error" variant="outlined">
-            Outlined
-          </Button>
-        </div>
-      </div>
-      <div className="space-y-2">
-        <h3 className="font-medium text-lg">Black Color</h3>
-        <div className="flex flex-wrap gap-4">
-          <Button color="black" variant="contained">
-            Contained
-          </Button>
-          <Button color="black" variant="outlined">
-            Outlined
-          </Button>
+        <h3 className="font-medium text-lg">Variants × Behaviors</h3>
+        <p className="text-gray-600 text-sm">
+          Hover/active/focus are triggered by interacting with each button —
+          they are not separate rows since they are not controlled via props.
+        </p>
+        <div className="grid grid-cols-[max-content_repeat(3,max-content)] items-center gap-x-8 gap-y-4">
+          <span />
+          <span className="font-medium text-gray-600 text-xs uppercase">
+            Default
+          </span>
+          <span className="font-medium text-gray-600 text-xs uppercase">
+            Disabled
+          </span>
+          <span className="font-medium text-gray-600 text-xs uppercase">
+            Loading
+          </span>
+          {VARIANTS.map((variant) => (
+            <Fragment key={variant}>
+              <span className="font-medium text-gray-900 text-sm capitalize">
+                {variant}
+              </span>
+              <Button variant={variant}>Button</Button>
+              <Button disabled variant={variant}>
+                Button
+              </Button>
+              <Button loading variant={variant}>
+                Button
+              </Button>
+            </Fragment>
+          ))}
         </div>
       </div>
       <div className="space-y-2">
@@ -167,13 +209,6 @@ export const AllVariants = {
           <Button size="small">Small</Button>
           <Button size="medium">Medium</Button>
           <Button size="large">Large</Button>
-        </div>
-      </div>
-      <div className="space-y-2">
-        <h3 className="font-medium text-lg">States</h3>
-        <div className="flex flex-wrap gap-4">
-          <Button>Normal</Button>
-          <Button disabled>Disabled</Button>
         </div>
       </div>
     </div>

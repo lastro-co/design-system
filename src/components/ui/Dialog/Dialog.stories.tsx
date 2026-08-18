@@ -38,24 +38,30 @@ const meta: Meta<typeof Dialog> = {
       control: "text",
       description: "Texto do botão de ação",
     },
-    cancelColor: {
-      control: "select",
-      options: ["purple", "error", "black"],
-      description: "Cor do botão cancelar",
-    },
-    actionColor: {
-      control: "select",
-      options: ["purple", "error", "black"],
-      description: "Cor do botão de ação",
-    },
     cancelVariant: {
       control: "select",
-      options: ["contained", "outlined"],
+      options: [
+        "default",
+        "outline",
+        "ghost",
+        "link",
+        "destructive",
+        "ghost-destructive",
+        "dark",
+      ],
       description: "Variante do botão cancelar",
     },
     actionVariant: {
       control: "select",
-      options: ["contained", "outlined"],
+      options: [
+        "default",
+        "outline",
+        "ghost",
+        "link",
+        "destructive",
+        "ghost-destructive",
+        "dark",
+      ],
       description: "Variante do botão de ação",
     },
     cancelSize: {
@@ -131,19 +137,19 @@ export const Docs: Story = {
             description="Este dialog possui um footer totalmente customizado."
             footer={
               <>
-                <Button color="black" size="medium" variant="outlined">
+                <Button size="medium" variant="outline">
                   Opção 1
                 </Button>
-                <Button color="purple" size="medium" variant="outlined">
+                <Button size="medium" variant="outline">
                   Opção 2
                 </Button>
-                <Button color="purple" size="medium" variant="contained">
+                <Button size="medium" variant="default">
                   Opção 3
                 </Button>
               </>
             }
             title="Dialog com Footer Customizado"
-            trigger={<Button variant="outlined">Footer customizado</Button>}
+            trigger={<Button variant="outline">Footer customizado</Button>}
           >
             <p>Dialog com múltiplos botões customizados no footer.</p>
           </Dialog>
@@ -154,11 +160,7 @@ export const Docs: Story = {
           <Dialog
             description="Dialog sem botões no footer."
             title="Dialog Simples"
-            trigger={
-              <Button color="black" variant="outlined">
-                Sem botões
-              </Button>
-            }
+            trigger={<Button variant="outline">Sem botões</Button>}
           >
             <p>Este dialog não possui botões de ação no footer.</p>
           </Dialog>
@@ -170,7 +172,7 @@ export const Docs: Story = {
           </h3>
           <DialogRoot>
             <DialogTrigger asChild>
-              <Button color="purple">Uso manual</Button>
+              <Button>Uso manual</Button>
             </DialogTrigger>
             <DialogContent showCloseButton={false}>
               <DialogHeader>
@@ -185,13 +187,9 @@ export const Docs: Story = {
               </div>
               <DialogFooter>
                 <DialogClose asChild>
-                  <Button color="purple" variant="outlined">
-                    Fechar
-                  </Button>
+                  <Button variant="outline">Fechar</Button>
                 </DialogClose>
-                <Button color="purple" variant="contained">
-                  Salvar
-                </Button>
+                <Button variant="default">Salvar</Button>
               </DialogFooter>
             </DialogContent>
           </DialogRoot>
@@ -200,14 +198,13 @@ export const Docs: Story = {
         <div>
           <h3 className="mb-4 font-semibold text-lg">5. Ação de Perigo</h3>
           <Dialog
-            actionColor="error"
             actionText="Excluir"
-            actionVariant="contained"
+            actionVariant="destructive"
             cancelText="Cancelar"
             description="Esta ação é permanente e não pode ser desfeita."
             onAction={() => console.log("Item excluído")}
             title="Excluir item"
-            trigger={<Button color="error">Excluir</Button>}
+            trigger={<Button variant="destructive">Excluir</Button>}
           >
             <p>Tem certeza que deseja excluir este item?</p>
           </Dialog>
