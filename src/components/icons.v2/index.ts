@@ -1,5 +1,6 @@
 export {
   ArrowLeft as ArrowLeftIcon,
+  ArrowRightLeft as ArrowRightLeftIcon,
   Bell as BellIcon,
   BriefcaseBusiness as BriefcaseBusinessIcon,
   Building2 as Building2Icon,
