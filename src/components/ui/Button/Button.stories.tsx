@@ -1,4 +1,5 @@
 import type { Meta } from "@storybook/react-vite";
+import { Fragment } from "react";
 import { Button } from "./Button";
 
 const meta: Meta<typeof Button> = {
@@ -187,23 +188,18 @@ export const AllVariants = {
             Loading
           </span>
           {VARIANTS.map((variant) => (
-            <>
-              <span
-                className="font-medium text-gray-900 text-sm capitalize"
-                key={`${variant}-label`}
-              >
+            <Fragment key={variant}>
+              <span className="font-medium text-gray-900 text-sm capitalize">
                 {variant}
               </span>
-              <Button key={`${variant}-default`} variant={variant}>
+              <Button variant={variant}>Button</Button>
+              <Button disabled variant={variant}>
                 Button
               </Button>
-              <Button disabled key={`${variant}-disabled`} variant={variant}>
+              <Button loading variant={variant}>
                 Button
               </Button>
-              <Button key={`${variant}-loading`} loading variant={variant}>
-                Button
-              </Button>
-            </>
+            </Fragment>
           ))}
         </div>
       </div>

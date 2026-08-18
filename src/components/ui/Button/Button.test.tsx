@@ -63,7 +63,10 @@ describe("Button", () => {
 
     rerender(<Button variant="link">Link</Button>);
     button = screen.getByRole("button");
-    expect(button).toHaveClass("disabled:text-gray-600");
+    expect(button).toHaveClass(
+      "disabled:text-gray-600",
+      "aria-disabled:text-gray-600"
+    );
     expect(button).not.toHaveClass("disabled:bg-gray-300");
 
     rerender(<Button variant="destructive">Destructive</Button>);
@@ -218,5 +221,50 @@ describe("Button", () => {
     const button = screen.getByRole("button");
     expect(screen.getByRole("status")).toBeInTheDocument();
     expect(button).toHaveTextContent("Loading Button");
+  });
+
+  it("forwards onClick to the child element when asChild is true", async () => {
+    const handleClick = jest.fn();
+    const user = userEvent.setup();
+
+    render(
+      <Button asChild onClick={handleClick}>
+        <a href="/somewhere">Link Button</a>
+      </Button>
+    );
+
+    await user.click(screen.getByRole("link", { name: "Link Button" }));
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+
+  it("marks the child element as aria-disabled when asChild and disabled are set together", () => {
+    render(
+      <Button asChild disabled>
+        <a href="/somewhere">Link Button</a>
+      </Button>
+    );
+
+    const link = screen.getByRole("link", { name: "Link Button" });
+    expect(link).toHaveAttribute("aria-disabled", "true");
+  });
+
+  it("blocks Enter/Space activation when loading, preventing implicit form submit", async () => {
+    const handleSubmit = jest.fn((e: React.FormEvent) => e.preventDefault());
+    const user = userEvent.setup();
+
+    render(
+      <form onSubmit={handleSubmit}>
+        <input aria-label="name" name="name" />
+        <Button loading type="submit">
+          Save
+        </Button>
+      </form>
+    );
+
+    const input = screen.getByLabelText("name");
+    input.focus();
+    await user.keyboard("{Enter}");
+
+    expect(handleSubmit).not.toHaveBeenCalled();
   });
 });

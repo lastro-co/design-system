@@ -35,6 +35,7 @@ export function ToggleButtonGroup<T extends string>({
         return (
           <Button
             {...buttonProps}
+            className={cn("rounded-full", buttonProps.className)}
             key={option.value}
             onClick={() => onValueChange(option.value)}
             size="small"

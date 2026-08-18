@@ -144,4 +144,18 @@ describe("ToggleButtonGroup", () => {
     const indexExports = require("./index");
     expect(indexExports.ToggleButtonGroup).toBeDefined();
   });
+
+  it("renders pill-shaped buttons", () => {
+    render(
+      <ToggleButtonGroup
+        onValueChange={jest.fn()}
+        options={defaultOptions}
+        value="month"
+      />
+    );
+
+    for (const button of screen.getAllByRole("button")) {
+      expect(button).toHaveClass("rounded-full");
+    }
+  });
 });

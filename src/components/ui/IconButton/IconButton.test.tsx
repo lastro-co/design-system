@@ -4,15 +4,23 @@ import { render, screen } from "@/tests/app-test-utils";
 import { IconButton, iconButtonVariants } from "./IconButton";
 
 describe("IconButton", () => {
-  it("forces the child icon to a fixed 16px size regardless of button size", () => {
+  it("defaults the child icon to 16px, but lets an explicit size class win", () => {
     render(
       <IconButton aria-label="Close">
-        <CloseIcon size="lg" />
+        <CloseIcon />
       </IconButton>
     );
 
     const button = screen.getByRole("button");
-    expect(button).toHaveClass("[&_svg]:!size-4");
+    expect(button).toHaveClass("[&_svg:not([class*='size-'])]:size-4");
+
+    const { container } = render(
+      <IconButton aria-label="Close">
+        <CloseIcon className="size-6" />
+      </IconButton>
+    );
+
+    expect(container.querySelector("svg")).toHaveClass("size-6");
   });
 
   it("renders with all variants and sizes", () => {
@@ -220,6 +228,35 @@ describe("IconButton", () => {
     const link = screen.getByRole("link", { name: "Close" });
     expect(link.tagName).toBe("A");
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
+  });
+
+  it("forwards onClick to the child element when asChild is true", async () => {
+    const handleClick = jest.fn();
+    const user = userEvent.setup();
+
+    render(
+      <IconButton aria-label="Close" asChild onClick={handleClick}>
+        <a href="/somewhere">
+          <CloseIcon />
+        </a>
+      </IconButton>
+    );
+
+    await user.click(screen.getByRole("link", { name: "Close" }));
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+
+  it("marks the child element as aria-disabled when asChild and disabled are set together", () => {
+    render(
+      <IconButton aria-label="Close" asChild disabled>
+        <a href="/somewhere">
+          <CloseIcon />
+        </a>
+      </IconButton>
+    );
+
+    const link = screen.getByRole("link", { name: "Close" });
+    expect(link).toHaveAttribute("aria-disabled", "true");
   });
 
   it("iconButtonVariants generates correct classes", () => {

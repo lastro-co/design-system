@@ -1,4 +1,5 @@
 import type { Meta } from "@storybook/react-vite";
+import { Fragment } from "react";
 
 import { InfoIcon } from "@/components/icons";
 import { PlusIcon } from "@/components/icons.v2";
@@ -94,37 +95,28 @@ export const AllVariants = {
             Loading
           </span>
           {VARIANTS.map((variant) => (
-            <>
-              <span
-                className="font-medium text-gray-900 text-sm capitalize"
-                key={`${variant}-label`}
-              >
+            <Fragment key={variant}>
+              <span className="font-medium text-gray-900 text-sm capitalize">
                 {variant}
               </span>
-              <IconButton
-                aria-label={`${variant} default`}
-                key={`${variant}-default`}
-                variant={variant}
-              >
+              <IconButton aria-label={`${variant} default`} variant={variant}>
                 <PlusIcon color={variant === "default" ? "white" : undefined} />
               </IconButton>
               <IconButton
                 aria-label={`${variant} disabled`}
                 disabled
-                key={`${variant}-disabled`}
                 variant={variant}
               >
                 <PlusIcon color={variant === "default" ? "white" : undefined} />
               </IconButton>
               <IconButton
                 aria-label={`${variant} loading`}
-                key={`${variant}-loading`}
                 loading
                 variant={variant}
               >
                 <PlusIcon color={variant === "default" ? "white" : undefined} />
               </IconButton>
-            </>
+            </Fragment>
           ))}
         </div>
       </div>

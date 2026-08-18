@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { LoaderCircleIcon } from "../../icons.v2";
 
 const iconButtonVariants = cva(
-  "[&_svg]:!size-4 inline-flex shrink-0 cursor-pointer items-center justify-center outline-none ring-0 transition-all duration-200 ease-out focus-visible:ring-2 focus-visible:ring-purple-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-45 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "inline-flex shrink-0 cursor-pointer items-center justify-center outline-none ring-0 transition-all duration-200 ease-out focus-visible:ring-2 focus-visible:ring-purple-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-45 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       size: {
@@ -78,48 +78,59 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
       disabled,
       type = "button",
       onClick,
+      onKeyDown,
       ...props
     },
     ref
   ) => {
-    if (asChild) {
-      return (
-        <Slot
-          className={cn(
-            iconButtonVariants({ size, shape, variant, className })
-          )}
-          data-slot="icon-button"
-          ref={ref}
-          {...props}
-        >
-          {children}
-        </Slot>
-      );
-    }
-
     const blockedByLoading = loading && !disabled;
+    const blockedForAsChild = asChild && Boolean(disabled);
+    const shouldBlockActivation = blockedByLoading || blockedForAsChild;
+    const Comp = asChild ? Slot : "button";
+
+    const blockIfInactive = (event: React.SyntheticEvent) => {
+      if (!shouldBlockActivation) {
+        return false;
+      }
+      event.preventDefault();
+      event.stopPropagation();
+      return true;
+    };
 
     return (
-      <button
+      <Comp
         aria-busy={loading || undefined}
-        aria-disabled={blockedByLoading ? true : undefined}
+        aria-disabled={shouldBlockActivation ? true : undefined}
         className={cn(
           iconButtonVariants({ size, shape, variant, className }),
           blockedByLoading && "pointer-events-none"
         )}
         data-slot="icon-button"
-        disabled={disabled}
-        onClick={blockedByLoading ? undefined : onClick}
+        onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+          if (!blockIfInactive(event)) {
+            onClick?.(event);
+          }
+        }}
+        onKeyDown={(event: React.KeyboardEvent<HTMLButtonElement>) => {
+          if (
+            shouldBlockActivation &&
+            (event.key === "Enter" || event.key === " ")
+          ) {
+            blockIfInactive(event);
+          } else {
+            onKeyDown?.(event);
+          }
+        }}
         ref={ref}
-        type={type}
+        {...(asChild ? {} : { disabled, type })}
         {...props}
       >
-        {loading ? (
+        {!asChild && loading ? (
           <LoaderCircleIcon className="size-4 animate-spin" role="status" />
         ) : (
           children
         )}
-      </button>
+      </Comp>
     );
   }
 );

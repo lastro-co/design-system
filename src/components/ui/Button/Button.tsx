@@ -15,7 +15,7 @@ const buttonVariants = cva(
         outline:
           "border border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-50 disabled:border-gray-300 disabled:bg-white",
         ghost: "text-purple-800 hover:bg-purple-50 active:bg-purple-50",
-        link: "text-purple-800 hover:underline active:underline disabled:text-gray-600",
+        link: "text-purple-800 hover:underline active:underline disabled:text-gray-600 aria-disabled:text-gray-600",
         destructive:
           "bg-red-600 text-white hover:bg-red-800 active:bg-red-800 disabled:bg-gray-300",
         "ghost-destructive": "text-red-600 hover:bg-red-50 active:bg-red-50",
@@ -61,45 +61,64 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       disabled,
       type = "button",
       onClick,
+      onKeyDown,
       ...props
     },
     ref
   ) => {
-    if (asChild) {
-      return (
-        <Slot
-          className={cn(buttonVariants({ variant, size, className }))}
-          data-slot="button"
-          ref={ref}
-          {...props}
-        >
-          {children}
-        </Slot>
-      );
-    }
-
     const blockedByLoading = loading && !disabled;
+    const blockedForAsChild = asChild && Boolean(disabled);
+    const shouldBlockActivation = blockedByLoading || blockedForAsChild;
+    const Comp = asChild ? Slot : "button";
+
+    const blockIfInactive = (event: React.SyntheticEvent) => {
+      if (!shouldBlockActivation) {
+        return false;
+      }
+      event.preventDefault();
+      event.stopPropagation();
+      return true;
+    };
 
     return (
-      <button
+      <Comp
         aria-busy={loading || undefined}
-        aria-disabled={blockedByLoading ? true : undefined}
+        aria-disabled={shouldBlockActivation ? true : undefined}
         className={cn(
           buttonVariants({ variant, size, className }),
           blockedByLoading && "pointer-events-none"
         )}
         data-slot="button"
-        disabled={disabled}
-        onClick={blockedByLoading ? undefined : onClick}
+        onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+          if (!blockIfInactive(event)) {
+            onClick?.(event);
+          }
+        }}
+        onKeyDown={(event: React.KeyboardEvent<HTMLButtonElement>) => {
+          if (
+            shouldBlockActivation &&
+            (event.key === "Enter" || event.key === " ")
+          ) {
+            blockIfInactive(event);
+          } else {
+            onKeyDown?.(event);
+          }
+        }}
         ref={ref}
-        type={type}
+        {...(asChild ? {} : { disabled, type })}
         {...props}
       >
-        {loading && (
-          <LoaderCircleIcon className="size-4 animate-spin" role="status" />
+        {asChild ? (
+          children
+        ) : (
+          <>
+            {loading && (
+              <LoaderCircleIcon className="size-4 animate-spin" role="status" />
+            )}
+            {children}
+          </>
         )}
-        {children}
-      </button>
+      </Comp>
     );
   }
 );
