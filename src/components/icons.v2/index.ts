@@ -30,6 +30,7 @@ export {
   Home as HomeIcon,
   Image as ImageIcon,
   Info as InfoIcon,
+  KeyRound as KeyRoundIcon,
   Link as LinkIcon,
   List as ListIcon,
   LoaderCircle as LoaderCircleIcon,
