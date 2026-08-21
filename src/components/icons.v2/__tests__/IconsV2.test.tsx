@@ -126,7 +126,7 @@ describe("icons.v2 — Lucide icons", () => {
       </div>
     );
     const svgs = container.querySelectorAll("svg");
-    expect(svgs).toHaveLength(45);
+    expect(svgs).toHaveLength(47);
   });
 
   it("icons accept className prop", () => {
