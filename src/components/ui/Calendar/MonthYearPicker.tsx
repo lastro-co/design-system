@@ -1,5 +1,6 @@
 "use client";
 
+import type { VariantProps } from "class-variance-authority";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import {
@@ -7,6 +8,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "../../icons";
+import { Button, type buttonVariants } from "../Button";
 import { Popover, PopoverContent, PopoverTrigger } from "../Popover";
 import { MONTHS_PT_BR, MONTHS_PT_BR_SHORT } from "./constants";
 
@@ -16,6 +18,7 @@ export interface MonthYearPickerProps {
   minYear?: number;
   month: number;
   onChange: (month: number, year: number) => void;
+  size?: VariantProps<typeof buttonVariants>["size"];
   year: number;
 }
 
@@ -25,6 +28,7 @@ export function MonthYearPicker({
   minYear = 2024,
   month,
   onChange,
+  size = "medium",
   year,
 }: MonthYearPickerProps) {
   const now = new Date();
@@ -48,13 +52,10 @@ export function MonthYearPicker({
   return (
     <Popover onOpenChange={handleOpenChange} open={open}>
       <PopoverTrigger asChild>
-        <button
-          className="flex h-10 cursor-pointer items-center gap-2 whitespace-nowrap rounded-md border border-gray-300 bg-white px-4 text-gray-900 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2"
-          type="button"
-        >
+        <Button size={size} variant="outline">
           {MONTHS_PT_BR[month - 1]}, {year}
           <ChevronDownIcon className="size-5 text-purple-600" />
-        </button>
+        </Button>
       </PopoverTrigger>
 
       <PopoverContent align="end" className="w-64 p-3">

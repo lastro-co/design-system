@@ -105,13 +105,9 @@ export const FilterPopover = forwardRef<HTMLButtonElement, FilterPopoverProps>(
               {title}
             </h3>
             {onClear && (
-              <button
-                className="cursor-pointer font-semibold text-purple-800 text-sm underline"
-                onClick={onClear}
-                type="button"
-              >
+              <Button onClick={onClear} variant="link">
                 {clearLabel}
-              </button>
+              </Button>
             )}
           </div>
 

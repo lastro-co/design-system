@@ -85,7 +85,7 @@ function DrawerStory({
       {...rest}
     >
       <DrawerTrigger asChild>
-        <Button variant="outlined">Open Drawer</Button>
+        <Button variant="outline">Open Drawer</Button>
       </DrawerTrigger>
 
       <DrawerContent>
@@ -102,7 +102,7 @@ function DrawerStory({
 
         <DrawerFooter>
           <DrawerClose asChild>
-            <Button variant="outlined">Cancel</Button>
+            <Button variant="outline">Cancel</Button>
           </DrawerClose>
           <Button>Save changes</Button>
         </DrawerFooter>
@@ -239,7 +239,7 @@ export const FromBottom: Story = {
   render: (args) => (
     <Drawer {...args}>
       <DrawerTrigger asChild>
-        <Button variant="outlined">Open from Bottom</Button>
+        <Button variant="outline">Open from Bottom</Button>
       </DrawerTrigger>
 
       <DrawerContent>
@@ -254,7 +254,7 @@ export const FromBottom: Story = {
 
         <DrawerFooter>
           <DrawerClose asChild>
-            <Button variant="outlined">Close</Button>
+            <Button variant="outline">Close</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>
@@ -271,7 +271,7 @@ export const FromTop: Story = {
   render: (args) => (
     <Drawer {...args}>
       <DrawerTrigger asChild>
-        <Button variant="outlined">Open from Top</Button>
+        <Button variant="outline">Open from Top</Button>
       </DrawerTrigger>
 
       <DrawerContent>
@@ -296,7 +296,7 @@ export const FromTop: Story = {
 
         <DrawerFooter>
           <DrawerClose asChild>
-            <Button variant="outlined">Close</Button>
+            <Button variant="outline">Close</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>
@@ -313,7 +313,7 @@ export const FromLeft: Story = {
   render: (args) => (
     <Drawer {...args}>
       <DrawerTrigger asChild>
-        <Button variant="outlined">Open from Left</Button>
+        <Button variant="outline">Open from Left</Button>
       </DrawerTrigger>
 
       <DrawerContent>
@@ -330,7 +330,7 @@ export const FromLeft: Story = {
 
         <DrawerFooter>
           <DrawerClose asChild>
-            <Button variant="outlined">Close</Button>
+            <Button variant="outline">Close</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>
@@ -347,7 +347,7 @@ export const FromRight: Story = {
   render: (args) => (
     <Drawer {...args}>
       <DrawerTrigger asChild>
-        <Button variant="outlined">Open from Right</Button>
+        <Button variant="outline">Open from Right</Button>
       </DrawerTrigger>
 
       <DrawerContent>
@@ -398,7 +398,7 @@ export const FromRight: Story = {
 
         <DrawerFooter>
           <DrawerClose asChild>
-            <Button variant="outlined">Close</Button>
+            <Button variant="outline">Close</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>
@@ -431,7 +431,7 @@ function AllDirectionsStory(props: DrawerStoryProps) {
           {...drawerProps}
         >
           <DrawerTrigger asChild>
-            <Button variant="outlined">{title}</Button>
+            <Button variant="outline">{title}</Button>
           </DrawerTrigger>
 
           <DrawerContent>
@@ -451,7 +451,7 @@ function AllDirectionsStory(props: DrawerStoryProps) {
 
             <DrawerFooter>
               <DrawerClose asChild>
-                <Button variant="outlined">Close</Button>
+                <Button variant="outline">Close</Button>
               </DrawerClose>
             </DrawerFooter>
           </DrawerContent>

@@ -141,7 +141,6 @@ export function ImageGallery({
             <IconButton
               aria-label="Imagem anterior"
               className="-translate-y-1/2 absolute top-1/2 left-2 bg-white hover:bg-gray-100"
-              color="purple"
               onClick={handlePrevious}
               shape="circular"
               size="small"
@@ -152,7 +151,6 @@ export function ImageGallery({
             <IconButton
               aria-label="Próxima imagem"
               className="-translate-y-1/2 absolute top-1/2 right-2 bg-white hover:bg-gray-100"
-              color="purple"
               onClick={handleNext}
               shape="circular"
               size="small"

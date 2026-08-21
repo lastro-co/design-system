@@ -3,9 +3,10 @@
 import { forwardRef } from "react";
 import { cn } from "@/lib/utils";
 import { TuneIcon } from "../../icons";
+import { Button } from "../Button";
 
 export interface FilterButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "color"> {
   /** Text label for the button */
   label?: string;
   /** Position of the label relative to icon/counter */
@@ -83,19 +84,12 @@ export const FilterButton = forwardRef<HTMLButtonElement, FilterButtonProps>(
       hasActiveFilters && !showIconWithCount ? counterElement : IconComponent;
 
     return (
-      <button
-        className={cn(
-          "inline-flex items-center gap-1.5 rounded-md border px-4 py-2",
-          "cursor-pointer transition-colors duration-200",
-          hasActiveFilters
-            ? "border-purple-100 bg-purple-100"
-            : "border-gray-200 bg-white hover:bg-gray-50",
-          disabled && "cursor-not-allowed opacity-50",
-          className
-        )}
+      <Button
+        className={className}
         disabled={disabled}
         ref={ref}
-        type="button"
+        size="small"
+        variant="outline"
         {...props}
       >
         {labelPosition === "left" ? (
@@ -111,7 +105,7 @@ export const FilterButton = forwardRef<HTMLButtonElement, FilterButtonProps>(
             {labelElement}
           </>
         )}
-      </button>
+      </Button>
     );
   }
 );

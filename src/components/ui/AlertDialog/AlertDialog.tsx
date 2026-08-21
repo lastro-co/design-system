@@ -1,9 +1,12 @@
 "use client";
 
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
+import type { VariantProps } from "class-variance-authority";
 import type * as React from "react";
 import { cn } from "@/lib/utils";
-import { Button } from "../Button";
+import { Button, type buttonVariants } from "../Button";
+
+type ButtonVariant = VariantProps<typeof buttonVariants>["variant"];
 
 function AlertDialogRoot({
   ...props
@@ -123,16 +126,14 @@ function AlertDialogDescription({
 
 function AlertDialogAction({
   className,
-  variant = "contained",
-  color = "purple",
+  variant = "default",
   size = "medium",
   loading,
   disabled,
   children,
   ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Action> & {
-  variant?: "contained" | "outlined";
-  color?: "purple" | "error" | "black";
+  variant?: ButtonVariant;
   size?: "small" | "medium" | "large";
   loading?: boolean;
   disabled?: boolean;
@@ -141,7 +142,6 @@ function AlertDialogAction({
     <AlertDialogPrimitive.Action asChild disabled={disabled} {...props}>
       <Button
         className={className}
-        color={color}
         disabled={disabled}
         loading={loading}
         size={size}
@@ -155,15 +155,13 @@ function AlertDialogAction({
 
 function AlertDialogCancel({
   className,
-  variant = "outlined",
-  color = "purple",
+  variant = "outline",
   size = "medium",
   disabled,
   children,
   ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Cancel> & {
-  variant?: "contained" | "outlined";
-  color?: "purple" | "error" | "black";
+  variant?: ButtonVariant;
   size?: "small" | "medium" | "large";
   disabled?: boolean;
 }) {
@@ -171,7 +169,6 @@ function AlertDialogCancel({
     <AlertDialogPrimitive.Cancel asChild disabled={disabled} {...props}>
       <Button
         className={className}
-        color={color}
         disabled={disabled}
         size={size}
         variant={variant}
@@ -190,10 +187,8 @@ interface AlertDialogProps
   description: string;
   cancelText?: string;
   actionText?: string;
-  cancelVariant?: "contained" | "outlined";
-  actionVariant?: "contained" | "outlined";
-  cancelColor?: "purple" | "error" | "black";
-  actionColor?: "purple" | "error" | "black";
+  cancelVariant?: ButtonVariant;
+  actionVariant?: ButtonVariant;
   cancelSize?: "small" | "medium" | "large";
   actionSize?: "small" | "medium" | "large";
   cancelDisabled?: boolean;
@@ -210,10 +205,8 @@ function AlertDialog({
   description,
   cancelText = "Cancel",
   actionText = "Confirm",
-  cancelVariant = "outlined",
-  actionVariant = "contained",
-  cancelColor = "purple",
-  actionColor = "purple",
+  cancelVariant = "outline",
+  actionVariant = "default",
   cancelSize = "medium",
   actionSize = "medium",
   cancelDisabled = false,
@@ -235,7 +228,6 @@ function AlertDialog({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel
-            color={cancelColor}
             disabled={cancelDisabled}
             onClick={onCancel}
             size={cancelSize}
@@ -244,7 +236,6 @@ function AlertDialog({
             {cancelText}
           </AlertDialogCancel>
           <AlertDialogAction
-            color={actionColor}
             disabled={actionDisabled}
             loading={actionLoading}
             onClick={onAction}

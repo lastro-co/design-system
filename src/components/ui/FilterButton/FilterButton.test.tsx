@@ -82,19 +82,19 @@ describe("FilterButton", () => {
     expect(labelIndex).toBeGreaterThan(counterIndex);
   });
 
-  it("applies active filter styling when count > 0", () => {
+  it("applies outlined Button styling regardless of active filters", () => {
     render(<FilterButton count={1} />);
 
     const button = screen.getByRole("button");
-    expect(button).toHaveClass("border-purple-100");
-    expect(button).toHaveClass("bg-purple-100");
+    expect(button).toHaveClass("border-gray-300");
+    expect(button).toHaveClass("bg-white");
   });
 
-  it("applies default styling when count is 0", () => {
+  it("applies default Button styling when count is 0", () => {
     render(<FilterButton count={0} />);
 
     const button = screen.getByRole("button");
-    expect(button).toHaveClass("border-gray-200");
+    expect(button).toHaveClass("border-gray-300");
     expect(button).toHaveClass("bg-white");
   });
 
@@ -108,8 +108,7 @@ describe("FilterButton", () => {
     render(<FilterButton disabled />);
 
     const button = screen.getByRole("button");
-    expect(button).toHaveClass("cursor-not-allowed");
-    expect(button).toHaveClass("opacity-50");
+    expect(button).toHaveClass("disabled:opacity-45");
   });
 
   it("calls onClick when clicked", async () => {

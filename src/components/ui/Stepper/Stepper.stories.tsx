@@ -105,7 +105,7 @@ function InteractiveStepper() {
         <Button
           disabled={step <= 1}
           onClick={() => setStep((s) => Math.max(1, s - 1))}
-          variant="outlined"
+          variant="outline"
         >
           Anterior
         </Button>

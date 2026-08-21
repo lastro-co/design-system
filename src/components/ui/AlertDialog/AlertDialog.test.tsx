@@ -107,7 +107,8 @@ describe("AlertDialog", () => {
     );
 
     const actionButton = screen.getByText("Confirm").closest("button");
-    expect(actionButton).toBeDisabled();
+    expect(actionButton).toHaveAttribute("aria-disabled", "true");
+    expect(actionButton).toHaveAttribute("aria-busy", "true");
   });
 
   it("disables action button when actionDisabled is true", () => {
@@ -517,7 +518,10 @@ describe("AlertDialogAction and AlertDialogCancel props", () => {
       </AlertDialogRoot>
     );
 
-    expect(screen.getByTestId("action-btn")).toBeDisabled();
+    expect(screen.getByTestId("action-btn")).toHaveAttribute(
+      "aria-disabled",
+      "true"
+    );
   });
 
   it("AlertDialogCancel renders as a button with provided children", () => {

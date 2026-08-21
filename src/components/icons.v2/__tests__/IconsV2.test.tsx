@@ -1,6 +1,7 @@
 import { render, screen } from "@/tests/app-test-utils";
 import {
   ArrowLeftIcon,
+  ArrowRightLeftIcon,
   BellIcon,
   BriefcaseBusinessIcon,
   Building2Icon,
@@ -11,6 +12,7 @@ import {
   ChevronRightIcon,
   ChevronsUpDownIcon,
   ChevronUpIcon,
+  CircleUserRoundIcon,
   ClipboardIcon,
   Columns3Icon,
   CornerUpRightIcon,
@@ -27,6 +29,7 @@ import {
   ImageIcon,
   LinkIcon,
   ListIcon,
+  MapPinIcon,
   MegaphoneIcon,
   MessageCircleIcon,
   MessageSquareIcon,
@@ -52,6 +55,7 @@ import {
 
 const LUCIDE_ICONS = [
   ["ArrowLeftIcon", ArrowLeftIcon],
+  ["ArrowRightLeftIcon", ArrowRightLeftIcon],
   ["BellIcon", BellIcon],
   ["BriefcaseBusinessIcon", BriefcaseBusinessIcon],
   ["Building2Icon", Building2Icon],
@@ -62,6 +66,7 @@ const LUCIDE_ICONS = [
   ["ChevronRightIcon", ChevronRightIcon],
   ["ChevronsUpDownIcon", ChevronsUpDownIcon],
   ["ChevronUpIcon", ChevronUpIcon],
+  ["CircleUserRoundIcon", CircleUserRoundIcon],
   ["ClipboardIcon", ClipboardIcon],
   ["Columns3Icon", Columns3Icon],
   ["CornerUpRightIcon", CornerUpRightIcon],
@@ -78,6 +83,7 @@ const LUCIDE_ICONS = [
   ["ImageIcon", ImageIcon],
   ["LinkIcon", LinkIcon],
   ["ListIcon", ListIcon],
+  ["MapPinIcon", MapPinIcon],
   ["MegaphoneIcon", MegaphoneIcon],
   ["MessageCircleIcon", MessageCircleIcon],
   ["MessageSquareIcon", MessageSquareIcon],
@@ -111,7 +117,7 @@ describe("icons.v2 — Lucide icons", () => {
     );
   });
 
-  it("all 44 lucide icons render without crashing", () => {
+  it("all 45 lucide icons render without crashing", () => {
     const { container } = render(
       <div>
         {LUCIDE_ICONS.map(([name, Icon]) => (
@@ -120,7 +126,7 @@ describe("icons.v2 — Lucide icons", () => {
       </div>
     );
     const svgs = container.querySelectorAll("svg");
-    expect(svgs).toHaveLength(44);
+    expect(svgs).toHaveLength(45);
   });
 
   it("icons accept className prop", () => {
