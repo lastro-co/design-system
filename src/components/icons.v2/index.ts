@@ -4,6 +4,8 @@ export {
   Bell as BellIcon,
   BriefcaseBusiness as BriefcaseBusinessIcon,
   Building2 as Building2Icon,
+  Check as CheckIcon,
+  CheckCheck as CheckCheckIcon,
   ChevronDown as ChevronDownIcon,
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,

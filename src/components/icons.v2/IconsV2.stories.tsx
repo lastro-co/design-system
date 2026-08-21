@@ -250,3 +250,73 @@ export const Colors = {
     strokeWidth: 2,
   },
 };
+
+const MESSAGE_STATUSES = [
+  {
+    Icon: IconsV2.CheckIcon,
+    className: "text-gray-600",
+    export: "CheckIcon",
+    label: "Enviado",
+  },
+  {
+    Icon: IconsV2.CheckCheckIcon,
+    className: "text-gray-600",
+    export: "CheckCheckIcon",
+    label: "Entregue",
+  },
+  {
+    Icon: IconsV2.CheckCheckIcon,
+    className: "text-blue-600",
+    export: "CheckCheckIcon",
+    label: "Visto",
+  },
+] as const;
+
+export const MessageStatus = {
+  name: "Status de Mensagem",
+  render: (args: IconsArgs) => (
+    <div className="w-full max-w-[720px]">
+      <div className="flex flex-wrap gap-4">
+        {MESSAGE_STATUSES.map(
+          ({ Icon, className, export: exportName, label }) => (
+            <div
+              className="flex min-w-[140px] flex-col items-center gap-2 rounded border p-4"
+              key={label}
+            >
+              <Icon
+                className={className}
+                size={args.size ?? 24}
+                strokeWidth={args.strokeWidth ?? 2}
+              />
+              <span className="font-medium text-sm">{label}</span>
+              <span className="text-center text-[11px] text-gray-600">
+                {exportName}
+                <br />
+                {className}
+              </span>
+            </div>
+          )
+        )}
+      </div>
+      <pre className="mt-6 overflow-x-auto rounded-lg bg-gray-900 px-4 py-3 text-gray-100 text-xs">
+        {`import { CheckIcon, CheckCheckIcon } from "@lastro-co/design-system/icons.v2";
+
+<CheckIcon className="text-gray-600" size={16} />       // enviado
+<CheckCheckIcon className="text-gray-600" size={16} />  // entregue
+<CheckCheckIcon className="text-blue-600" size={16} />  // visto`}
+      </pre>
+    </div>
+  ),
+  args: {
+    size: 24,
+    strokeWidth: 2,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Conjunto de status de mensagem no padrão WhatsApp, montado com os ícones lucide `check` e `check-check`. A cor vem de uma classe de token do DS (`text-gray-600` para enviado/entregue, `text-blue-600` para visto) — os ícones lucide herdam `currentColor`.",
+      },
+    },
+  },
+};
