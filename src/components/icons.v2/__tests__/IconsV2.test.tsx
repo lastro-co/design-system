@@ -117,7 +117,7 @@ describe("icons.v2 — Lucide icons", () => {
     );
   });
 
-  it("all 45 lucide icons render without crashing", () => {
+  it("all 47 lucide icons render without crashing", () => {
     const { container } = render(
       <div>
         {LUCIDE_ICONS.map(([name, Icon]) => (
