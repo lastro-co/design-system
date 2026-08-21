@@ -21,6 +21,7 @@ export { CheckBoxIcon } from "./CheckBoxIcon";
 export { CheckDoubleIcon } from "./CheckDoubleIcon";
 export { CheckIcon } from "./CheckIcon";
 export { CheckIconCircle } from "./CheckIconCircle";
+export { CheckSingleIcon } from "./CheckSingleIcon";
 export { ChevronDownIcon } from "./ChevronDownIcon";
 export { ChevronLeftIcon } from "./ChevronLeftIcon";
 export { ChevronRightIcon } from "./ChevronRightIcon";
