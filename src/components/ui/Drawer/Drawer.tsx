@@ -4,8 +4,8 @@ import type * as React from "react";
 import { createContext, useContext } from "react";
 import { Drawer as DrawerPrimitive } from "vaul";
 import { cn } from "@/lib/utils";
-import { CloseIcon } from "../../icons";
-import { ChevronLeftIcon } from "../../icons.v2";
+import { ChevronLeftIcon, XIcon } from "../../icons.v2";
+import { Button } from "../Button";
 import { IconButton } from "../IconButton";
 import { ScrollArea } from "../ScrollArea";
 
@@ -107,12 +107,12 @@ function DrawerContent({
         <DrawerClose asChild data-slot="drawer-close">
           <IconButton
             aria-label="Close"
-            className="absolute top-6 right-6"
+            className="absolute top-4 right-[18px]"
             shape="circular"
             size="small"
             variant="ghost"
           >
-            <CloseIcon size="sm" />
+            <XIcon className="size-4" />
           </IconButton>
         </DrawerClose>
       </DrawerPrimitive.Content>
@@ -120,8 +120,7 @@ function DrawerContent({
   );
 }
 
-const BACK_BUTTON_CLASSNAME =
-  "flex cursor-pointer items-center gap-0.5 font-medium text-purple-800 text-sm";
+const BACK_BUTTON_CLASSNAME = "absolute top-[22px] left-[22px]";
 
 function DrawerBackButton({ onBack }: { onBack?: () => void }) {
   const content = (
@@ -133,17 +132,22 @@ function DrawerBackButton({ onBack }: { onBack?: () => void }) {
 
   if (onBack) {
     return (
-      <button className={BACK_BUTTON_CLASSNAME} onClick={onBack} type="button">
+      <Button
+        className={BACK_BUTTON_CLASSNAME}
+        onClick={onBack}
+        type="button"
+        variant="link"
+      >
         {content}
-      </button>
+      </Button>
     );
   }
 
   return (
     <DrawerClose asChild>
-      <button className={BACK_BUTTON_CLASSNAME} type="button">
+      <Button className={BACK_BUTTON_CLASSNAME} type="button" variant="link">
         {content}
-      </button>
+      </Button>
     </DrawerClose>
   );
 }
@@ -162,15 +166,15 @@ function DrawerHeader({
 }) {
   return (
     <div
-      className={cn("mb-8 p-6 pb-0", className)}
+      className={cn("mb-8 px-6 pt-14", className)}
       data-slot="drawer-header"
       {...props}
     >
       {(!hideBackButton || action) && (
-        <div className="mb-4 flex items-center justify-between">
+        <>
           {hideBackButton ? <span /> : <DrawerBackButton onBack={onBack} />}
           {action}
-        </div>
+        </>
       )}
       {children}
     </div>
