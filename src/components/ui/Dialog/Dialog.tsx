@@ -4,7 +4,7 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import type { VariantProps } from "class-variance-authority";
 import type * as React from "react";
 import { cn } from "@/lib/utils";
-import { CloseIcon } from "../../icons";
+import { XIcon } from "../../icons.v2";
 import { Button, type buttonVariants } from "../Button";
 import { IconButton } from "../IconButton";
 
@@ -223,12 +223,12 @@ function DialogContent({
           <DialogPrimitive.Close asChild data-slot="dialog-close">
             <IconButton
               aria-label="Close"
-              className="absolute top-4 right-4"
+              className="absolute top-4 right-[18px]"
               shape="circular"
               size="small"
               variant="ghost"
             >
-              <CloseIcon size="sm" />
+              <XIcon className="size-4" />
             </IconButton>
           </DialogPrimitive.Close>
         )}
@@ -240,7 +240,7 @@ function DialogContent({
 function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn("mb-4 grid gap-1.5", className)}
+      className={cn("mb-5 grid gap-1.5 pr-8", className)}
       data-slot="dialog-header"
       {...props}
     />
@@ -250,7 +250,7 @@ function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
 function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn("mt-4 flex justify-end gap-2", className)}
+      className={cn("mt-5 flex justify-end gap-2", className)}
       data-slot="dialog-footer"
       {...props}
     />
