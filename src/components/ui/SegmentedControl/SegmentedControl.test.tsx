@@ -43,12 +43,22 @@ describe("SegmentedControl", () => {
     expect(screen.getAllByRole("radio", { checked: false })).toHaveLength(2);
   });
 
-  it("gives a surface to the selected segment only", () => {
+  // data-state, not the class: every token here is pending design sign-off, and
+  // the behaviour asserted — one segment checked, the rest not — outlives whatever
+  // value they land on. Radix owns this attribute, so it is a contract, not ours.
+  it("marks exactly one segment as checked", () => {
     setup("bankslips");
 
-    expect(screen.getByText("Boletos")).toHaveClass("bg-white");
-    expect(screen.getByText("Conversas")).toHaveClass("bg-transparent");
-    expect(screen.getByText("Ocorrências")).toHaveClass("bg-transparent");
+    expect(screen.getByRole("radio", { name: "Boletos" })).toHaveAttribute(
+      "data-state",
+      "checked"
+    );
+    for (const name of ["Conversas", "Ocorrências"]) {
+      expect(screen.getByRole("radio", { name })).toHaveAttribute(
+        "data-state",
+        "unchecked"
+      );
+    }
   });
 
   it("reports the value that was picked", async () => {
@@ -60,10 +70,6 @@ describe("SegmentedControl", () => {
     expect(onValueChange).toHaveBeenCalledWith("occurrences");
   });
 
-  // Arrow navigation itself comes from Radix's roving focus and is NOT asserted
-  // here: jsdom does not exercise it — verified by driving the DS's own
-  // RadioGroup the same way, which also reports nothing. What is assertable is
-  // the contract that tells the browser and AT which keys apply.
   it("declares the horizontal orientation the arrow keys follow", () => {
     setup();
 
@@ -71,6 +77,25 @@ describe("SegmentedControl", () => {
       "aria-orientation",
       "horizontal"
     );
+  });
+
+  // Radix moves focus on arrow and commits on Space, which is why this is a radio
+  // group and not a row of buttons. Asserting focus rather than the callback: the
+  // arrow alone does not select, and measuring the callback here is what made an
+  // earlier version of this test look like jsdom could not run the interaction.
+  it("moves focus with the arrows and commits with Space", async () => {
+    const user = userEvent.setup();
+    const onValueChange = setup();
+
+    screen.getByRole("radio", { name: "Conversas" }).focus();
+    await user.keyboard("{ArrowRight}");
+
+    expect(screen.getByRole("radio", { name: "Boletos" })).toHaveFocus();
+    expect(onValueChange).not.toHaveBeenCalled();
+
+    await user.keyboard(" ");
+
+    expect(onValueChange).toHaveBeenCalledWith("bankslips");
   });
 
   it("does not report a disabled segment", async () => {
@@ -105,9 +130,7 @@ describe("SegmentedControl", () => {
       />
     );
 
-    const track = screen.getByRole("radiogroup");
-    expect(track).toHaveClass("mt-4");
-    expect(track).toHaveClass("bg-gray-100");
+    expect(screen.getByRole("radiogroup")).toHaveClass("mt-4");
   });
 
   it("index.ts exports work correctly", () => {

@@ -223,6 +223,8 @@ describe("components/ui barrel exports", () => {
   });
   it("exports SegmentedControl", () => {
     expect(uiExports.SegmentedControl).toBeDefined();
+    expect(uiExports.segmentedControlVariants).toBeDefined();
+    expect(uiExports.segmentVariants).toBeDefined();
   });
 
   it("exports Select components", () => {
