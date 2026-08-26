@@ -209,6 +209,7 @@ export type { ProgressProps } from "./Progress";
 export { Progress } from "./Progress";
 export { RadioGroup, RadioGroupItem } from "./RadioGroup";
 export { ScrollArea, ScrollBar } from "./ScrollArea";
+export { SegmentedControl } from "./SegmentedControl";
 export {
   Select,
   SelectContent,
