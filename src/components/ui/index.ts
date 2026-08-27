@@ -41,8 +41,8 @@ export {
   CardTitle,
 } from "./Card";
 export { Checkbox } from "./Checkbox";
-export type { ColorPickerProps } from "./ColorPicker";
-export { ColorPicker } from "./ColorPicker";
+export type { ColorPickerPanelProps, ColorPickerProps } from "./ColorPicker";
+export { ColorPicker, ColorPickerPanel } from "./ColorPicker";
 export {
   Command,
   CommandDialog,
