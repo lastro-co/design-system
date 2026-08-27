@@ -13,18 +13,10 @@ const segmentVariants = cva([
   "cursor-pointer rounded-md px-3 py-1.5 font-medium text-sm",
   "outline-none transition-colors",
   "focus-visible:ring-2 focus-visible:ring-purple-400 focus-visible:ring-offset-1",
-  "disabled:cursor-default disabled:opacity-45",
-  // Styled off Radix's data-state rather than a value comparison in JS: Radix
-  // already owns which segment is checked, and this is how the DS's other
-  // Radix-backed components do it (RadioGroup, Checkbox).
-  //
-  // Only the checked segment carries a surface — that is the whole point of
-  // the pattern: the track reads as one control, not a row of buttons.
-  // shadow-xxs, not shadow-sm: in this DS --shadow-sm is `0 0 16px` with no
-  // offset — a 16px blur on a pill this tall spills past the track. --shadow-xxs
-  // is the ramp's only offset shadow. It has no other consumer yet, so design
-  // signs this off alongside the rest of the values.
+  // `disabled` blocks the click but not `:hover`; without this the hover below applies.
+  "disabled:pointer-events-none disabled:opacity-45",
   "data-[state=checked]:bg-white data-[state=checked]:text-gray-900",
+  // xxs, not sm: --shadow-sm here is a 16px blur with no offset.
   "data-[state=checked]:shadow-xxs",
   "data-[state=unchecked]:bg-transparent data-[state=unchecked]:text-gray-600",
   "data-[state=unchecked]:hover:text-gray-800",

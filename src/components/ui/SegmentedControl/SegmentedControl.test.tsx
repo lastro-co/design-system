@@ -25,7 +25,7 @@ describe("SegmentedControl", () => {
     setup();
 
     for (const option of options) {
-      expect(screen.getByText(option.label)).toBeInTheDocument();
+      expect(screen.getByText(option.label)).toBeVisible();
     }
   });
 
@@ -87,7 +87,9 @@ describe("SegmentedControl", () => {
     const user = userEvent.setup();
     const onValueChange = setup();
 
-    screen.getByRole("radio", { name: "Conversas" }).focus();
+    // tab, not .focus(): Radix's roving focus enters at the checked segment, and
+    // a bare .focus() fires its setState outside act().
+    await user.tab();
     await user.keyboard("{ArrowRight}");
 
     expect(screen.getByRole("radio", { name: "Boletos" })).toHaveFocus();
@@ -117,6 +119,8 @@ describe("SegmentedControl", () => {
 
     expect(onValueChange).not.toHaveBeenCalled();
     expect(screen.getByText("B")).toBeDisabled();
+    // jsdom resolves no `:hover`, so the class is the only assertable guard.
+    expect(screen.getByText("B")).toHaveClass("disabled:pointer-events-none");
   });
 
   it("merges an external className onto the track", () => {
