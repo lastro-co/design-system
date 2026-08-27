@@ -221,6 +221,11 @@ describe("components/ui barrel exports", () => {
     expect(uiExports.ScrollArea).toBeDefined();
     expect(uiExports.ScrollBar).toBeDefined();
   });
+  it("exports SegmentedControl", () => {
+    expect(uiExports.SegmentedControl).toBeDefined();
+    expect(uiExports.segmentedControlVariants).toBeDefined();
+    expect(uiExports.segmentVariants).toBeDefined();
+  });
 
   it("exports Select components", () => {
     expect(uiExports.Select).toBeDefined();
