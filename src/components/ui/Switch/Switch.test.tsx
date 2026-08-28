@@ -124,17 +124,41 @@ describe("Switch", () => {
     expect(thumb).toBeEmptyDOMElement();
   });
 
-  // `children` is accepted by SwitchPrimitive.Root and has always been dropped.
-  // Keeping it dropped is what makes thumbContent an additive change.
+  // SwitchPrimitive.Root accepts children and has always dropped them. The prop
+  // type now rejects them outright, so the ts-expect-error is the assertion:
+  // remove the Omit and this file stops compiling.
   it("still ignores children", () => {
+    // @ts-expect-error children is not part of the Switch API
     render(<Switch>should not render</Switch>);
     expect(screen.queryByText("should not render")).not.toBeInTheDocument();
   });
 
-  it("centers thumb content", () => {
-    const { container } = render(<Switch thumbContent={<span />} />);
+  // Named for what it checks: the centering lives on the thumb's own classes and
+  // holds with or without content, so passing content here would prove nothing.
+  it("makes the thumb a centering flex container", () => {
+    const { container } = render(<Switch />);
     const thumb = container.querySelector('[data-slot="switch-thumb"]');
     expect(thumb).toHaveClass("flex", "items-center", "justify-center");
+  });
+
+  // The regression the knob mark introduced: decorative artwork becoming the
+  // control's name. LaisLogo carries a default aria-label, so an unlabelled
+  // switch announced as "Lais" until the thumb was hidden from assistive tech.
+  it("keeps thumbContent out of the accessible name", () => {
+    render(
+      <Switch
+        aria-label="Atendimento"
+        thumbContent={<span aria-label="Lais" role="img" />}
+      />
+    );
+
+    expect(screen.getByRole("switch")).toHaveAccessibleName("Atendimento");
+  });
+
+  it("leaves an unlabelled switch unnamed even with a mark in the thumb", () => {
+    render(<Switch thumbContent={<span aria-label="Lais" role="img" />} />);
+
+    expect(screen.getByRole("switch")).toHaveAccessibleName("");
   });
 
   // The toggle reads abrupt at Tailwind's 150ms default; the slower ease-out is

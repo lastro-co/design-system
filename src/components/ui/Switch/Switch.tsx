@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 const switchVariants = cva(
   [
     "peer inline-flex shrink-0 items-center rounded-full border border-transparent shadow-xs",
-    "cursor-pointer outline-none transition-all duration-300 ease-out",
+    "cursor-pointer outline-none transition-colors duration-300 ease-out",
     "focus-visible:ring-2 focus-visible:ring-current/50",
     "disabled:cursor-not-allowed disabled:opacity-50",
     "data-[state=checked]:bg-current",
@@ -56,7 +56,7 @@ const switchThumbVariants = cva(
 );
 
 export interface SwitchProps
-  extends React.ComponentProps<typeof SwitchPrimitive.Root>,
+  extends Omit<React.ComponentProps<typeof SwitchPrimitive.Root>, "children">,
     VariantProps<typeof switchVariants> {
   /**
    * Rendered inside the thumb, for switches that carry a mark or glyph.
@@ -76,7 +76,11 @@ function Switch({ className, size, thumbContent, ...props }: SwitchProps) {
       data-slot="switch"
       {...props}
     >
+      {/* role="switch" takes its name from content, so a mark in the knob would
+          become the control's accessible name — LaisLogo alone would make an
+          unlabelled switch announce as "Lais". The knob is presentational. */}
       <SwitchPrimitive.Thumb
+        aria-hidden="true"
         className={cn(switchThumbVariants({ size }))}
         data-slot="switch-thumb"
       >

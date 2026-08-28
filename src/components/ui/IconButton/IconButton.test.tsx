@@ -310,6 +310,7 @@ describe("IconButton", () => {
     // Test variant classes
     expect(iconButtonVariants({ variant: "default" })).toContain("border-0");
     expect(iconButtonVariants({ variant: "outline" })).toContain("border");
+    expect(iconButtonVariants({ variant: "soft" })).toContain("bg-purple-100");
     expect(iconButtonVariants({ variant: "default" })).toContain(
       "bg-purple-800"
     );
