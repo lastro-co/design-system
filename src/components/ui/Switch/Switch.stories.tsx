@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { LaisLogo } from "../LaisLogo";
 import { Switch, type SwitchProps } from "./Switch";
 
 const meta: Meta<typeof Switch> = {
@@ -102,6 +103,34 @@ export const Disabled: Story = {
       <div className="flex items-center gap-3">
         <Switch {...args} defaultChecked disabled />
         <span className="text-gray-400 text-sm">Desativado (on)</span>
+      </div>
+    </div>
+  ),
+};
+
+export const WithThumbContent: Story = {
+  render: (args: SwitchProps) => (
+    <div className="flex flex-col gap-4 text-purple-500">
+      <div className="flex items-center gap-3">
+        <Switch
+          {...args}
+          defaultChecked
+          size="lg"
+          thumbContent={
+            <LaisLogo className="size-4 text-purple-500" symbolOnly />
+          }
+        />
+        <span className="text-gray-600 text-sm">Marca no thumb (on)</span>
+      </div>
+      <div className="flex items-center gap-3">
+        <Switch
+          {...args}
+          size="lg"
+          thumbContent={
+            <LaisLogo className="size-4 text-gray-600" symbolOnly />
+          }
+        />
+        <span className="text-gray-600 text-sm">Marca no thumb (off)</span>
       </div>
     </div>
   ),

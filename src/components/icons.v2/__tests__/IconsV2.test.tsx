@@ -31,6 +31,7 @@ import {
   KeyRoundIcon,
   LinkIcon,
   ListIcon,
+  LockIcon,
   MapPinIcon,
   MegaphoneIcon,
   MessageCircleIcon,
@@ -38,7 +39,9 @@ import {
   PaperclipIcon,
   PinIcon,
   ReplyIcon,
+  SendIcon,
   SettingsIcon,
+  ShieldCheckIcon,
   ShieldUserIcon,
   ShoppingBagIcon,
   SquarePenIcon,
@@ -87,6 +90,7 @@ const LUCIDE_ICONS = [
   ["KeyRoundIcon", KeyRoundIcon],
   ["LinkIcon", LinkIcon],
   ["ListIcon", ListIcon],
+  ["LockIcon", LockIcon],
   ["MapPinIcon", MapPinIcon],
   ["MegaphoneIcon", MegaphoneIcon],
   ["MessageCircleIcon", MessageCircleIcon],
@@ -94,7 +98,9 @@ const LUCIDE_ICONS = [
   ["PaperclipIcon", PaperclipIcon],
   ["PinIcon", PinIcon],
   ["ReplyIcon", ReplyIcon],
+  ["SendIcon", SendIcon],
   ["SettingsIcon", SettingsIcon],
+  ["ShieldCheckIcon", ShieldCheckIcon],
   ["ShieldUserIcon", ShieldUserIcon],
   ["ShoppingBagIcon", ShoppingBagIcon],
   ["SquarePenIcon", SquarePenIcon],
@@ -121,7 +127,7 @@ describe("icons.v2 — Lucide icons", () => {
     );
   });
 
-  it("all 49 lucide icons render without crashing", () => {
+  it("renders every listed lucide icon without crashing", () => {
     const { container } = render(
       <div>
         {LUCIDE_ICONS.map(([name, Icon]) => (
@@ -130,7 +136,7 @@ describe("icons.v2 — Lucide icons", () => {
       </div>
     );
     const svgs = container.querySelectorAll("svg");
-    expect(svgs).toHaveLength(49);
+    expect(svgs).toHaveLength(LUCIDE_ICONS.length);
   });
 
   it("icons accept className prop", () => {
