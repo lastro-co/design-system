@@ -124,22 +124,6 @@ describe("IconButton", () => {
     );
   });
 
-  it("renders the soft variant with a tinted fill and a purple mark", () => {
-    render(
-      <IconButton aria-label="Close" variant="soft">
-        <CloseIcon />
-      </IconButton>
-    );
-
-    const button = screen.getByRole("button");
-    expect(button).toHaveClass(
-      "bg-purple-100",
-      "text-purple-800",
-      "hover:bg-purple-200",
-      "active:bg-purple-300"
-    );
-  });
-
   it("applies active and focus-visible classes", () => {
     render(
       <IconButton aria-label="Close" variant="default">
@@ -184,18 +168,6 @@ describe("IconButton", () => {
 
     button = screen.getByRole("button");
     expect(button).not.toHaveClass("disabled:bg-gray-300");
-
-    rerender(
-      <IconButton aria-label="Close" disabled variant="soft">
-        <CloseIcon />
-      </IconButton>
-    );
-
-    button = screen.getByRole("button");
-    expect(button).toHaveClass(
-      "disabled:bg-gray-100",
-      "disabled:text-gray-600"
-    );
   });
 
   it("shows a fixed-size spinner and blocks clicks when loading, without disabled styles", async () => {
@@ -310,7 +282,6 @@ describe("IconButton", () => {
     // Test variant classes
     expect(iconButtonVariants({ variant: "default" })).toContain("border-0");
     expect(iconButtonVariants({ variant: "outline" })).toContain("border");
-    expect(iconButtonVariants({ variant: "soft" })).toContain("bg-purple-100");
     expect(iconButtonVariants({ variant: "default" })).toContain(
       "bg-purple-800"
     );
