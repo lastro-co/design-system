@@ -110,6 +110,44 @@ describe("Switch", () => {
     expect(thumb).toBeInTheDocument();
   });
 
+  it("renders thumbContent inside the thumb", () => {
+    const { container } = render(
+      <Switch thumbContent={<span data-testid="thumb-mark" />} />
+    );
+    const thumb = container.querySelector('[data-slot="switch-thumb"]');
+    expect(thumb).toContainElement(screen.getByTestId("thumb-mark"));
+  });
+
+  it("leaves the thumb empty when thumbContent is omitted", () => {
+    const { container } = render(<Switch />);
+    const thumb = container.querySelector('[data-slot="switch-thumb"]');
+    expect(thumb).toBeEmptyDOMElement();
+  });
+
+  // `children` is accepted by SwitchPrimitive.Root and has always been dropped.
+  // Keeping it dropped is what makes thumbContent an additive change.
+  it("still ignores children", () => {
+    render(<Switch>should not render</Switch>);
+    expect(screen.queryByText("should not render")).not.toBeInTheDocument();
+  });
+
+  it("centers thumb content", () => {
+    const { container } = render(<Switch thumbContent={<span />} />);
+    const thumb = container.querySelector('[data-slot="switch-thumb"]');
+    expect(thumb).toHaveClass("flex", "items-center", "justify-center");
+  });
+
+  // The toggle reads abrupt at Tailwind's 150ms default; the slower ease-out is
+  // the deliberate feel, so a silent revert should fail here.
+  it("eases the track and the thumb over the same duration", () => {
+    const { container } = render(<Switch />);
+    const switchEl = screen.getByRole("switch");
+    const thumb = container.querySelector('[data-slot="switch-thumb"]');
+
+    expect(switchEl).toHaveClass("duration-300", "ease-out");
+    expect(thumb).toHaveClass("duration-300", "ease-out");
+  });
+
   it("exports from index", () => {
     const exports = require("./index");
     expect(exports.Switch).toBeDefined();

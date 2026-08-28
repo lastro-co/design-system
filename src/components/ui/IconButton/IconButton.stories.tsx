@@ -26,7 +26,7 @@ const meta: Meta<typeof IconButton> = {
     },
     variant: {
       control: "select",
-      options: ["default", "outline", "ghost", "destructive"],
+      options: ["default", "outline", "ghost", "soft", "destructive"],
       description: "IconButton visual style variant",
     },
     loading: {
@@ -72,7 +72,13 @@ export const AsChild = {
   ),
 };
 
-const VARIANTS = ["default", "outline", "ghost", "destructive"] as const;
+const VARIANTS = [
+  "default",
+  "outline",
+  "ghost",
+  "soft",
+  "destructive",
+] as const;
 
 export const AllVariants = {
   render: () => (
