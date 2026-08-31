@@ -46,19 +46,19 @@ export function WaveformPlayer({
       {showControls && (
         <button
           aria-label={isPlaying ? "Pausar" : "Reproduzir"}
-          className="ml-4 shrink-0 disabled:opacity-50"
+          className="ml-4 shrink-0 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
           disabled={!isReady}
           onClick={togglePlayPause}
           type="button"
         >
           {isPlaying ? (
             <PauseIcon
-              className="cursor-pointer text-gray-600 transition-all duration-200 ease-out hover:text-gray-900"
+              className="text-gray-600 transition-all duration-200 ease-out hover:text-gray-900"
               size="md"
             />
           ) : (
             <PlayIcon
-              className="cursor-pointer text-gray-600 transition-all duration-200 ease-out hover:text-gray-900"
+              className="text-gray-600 transition-all duration-200 ease-out hover:text-gray-900"
               size="md"
             />
           )}

@@ -45,7 +45,11 @@ export function Card({
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <button aria-label="Mais informações" type="button">
+                    <button
+                      aria-label="Mais informações"
+                      className="cursor-pointer"
+                      type="button"
+                    >
                       <InfoIcon className="size-4 text-gray-400" />
                     </button>
                   </TooltipTrigger>

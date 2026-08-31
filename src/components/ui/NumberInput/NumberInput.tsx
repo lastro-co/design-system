@@ -113,7 +113,7 @@ function NumberInput({
       <div className="-translate-y-1/2 absolute top-1/2 right-3 flex flex-col justify-center">
         <button
           aria-label={incrementAriaLabel}
-          className="-mb-2 text-purple-800 transition-colors hover:text-purple-600 disabled:text-gray-300"
+          className="-mb-2 cursor-pointer text-purple-800 transition-colors hover:text-purple-600 disabled:cursor-not-allowed disabled:text-gray-300"
           data-slot="number-input-increment"
           disabled={!canIncrement}
           onClick={handleIncrement}
@@ -124,7 +124,7 @@ function NumberInput({
         </button>
         <button
           aria-label={decrementAriaLabel}
-          className="text-purple-800 transition-colors hover:text-purple-600 disabled:text-gray-300"
+          className="cursor-pointer text-purple-800 transition-colors hover:text-purple-600 disabled:cursor-not-allowed disabled:text-gray-300"
           data-slot="number-input-decrement"
           disabled={!canDecrement}
           onClick={handleDecrement}

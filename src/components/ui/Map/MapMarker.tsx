@@ -234,7 +234,7 @@ export function MarkerPopup({
       {closeButton && (
         <button
           aria-label="Close popup"
-          className="absolute top-1 right-1 z-10 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+          className="absolute top-1 right-1 z-10 cursor-pointer rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
           onClick={handleClose}
           type="button"
         >
