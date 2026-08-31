@@ -90,4 +90,93 @@ describe("Tabs", () => {
 
     expect(screen.queryByText("NOVO")).not.toBeInTheDocument();
   });
+
+  it("should render a string badge as the outlined pill", () => {
+    render(
+      <Tabs
+        items={[{ value: "equipes", label: "Equipes", badge: "NOVO" }]}
+        onValueChange={mockOnValueChange}
+        value="equipes"
+      />
+    );
+
+    const badge = screen.getByText("NOVO");
+    expect(badge).toHaveAttribute("data-slot", "tab-badge");
+    expect(badge).toHaveClass(
+      "inline-flex",
+      "items-center",
+      "rounded-full",
+      "border",
+      "border-purple-800",
+      "px-2",
+      "font-semibold",
+      "text-[10px]",
+      "text-purple-800",
+      "leading-5",
+      "tracking-[0.1px]"
+    );
+    expect(badge.tagName).toBe("SPAN");
+  });
+
+  it("should render an object badge as the design system Badge", () => {
+    render(
+      <Tabs
+        items={[
+          {
+            value: "error",
+            label: "Com erro",
+            badge: { text: "15", color: "red", isNumber: true },
+          },
+        ]}
+        onValueChange={mockOnValueChange}
+        value="error"
+      />
+    );
+
+    const badge = screen.getByText("15");
+    expect(badge).toHaveAttribute("data-slot", "badge");
+    expect(badge).toHaveClass("bg-red-50", "text-red-800", "min-w-5");
+  });
+
+  it("should honor color and isNumber on an object badge", () => {
+    render(
+      <Tabs
+        items={[
+          {
+            value: "equipes",
+            label: "Equipes",
+            badge: { text: "NOVO", color: "green", isNumber: false },
+          },
+        ]}
+        onValueChange={mockOnValueChange}
+        value="equipes"
+      />
+    );
+
+    const badge = screen.getByText("NOVO");
+    expect(badge).toHaveClass("bg-green-50", "text-green-800");
+    expect(badge).not.toHaveClass("min-w-5");
+  });
+
+  it("should not wrap an object badge in the legacy outlined pill", () => {
+    const { container } = render(
+      <Tabs
+        items={[
+          {
+            value: "error",
+            label: "Com erro",
+            badge: { text: "15", color: "red", isNumber: true },
+          },
+        ]}
+        onValueChange={mockOnValueChange}
+        value="error"
+      />
+    );
+
+    expect(container.querySelector('[data-slot="tab-badge"]')).toBeNull();
+    expect(screen.getByText("15").parentElement).toHaveAttribute(
+      "data-slot",
+      "tab"
+    );
+  });
 });

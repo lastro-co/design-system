@@ -19,6 +19,7 @@ export {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "./AlertDialog";
+export type { BadgeProps } from "./Badge";
 export { Badge, badgeVariants } from "./Badge";
 export type { BreadcrumbItem, BreadcrumbProps } from "./Breadcrumb";
 export { Breadcrumb } from "./Breadcrumb";
@@ -238,7 +239,7 @@ export type { StepperProps } from "./Stepper";
 export { Stepper } from "./Stepper";
 export type { SwitchProps } from "./Switch";
 export { Switch, switchVariants } from "./Switch";
-export type { TabItem, TabsProps } from "./Tabs";
+export type { TabBadge, TabItem, TabsProps } from "./Tabs";
 export { Tabs, tabsVariants, tabVariants } from "./Tabs";
 export { Textarea } from "./Textarea";
 export { Toaster } from "./Toaster";

@@ -81,3 +81,23 @@ export const WithBadge: Story = {
     value: "usuarios",
   },
 };
+
+export const WithBadgeVariants: Story = {
+  render: TabsWithState,
+  args: {
+    items: [
+      { value: "usuarios", label: "Usuários", badge: "NOVO" },
+      {
+        value: "equipes",
+        label: "Equipes",
+        badge: { text: "NOVO", color: "green", isNumber: false },
+      },
+      {
+        value: "error",
+        label: "Com erro",
+        badge: { text: "15", color: "red", isNumber: true },
+      },
+    ],
+    value: "usuarios",
+  },
+};
