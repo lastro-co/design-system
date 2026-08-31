@@ -41,8 +41,8 @@ export {
   CardTitle,
 } from "./Card";
 export { Checkbox } from "./Checkbox";
-export type { ColorPickerProps } from "./ColorPicker";
-export { ColorPicker } from "./ColorPicker";
+export type { ColorPickerPanelProps, ColorPickerProps } from "./ColorPicker";
+export { ColorPicker, ColorPickerPanel } from "./ColorPicker";
 export {
   Command,
   CommandDialog,
@@ -209,6 +209,15 @@ export type { ProgressProps } from "./Progress";
 export { Progress } from "./Progress";
 export { RadioGroup, RadioGroupItem } from "./RadioGroup";
 export { ScrollArea, ScrollBar } from "./ScrollArea";
+export type {
+  SegmentedControlOption,
+  SegmentedControlProps,
+} from "./SegmentedControl";
+export {
+  SegmentedControl,
+  segmentedControlVariants,
+  segmentVariants,
+} from "./SegmentedControl";
 export {
   Select,
   SelectContent,

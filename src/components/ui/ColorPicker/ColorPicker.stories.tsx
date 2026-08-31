@@ -25,6 +25,21 @@ const meta: Meta<typeof ColorPicker> = {
 export default meta;
 type Story = StoryObj<typeof ColorPicker>;
 
+/**
+ * The palette is supplied by the consumer through the `swatches` prop — the DS
+ * ships no default set of colors.
+ */
+const PRESET_COLORS = [
+  "#9664FA",
+  "#4CC9F0",
+  "#FF7A45",
+  "#C7C7CE",
+  "#4361EE",
+  "#D4A200",
+  "#F4457B",
+  "#28E4A8",
+];
+
 export const Default: Story = {
   render: () => {
     const [color, setColor] = useState("#7C3AED");
@@ -73,6 +88,59 @@ export const InForm: Story = {
         <span className="font-mono text-gray-500 text-xs">
           Cor selecionada: {color}
         </span>
+      </div>
+    );
+  },
+};
+
+export const WithSwatches: Story = {
+  render: () => {
+    const [color, setColor] = useState("#28E4A8");
+    return (
+      <div className="flex items-center gap-4">
+        <ColorPicker
+          onChange={setColor}
+          swatches={PRESET_COLORS}
+          value={color}
+        />
+        <span className="font-mono text-gray-800 text-sm">{color}</span>
+      </div>
+    );
+  },
+};
+
+export const SwatchesOnly: Story = {
+  render: () => {
+    const [color, setColor] = useState("#4361EE");
+    return (
+      <div className="flex items-center gap-4">
+        <ColorPicker
+          onChange={setColor}
+          showCustom={false}
+          swatches={PRESET_COLORS}
+          value={color}
+        />
+        <span className="font-mono text-gray-800 text-sm">{color}</span>
+      </div>
+    );
+  },
+};
+
+/** Header (title + description) above the grid, in a popover wide enough for it. */
+export const WideWithHeader: Story = {
+  render: () => {
+    const [color, setColor] = useState("#28E4A8");
+    return (
+      <div className="flex items-center gap-4">
+        <ColorPicker
+          contentClassName="w-[460px]"
+          onChange={setColor}
+          panelDescription="Selecione uma cor pré-definida ou da seleção livre abaixo."
+          panelTitle="Cor da etiqueta"
+          swatches={PRESET_COLORS}
+          value={color}
+        />
+        <span className="font-mono text-gray-800 text-sm">{color}</span>
       </div>
     );
   },
