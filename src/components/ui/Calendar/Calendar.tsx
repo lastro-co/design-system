@@ -554,9 +554,14 @@ function CalendarDayButton({
   return (
     <button
       className={cn(
-        "inline-flex cursor-pointer items-center justify-center rounded-full transition-colors disabled:cursor-not-allowed",
-        !modifiers.disabled &&
-          "hover:bg-gray-100 dark:hover:text-accent-foreground",
+        "inline-flex items-center justify-center rounded-full transition-colors",
+        // react-day-picker only sets the `disabled` attribute when the day is
+        // not focused -- a focused disabled day gets `aria-disabled` instead,
+        // which the `disabled:` variant would miss. Drive the cursor off the
+        // modifier so both cases are covered.
+        modifiers.disabled
+          ? "cursor-not-allowed"
+          : "cursor-pointer hover:bg-gray-100 dark:hover:text-accent-foreground",
         "flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 font-normal text-base text-gray-900 leading-none data-[range-end=true]:rounded-full data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-full data-[range-end=true]:rounded-r-md data-[range-start=true]:rounded-l-md data-[range-end=true]:bg-purple-900 data-[range-middle=true]:bg-accent data-[range-start=true]:bg-purple-900 data-[selected-single=true]:bg-purple-900 data-[range-end=true]:text-gray-900 data-[range-middle=true]:text-accent-foreground data-[range-start=true]:text-white data-[selected-single=true]:text-white group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-0 group-data-[focused=true]/day:ring-0 [&>span]:text-base [&>span]:opacity-70",
         defaultClassNames.day,
         modifiers.outside && !modifiers.selected && "text-gray-600!",
