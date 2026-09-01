@@ -45,6 +45,7 @@ export {
   Pin as PinIcon,
   Plus as PlusIcon,
   Reply as ReplyIcon,
+  ScanBarcode as ScanBarcodeIcon,
   Search as SearchIcon,
   Send as SendIcon,
   Settings as SettingsIcon,
