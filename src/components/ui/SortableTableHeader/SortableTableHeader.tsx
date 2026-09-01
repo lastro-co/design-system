@@ -60,7 +60,7 @@ function SortableTableHeader<K extends string>({
       <button
         {...buttonProps}
         className={cn(
-          "inline-flex cursor-pointer items-center gap-1.5 font-medium text-gray-500 text-xs uppercase tracking-wider transition-colors hover:text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600",
+          "inline-flex cursor-pointer items-center gap-1.5 font-medium text-gray-500 text-xs uppercase tracking-wider transition-colors hover:text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 disabled:cursor-not-allowed",
           align === "right" && "w-full justify-end",
           isActive && "text-gray-900",
           buttonProps?.className
