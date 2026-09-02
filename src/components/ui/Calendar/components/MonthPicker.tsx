@@ -19,7 +19,7 @@ export function MonthPicker({
     <div className="flex flex-col gap-4 p-3">
       <div className="flex items-center justify-between">
         <button
-          className="group flex size-8 items-center justify-center rounded-lg border border-gray-300 transition hover:bg-purple-100"
+          className="group flex size-8 cursor-pointer items-center justify-center rounded-lg border border-gray-300 transition hover:bg-purple-100"
           onClick={() => onYearChange("prev")}
           type="button"
         >
@@ -27,7 +27,7 @@ export function MonthPicker({
         </button>
         <span className="font-semibold text-purple-900">{selectedYear}</span>
         <button
-          className="group flex size-8 items-center justify-center rounded-lg border border-gray-300 transition hover:bg-purple-100"
+          className="group flex size-8 cursor-pointer items-center justify-center rounded-lg border border-gray-300 transition hover:bg-purple-100"
           onClick={() => onYearChange("next")}
           type="button"
         >
@@ -39,7 +39,7 @@ export function MonthPicker({
         {MONTHS_PT_BR.map((month, index) => (
           <button
             className={cn(
-              "rounded-lg px-4 py-2 font-medium text-sm transition",
+              "cursor-pointer rounded-lg px-4 py-2 font-medium text-sm transition",
               index === selectedMonth
                 ? "bg-purple-800 text-white"
                 : "bg-gray-100 text-gray-900 hover:bg-purple-100"

@@ -166,7 +166,7 @@ export const InputTag = forwardRef<HTMLInputElement, InputTagProps>(
             {!disabled && (
               <button
                 aria-label={`Remove ${tag}`}
-                className="flex items-center justify-center text-purple-800"
+                className="flex cursor-pointer items-center justify-center text-purple-800"
                 onClick={() => handleRemove(index)}
                 type="button"
               >
