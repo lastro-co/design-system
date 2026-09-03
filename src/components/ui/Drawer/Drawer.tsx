@@ -103,7 +103,7 @@ function DrawerContent({
       <DrawerOverlay />
       <DrawerPrimitive.Content
         className={cn(
-          "group/drawer-content select-text! fixed inset-y-0 right-0 flex h-auto flex-col bg-white",
+          "group/drawer-content select-text! fixed inset-y-0 right-0 z-50 flex h-auto flex-col bg-white",
           DRAWER_WIDTH_CLASSES[width],
           className
         )}
