@@ -28,12 +28,19 @@ const DrawerContext = createContext<DrawerContextValue>({
   width: "default",
 });
 
+type OmitDistributive<T, K extends PropertyKey> = T extends unknown
+  ? Omit<T, K>
+  : never;
+type DrawerProps = OmitDistributive<
+  React.ComponentProps<typeof DrawerPrimitive.Root>,
+  "direction"
+>;
+
 function Drawer({
   width = "default",
   handleOnly = true,
-  direction: _direction,
   ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Root> & {
+}: DrawerProps & {
   width?: DrawerWidth;
 }) {
   return (
