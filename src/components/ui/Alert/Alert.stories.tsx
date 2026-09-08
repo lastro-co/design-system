@@ -1,4 +1,4 @@
-import type { Meta } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Alert, AlertDescription, AlertTitle } from "./Alert";
 
 const meta: Meta<typeof Alert> = {
@@ -114,6 +114,32 @@ export const InlineIcon = {
         Alerta compacto com ícone alinhado ao texto, sem título — útil para
         avisos curtos em formulários e drawers.
       </AlertDescription>
+    ),
+  },
+};
+
+/**
+ * The alert paints its own white surface, so it stays legible on screens
+ * whose background is not white (drawers, gray page shells, colored sections)
+ * instead of letting the underlying color show through.
+ */
+export const OnColoredBackground: StoryObj<typeof Alert> = {
+  decorators: [
+    (Story) => (
+      <div className="w-[560px] rounded-lg bg-gray-100 p-8">
+        <Story />
+      </div>
+    ),
+  ],
+  args: {
+    severity: "info",
+    children: (
+      <>
+        <AlertTitle>Fundo próprio</AlertTitle>
+        <AlertDescription>
+          Mesmo sobre uma superfície cinza, o alerta mantém o fundo branco.
+        </AlertDescription>
+      </>
     ),
   },
 };

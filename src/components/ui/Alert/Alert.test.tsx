@@ -22,6 +22,16 @@ describe("Alert", () => {
     expect(screen.getByRole("alert")).toHaveClass("border-l-green-600");
   });
 
+  it("has an opaque white background in every severity", () => {
+    const severities = ["success", "info", "warning", "error"] as const;
+
+    severities.forEach((severity) => {
+      const { unmount } = render(<Alert severity={severity}>Content</Alert>);
+      expect(screen.getByRole("alert")).toHaveClass("bg-white");
+      unmount();
+    });
+  });
+
   it("accepts custom className", () => {
     render(<Alert className="custom-class">Test</Alert>);
     expect(screen.getByRole("alert")).toHaveClass("custom-class");

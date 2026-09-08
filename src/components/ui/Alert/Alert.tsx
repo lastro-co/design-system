@@ -53,7 +53,7 @@ const SEVERITY_ICON_COLOR = {
 } as const;
 
 const alertVariants = cva(
-  "w-full items-start rounded-lg border border-gray-300 border-l-8 p-4 text-base leading-none",
+  "w-full items-start rounded-lg border border-gray-300 border-l-8 bg-white p-4 text-base leading-none",
   {
     variants: {
       severity: {
