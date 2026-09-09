@@ -11,6 +11,10 @@ export {
   type BellIconHandle as AnimatedBellIconHandle,
 } from "./Bell";
 export {
+  BookOpenIcon as AnimatedBookOpenIcon,
+  type BookOpenIconHandle as AnimatedBookOpenIconHandle,
+} from "./BookOpen";
+export {
   BriefcaseBusinessIcon as AnimatedBriefcaseBusinessIcon,
   type BriefcaseBusinessIconHandle as AnimatedBriefcaseBusinessIconHandle,
 } from "./BriefcaseBusiness";
@@ -38,6 +42,10 @@ export {
   ChevronUpIcon as AnimatedChevronUpIcon,
   type ChevronUpIconHandle as AnimatedChevronUpIconHandle,
 } from "./ChevronUp";
+export {
+  ClipboardListIcon as AnimatedClipboardListIcon,
+  type ClipboardListIconHandle as AnimatedClipboardListIconHandle,
+} from "./ClipboardList";
 export {
   DollarSignIcon as AnimatedDollarSignIcon,
   type DollarSignIconHandle as AnimatedDollarSignIconHandle,
@@ -87,6 +95,10 @@ export {
   type PlugZapIconHandle as AnimatedPlugZapIconHandle,
 } from "./PlugZap";
 export {
+  ReceiptIcon as AnimatedReceiptIcon,
+  type ReceiptIconHandle as AnimatedReceiptIconHandle,
+} from "./Receipt";
+export {
   SearchIcon as AnimatedSearchIcon,
   type SearchIconHandle as AnimatedSearchIconHandle,
 } from "./Search";
@@ -110,6 +122,10 @@ export {
   UsersIcon as AnimatedUsersIcon,
   type UsersIconHandle as AnimatedUsersIconHandle,
 } from "./Users";
+export {
+  WrenchIcon as AnimatedWrenchIcon,
+  type WrenchIconHandle as AnimatedWrenchIconHandle,
+} from "./Wrench";
 export {
   type ZapHandle as AnimatedZapIconHandle,
   ZapIcon as AnimatedZapIcon,
