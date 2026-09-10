@@ -256,7 +256,7 @@ export const AllVariants: Story = {
             <SelectItem value="option2">Opção 2</SelectItem>
           </SelectContent>
         </Select>
-        <p className="mt-1 text-red-600 text-xs">Este campo é obrigatório.</p>
+        <p className="-mt-1 text-red-600 text-xs">Este campo é obrigatório.</p>
       </FormItem>
 
       <FormItem>
@@ -270,7 +270,7 @@ export const AllVariants: Story = {
             <SelectItem value="option2">Opção 2</SelectItem>
           </SelectContent>
         </Select>
-        <p className="mt-1 text-green-600 text-xs">Opção válida.</p>
+        <p className="-mt-1 text-green-600 text-xs">Opção válida.</p>
       </FormItem>
 
       <FormItem className="pb-6">

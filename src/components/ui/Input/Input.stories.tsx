@@ -99,7 +99,7 @@ export const AllVariants = {
         <FormItem>
           <Label required>Error</Label>
           <Input defaultValue="Jo" state="error" />
-          <p className="mt-1 text-red-600 text-xs">
+          <p className="-mt-1 text-red-600 text-xs">
             Nome deve ter pelo menos 3 caracteres.
           </p>
         </FormItem>
@@ -107,7 +107,7 @@ export const AllVariants = {
         <FormItem>
           <Label required>Success</Label>
           <Input defaultValue="maria@email.com" state="success" />
-          <p className="mt-1 text-green-600 text-xs">Email válido.</p>
+          <p className="-mt-1 text-green-600 text-xs">Email válido.</p>
         </FormItem>
 
         <FormItem>

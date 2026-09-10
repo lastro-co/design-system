@@ -534,25 +534,18 @@ describe("Form Component Rendering", () => {
     expect(screen.getByTestId("submit-button")).toBeInTheDocument();
   });
 
-  it("should render FormItem with correct data-slot and grid class", () => {
+  it("should render FormItem with correct data-slot and gap class", () => {
     render(<TestFormComponent />);
 
     const formItem = document.querySelector('[data-slot="form-item"]');
-    expect(formItem).toHaveClass("grid");
+    expect(formItem).toHaveClass("grid", "gap-2");
   });
 
-  it("should render FormLabel with 8px bottom margin", () => {
-    render(<TestFormComponent />);
-
-    const usernameLabel = screen.getByText("Username");
-    expect(usernameLabel).toHaveClass("mb-2");
-  });
-
-  it("should render FormMessage with 4px top margin", () => {
+  it("should render FormMessage with a 4px offset from the gap-2 baseline", () => {
     render(<FormMessageWithChildrenComponent />);
 
     const message = screen.getByText("Static hint message");
-    expect(message).toHaveClass("mt-1");
+    expect(message).toHaveClass("-mt-1");
   });
 
   it("should render FormControl with data-slot attribute", () => {

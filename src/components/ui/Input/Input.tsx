@@ -30,10 +30,10 @@ function Input({
         className={cn(
           "flex h-10 w-full items-center gap-3 rounded-md border border-gray-200 bg-white px-3 py-2 transition",
           "focus-within:border-purple-800 focus-within:ring-2 focus-within:ring-purple-400/15",
+          "has-aria-invalid:border-red-600",
           props.disabled &&
             "pointer-events-none cursor-not-allowed select-none bg-gray-50",
           isSuccess && "border-green-500",
-          isInvalid && "border-red-600",
           className
         )}
       >
@@ -41,7 +41,7 @@ function Input({
           <span
             className={cn(
               "block shrink-0 text-gray-600 transition [&_svg]:size-4",
-              props.disabled && "text-gray-400 disabled:opacity-50",
+              props.disabled && "text-gray-400",
               isSuccess && "text-green-600",
               isInvalid && "text-red-600"
             )}
@@ -67,7 +67,7 @@ function Input({
             aria-label="Clear search"
             className={cn(
               "shrink-0 cursor-pointer text-gray-400 transition-colors hover:text-gray-800",
-              props.disabled && "text-gray-400 disabled:opacity-50"
+              props.disabled && "text-gray-400"
             )}
             onClick={onClear}
             type="button"

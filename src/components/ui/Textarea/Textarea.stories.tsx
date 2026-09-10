@@ -79,7 +79,7 @@ export const AllVariants = {
         <FormItem>
           <Label required>Error</Label>
           <Textarea defaultValue="Descrição muito curta" state="error" />
-          <p className="mt-1 text-red-600 text-xs">
+          <p className="-mt-1 text-red-600 text-xs">
             Descrição deve ter pelo menos 20 caracteres.
           </p>
         </FormItem>
@@ -90,7 +90,7 @@ export const AllVariants = {
             defaultValue="Apartamento reformado, 2 quartos, próximo ao metrô."
             state="success"
           />
-          <p className="mt-1 text-green-600 text-xs">Descrição válida.</p>
+          <p className="-mt-1 text-green-600 text-xs">Descrição válida.</p>
         </FormItem>
 
         <FormItem className="pb-6">
