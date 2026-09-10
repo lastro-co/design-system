@@ -2,7 +2,7 @@
 
 import { forwardRef, useCallback, useState } from "react";
 import { cn } from "@/lib/utils";
-import { CloseIcon } from "../../icons";
+import { XIcon } from "../../icons.v2";
 
 export interface InputTagProps
   extends Omit<
@@ -27,6 +27,8 @@ export interface InputTagProps
   containerClassName?: string;
   /** Custom className for tags */
   tagClassName?: string;
+  /** Visual validation state of the input */
+  state?: "default" | "error" | "success";
 }
 
 /**
@@ -74,11 +76,15 @@ export const InputTag = forwardRef<HTMLInputElement, InputTagProps>(
       containerClassName,
       tagClassName,
       className,
+      state = "default",
       ...props
     },
     ref
   ) => {
     const [inputValue, setInputValue] = useState("");
+
+    const isInvalid = state === "error" || Boolean(props["aria-invalid"]);
+    const isSuccess = state === "success" && !isInvalid;
 
     const canAddMore = maxTags === undefined || value.length < maxTags;
 
@@ -131,8 +137,10 @@ export const InputTag = forwardRef<HTMLInputElement, InputTagProps>(
     const iconElement = icon && (
       <span
         className={cn(
-          "flex-shrink-0 text-gray-600",
-          disabled && "text-gray-300",
+          "flex-shrink-0 text-gray-600 [&_svg]:size-4",
+          disabled && "text-gray-400",
+          isSuccess && "text-green-600",
+          isInvalid && "text-red-600",
           iconPosition === "left" ? "mr-2" : "ml-2"
         )}
       >
@@ -143,10 +151,13 @@ export const InputTag = forwardRef<HTMLInputElement, InputTagProps>(
     return (
       <div
         className={cn(
-          "flex min-h-[46px] flex-wrap items-center gap-1",
-          "rounded-md border border-gray-300 bg-white px-3 py-1.5",
-          "focus-within:border-purple-800",
-          disabled && "cursor-not-allowed bg-gray-50 opacity-50",
+          "flex min-h-10 flex-wrap items-center gap-1",
+          "rounded-md border border-gray-200 bg-white px-2 py-1",
+          "transition focus-within:border-purple-800 focus-within:ring-2 focus-within:ring-purple-400/15",
+          "has-aria-invalid:border-red-600",
+          disabled &&
+            "pointer-events-none cursor-not-allowed select-none bg-gray-50",
+          isSuccess && "border-green-500",
           containerClassName
         )}
       >
@@ -156,8 +167,8 @@ export const InputTag = forwardRef<HTMLInputElement, InputTagProps>(
           <span
             className={cn(
               "inline-flex items-center gap-2",
-              "rounded-md border border-gray-300 bg-white px-2 py-1.5",
-              "font-normal text-gray-900 text-xs",
+              "rounded-md border border-gray-200 bg-white px-1.5 py-1",
+              "font-normal text-gray-800 text-xs",
               tagClassName
             )}
             key={`${tag}-${index}`}
@@ -170,17 +181,18 @@ export const InputTag = forwardRef<HTMLInputElement, InputTagProps>(
                 onClick={() => handleRemove(index)}
                 type="button"
               >
-                <CloseIcon className="size-2.5" />
+                <XIcon className="size-3" />
               </button>
             )}
           </span>
         ))}
 
         <input
+          aria-invalid={isInvalid}
           className={cn(
-            "min-w-[60px] flex-1 border-none bg-transparent p-0 text-gray-900 text-sm outline-none",
-            "placeholder:text-gray-600",
-            disabled && "cursor-not-allowed",
+            "min-w-[60px] flex-1 border-none bg-transparent p-0 pl-1 text-gray-800 text-sm outline-none",
+            "placeholder:text-gray-500",
+            "disabled:cursor-not-allowed disabled:text-gray-400",
             className
           )}
           disabled={disabled || !canAddMore}
