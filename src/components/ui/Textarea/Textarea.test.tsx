@@ -24,6 +24,27 @@ describe("Textarea", () => {
     );
   });
 
+  it("should apply error border via state prop", () => {
+    render(<Textarea placeholder="Error input" state="error" />);
+    const textarea = screen.getByPlaceholderText("Error input");
+    expect(textarea).toHaveAttribute("aria-invalid", "true");
+    expect(textarea).toHaveClass("aria-invalid:border-red-600");
+  });
+
+  it("should apply success border via state prop", () => {
+    render(<Textarea placeholder="Success input" state="success" />);
+    const textarea = screen.getByPlaceholderText("Success input");
+    expect(textarea).toHaveClass("border-green-500");
+    expect(textarea).toHaveAttribute("aria-invalid", "false");
+  });
+
+  it("error state takes precedence over success state", () => {
+    render(<Textarea aria-invalid placeholder="Both states" state="success" />);
+    const textarea = screen.getByPlaceholderText("Both states");
+    expect(textarea).toHaveAttribute("aria-invalid", "true");
+    expect(textarea).not.toHaveClass("border-green-500");
+  });
+
   it("should start with 1 row when maxRows is defined", () => {
     render(<Textarea data-testid="textarea" maxRows={5} />);
     expect(screen.getByTestId("textarea")).toHaveAttribute("rows", "1");

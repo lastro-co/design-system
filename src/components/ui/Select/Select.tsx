@@ -4,7 +4,7 @@ import * as SelectPrimitive from "@radix-ui/react-select";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { ChevronDownIcon, SearchIcon } from "../../icons";
+import { CheckIcon, ChevronDownIcon, SearchIcon } from "../../icons.v2";
 
 function normalizeText(text: string): string {
   return text
@@ -18,46 +18,36 @@ const SelectSearchContext = React.createContext<string>("");
 
 const selectTriggerVariants = cva(
   [
-    "flex w-full cursor-pointer items-center justify-between gap-2 whitespace-nowrap rounded-md bg-white text-gray-900 outline-none transition",
-    "disabled:pointer-events-none disabled:cursor-not-allowed disabled:select-none disabled:bg-gray-100 disabled:text-gray-600 [&:disabled_svg]:text-gray-600 [&[data-disabled]_svg]:text-gray-600",
+    "flex min-h-8 w-full cursor-pointer items-center justify-between gap-2 whitespace-nowrap rounded-md bg-white p-3 pl-4 text-gray-900 text-sm outline-none transition",
+    '[&_svg:not([class*="size-"])]:size-4',
+    "data-[state=open]:border-purple-800 data-[state=open]:ring-2 data-[state=open]:ring-purple-400/15",
+    "disabled:pointer-events-none disabled:cursor-not-allowed disabled:select-none disabled:bg-gray-50 disabled:text-gray-400 [&:disabled_svg]:text-gray-400 [&[data-disabled]_svg]:text-gray-400",
     "aria-invalid:border-red-600",
     "*:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2",
-    "*:data-[slot=select-value]:text-gray-900 [&[data-placeholder]_*[data-slot=select-value]]:text-gray-600",
+    "*:data-[slot=select-value]:text-gray-900 [&[data-placeholder]_*[data-slot=select-value]]:text-gray-500",
     "font-text [&_svg]:pointer-events-none [&_svg]:shrink-0",
   ].join(" "),
   {
     variants: {
-      size: {
-        sm: 'h-8 px-2 text-xs [&_svg:not([class*="size-"])]:size-3',
-        md: 'h-10 p-3 pl-4 text-sm [&_svg:not([class*="size-"])]:size-4',
-        lg: 'h-12 p-3 pl-4 text-sm [&_svg:not([class*="size-"])]:size-4',
-      },
       variant: {
-        bordered: "border border-gray-300",
+        bordered: "border border-gray-200",
         borderless: "border-none",
       },
     },
     defaultVariants: {
-      size: "lg",
       variant: "bordered",
     },
   }
 );
 
 const selectItemVariants = cva(
-  "relative flex w-full cursor-pointer select-none items-center gap-2 text-base text-gray-900 outline-hidden transition-colors data-disabled:pointer-events-none data-[state=checked]:bg-purple-100 data-highlighted:bg-gray-300 data-[state=checked]:text-purple-800 data-disabled:opacity-50",
-  {
-    variants: {
-      size: {
-        sm: "p-2 text-xs",
-        md: "p-2.5",
-        lg: "p-3",
-      },
-    },
-    defaultVariants: {
-      size: "lg",
-    },
-  }
+  [
+    "relative flex h-10 w-full cursor-pointer select-none items-center justify-between gap-2 px-2 py-1.5 text-gray-900 text-sm outline-hidden transition-colors",
+    "data-disabled:pointer-events-none data-disabled:opacity-50",
+    "data-[state=checked]:bg-purple-50 data-[state=checked]:text-purple-800",
+    "data-highlighted:bg-purple-50",
+    "[&_svg]:size-4 [&_svg]:shrink-0",
+  ].join(" ")
 );
 
 function Select({
@@ -81,16 +71,24 @@ function SelectValue({
 function SelectTrigger({
   className,
   children,
-  size,
   variant,
+  state = "default",
+  "aria-invalid": ariaInvalid,
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Trigger> &
-  VariantProps<typeof selectTriggerVariants>) {
+  VariantProps<typeof selectTriggerVariants> & {
+    state?: "default" | "error" | "success";
+  }) {
+  const isInvalid = state === "error" || Boolean(ariaInvalid);
+  const isSuccess = state === "success" && !isInvalid;
+
   return (
     <SelectPrimitive.Trigger
+      aria-invalid={isInvalid}
       className={cn(
-        selectTriggerVariants({ size, variant }),
+        selectTriggerVariants({ variant }),
         '[&_svg:not([class*="text-"])]:text-gray-600',
+        isSuccess && "border-green-500",
         className
       )}
       data-slot="select-trigger"
@@ -99,8 +97,11 @@ function SelectTrigger({
       {children}
       <SelectPrimitive.Icon asChild>
         <ChevronDownIcon
-          className={size === "sm" ? "size-5" : "size-8"}
-          color="gray-900"
+          className={cn(
+            "size-4 text-gray-900",
+            isSuccess && "text-green-600",
+            isInvalid && "text-red-600"
+          )}
         />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
@@ -113,6 +114,7 @@ function SelectContent({
   position = "popper",
   align = "start",
   side = "bottom",
+  sideOffset = 4,
   searchable = false,
   searchPlaceholder = "Buscar...",
   ...props
@@ -130,15 +132,17 @@ function SelectContent({
           align={align}
           avoidCollisions={false}
           className={cn(
-            "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95",
-            "data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-            "relative z-50 max-h-(--radix-select-content-available-height) min-w-[4rem] origin-(--radix-select-content-transform-origin) overflow-x-hidden rounded-md border border-gray-300 bg-white font-text text-gray-900 shadow-sx data-[state=closed]:animate-out data-[state=open]:animate-in",
+            "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
+            "data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+            "data-[state=closed]:animate-out data-[state=open]:animate-in",
+            "relative z-50 max-h-(--radix-select-content-available-height) min-w-[4rem] origin-(--radix-select-content-transform-origin) overflow-x-hidden rounded-md border border-gray-300 bg-white font-text text-gray-900 shadow-sx",
             className
           )}
           data-slot="select-content"
           onCloseAutoFocus={() => setSearch("")}
           position={position}
           side={side}
+          sideOffset={sideOffset}
           {...props}
         >
           {searchable && (
@@ -146,7 +150,7 @@ function SelectContent({
               className="sticky top-0 z-10 flex items-center gap-2 border-gray-300 border-b bg-white p-3"
               data-slot="select-search"
             >
-              <SearchIcon className="size-4 shrink-0" color="purple-800" />
+              <SearchIcon className="size-4 shrink-0 text-purple-800" />
               <input
                 autoFocus
                 className="w-full bg-transparent font-text text-gray-900 text-sm outline-none placeholder:text-gray-600"
@@ -160,7 +164,7 @@ function SelectContent({
           )}
           <SelectPrimitive.Viewport
             className={cn(
-              "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)] scroll-my-1"
+              "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)] scroll-my-1 p-1"
             )}
           >
             {children}
@@ -187,10 +191,11 @@ function SelectLabel({
 function SelectItem({
   className,
   children,
-  size,
+  icon,
   ...props
-}: React.ComponentProps<typeof SelectPrimitive.Item> &
-  VariantProps<typeof selectItemVariants>) {
+}: React.ComponentProps<typeof SelectPrimitive.Item> & {
+  icon?: React.ReactNode;
+}) {
   const search = React.useContext(SelectSearchContext);
 
   const isHidden = React.useMemo(() => {
@@ -209,15 +214,17 @@ function SelectItem({
 
   return (
     <SelectPrimitive.Item
-      className={cn(
-        selectItemVariants({ size }),
-        isHidden && "hidden",
-        className
-      )}
+      className={cn(selectItemVariants(), isHidden && "hidden", className)}
       data-slot="select-item"
       {...props}
     >
-      <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+      <span className="flex min-w-0 items-center gap-2">
+        {icon}
+        <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+      </span>
+      <SelectPrimitive.ItemIndicator>
+        <CheckIcon className="size-4" />
+      </SelectPrimitive.ItemIndicator>
     </SelectPrimitive.Item>
   );
 }
