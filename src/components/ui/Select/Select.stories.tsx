@@ -173,37 +173,6 @@ export const WithIcons: Story = {
   },
 };
 
-/**
- * Temporary story for design review — dropdown is open by default so the
- * content (items, hover, check) can be inspected without clicking.
- */
-export const Opened: Story = {
-  render: (args) => {
-    const { "aria-invalid": ariaInvalid, variant, ...selectArgs } = args;
-    return (
-      <Select defaultOpen defaultValue="aluguel" {...selectArgs}>
-        <SelectTrigger aria-invalid={ariaInvalid} variant={variant}>
-          <SelectValue placeholder="Selecione uma operação" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem icon={<HomeIcon />} value="aluguel">
-            Aluguel
-          </SelectItem>
-          <SelectItem icon={<Building2Icon />} value="compra">
-            Compra
-          </SelectItem>
-          <SelectItem icon={<SendIcon />} value="venda">
-            Venda
-          </SelectItem>
-          <SelectItem icon={<ArrowRightLeftIcon />} value="permuta">
-            Permuta
-          </SelectItem>
-        </SelectContent>
-      </Select>
-    );
-  },
-};
-
 export const Borderless: Story = {
   args: {
     variant: "borderless",
