@@ -18,10 +18,10 @@ const SelectSearchContext = React.createContext<string>("");
 
 const selectTriggerVariants = cva(
   [
-    "flex min-h-8 w-full cursor-pointer items-center justify-between gap-2 whitespace-nowrap rounded-md bg-white p-3 pl-4 text-gray-900 text-sm outline-none transition",
+    "flex h-10 w-full cursor-pointer items-center justify-between gap-2 whitespace-nowrap rounded-md bg-white p-3 pl-4 text-gray-900 text-sm outline-none transition",
     '[&_svg:not([class*="size-"])]:size-4',
     "data-[state=open]:border-purple-800 data-[state=open]:ring-2 data-[state=open]:ring-purple-400/15",
-    "disabled:pointer-events-none disabled:cursor-not-allowed disabled:select-none disabled:bg-gray-50 disabled:text-gray-400 [&:disabled_svg]:text-gray-400 [&[data-disabled]_svg]:text-gray-400",
+    "disabled:pointer-events-none disabled:cursor-not-allowed disabled:select-none disabled:bg-gray-50 disabled:text-gray-400 disabled:opacity-50 [&:disabled_svg]:text-gray-400 [&[data-disabled]_svg]:text-gray-400",
     "aria-invalid:border-red-600",
     "*:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2",
     "*:data-[slot=select-value]:text-gray-900 [&[data-placeholder]_*[data-slot=select-value]]:text-gray-500",

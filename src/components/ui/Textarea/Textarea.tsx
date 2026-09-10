@@ -142,7 +142,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         className={cn(
           "flex min-h-10 w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-gray-800 text-sm outline-none transition placeholder:text-gray-500",
           "focus-visible:border-purple-800 focus-visible:ring-2 focus-visible:ring-purple-400/15",
-          "disabled:pointer-events-none disabled:cursor-not-allowed disabled:select-none disabled:bg-gray-100 disabled:text-gray-600",
+          "disabled:pointer-events-none disabled:cursor-not-allowed disabled:select-none disabled:bg-gray-50 disabled:text-gray-400 disabled:opacity-50",
           "selection:bg-text-gray-900 selection:text-purple-foreground",
           "aria-invalid:border-red-600",
           isSuccess && "border-green-500",
