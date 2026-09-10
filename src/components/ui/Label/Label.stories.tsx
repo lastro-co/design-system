@@ -30,6 +30,10 @@ const meta: Meta<typeof Label> = {
       control: "text",
       description: "The id of the form element the label is associated with",
     },
+    required: {
+      control: "boolean",
+      description: "Whether to show a red asterisk indicating a required field",
+    },
   },
 };
 
@@ -66,6 +70,17 @@ export const Section: Story = {
 };
 
 /**
+ * Required field - shows a red asterisk after the label text
+ */
+export const Required: Story = {
+  args: {
+    variant: "input",
+    required: true,
+    children: "Email",
+  },
+};
+
+/**
  * All variants side by side for comparison
  */
 export const AllVariants: Story = {
@@ -81,6 +96,14 @@ export const AllVariants: Story = {
         <Label variant="section">Section variant</Label>
         <p className="text-gray-500 text-xs">
           Used for section headers - 16px, #1A1A1A
+        </p>
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label required variant="input">
+          Required field
+        </Label>
+        <p className="text-gray-500 text-xs">
+          Used when the field must be filled - red asterisk
         </p>
       </div>
     </div>

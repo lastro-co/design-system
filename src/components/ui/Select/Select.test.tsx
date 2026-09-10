@@ -131,6 +131,48 @@ describe("Select", () => {
     expect(onValueChange).toHaveBeenCalledWith("option1");
   });
 
+  it("renders icon inside SelectItem", async () => {
+    const user = userEvent.setup();
+    render(
+      <Select>
+        <SelectTrigger>
+          <SelectValue placeholder="Escolha" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem
+            icon={<span data-testid="item-icon">icon</span>}
+            value="option1"
+          >
+            Opção 1
+          </SelectItem>
+        </SelectContent>
+      </Select>
+    );
+
+    await user.click(screen.getByRole("combobox"));
+    expect(screen.getByTestId("item-icon")).toBeVisible();
+  });
+
+  it("shows check indicator on the selected item", async () => {
+    const user = userEvent.setup();
+    render(
+      <Select defaultValue="option1">
+        <SelectTrigger>
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="option1">Opção 1</SelectItem>
+          <SelectItem value="option2">Opção 2</SelectItem>
+        </SelectContent>
+      </Select>
+    );
+
+    await user.click(screen.getByRole("combobox"));
+    const selectedItem = screen.getByRole("option", { name: "Opção 1" });
+    expect(selectedItem).toHaveAttribute("data-state", "checked");
+    expect(selectedItem.querySelector("svg")).toBeInTheDocument();
+  });
+
   it("renders SelectGroup with data-slot", async () => {
     const user = userEvent.setup();
     render(
@@ -338,6 +380,89 @@ describe("Select", () => {
     );
 
     expect(screen.getByRole("combobox")).toHaveAttribute("aria-invalid");
+  });
+
+  it("applies error border via state prop", () => {
+    render(
+      <Select>
+        <SelectTrigger state="error">
+          <SelectValue placeholder="Error" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="a">A</SelectItem>
+        </SelectContent>
+      </Select>
+    );
+
+    const trigger = screen.getByRole("combobox");
+    expect(trigger).toHaveAttribute("aria-invalid", "true");
+    expect(trigger).toHaveClass("aria-invalid:border-red-600");
+  });
+
+  it("applies success border via state prop", () => {
+    render(
+      <Select>
+        <SelectTrigger state="success">
+          <SelectValue placeholder="Success" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="a">A</SelectItem>
+        </SelectContent>
+      </Select>
+    );
+
+    const trigger = screen.getByRole("combobox");
+    expect(trigger).toHaveClass("border-green-500");
+    expect(trigger).toHaveAttribute("aria-invalid", "false");
+  });
+
+  it("error state takes precedence over success state", () => {
+    render(
+      <Select>
+        <SelectTrigger aria-invalid state="success">
+          <SelectValue placeholder="Both" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="a">A</SelectItem>
+        </SelectContent>
+      </Select>
+    );
+
+    const trigger = screen.getByRole("combobox");
+    expect(trigger).toHaveAttribute("aria-invalid", "true");
+    expect(trigger).not.toHaveClass("border-green-500");
+  });
+
+  it("applies error color to chevron icon via state prop", () => {
+    render(
+      <Select>
+        <SelectTrigger state="error">
+          <SelectValue placeholder="Error" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="a">A</SelectItem>
+        </SelectContent>
+      </Select>
+    );
+
+    const chevron = screen.getByRole("combobox").querySelector("svg");
+    expect(chevron).toHaveClass("text-red-600");
+  });
+
+  it("applies success color to chevron icon via state prop", () => {
+    render(
+      <Select>
+        <SelectTrigger state="success">
+          <SelectValue placeholder="Success" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="a">A</SelectItem>
+        </SelectContent>
+      </Select>
+    );
+
+    const chevron = screen.getByRole("combobox").querySelector("svg");
+    expect(chevron).toHaveClass("text-green-600");
   });
 
   describe("searchable", () => {

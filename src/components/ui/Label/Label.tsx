@@ -21,15 +21,34 @@ const labelVariants = cva(
 
 interface LabelProps
   extends React.ComponentProps<typeof LabelPrimitive.Root>,
-    VariantProps<typeof labelVariants> {}
+    VariantProps<typeof labelVariants> {
+  required?: boolean;
+}
 
-function Label({ className, variant, ...props }: LabelProps) {
+function Label({
+  className,
+  variant,
+  required,
+  children,
+  ...props
+}: LabelProps) {
   return (
     <LabelPrimitive.Root
       className={cn(labelVariants({ variant }), className)}
       data-slot="label"
       {...props}
-    />
+    >
+      {required ? (
+        <span>
+          {children}{" "}
+          <span aria-hidden="true" className="text-red-600">
+            *
+          </span>
+        </span>
+      ) : (
+        children
+      )}
+    </LabelPrimitive.Root>
   );
 }
 
