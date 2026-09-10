@@ -147,7 +147,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           "aria-invalid:border-red-600",
           isSuccess && "border-green-500",
           !resizable && "resize-none",
-          maxRows ? "h-auto" : "h-12",
+          maxRows ? "h-auto" : "h-10",
           className
         )}
         data-slot="textarea"

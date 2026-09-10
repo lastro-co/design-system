@@ -65,10 +65,7 @@ function Input({
         {showClearButton && (
           <button
             aria-label="Clear search"
-            className={cn(
-              "shrink-0 cursor-pointer text-gray-400 transition-colors hover:text-gray-800",
-              props.disabled && "text-gray-400"
-            )}
+            className="shrink-0 cursor-pointer text-gray-400 transition-colors hover:text-gray-800"
             onClick={onClear}
             type="button"
           >

@@ -70,9 +70,9 @@ describe("Textarea", () => {
     expect(screen.getByTestId("textarea")).toHaveClass("h-auto");
   });
 
-  it("should apply h-12 class when maxRows is not set", () => {
+  it("should apply h-10 class when maxRows is not set", () => {
     render(<Textarea data-testid="textarea" />);
-    expect(screen.getByTestId("textarea")).toHaveClass("h-12");
+    expect(screen.getByTestId("textarea")).toHaveClass("h-10");
   });
 
   it("should call onInput handler when text is typed", async () => {
