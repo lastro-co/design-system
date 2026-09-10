@@ -141,7 +141,7 @@ export const InputTag = forwardRef<HTMLInputElement, InputTagProps>(
           disabled && "text-gray-400",
           isSuccess && "text-green-600",
           isInvalid && "text-red-600",
-          iconPosition === "left" ? "mr-2" : "ml-2"
+          iconPosition === "left" ? "mr-2 ml-1" : "mr-1 ml-2"
         )}
       >
         {icon}
