@@ -15,6 +15,7 @@ export {
   CircleAlert as CircleAlertIcon,
   CircleUserRound as CircleUserRoundIcon,
   Clipboard as ClipboardIcon,
+  ClockArrowRight as ClockArrowRightIcon,
   Columns3 as Columns3Icon,
   CornerUpRight as CornerUpRightIcon,
   Crown as CrownIcon,
