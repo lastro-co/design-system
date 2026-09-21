@@ -45,7 +45,7 @@ describe("Card", () => {
       expect(card).toHaveClass("border-gray-200");
       expect(card).toHaveClass("bg-white");
       expect(card).toHaveClass("p-6");
-      expect(card).toHaveClass("shadow-xxs");
+      expect(card).toHaveClass("shadow-card");
     });
 
     it("darkens the border on hover", () => {
@@ -59,7 +59,7 @@ describe("Card", () => {
       render(<Card data-testid="card">Content</Card>);
       const card = screen.getByTestId("card");
       expect(card).toHaveClass("p-6");
-      expect(card).toHaveClass("shadow-xxs");
+      expect(card).toHaveClass("shadow-card");
     });
 
     it("lets className override the default padding", () => {
