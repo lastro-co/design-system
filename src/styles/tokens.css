@@ -136,3 +136,352 @@
     }
   }
 }
+
+/* ---------------------------------------------------------------------------
+ * LaisSuggestionCard / LaisGlowOrb
+ * Recreated from Figma "Componente completo" (file PBllwtsOffnfFGmqjuqPRa,
+ * node 9834:47220). Timings below are the exported keyframe times (fractions of
+ * the 6s timeline) converted to percentages.
+ * ------------------------------------------------------------------------- */
+
+/* --- Glow orb: primary (spins clockwise from 0deg) --- */
+
+@keyframes lais-orb-primary-fade {
+  0%,
+  20.18% {
+    opacity: 0;
+    animation-timing-function: ease-in;
+  }
+  33.33% {
+    opacity: 0.8;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  53.11% {
+    opacity: 0.6;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  72.8% {
+    opacity: 0.85;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  92.49%,
+  100% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes lais-orb-primary-spin {
+  0%,
+  13.73% {
+    rotate: 0deg;
+  }
+  100% {
+    rotate: 360deg;
+  }
+}
+
+@keyframes lais-orb-primary-pulse {
+  0%,
+  13.73% {
+    scale: 0.8;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  25.54% {
+    scale: 1;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  55.08% {
+    scale: 1.06;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  76.73% {
+    scale: 0.95;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  92.49%,
+  100% {
+    scale: 1;
+  }
+}
+
+@keyframes lais-orb-primary-drift {
+  0%,
+  13.73% {
+    translate: -18px 14px;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  25.54% {
+    translate: 0 0;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  45.23% {
+    translate: 0 8px;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  66.89% {
+    translate: 0 -8px;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  92.49%,
+  100% {
+    translate: 0 0;
+  }
+}
+
+/* --- Glow orb: secondary (counter-clockwise from -21.1deg, counter-phased) --- */
+
+@keyframes lais-orb-secondary-fade {
+  0%,
+  20% {
+    opacity: 0;
+    animation-timing-function: ease-in;
+  }
+  40.02% {
+    opacity: 0.8;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  57.04% {
+    opacity: 0.9;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  74.76% {
+    opacity: 0.55;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  92.49%,
+  100% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes lais-orb-secondary-spin {
+  0%,
+  13.73% {
+    rotate: -21.1deg;
+  }
+  100% {
+    rotate: -381.1deg;
+  }
+}
+
+@keyframes lais-orb-secondary-pulse {
+  0%,
+  13.73% {
+    scale: 0.8;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  26.53% {
+    scale: 1;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  53.11% {
+    scale: 0.94;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  74.76% {
+    scale: 1.07;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  92.49%,
+  100% {
+    scale: 1;
+  }
+}
+
+@keyframes lais-orb-secondary-drift {
+  0%,
+  13.73% {
+    translate: 18px 14px;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  26.53% {
+    translate: 0 0;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  49.17% {
+    translate: 0 -10px;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  70.83% {
+    translate: 0 8px;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  92.49%,
+  100% {
+    translate: 0 0;
+  }
+}
+
+/* --- Suggestion card --- */
+
+@keyframes lais-card-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes lais-card-rise {
+  from {
+    scale: 0.9;
+    translate: 0 20px;
+  }
+  to {
+    scale: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes lais-card-float {
+  from {
+    translate: 0 0;
+  }
+  to {
+    translate: 0 -6px;
+  }
+}
+
+/*
+ * Orb surface: a mint radial over a purple one, both blurred by the component.
+ * Figma's radial gradients are sheared ellipses (non-orthogonal axes); CSS
+ * cannot rotate a radial-gradient, so these are axis-aligned approximations —
+ * indistinguishable under the 32.5px blur the orb applies.
+ */
+@utility lais-glow-orb-primary {
+  background-image:
+    radial-gradient(
+      86px 258px at 45.5% 14.25%,
+      var(--color-mint-500) 0%,
+      var(--color-green-100) 100%
+    ),
+    radial-gradient(
+      191px 462px at 40% 62.4%,
+      color-mix(in srgb, var(--color-purple-400) 90%, transparent) 0%,
+      color-mix(in srgb, var(--color-purple-300) 10%, transparent) 100%
+    );
+  animation:
+    lais-orb-primary-fade 6s linear infinite,
+    lais-orb-primary-spin 6s linear infinite,
+    lais-orb-primary-pulse 6s linear infinite,
+    lais-orb-primary-drift 6s linear infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    opacity: 0.8;
+  }
+}
+
+@utility lais-glow-orb-secondary {
+  background-image:
+    radial-gradient(
+      86px 258px at 45.5% 14.25%,
+      var(--color-mint-500) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      191px 462px at 40% 62.4%,
+      color-mix(in srgb, var(--color-purple-400) 90%, transparent) 0%,
+      color-mix(in srgb, var(--color-purple-300) 10%, transparent) 100%
+    );
+  animation:
+    lais-orb-secondary-fade 6s linear infinite,
+    lais-orb-secondary-spin 6s linear infinite,
+    lais-orb-secondary-pulse 6s linear infinite,
+    lais-orb-secondary-drift 6s linear infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    opacity: 0.8;
+    rotate: -21.1deg;
+  }
+}
+
+/*
+ * Card surface. Figma's radial gradient is a 2780x603 ellipse centred outside
+ * the card, so across the card it resolves to a linear ramp (verified: the
+ * gradient parameter at the centre equals the mean of the four corners).
+ */
+@utility lais-suggestion-surface {
+  position: relative;
+  overflow: clip;
+  /* Lets the 1px stroke drawn by ::before at inset -1px survive the clip. */
+  overflow-clip-margin: 1px;
+  background-image: linear-gradient(
+    342deg,
+    color-mix(in srgb, var(--color-purple-400) 60%, transparent) -28%,
+    color-mix(in srgb, var(--color-purple-900) 90%, transparent) 48.5%,
+    var(--color-purple-700) 96.3%
+  );
+  /* Transparent border reserves the 1px box; ::before paints the gradient. */
+  border: 1px solid transparent;
+  box-shadow:
+    0 0 120px 0 color-mix(in srgb, var(--color-purple-300) 35%, transparent),
+    0 0 40px 0 color-mix(in srgb, var(--color-purple-400) 45%, transparent);
+
+  /*
+   * Gradient stroke. A border cannot hold a gradient, so a 1px ring is masked
+   * out of a filled pseudo-element — the only technique that follows the 20px
+   * corner radius.
+   */
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    padding: 1px;
+    border-radius: inherit;
+    background: linear-gradient(
+      115deg,
+      color-mix(in srgb, var(--color-purple-200) 80%, transparent) 0%,
+      color-mix(in srgb, var(--color-purple-400) 25%, transparent) 100%
+    );
+    pointer-events: none;
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+}
+
+/*
+ * Clipping frame for the two glow orbs, mirroring Figma's fixed-size "Circles"
+ * frame (9852:36975) — it is narrower than the card and cuts the orbs, which is
+ * what keeps the glow hugging the card. The blur moves from the orbs onto this
+ * frame so it is applied *after* the clip: blurring first and clipping second
+ * leaves a hard rectangular edge below the card.
+ */
+@utility lais-suggestion-glow {
+  position: absolute;
+  overflow: clip;
+  filter: blur(32.5px);
+  pointer-events: none;
+
+  /* Attribute selector outranks the orb's own `blur-*` utility. */
+  & > [data-slot="lais-glow-orb"] {
+    filter: none;
+  }
+}
+
+@utility lais-suggestion-enter {
+  animation:
+    lais-card-fade-in 1.688s cubic-bezier(0.25, 0.46, 0.45, 0.94) both,
+    lais-card-rise 2.063s cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@utility lais-suggestion-float {
+  animation: lais-card-float 3.94s cubic-bezier(0.45, 0, 0.55, 1) 2.063s
+    infinite alternate;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}

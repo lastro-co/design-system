@@ -132,8 +132,15 @@ export { Input } from "./Input";
 export type { InputTagProps } from "./InputTag";
 export { InputTag } from "./InputTag";
 export { Label } from "./Label";
+export type { LaisGlowOrbProps, LaisGlowOrbVariant } from "./LaisGlowOrb";
+export { LaisGlowOrb } from "./LaisGlowOrb";
 export type { LaisLogoProps } from "./LaisLogo";
 export { LaisLogo } from "./LaisLogo";
+export type {
+  LaisSuggestionCardAction,
+  LaisSuggestionCardProps,
+} from "./LaisSuggestionCard";
+export { LaisSuggestionCard } from "./LaisSuggestionCard";
 export type { LoadingOverlayProps } from "./LoadingOverlay";
 export { LoadingOverlay } from "./LoadingOverlay";
 export type {

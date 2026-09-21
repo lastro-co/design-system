@@ -180,6 +180,14 @@ describe("components/ui barrel exports", () => {
     expect(uiExports.Label).toBeDefined();
   });
 
+  it("exports LaisGlowOrb", () => {
+    expect(uiExports.LaisGlowOrb).toBeDefined();
+  });
+
+  it("exports LaisSuggestionCard", () => {
+    expect(uiExports.LaisSuggestionCard).toBeDefined();
+  });
+
   it("exports LoadingOverlay", () => {
     expect(uiExports.LoadingOverlay).toBeDefined();
   });
