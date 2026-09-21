@@ -40,6 +40,24 @@ describe("LaisSuggestionCard", () => {
     expect(screen.queryByText(BULLET)).not.toBeInTheDocument();
   });
 
+  it("applies the DS typography spec to the title and description", () => {
+    render(<LaisSuggestionCard {...baseProps} />);
+    // Red Hat Text 18/20 medium, inheriting white from the card surface.
+    expect(screen.getByText("Sugestão da Lais • Reengajamento")).toHaveClass(
+      "font-medium",
+      "text-lg",
+      "leading-5"
+    );
+    // Red Hat Text 16/20 regular.
+    expect(screen.getByText(DESCRIPTION)).toHaveClass(
+      "font-normal",
+      "text-base",
+      "leading-5"
+    );
+    // The family is set once on the surface so the CTA inherits it too.
+    expect(screen.getByRole("status")).toHaveClass("font-text", "text-white");
+  });
+
   it("calls the action handler when the CTA is pressed", async () => {
     const user = userEvent.setup();
     render(<LaisSuggestionCard {...baseProps} />);

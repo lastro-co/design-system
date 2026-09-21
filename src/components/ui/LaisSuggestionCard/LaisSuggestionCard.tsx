@@ -72,7 +72,7 @@ export function LaisSuggestionCard({
         <div
           aria-atomic="true"
           aria-live="polite"
-          className="lais-suggestion-surface lais-suggestion-enter flex flex-col gap-8 rounded-[20px] p-5 text-white backdrop-blur-[1px]"
+          className="lais-suggestion-surface lais-suggestion-enter flex flex-col gap-8 rounded-[20px] p-5 font-text text-white backdrop-blur-[1px]"
           role="status"
         >
           <div className="flex w-full flex-col gap-4">
@@ -83,7 +83,7 @@ export function LaisSuggestionCard({
                   className="size-4 shrink-0 text-white"
                   symbolOnly
                 />
-                <p className="font-medium text-[18px] leading-5">
+                <p className="font-medium text-lg leading-5">
                   {category ? `${label} • ${category}` : label}
                 </p>
               </div>
@@ -98,7 +98,7 @@ export function LaisSuggestionCard({
                 </button>
               )}
             </div>
-            <p className="text-base leading-5">{description}</p>
+            <p className="font-normal text-base leading-5">{description}</p>
           </div>
 
           <Button
