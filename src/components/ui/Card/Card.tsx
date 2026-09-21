@@ -8,10 +8,17 @@ import {
   TooltipTrigger,
 } from "../Tooltip";
 
+/**
+ * Tipografia do título do card (DS 2026.2): Red Hat Display 18px SemiBold,
+ * gray-800, leading 18px, tracking -0.18px. Compartilhada entre a prop `title`
+ * do Card e o `CardTitle` para que as duas APIs não divirjam.
+ */
+const cardTitleClassName =
+  "font-display font-semibold text-gray-800 text-lg leading-[18px] tracking-[-0.18px]";
+
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   separator?: boolean;
-  shadow?: boolean;
   title?: string;
   titleTooltip?: string;
 }
@@ -20,7 +27,6 @@ export function Card({
   children,
   className,
   separator = false,
-  shadow = false,
   title,
   titleTooltip,
   ...props
@@ -28,19 +34,15 @@ export function Card({
   return (
     <div
       className={cn(
-        "rounded-lg border border-gray-200 bg-white",
-        shadow && "shadow-sm",
-        title && "px-6 pt-3 pb-6",
+        "rounded-lg border border-gray-200 bg-white p-6 shadow-xxs transition-colors hover:border-gray-300",
         className
       )}
       {...props}
     >
       {title && (
         <>
-          <div className="flex items-center gap-2">
-            <h3 className="font-semibold text-black text-lg leading-[1.4]">
-              {title}
-            </h3>
+          <div className={cn("flex items-center gap-2", !separator && "mb-6")}>
+            <h3 className={cardTitleClassName}>{title}</h3>
             {titleTooltip && (
               <TooltipProvider>
                 <Tooltip>
@@ -60,7 +62,7 @@ export function Card({
               </TooltipProvider>
             )}
           </div>
-          {separator && <div className="my-3 h-px bg-gray-300" />}
+          {separator && <div className="my-6 h-px bg-gray-200" />}
         </>
       )}
       {children}
@@ -74,7 +76,7 @@ export interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function CardHeader({ className, children, ...props }: CardHeaderProps) {
   return (
-    <div className={cn("p-4 pb-3", className)} {...props}>
+    <div className={cn("pb-6", className)} {...props}>
       {children}
     </div>
   );
@@ -87,10 +89,7 @@ export interface CardTitleProps
 
 export function CardTitle({ className, children, ...props }: CardTitleProps) {
   return (
-    <h3
-      className={cn("font-semibold text-lg leading-none", className)}
-      {...props}
-    >
+    <h3 className={cn(cardTitleClassName, className)} {...props}>
       {children}
     </h3>
   );
@@ -107,7 +106,7 @@ export function CardDescription({
   ...props
 }: CardDescriptionProps) {
   return (
-    <p className={cn("mt-1 text-gray-500 text-sm", className)} {...props}>
+    <p className={cn("mt-1 text-gray-600 text-sm", className)} {...props}>
       {children}
     </p>
   );
@@ -123,7 +122,7 @@ export function CardContent({
   ...props
 }: CardContentProps) {
   return (
-    <div className={cn("p-4 pt-0", className)} {...props}>
+    <div className={className} {...props}>
       {children}
     </div>
   );
@@ -135,7 +134,7 @@ export interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function CardFooter({ className, children, ...props }: CardFooterProps) {
   return (
-    <div className={cn("p-4 pt-0", className)} {...props}>
+    <div className={cn("pt-6", className)} {...props}>
       {children}
     </div>
   );

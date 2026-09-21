@@ -22,91 +22,131 @@ const meta: Meta<typeof Card> = {
 export default meta;
 type Story = StoryObj<typeof Card>;
 
+/**
+ * Card no estado de repouso: raio 8px, borda `gray-200`, sombra `shadow-xxs`
+ * e padding de 24px em todos os lados. Passe o mouse para ver a borda escurecer
+ * para `gray-300`.
+ */
 export const Default: Story = {
   render: () => (
-    <Card className="w-[350px] border-gray-300 bg-white" shadow>
+    <Card className="w-[350px]" title="Atividades">
+      <p className="text-gray-600 text-sm">
+        A Lais registrou 3 novas atividades hoje.
+      </p>
+    </Card>
+  ),
+};
+
+/**
+ * Sem a prop `title` o Card é só a superfície — o conteúdo já nasce dentro dos
+ * 24px de padding.
+ */
+export const Simple: Story = {
+  render: () => (
+    <Card className="w-[350px]">
+      <p className="text-gray-600 text-sm">Card simples com conteúdo direto.</p>
+    </Card>
+  ),
+};
+
+/**
+ * O `separator` substitui o espaçamento de 24px por uma régua `gray-200` com
+ * 24px acima e abaixo.
+ */
+export const WithSeparator: Story = {
+  render: () => (
+    <Card className="w-[350px]" separator title="Consumo do plano">
+      <p className="text-gray-600 text-sm">10 de 150 atendimentos usados.</p>
+    </Card>
+  ),
+};
+
+/**
+ * `titleTooltip` adiciona o ícone de informação ao lado do título.
+ */
+export const WithTitleTooltip: Story = {
+  render: () => (
+    <Card
+      className="w-[350px]"
+      title="Cobranças de atendimento"
+      titleTooltip="Atendimentos que ultrapassaram a franquia do plano são cobrados à parte."
+    >
+      <p className="text-gray-600 text-sm">Nenhuma cobrança neste ciclo.</p>
+    </Card>
+  ),
+};
+
+/**
+ * Composição com os sub-componentes. O padding de 24px é do `Card` — o
+ * `CardHeader` e o `CardFooter` só cuidam do ritmo vertical.
+ */
+export const Composed: Story = {
+  render: () => (
+    <Card className="w-[350px]">
       <CardHeader>
-        <CardTitle>Título do Card</CardTitle>
-        <CardDescription>Descrição do card aqui.</CardDescription>
+        <CardTitle>Reengajamento em minutos</CardTitle>
+        <CardDescription>
+          A Lais envia uma mensagem 15 minutos depois que o lead parar de
+          responder.
+        </CardDescription>
       </CardHeader>
       <CardContent>
-        <p>Conteúdo do card.</p>
+        <p className="text-gray-600 text-sm">Ativo desde 12 de março.</p>
       </CardContent>
       <CardFooter>
-        <p className="text-gray-500 text-sm">Footer do card</p>
+        <p className="text-gray-600 text-sm">Última execução há 2 horas.</p>
       </CardFooter>
     </Card>
   ),
 };
 
-export const Simple: Story = {
+/**
+ * O espaçamento entre cards é de 16px (`gap-4`) e fica a cargo de quem compõe a
+ * tela — o Card não opina sobre o layout ao redor.
+ */
+export const CardGrid: Story = {
+  parameters: { layout: "padded" },
   render: () => (
-    <Card className="w-[350px] border-gray-300 bg-white p-6" shadow>
-      <p>Card simples com conteúdo direto.</p>
-    </Card>
+    <div className="grid w-[740px] grid-cols-2 gap-4">
+      <Card title="Consumo do plano">
+        <p className="text-gray-600 text-sm">10 / 150 atendimentos</p>
+      </Card>
+      <Card title="Cobranças de atendimento">
+        <p className="text-gray-600 text-sm">Nenhuma neste ciclo</p>
+      </Card>
+      <Card title="Pré-agendamento de visitas">
+        <p className="text-gray-600 text-sm">1 visita aguardando</p>
+      </Card>
+      <Card title="Leads por canal">
+        <p className="text-gray-600 text-sm">WhatsApp lidera com 62%</p>
+      </Card>
+    </div>
   ),
 };
 
-export const WithTitle: Story = {
-  render: () => (
-    <Card className="w-[350px]" title="Título do Card">
-      <p>Conteúdo do card com título.</p>
-    </Card>
-  ),
-};
-
-export const WithTitleAndSeparator: Story = {
-  render: () => (
-    <Card className="w-[350px]" separator title="Título com Separador">
-      <p>Conteúdo abaixo do separador.</p>
-    </Card>
-  ),
-};
-
-export const WithShadow: Story = {
-  render: () => (
-    <Card className="w-[350px]" shadow title="Card com sombra">
-      <p>Card com shadow-sm habilitado.</p>
-    </Card>
-  ),
-};
-
-export const ContentCardStyle: Story = {
-  render: () => (
-    <Card
-      className="w-[350px] border-gray-300"
-      separator
-      shadow={false}
-      title="Estilo ContentCard"
-    >
-      <p>Conteúdo no estilo do antigo ContentCard.</p>
-    </Card>
-  ),
-};
-
+/**
+ * Card com imagem à direita, composto a partir do próprio `Card` — o padding de
+ * 24px e a borda vêm do componente, não de markup solto.
+ */
 export const WithImage: Story = {
   render: () => (
-    <div className="flex flex-row items-center justify-between gap-4 rounded-xl border border-gray-300 bg-white p-6">
+    <Card className="flex w-[420px] flex-row items-center justify-between gap-4">
       <div className="flex min-w-0 flex-1 flex-col gap-2">
         <div className="flex items-center gap-1">
-          <span className="font-semibold text-gray-900 text-lg">
-            Título do card
-          </span>
-          <ChevronRightIcon className="size-6 text-gray-900" />
+          <CardTitle>Configurar negócio</CardTitle>
+          <ChevronRightIcon className="size-6 text-gray-800" />
         </div>
-        <span className="text-gray-600 text-sm leading-relaxed">
-          Descrição do card com informações adicionais
-        </span>
+        <CardDescription>
+          Ajuste as informações que a Lais usa para atender seus leads.
+        </CardDescription>
       </div>
-      <div className="relative shrink-0">
-        <img
-          alt="Imagem do card"
-          className="object-contain"
-          height={84}
-          src="/img/config-business.png"
-          width={112}
-        />
-      </div>
-    </div>
+      <img
+        alt="Ilustração de configuração do negócio"
+        className="shrink-0 object-contain"
+        height={84}
+        src="/img/config-business.png"
+        width={112}
+      />
+    </Card>
   ),
 };
