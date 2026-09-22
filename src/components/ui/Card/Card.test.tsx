@@ -102,10 +102,16 @@ describe("Card", () => {
       expect(heading).toHaveClass("text-gray-800");
     });
 
-    it("leaves 24px between the title and the content", () => {
+    it("leaves 8px between the title and the content", () => {
       render(<Card title="My Title">Content</Card>);
       const heading = screen.getByRole("heading", { level: 3 });
-      expect(heading.parentElement).toHaveClass("mb-6");
+      expect(heading.parentElement).toHaveClass("mb-2");
+    });
+
+    it("renders the title above the children", () => {
+      render(<Card title="My Title">Body</Card>);
+      expect(screen.getByRole("heading", { level: 3 })).toBeInTheDocument();
+      expect(screen.getByText("Body")).toBeInTheDocument();
     });
 
     it("does not render an h3 when title is not provided", () => {
@@ -133,64 +139,6 @@ describe("Card", () => {
       expect(
         screen.queryByRole("button", { name: "Mais informações" })
       ).not.toBeInTheDocument();
-    });
-  });
-
-  describe("separator prop", () => {
-    it("renders a divider when both title and separator are true", () => {
-      render(
-        <Card data-testid="card" separator title="My Title">
-          Content
-        </Card>
-      );
-      const card = screen.getByTestId("card");
-      expect(card.querySelector(".h-px.bg-gray-200.my-6")).toBeInTheDocument();
-    });
-
-    it("replaces the title bottom margin with the divider spacing", () => {
-      render(
-        <Card separator title="My Title">
-          Content
-        </Card>
-      );
-      const heading = screen.getByRole("heading", { level: 3 });
-      expect(heading.parentElement).not.toHaveClass("mb-6");
-    });
-
-    it("does not render a divider when separator is true but title is missing", () => {
-      render(
-        <Card data-testid="card" separator>
-          Content
-        </Card>
-      );
-      const card = screen.getByTestId("card");
-      expect(card.querySelector(".h-px.bg-gray-200")).not.toBeInTheDocument();
-    });
-
-    it("does not render a divider when title is present but separator is false", () => {
-      render(
-        <Card data-testid="card" title="My Title">
-          Content
-        </Card>
-      );
-      const card = screen.getByTestId("card");
-      expect(card.querySelector(".h-px.bg-gray-200")).not.toBeInTheDocument();
-    });
-  });
-
-  describe("combination: title + separator", () => {
-    it("renders title, divider and children together", () => {
-      render(
-        <Card data-testid="card" separator title="Combined">
-          Body
-        </Card>
-      );
-      const card = screen.getByTestId("card");
-      expect(
-        screen.getByRole("heading", { level: 3, name: "Combined" })
-      ).toBeInTheDocument();
-      expect(card.querySelector(".h-px.bg-gray-200")).toBeInTheDocument();
-      expect(screen.getByText("Body")).toBeInTheDocument();
     });
   });
 
@@ -261,10 +209,10 @@ describe("Card", () => {
   });
 
   describe("sub-components do not add their own inset padding", () => {
-    it("CardHeader only spaces the content below it", () => {
+    it("CardHeader matches the 8px title gap of the title prop", () => {
       render(<CardHeader data-testid="header">Header</CardHeader>);
       const header = screen.getByTestId("header");
-      expect(header).toHaveClass("pb-6");
+      expect(header).toHaveClass("pb-2");
       expect(header).not.toHaveClass("p-4");
     });
 

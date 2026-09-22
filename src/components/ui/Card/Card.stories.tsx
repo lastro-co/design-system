@@ -23,9 +23,9 @@ export default meta;
 type Story = StoryObj<typeof Card>;
 
 /**
- * Card no estado de repouso: raio 8px, borda `gray-200`, sombra `shadow-card`
- * e padding de 24px em todos os lados. Passe o mouse para ver a borda escurecer
- * para `gray-300`.
+ * Card no estado de repouso: raio 8px, borda `gray-200`, sombra `shadow-card`,
+ * padding de 24px em todos os lados e 8px entre o título e o conteúdo. Passe o
+ * mouse para ver a borda escurecer para `gray-300`.
  */
 export const Default: Story = {
   render: () => (
@@ -45,18 +45,6 @@ export const Simple: Story = {
   render: () => (
     <Card className="w-[350px]">
       <p className="text-gray-600 text-sm">Card simples com conteúdo direto.</p>
-    </Card>
-  ),
-};
-
-/**
- * O `separator` substitui o espaçamento de 24px por uma régua `gray-200` com
- * 24px acima e abaixo.
- */
-export const WithSeparator: Story = {
-  render: () => (
-    <Card className="w-[350px]" separator title="Consumo do plano">
-      <p className="text-gray-600 text-sm">10 de 150 atendimentos usados.</p>
     </Card>
   ),
 };

@@ -18,7 +18,6 @@ const cardTitleClassName =
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
-  separator?: boolean;
   title?: string;
   titleTooltip?: string;
 }
@@ -26,7 +25,6 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 export function Card({
   children,
   className,
-  separator = false,
   title,
   titleTooltip,
   ...props
@@ -40,30 +38,27 @@ export function Card({
       {...props}
     >
       {title && (
-        <>
-          <div className={cn("flex items-center gap-2", !separator && "mb-6")}>
-            <h3 className={cardTitleClassName}>{title}</h3>
-            {titleTooltip && (
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <button
-                      aria-label="Mais informações"
-                      className="cursor-pointer"
-                      type="button"
-                    >
-                      <InfoIcon className="size-4 text-gray-400" />
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="max-w-[250px] text-xs">{titleTooltip}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            )}
-          </div>
-          {separator && <div className="my-6 h-px bg-gray-200" />}
-        </>
+        <div className="mb-2 flex items-center gap-2">
+          <h3 className={cardTitleClassName}>{title}</h3>
+          {titleTooltip && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    aria-label="Mais informações"
+                    className="cursor-pointer"
+                    type="button"
+                  >
+                    <InfoIcon className="size-4 text-gray-400" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="max-w-[250px] text-xs">{titleTooltip}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+        </div>
       )}
       {children}
     </div>
@@ -76,7 +71,7 @@ export interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function CardHeader({ className, children, ...props }: CardHeaderProps) {
   return (
-    <div className={cn("pb-6", className)} {...props}>
+    <div className={cn("pb-2", className)} {...props}>
       {children}
     </div>
   );
