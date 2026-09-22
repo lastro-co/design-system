@@ -78,6 +78,40 @@ describe("LaisSuggestionCard", () => {
     expect(onDismiss).toHaveBeenCalledTimes(1);
   });
 
+  it("hides the logo from the live region so the title is not read twice", () => {
+    const { container } = render(<LaisSuggestionCard {...baseProps} />);
+    const logo = container.querySelector('[data-slot="lais-logo"]');
+    expect(logo).toHaveAttribute("aria-hidden", "true");
+    // getByRole walks the accessibility tree, so an aria-hidden svg drops out.
+    expect(screen.queryByRole("img", { name: "Lais" })).not.toBeInTheDocument();
+  });
+
+  it("accepts a custom accessible name for the dismiss button", async () => {
+    const onDismiss = jest.fn();
+    const user = userEvent.setup();
+    render(
+      <LaisSuggestionCard
+        {...baseProps}
+        dismissLabel="Dismiss"
+        onDismiss={onDismiss}
+      />
+    );
+    expect(
+      screen.queryByRole("button", { name: "Fechar" })
+    ).not.toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Dismiss" }));
+    expect(onDismiss).toHaveBeenCalledTimes(1);
+  });
+
+  it("gives the dismiss button a focus-visible affordance", () => {
+    render(<LaisSuggestionCard {...baseProps} onDismiss={jest.fn()} />);
+    expect(screen.getByRole("button", { name: "Fechar" })).toHaveClass(
+      "outline-none",
+      "focus-visible:ring-2",
+      "focus-visible:ring-white"
+    );
+  });
+
   it("renders the two glow orbs by default", () => {
     const { container } = render(<LaisSuggestionCard {...baseProps} />);
     expect(orbs(container)).toHaveLength(2);

@@ -17,7 +17,9 @@ const meta: Meta<typeof LaisGlowOrb> = {
     ),
   ],
   args: {
-    className: "-translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2",
+    // Negative margins, not translate-*: the orb animates the `translate`
+    // property, and an animation declaration outranks this one.
+    className: "-mt-[100px] -ml-[100px] top-1/2 left-1/2",
   },
 };
 

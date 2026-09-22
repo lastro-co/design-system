@@ -25,6 +25,12 @@ export interface LaisSuggestionCardProps {
   action: LaisSuggestionCardAction;
   onDismiss?: () => void;
   /**
+   * Accessible name for the dismiss button. Defaults to pt-BR, matching the
+   * rest of this card's copy.
+   * @default "Fechar"
+   */
+  dismissLabel?: string;
+  /**
    * Renders the two animated glow orbs behind the card.
    * @default true
    */
@@ -38,6 +44,7 @@ export function LaisSuggestionCard({
   description,
   action,
   onDismiss,
+  dismissLabel = "Fechar",
   glow = true,
   className,
 }: LaisSuggestionCardProps) {
@@ -53,7 +60,7 @@ export function LaisSuggestionCard({
          */
         <div
           aria-hidden="true"
-          className="lais-suggestion-glow -top-8 bottom-0 left-[86px] w-[307.3px]"
+          className="lais-suggestion-glow -top-8 bottom-0 left-[calc(50%-153.65px)] w-[307.3px]"
           data-slot="lais-suggestion-card-glow"
         >
           <LaisGlowOrb
@@ -80,17 +87,18 @@ export function LaisSuggestionCard({
               <div className="flex items-center gap-2">
                 <LaisLogo
                   animateOnHover={false}
+                  aria-hidden="true"
                   className="size-4 shrink-0 text-white"
                   symbolOnly
                 />
-                <p className="font-medium text-lg leading-5">
+                <p className="break-words font-medium text-lg leading-5">
                   {category ? `${label} • ${category}` : label}
                 </p>
               </div>
               {onDismiss && (
                 <button
-                  aria-label="Fechar"
-                  className="flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-full text-white/70 transition-colors hover:text-white"
+                  aria-label={dismissLabel}
+                  className="flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-full text-white/70 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-white"
                   onClick={onDismiss}
                   type="button"
                 >
@@ -98,7 +106,9 @@ export function LaisSuggestionCard({
                 </button>
               )}
             </div>
-            <p className="font-normal text-base leading-5">{description}</p>
+            <p className="break-words font-normal text-base leading-5">
+              {description}
+            </p>
           </div>
 
           <Button

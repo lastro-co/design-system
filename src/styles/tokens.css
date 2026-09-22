@@ -144,171 +144,168 @@
  * the 6s timeline) converted to percentages.
  * ------------------------------------------------------------------------- */
 
-/* --- Glow orb: primary (spins clockwise from 0deg) --- */
+/* --- Glow orb ---------------------------------------------------------------
+ *
+ * Figma exports one looping 6s timeline per orb, which starts at `opacity: 0`.
+ * Replayed forever that makes the glow vanish for ~1.2s every 6s, so — exactly
+ * as with the card — the entrance is split out and runs once, and what loops
+ * starts and ends on the resting value. The breathe keyframes below are the
+ * original timeline's post-entrance segment renormalised onto 0-100%, so the
+ * shape of the motion is unchanged.
+ */
 
-@keyframes lais-orb-primary-fade {
-  0%,
-  20.18% {
+@keyframes lais-orb-enter-primary-fade {
+  from {
     opacity: 0;
-    animation-timing-function: ease-in;
   }
-  33.33% {
-    opacity: 0.8;
-    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
-  }
-  53.11% {
-    opacity: 0.6;
-    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
-  }
-  72.8% {
-    opacity: 0.85;
-    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
-  }
-  92.49%,
-  100% {
+  to {
     opacity: 0.8;
   }
 }
 
-@keyframes lais-orb-primary-spin {
+@keyframes lais-orb-enter-primary-rise {
+  from {
+    scale: 0.8;
+    translate: -18px 14px;
+  }
+  to {
+    scale: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes lais-orb-primary-breathe-fade {
   0%,
-  13.73% {
+  100% {
+    opacity: 0.8;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  33.44% {
+    opacity: 0.6;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  66.72% {
+    opacity: 0.85;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+}
+
+@keyframes lais-orb-primary-breathe-pulse {
+  0%,
+  100% {
+    scale: 1;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  44.12% {
+    scale: 1.06;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  76.46% {
+    scale: 0.95;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+}
+
+@keyframes lais-orb-primary-breathe-drift {
+  0%,
+  100% {
+    translate: 0 0;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  29.41% {
+    translate: 0 8px;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  61.76% {
+    translate: 0 -8px;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+}
+
+/* 360deg lands back on the start angle, so the loop has no seam. */
+@keyframes lais-orb-primary-spin {
+  from {
     rotate: 0deg;
   }
-  100% {
+  to {
     rotate: 360deg;
   }
 }
 
-@keyframes lais-orb-primary-pulse {
-  0%,
-  13.73% {
-    scale: 0.8;
-    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  25.54% {
-    scale: 1;
-    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
-  }
-  55.08% {
-    scale: 1.06;
-    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
-  }
-  76.73% {
-    scale: 0.95;
-    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
-  }
-  92.49%,
-  100% {
-    scale: 1;
-  }
-}
-
-@keyframes lais-orb-primary-drift {
-  0%,
-  13.73% {
-    translate: -18px 14px;
-    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  25.54% {
-    translate: 0 0;
-    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
-  }
-  45.23% {
-    translate: 0 8px;
-    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
-  }
-  66.89% {
-    translate: 0 -8px;
-    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
-  }
-  92.49%,
-  100% {
-    translate: 0 0;
-  }
-}
-
-/* --- Glow orb: secondary (counter-clockwise from -21.1deg, counter-phased) --- */
-
-@keyframes lais-orb-secondary-fade {
-  0%,
-  20% {
+@keyframes lais-orb-enter-secondary-fade {
+  from {
     opacity: 0;
-    animation-timing-function: ease-in;
   }
-  40.02% {
+  to {
+    opacity: 0.8;
+  }
+}
+
+@keyframes lais-orb-enter-secondary-rise {
+  from {
+    scale: 0.8;
+    translate: 18px 14px;
+  }
+  to {
+    scale: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes lais-orb-secondary-breathe-fade {
+  0%,
+  100% {
     opacity: 0.8;
     animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
   }
-  57.04% {
+  32.44% {
     opacity: 0.9;
     animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
   }
-  74.76% {
+  66.21% {
     opacity: 0.55;
     animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
   }
-  92.49%,
+}
+
+@keyframes lais-orb-secondary-breathe-pulse {
+  0%,
   100% {
-    opacity: 0.8;
+    scale: 1;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  40.3% {
+    scale: 0.94;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  73.12% {
+    scale: 1.07;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+}
+
+@keyframes lais-orb-secondary-breathe-drift {
+  0%,
+  100% {
+    translate: 0 0;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  34.32% {
+    translate: 0 -10px;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  67.16% {
+    translate: 0 8px;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
   }
 }
 
 @keyframes lais-orb-secondary-spin {
-  0%,
-  13.73% {
+  from {
     rotate: -21.1deg;
   }
-  100% {
+  to {
     rotate: -381.1deg;
-  }
-}
-
-@keyframes lais-orb-secondary-pulse {
-  0%,
-  13.73% {
-    scale: 0.8;
-    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  26.53% {
-    scale: 1;
-    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
-  }
-  53.11% {
-    scale: 0.94;
-    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
-  }
-  74.76% {
-    scale: 1.07;
-    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
-  }
-  92.49%,
-  100% {
-    scale: 1;
-  }
-}
-
-@keyframes lais-orb-secondary-drift {
-  0%,
-  13.73% {
-    translate: 18px 14px;
-    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  26.53% {
-    translate: 0 0;
-    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
-  }
-  49.17% {
-    translate: 0 -10px;
-    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
-  }
-  70.83% {
-    translate: 0 8px;
-    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
-  }
-  92.49%,
-  100% {
-    translate: 0 0;
   }
 }
 
@@ -361,11 +358,18 @@
       color-mix(in srgb, var(--color-purple-400) 90%, transparent) 0%,
       color-mix(in srgb, var(--color-purple-300) 10%, transparent) 100%
     );
+  /*
+   * Entrance runs once (`both` holds the resting value afterwards); the breathe
+   * tracks have no fill, so they contribute nothing during their delay and take
+   * over from the entrance's resting value without a jump.
+   */
   animation:
-    lais-orb-primary-fade 6s linear infinite,
-    lais-orb-primary-spin 6s linear infinite,
-    lais-orb-primary-pulse 6s linear infinite,
-    lais-orb-primary-drift 6s linear infinite;
+    lais-orb-enter-primary-fade 0.79s ease-in 1.21s both,
+    lais-orb-enter-primary-rise 0.71s cubic-bezier(0.16, 1, 0.3, 1) 0.82s both,
+    lais-orb-primary-spin 6s linear 0.82s infinite both,
+    lais-orb-primary-breathe-fade 6s linear 2s infinite,
+    lais-orb-primary-breathe-pulse 6s linear 2s infinite,
+    lais-orb-primary-breathe-drift 6s linear 2s infinite;
 
   @media (prefers-reduced-motion: reduce) {
     animation: none;
@@ -386,10 +390,12 @@
       color-mix(in srgb, var(--color-purple-300) 10%, transparent) 100%
     );
   animation:
-    lais-orb-secondary-fade 6s linear infinite,
-    lais-orb-secondary-spin 6s linear infinite,
-    lais-orb-secondary-pulse 6s linear infinite,
-    lais-orb-secondary-drift 6s linear infinite;
+    lais-orb-enter-secondary-fade 1.2s ease-in 1.2s both,
+    lais-orb-enter-secondary-rise 0.77s cubic-bezier(0.16, 1, 0.3, 1) 0.82s both,
+    lais-orb-secondary-spin 6s linear 0.82s infinite both,
+    lais-orb-secondary-breathe-fade 6s linear 2.4s infinite,
+    lais-orb-secondary-breathe-pulse 6s linear 2.4s infinite,
+    lais-orb-secondary-breathe-drift 6s linear 2.4s infinite;
 
   @media (prefers-reduced-motion: reduce) {
     animation: none;
@@ -405,9 +411,12 @@
  */
 @utility lais-suggestion-surface {
   position: relative;
-  overflow: clip;
-  /* Lets the 1px stroke drawn by ::before at inset -1px survive the clip. */
-  overflow-clip-margin: 1px;
+  /*
+   * No `overflow: clip` here: the ::before ring sits at inset -1px, outside the
+   * padding box, and only `overflow-clip-margin` — which WebKit does not
+   * implement — kept it visible. The background is already bounded by the
+   * radius, and long words are handled by `break-words` on the text nodes.
+   */
   background-image: linear-gradient(
     342deg,
     color-mix(in srgb, var(--color-purple-400) 60%, transparent) -28%,
