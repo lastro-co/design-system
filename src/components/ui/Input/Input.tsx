@@ -32,7 +32,7 @@ function Input({
           "focus-within:border-purple-800 focus-within:ring-2 focus-within:ring-purple-400/15",
           "has-aria-invalid:border-red-600",
           props.disabled &&
-            "pointer-events-none cursor-not-allowed select-none bg-gray-50",
+            "pointer-events-none cursor-not-allowed select-none bg-gray-50 opacity-50",
           isSuccess && "border-green-500",
           className
         )}
@@ -52,8 +52,8 @@ function Input({
         <input
           aria-invalid={isInvalid}
           className={cn(
-            "w-full bg-white p-0 text-gray-800 text-sm leading-5 outline-none transition placeholder:text-gray-500",
-            "disabled:pointer-events-none disabled:cursor-not-allowed disabled:text-gray-400 disabled:opacity-50",
+            "w-full bg-transparent p-0 text-gray-800 text-sm leading-5 outline-none transition placeholder:text-gray-500",
+            "disabled:pointer-events-none disabled:cursor-not-allowed disabled:text-gray-400",
             "file:inline-flex file:border-0 file:font-medium file:text-foreground file:text-sm",
             "selection:bg-text-gray-900 selection:text-purple-foreground",
             "[&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden"

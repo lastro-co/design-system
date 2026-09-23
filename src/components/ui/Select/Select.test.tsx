@@ -433,7 +433,7 @@ describe("Select", () => {
     expect(trigger).not.toHaveClass("border-green-500");
   });
 
-  it("applies error color to chevron icon via state prop", () => {
+  it("keeps chevron in gray-400 regardless of state (error)", () => {
     render(
       <Select>
         <SelectTrigger state="error">
@@ -446,10 +446,11 @@ describe("Select", () => {
     );
 
     const chevron = screen.getByRole("combobox").querySelector("svg");
-    expect(chevron).toHaveClass("text-red-600");
+    expect(chevron).toHaveClass("text-gray-400");
+    expect(chevron).not.toHaveClass("text-red-600");
   });
 
-  it("applies success color to chevron icon via state prop", () => {
+  it("keeps chevron in gray-400 regardless of state (success)", () => {
     render(
       <Select>
         <SelectTrigger state="success">
@@ -462,7 +463,8 @@ describe("Select", () => {
     );
 
     const chevron = screen.getByRole("combobox").querySelector("svg");
-    expect(chevron).toHaveClass("text-green-600");
+    expect(chevron).toHaveClass("text-gray-400");
+    expect(chevron).not.toHaveClass("text-green-600");
   });
 
   describe("searchable", () => {

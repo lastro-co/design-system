@@ -42,7 +42,7 @@ const selectTriggerVariants = cva(
 
 const selectItemVariants = cva(
   [
-    "relative flex h-10 w-full cursor-pointer select-none items-center justify-between gap-2 px-2 py-1.5 text-gray-900 text-sm outline-hidden transition-colors",
+    "relative flex h-10 w-full cursor-pointer select-none items-center justify-between gap-2 rounded-[2px] px-2 py-1.5 text-gray-900 text-sm outline-hidden transition-colors",
     "data-disabled:pointer-events-none data-disabled:opacity-50",
     "data-[state=checked]:bg-purple-50 data-[state=checked]:text-purple-800",
     "data-highlighted:bg-purple-50",
@@ -96,13 +96,7 @@ function SelectTrigger({
     >
       {children}
       <SelectPrimitive.Icon asChild>
-        <ChevronDownIcon
-          className={cn(
-            "size-4 text-gray-900",
-            isSuccess && "text-green-600",
-            isInvalid && "text-red-600"
-          )}
-        />
+        <ChevronDownIcon className="size-4 text-gray-400" />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   );
