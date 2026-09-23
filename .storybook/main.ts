@@ -13,8 +13,9 @@ const config: StorybookConfig = {
   ],
   addons: ["@storybook/addon-docs", "@storybook/addon-jest"],
   staticDirs: ["./public"],
-  core: {
-    disableOnboarding: true,
+  features: {
+    sidebarOnboardingChecklist: false,
+    menuOnboardingChecklist: false,
   },
   framework: {
     name: "@storybook/react-vite",
