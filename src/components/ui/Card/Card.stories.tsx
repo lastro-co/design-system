@@ -24,15 +24,26 @@ type Story = StoryObj<typeof Card>;
 
 /**
  * Card no estado de repouso: raio 8px, borda `gray-200`, sombra `shadow-card` e
- * padding de 24px em todos os lados. Sem subtítulo, o conteúdo começa 24px
- * abaixo do título. Passe o mouse para ver a borda escurecer para `gray-300`.
+ * padding de 24px em todos os lados. **Sem subtítulo, o conteúdo começa 24px
+ * abaixo do título.** Passe o mouse para ver a borda escurecer para `gray-300`.
  */
 export const Default: Story = {
   render: () => (
     <Card className="w-[350px]" title="Atividades">
-      <p className="text-gray-600 text-sm">
-        A Lais registrou 3 novas atividades hoje.
-      </p>
+      <dl className="flex flex-col gap-4">
+        {[
+          { label: "Consumo do plano", value: "6,67%" },
+          { label: "Cobranças de atendimento", value: "0" },
+          { label: "Pré-agendamento de visitas", value: "1" },
+        ].map((item) => (
+          <div className="flex items-baseline justify-between" key={item.label}>
+            <dt className="text-gray-600 text-sm">{item.label}</dt>
+            <dd className="font-display font-semibold text-gray-800">
+              {item.value}
+            </dd>
+          </div>
+        ))}
+      </dl>
     </Card>
   ),
 };
@@ -48,8 +59,48 @@ export const WithSubtitle: Story = {
       subtitle="Resumo do que a Lais fez nas últimas 24 horas."
       title="Atividades"
     >
-      <p className="text-gray-600 text-sm">3 novas atividades registradas.</p>
+      <dl className="flex flex-col gap-4">
+        {[
+          { label: "Consumo do plano", value: "6,67%" },
+          { label: "Cobranças de atendimento", value: "0" },
+        ].map((item) => (
+          <div className="flex items-baseline justify-between" key={item.label}>
+            <dt className="text-gray-600 text-sm">{item.label}</dt>
+            <dd className="font-display font-semibold text-gray-800">
+              {item.value}
+            </dd>
+          </div>
+        ))}
+      </dl>
     </Card>
+  ),
+};
+
+/**
+ * Os dois casos lado a lado. O subtítulo é o único elemento que altera o
+ * espaçamento abaixo do título — o conteúdo sempre começa 24px depois do último
+ * elemento de texto do cabeçalho.
+ */
+export const Spacing: Story = {
+  parameters: { layout: "padded" },
+  render: () => (
+    <div className="flex flex-wrap items-start gap-4">
+      <Card className="w-[320px]" title="Sem subtítulo">
+        <div className="rounded border border-purple-800 border-dashed bg-purple-50 p-3 text-purple-800 text-sm">
+          conteúdo — 24px abaixo do título
+        </div>
+      </Card>
+
+      <Card
+        className="w-[320px]"
+        subtitle="Subtítulo — 8px abaixo do título"
+        title="Com subtítulo"
+      >
+        <div className="rounded border border-purple-800 border-dashed bg-purple-50 p-3 text-purple-800 text-sm">
+          conteúdo — 24px abaixo do subtítulo
+        </div>
+      </Card>
+    </div>
   ),
 };
 
