@@ -23,9 +23,9 @@ export default meta;
 type Story = StoryObj<typeof Card>;
 
 /**
- * Card no estado de repouso: raio 8px, borda `gray-200`, sombra `shadow-card`,
- * padding de 24px em todos os lados e 8px entre o título e o conteúdo. Passe o
- * mouse para ver a borda escurecer para `gray-300`.
+ * Card no estado de repouso: raio 8px, borda `gray-200`, sombra `shadow-card` e
+ * padding de 24px em todos os lados. Sem subtítulo, o conteúdo começa 24px
+ * abaixo do título. Passe o mouse para ver a borda escurecer para `gray-300`.
  */
 export const Default: Story = {
   render: () => (
@@ -33,6 +33,22 @@ export const Default: Story = {
       <p className="text-gray-600 text-sm">
         A Lais registrou 3 novas atividades hoje.
       </p>
+    </Card>
+  ),
+};
+
+/**
+ * Com `subtitle`, o ritmo vertical é: título → **8px** → subtítulo → **24px** →
+ * conteúdo.
+ */
+export const WithSubtitle: Story = {
+  render: () => (
+    <Card
+      className="w-[350px]"
+      subtitle="Resumo do que a Lais fez nas últimas 24 horas."
+      title="Atividades"
+    >
+      <p className="text-gray-600 text-sm">3 novas atividades registradas.</p>
     </Card>
   ),
 };

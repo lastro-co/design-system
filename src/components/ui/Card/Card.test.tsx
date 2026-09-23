@@ -102,10 +102,10 @@ describe("Card", () => {
       expect(heading).toHaveClass("text-gray-800");
     });
 
-    it("leaves 8px between the title and the content", () => {
+    it("leaves 24px between the title and the content when there is no subtitle", () => {
       render(<Card title="My Title">Content</Card>);
       const heading = screen.getByRole("heading", { level: 3 });
-      expect(heading.parentElement).toHaveClass("mb-2");
+      expect(heading.parentElement).toHaveClass("mb-6");
     });
 
     it("renders the title above the children", () => {
@@ -116,6 +116,67 @@ describe("Card", () => {
 
     it("does not render an h3 when title is not provided", () => {
       render(<Card>Content</Card>);
+      expect(
+        screen.queryByRole("heading", { level: 3 })
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  describe("subtitle prop", () => {
+    it("renders the subtitle text", () => {
+      render(
+        <Card subtitle="A Lais registrou 3 novas atividades" title="My Title">
+          Content
+        </Card>
+      );
+      expect(
+        screen.getByText("A Lais registrou 3 novas atividades")
+      ).toBeVisible();
+    });
+
+    it("tightens the title gap to 8px when a subtitle is present", () => {
+      render(
+        <Card subtitle="Subtitle" title="My Title">
+          Content
+        </Card>
+      );
+      const heading = screen.getByRole("heading", { level: 3 });
+      expect(heading.parentElement).toHaveClass("mb-2");
+      expect(heading.parentElement).not.toHaveClass("mb-6");
+    });
+
+    it("leaves 24px between the subtitle and the content", () => {
+      render(
+        <Card subtitle="Subtitle" title="My Title">
+          Content
+        </Card>
+      );
+      expect(screen.getByText("Subtitle")).toHaveClass("mb-6");
+    });
+
+    it("applies the DS subtitle typography", () => {
+      render(
+        <Card subtitle="Subtitle" title="My Title">
+          Content
+        </Card>
+      );
+      const subtitle = screen.getByText("Subtitle");
+      expect(subtitle).toHaveClass("text-gray-600");
+      expect(subtitle).toHaveClass("text-sm");
+    });
+
+    it("renders nothing extra when no subtitle is provided", () => {
+      render(
+        <Card data-testid="card" title="My Title">
+          Content
+        </Card>
+      );
+      expect(screen.getByTestId("card").querySelector("p")).toBeNull();
+    });
+
+    it("still spaces the content when a subtitle is used without a title", () => {
+      render(<Card subtitle="Subtitle">Content</Card>);
+      expect(screen.getByText("Subtitle")).toHaveClass("mb-6");
       expect(
         screen.queryByRole("heading", { level: 3 })
       ).not.toBeInTheDocument();
@@ -182,6 +243,11 @@ describe("Card", () => {
       expect(screen.getByTestId("desc")).toHaveClass("text-gray-600");
     });
 
+    it("matches the 8px title gap of the subtitle prop", () => {
+      render(<CardDescription data-testid="desc">Text</CardDescription>);
+      expect(screen.getByTestId("desc")).toHaveClass("mt-2");
+    });
+
     it("forwards className to the paragraph element", () => {
       render(
         <CardDescription className="custom-desc" data-testid="desc">
@@ -209,10 +275,10 @@ describe("Card", () => {
   });
 
   describe("sub-components do not add their own inset padding", () => {
-    it("CardHeader matches the 8px title gap of the title prop", () => {
+    it("CardHeader leaves 24px to the content below it", () => {
       render(<CardHeader data-testid="header">Header</CardHeader>);
       const header = screen.getByTestId("header");
-      expect(header).toHaveClass("pb-2");
+      expect(header).toHaveClass("pb-6");
       expect(header).not.toHaveClass("p-4");
     });
 
