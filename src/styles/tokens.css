@@ -136,3 +136,364 @@
     }
   }
 }
+
+/* ---------------------------------------------------------------------------
+ * LaisSuggestionCard
+ * Recreated from Figma "Componente completo" (file PBllwtsOffnfFGmqjuqPRa,
+ * node 9852:36974). Timings below are the exported keyframe times (fractions of
+ * the 6s timeline) converted to percentages.
+ *
+ * The `lais-glow-orb-*` utilities back the card's private GlowOrb; they are not
+ * meant to be used on their own.
+ * ------------------------------------------------------------------------- */
+
+/* --- Glow orb ---------------------------------------------------------------
+ *
+ * Figma exports one looping 6s timeline per orb, which starts at `opacity: 0`.
+ * Replayed forever that makes the glow vanish for ~1.2s every 6s, so — exactly
+ * as with the card — the entrance is split out and runs once, and what loops
+ * starts and ends on the resting value. The breathe keyframes below are the
+ * original timeline's post-entrance segment renormalised onto 0-100%, so the
+ * shape of the motion is unchanged.
+ */
+
+@keyframes lais-orb-enter-primary-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.8;
+  }
+}
+
+@keyframes lais-orb-enter-primary-rise {
+  from {
+    scale: 0.8;
+    translate: -18px 14px;
+  }
+  to {
+    scale: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes lais-orb-primary-breathe-fade {
+  0%,
+  100% {
+    opacity: 0.8;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  33.44% {
+    opacity: 0.6;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  66.72% {
+    opacity: 0.85;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+}
+
+@keyframes lais-orb-primary-breathe-pulse {
+  0%,
+  100% {
+    scale: 1;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  44.12% {
+    scale: 1.06;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  76.46% {
+    scale: 0.95;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+}
+
+@keyframes lais-orb-primary-breathe-drift {
+  0%,
+  100% {
+    translate: 0 0;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  29.41% {
+    translate: 0 8px;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  61.76% {
+    translate: 0 -8px;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+}
+
+/* 360deg lands back on the start angle, so the loop has no seam. */
+@keyframes lais-orb-primary-spin {
+  from {
+    rotate: 0deg;
+  }
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes lais-orb-enter-secondary-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.8;
+  }
+}
+
+@keyframes lais-orb-enter-secondary-rise {
+  from {
+    scale: 0.8;
+    translate: 18px 14px;
+  }
+  to {
+    scale: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes lais-orb-secondary-breathe-fade {
+  0%,
+  100% {
+    opacity: 0.8;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  32.44% {
+    opacity: 0.9;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  66.21% {
+    opacity: 0.55;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+}
+
+@keyframes lais-orb-secondary-breathe-pulse {
+  0%,
+  100% {
+    scale: 1;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  40.3% {
+    scale: 0.94;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  73.12% {
+    scale: 1.07;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+}
+
+@keyframes lais-orb-secondary-breathe-drift {
+  0%,
+  100% {
+    translate: 0 0;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  34.32% {
+    translate: 0 -10px;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  67.16% {
+    translate: 0 8px;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+}
+
+@keyframes lais-orb-secondary-spin {
+  from {
+    rotate: -21.1deg;
+  }
+  to {
+    rotate: -381.1deg;
+  }
+}
+
+/* --- Suggestion card --- */
+
+@keyframes lais-card-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes lais-card-rise {
+  from {
+    scale: 0.9;
+    translate: 0 20px;
+  }
+  to {
+    scale: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes lais-card-float {
+  from {
+    translate: 0 0;
+  }
+  to {
+    translate: 0 -6px;
+  }
+}
+
+/*
+ * Orb surface: a mint radial over a purple one, both blurred by the component.
+ * Figma's radial gradients are sheared ellipses (non-orthogonal axes); CSS
+ * cannot rotate a radial-gradient, so these are axis-aligned approximations —
+ * indistinguishable under the 32.5px blur the orb applies.
+ */
+@utility lais-glow-orb-primary {
+  background-image:
+    radial-gradient(
+      86px 258px at 45.5% 14.25%,
+      var(--color-mint-500) 0%,
+      var(--color-green-100) 100%
+    ),
+    radial-gradient(
+      191px 462px at 40% 62.4%,
+      color-mix(in srgb, var(--color-purple-400) 90%, transparent) 0%,
+      color-mix(in srgb, var(--color-purple-300) 10%, transparent) 100%
+    );
+  /*
+   * Entrance runs once (`both` holds the resting value afterwards); the breathe
+   * tracks have no fill, so they contribute nothing during their delay and take
+   * over from the entrance's resting value without a jump.
+   */
+  animation:
+    lais-orb-enter-primary-fade 0.79s ease-in 1.21s both,
+    lais-orb-enter-primary-rise 0.71s cubic-bezier(0.16, 1, 0.3, 1) 0.82s both,
+    lais-orb-primary-spin 6s linear 0.82s infinite both,
+    lais-orb-primary-breathe-fade 6s linear 2s infinite,
+    lais-orb-primary-breathe-pulse 6s linear 2s infinite,
+    lais-orb-primary-breathe-drift 6s linear 2s infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    opacity: 0.8;
+  }
+}
+
+@utility lais-glow-orb-secondary {
+  background-image:
+    radial-gradient(
+      86px 258px at 45.5% 14.25%,
+      var(--color-mint-500) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      191px 462px at 40% 62.4%,
+      color-mix(in srgb, var(--color-purple-400) 90%, transparent) 0%,
+      color-mix(in srgb, var(--color-purple-300) 10%, transparent) 100%
+    );
+  animation:
+    lais-orb-enter-secondary-fade 1.2s ease-in 1.2s both,
+    lais-orb-enter-secondary-rise 0.77s cubic-bezier(0.16, 1, 0.3, 1) 0.82s both,
+    lais-orb-secondary-spin 6s linear 0.82s infinite both,
+    lais-orb-secondary-breathe-fade 6s linear 2.4s infinite,
+    lais-orb-secondary-breathe-pulse 6s linear 2.4s infinite,
+    lais-orb-secondary-breathe-drift 6s linear 2.4s infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    opacity: 0.8;
+    rotate: -21.1deg;
+  }
+}
+
+/*
+ * Card surface. Figma's radial gradient is a 2780x603 ellipse centred outside
+ * the card, so across the card it resolves to a linear ramp (verified: the
+ * gradient parameter at the centre equals the mean of the four corners).
+ */
+@utility lais-suggestion-surface {
+  position: relative;
+  /*
+   * No `overflow: clip` here: the ::before ring sits at inset -1px, outside the
+   * padding box, and only `overflow-clip-margin` — which WebKit does not
+   * implement — kept it visible. The background is already bounded by the
+   * radius, and long words are handled by `break-words` on the text nodes.
+   */
+  background-image: linear-gradient(
+    342deg,
+    color-mix(in srgb, var(--color-purple-400) 60%, transparent) -28%,
+    color-mix(in srgb, var(--color-purple-900) 90%, transparent) 48.5%,
+    var(--color-purple-700) 96.3%
+  );
+  /* Transparent border reserves the 1px box; ::before paints the gradient. */
+  border: 1px solid transparent;
+  box-shadow:
+    0 0 120px 0 color-mix(in srgb, var(--color-purple-300) 35%, transparent),
+    0 0 40px 0 color-mix(in srgb, var(--color-purple-400) 45%, transparent);
+
+  /*
+   * Gradient stroke. A border cannot hold a gradient, so a 1px ring is masked
+   * out of a filled pseudo-element — the only technique that follows the 20px
+   * corner radius.
+   */
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    padding: 1px;
+    border-radius: inherit;
+    background: linear-gradient(
+      115deg,
+      color-mix(in srgb, var(--color-purple-200) 80%, transparent) 0%,
+      color-mix(in srgb, var(--color-purple-400) 25%, transparent) 100%
+    );
+    pointer-events: none;
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+}
+
+/*
+ * Clipping frame for the two glow orbs, mirroring Figma's fixed-size "Circles"
+ * frame (9852:36975) — it is narrower than the card and cuts the orbs, which is
+ * what keeps the glow hugging the card. The blur moves from the orbs onto this
+ * frame so it is applied *after* the clip: blurring first and clipping second
+ * leaves a hard rectangular edge below the card.
+ */
+@utility lais-suggestion-glow {
+  position: absolute;
+  overflow: clip;
+  filter: blur(32.5px);
+  pointer-events: none;
+
+  /* Attribute selector outranks the orb's own `blur-*` utility. */
+  & > [data-slot="lais-glow-orb"] {
+    filter: none;
+  }
+}
+
+@utility lais-suggestion-enter {
+  animation:
+    lais-card-fade-in 1.688s cubic-bezier(0.25, 0.46, 0.45, 0.94) both,
+    lais-card-rise 2.063s cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@utility lais-suggestion-float {
+  animation: lais-card-float 3.94s cubic-bezier(0.45, 0, 0.55, 1) 2.063s
+    infinite alternate;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
