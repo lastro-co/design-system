@@ -3,6 +3,7 @@ import { act, fireEvent, render } from "@/tests/app-test-utils";
 import {
   AnimatedActivityIcon,
   AnimatedBellIcon,
+  AnimatedBookOpenIcon,
   AnimatedBriefcaseBusinessIcon,
   AnimatedChartBarIncreasingIcon,
   AnimatedChevronDownIcon,
@@ -10,6 +11,7 @@ import {
   AnimatedChevronRightIcon,
   AnimatedChevronsUpDownIcon,
   AnimatedChevronUpIcon,
+  AnimatedClipboardListIcon,
   AnimatedDollarSignIcon,
   AnimatedEyeIcon,
   AnimatedEyeOffIcon,
@@ -22,12 +24,14 @@ import {
   AnimatedMessageSquareIcon,
   AnimatedPhoneIcon,
   AnimatedPlugZapIcon,
+  AnimatedReceiptIcon,
   AnimatedSearchIcon,
   AnimatedSettingsIcon,
   AnimatedSmartphoneNfcIcon,
   AnimatedTrendingUpIcon,
   AnimatedUserCheckIcon,
   AnimatedUsersIcon,
+  AnimatedWrenchIcon,
   AnimatedZapIcon,
 } from "../animated";
 
@@ -38,6 +42,7 @@ import {
 const ANIMATED_ICONS = [
   ["AnimatedActivityIcon", AnimatedActivityIcon],
   ["AnimatedBellIcon", AnimatedBellIcon],
+  ["AnimatedBookOpenIcon", AnimatedBookOpenIcon],
   ["AnimatedBriefcaseBusinessIcon", AnimatedBriefcaseBusinessIcon],
   ["AnimatedChartBarIncreasingIcon", AnimatedChartBarIncreasingIcon],
   ["AnimatedChevronDownIcon", AnimatedChevronDownIcon],
@@ -45,6 +50,7 @@ const ANIMATED_ICONS = [
   ["AnimatedChevronRightIcon", AnimatedChevronRightIcon],
   ["AnimatedChevronsUpDownIcon", AnimatedChevronsUpDownIcon],
   ["AnimatedChevronUpIcon", AnimatedChevronUpIcon],
+  ["AnimatedClipboardListIcon", AnimatedClipboardListIcon],
   ["AnimatedDollarSignIcon", AnimatedDollarSignIcon],
   ["AnimatedEyeIcon", AnimatedEyeIcon],
   ["AnimatedEyeOffIcon", AnimatedEyeOffIcon],
@@ -57,12 +63,14 @@ const ANIMATED_ICONS = [
   ["AnimatedMessageSquareIcon", AnimatedMessageSquareIcon],
   ["AnimatedPhoneIcon", AnimatedPhoneIcon],
   ["AnimatedPlugZapIcon", AnimatedPlugZapIcon],
+  ["AnimatedReceiptIcon", AnimatedReceiptIcon],
   ["AnimatedSearchIcon", AnimatedSearchIcon],
   ["AnimatedSettingsIcon", AnimatedSettingsIcon],
   ["AnimatedSmartphoneNfcIcon", AnimatedSmartphoneNfcIcon],
   ["AnimatedTrendingUpIcon", AnimatedTrendingUpIcon],
   ["AnimatedUserCheckIcon", AnimatedUserCheckIcon],
   ["AnimatedUsersIcon", AnimatedUsersIcon],
+  ["AnimatedWrenchIcon", AnimatedWrenchIcon],
   ["AnimatedZapIcon", AnimatedZapIcon],
 ] as const;
 
@@ -123,7 +131,7 @@ describe("icons.v2 — animated icons", () => {
     }
   );
 
-  it("all 28 animated icons render without crashing", () => {
+  it("all 32 animated icons render without crashing", () => {
     const { container } = render(
       <div>
         {ANIMATED_ICONS.map(([name, Icon]) => (
@@ -131,7 +139,7 @@ describe("icons.v2 — animated icons", () => {
         ))}
       </div>
     );
-    expect(container.querySelectorAll("svg")).toHaveLength(28);
+    expect(container.querySelectorAll("svg")).toHaveLength(32);
   });
 
   it("applies className to the wrapper element", () => {
