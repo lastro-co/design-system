@@ -62,6 +62,38 @@ describe("Input", () => {
     );
   });
 
+  it("applies error border via state prop", () => {
+    render(<Input placeholder="Error input" state="error" />);
+    const input = screen.getByPlaceholderText("Error input");
+    expect(input).toHaveAttribute("aria-invalid", "true");
+    expect(input).toHaveClass("aria-invalid:border-red-600");
+  });
+
+  it("applies success border via state prop", () => {
+    render(<Input placeholder="Success input" state="success" />);
+    const input = screen.getByPlaceholderText("Success input");
+    expect(input).toHaveClass("border-green-500");
+    expect(input).toHaveAttribute("aria-invalid", "false");
+  });
+
+  it("applies success border via state prop with icon", () => {
+    const icon = <span data-testid="success-icon">icon</span>;
+    render(
+      <Input icon={icon} placeholder="Success with icon" state="success" />
+    );
+    const wrapper = screen
+      .getByPlaceholderText("Success with icon")
+      .closest("div");
+    expect(wrapper).toHaveClass("border-green-500");
+  });
+
+  it("error state takes precedence over success state", () => {
+    render(<Input aria-invalid placeholder="Both states" state="success" />);
+    const input = screen.getByPlaceholderText("Both states");
+    expect(input).toHaveAttribute("aria-invalid", "true");
+    expect(input).not.toHaveClass("border-green-500");
+  });
+
   it("renders different input types", () => {
     const { rerender } = render(
       <Input placeholder="Email input" type="email" />

@@ -12,6 +12,7 @@ interface DatePickerProps
   onChange?: (date: Date | undefined) => void;
   className?: string;
   disabledDates?: Date[];
+  state?: "default" | "error" | "success";
 }
 
 export function DatePicker({
@@ -21,6 +22,7 @@ export function DatePicker({
   className,
   disabled,
   disabledDates,
+  state = "default",
   ...props
 }: DatePickerProps) {
   const {
@@ -33,22 +35,28 @@ export function DatePicker({
     handleCalendarSelect,
   } = useDatePicker({ value, onChange });
 
+  const isInvalid = state === "error" || Boolean(props["aria-invalid"]);
+  const isSuccess = state === "success" && !isInvalid;
+
   return (
     <Popover onOpenChange={setOpen} open={open}>
       <PopoverTrigger asChild disabled={disabled}>
         <div
           className={cn(
-            "flex h-12 w-full items-center gap-3 rounded-md border border-gray-300 bg-white p-3 pl-4 transition",
+            "flex h-10 w-full items-center gap-3 rounded-md border border-gray-200 bg-white px-3 py-2 transition",
+            "focus-within:border-purple-800 focus-within:ring-2 focus-within:ring-purple-400/15",
+            "has-aria-invalid:border-red-600",
             disabled &&
-              "pointer-events-none cursor-not-allowed select-none bg-gray-100",
-            props["aria-invalid"] && "border-red-600",
+              "pointer-events-none cursor-not-allowed select-none bg-gray-50",
+            isSuccess && "border-green-500",
             className
           )}
         >
           <input
+            aria-invalid={isInvalid}
             className={cn(
-              "w-full bg-transparent p-0 text-base text-gray-900 leading-5 outline-none transition placeholder:text-gray-600",
-              "disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-600",
+              "w-full bg-white p-0 text-gray-800 text-sm leading-5 outline-none transition placeholder:text-gray-500",
+              "disabled:pointer-events-none disabled:cursor-not-allowed disabled:text-gray-400 disabled:opacity-50",
               "selection:bg-text-gray-900 selection:text-purple-foreground"
             )}
             data-slot="input"
@@ -61,11 +69,11 @@ export function DatePicker({
           />
           <span
             className={cn(
-              "block text-purple-800 transition",
-              disabled && "text-gray-600"
+              "block shrink-0 text-gray-600 transition [&_svg]:size-4",
+              disabled && "text-gray-400"
             )}
           >
-            <CalendarIcon size="lg" />
+            <CalendarIcon size="sm" />
           </span>
         </div>
       </PopoverTrigger>
