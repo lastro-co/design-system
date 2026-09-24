@@ -8,60 +8,71 @@ import {
   TooltipTrigger,
 } from "../Tooltip";
 
+/**
+ * Tipografia do título do card (DS 2026.2): Red Hat Display 18px SemiBold,
+ * gray-800, leading 18px, tracking -0.18px. Compartilhada entre a prop `title`
+ * do Card e o `CardTitle` para que as duas APIs não divirjam.
+ */
+const cardTitleClassName =
+  "font-display font-semibold text-gray-800 text-lg leading-[18px] tracking-[-0.18px]";
+
+/**
+ * Tipografia do subtítulo (DS 2026.2): Red Hat Text 14px, gray-600.
+ * Compartilhada entre a prop `subtitle` do Card e o `CardDescription`.
+ */
+const cardSubtitleClassName = "text-gray-600 text-sm";
+
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
-  separator?: boolean;
-  shadow?: boolean;
   title?: string;
+  subtitle?: string;
   titleTooltip?: string;
 }
 
 export function Card({
   children,
   className,
-  separator = false,
-  shadow = false,
   title,
+  subtitle,
   titleTooltip,
   ...props
 }: CardProps) {
   return (
     <div
       className={cn(
-        "rounded-lg border border-gray-200 bg-white",
-        shadow && "shadow-sm",
-        title && "px-6 pt-3 pb-6",
+        "rounded-lg border border-gray-200 bg-white p-6 shadow-card transition-colors hover:border-gray-300",
         className
       )}
       {...props}
     >
       {title && (
-        <>
-          <div className="flex items-center gap-2">
-            <h3 className="font-semibold text-black text-lg leading-[1.4]">
-              {title}
-            </h3>
-            {titleTooltip && (
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <button
-                      aria-label="Mais informações"
-                      className="cursor-pointer"
-                      type="button"
-                    >
-                      <InfoIcon className="size-4 text-gray-400" />
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="max-w-[250px] text-xs">{titleTooltip}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            )}
-          </div>
-          {separator && <div className="my-3 h-px bg-gray-300" />}
-        </>
+        // 8px até o subtítulo; sem subtítulo, 24px direto para o conteúdo.
+        <div
+          className={cn("flex items-center gap-2", subtitle ? "mb-2" : "mb-6")}
+        >
+          <h3 className={cardTitleClassName}>{title}</h3>
+          {titleTooltip && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    aria-label="Mais informações"
+                    className="cursor-pointer"
+                    type="button"
+                  >
+                    <InfoIcon className="size-4 text-gray-400" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="max-w-[250px] text-xs">{titleTooltip}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+        </div>
+      )}
+      {subtitle && (
+        <p className={cn("mb-6", cardSubtitleClassName)}>{subtitle}</p>
       )}
       {children}
     </div>
@@ -74,7 +85,7 @@ export interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function CardHeader({ className, children, ...props }: CardHeaderProps) {
   return (
-    <div className={cn("p-4 pb-3", className)} {...props}>
+    <div className={cn("pb-6", className)} {...props}>
       {children}
     </div>
   );
@@ -87,10 +98,7 @@ export interface CardTitleProps
 
 export function CardTitle({ className, children, ...props }: CardTitleProps) {
   return (
-    <h3
-      className={cn("font-semibold text-lg leading-none", className)}
-      {...props}
-    >
+    <h3 className={cn(cardTitleClassName, className)} {...props}>
       {children}
     </h3>
   );
@@ -107,7 +115,7 @@ export function CardDescription({
   ...props
 }: CardDescriptionProps) {
   return (
-    <p className={cn("mt-1 text-gray-500 text-sm", className)} {...props}>
+    <p className={cn("mt-2", cardSubtitleClassName, className)} {...props}>
       {children}
     </p>
   );
@@ -123,7 +131,7 @@ export function CardContent({
   ...props
 }: CardContentProps) {
   return (
-    <div className={cn("p-4 pt-0", className)} {...props}>
+    <div className={className} {...props}>
       {children}
     </div>
   );
@@ -135,7 +143,7 @@ export interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function CardFooter({ className, children, ...props }: CardFooterProps) {
   return (
-    <div className={cn("p-4 pt-0", className)} {...props}>
+    <div className={cn("pt-6", className)} {...props}>
       {children}
     </div>
   );
