@@ -138,10 +138,13 @@
 }
 
 /* ---------------------------------------------------------------------------
- * LaisSuggestionCard / LaisGlowOrb
+ * LaisSuggestionCard
  * Recreated from Figma "Componente completo" (file PBllwtsOffnfFGmqjuqPRa,
- * node 9834:47220). Timings below are the exported keyframe times (fractions of
+ * node 9852:36974). Timings below are the exported keyframe times (fractions of
  * the 6s timeline) converted to percentages.
+ *
+ * The `lais-glow-orb-*` utilities back the card's private GlowOrb; they are not
+ * meant to be used on their own.
  * ------------------------------------------------------------------------- */
 
 /* --- Glow orb ---------------------------------------------------------------

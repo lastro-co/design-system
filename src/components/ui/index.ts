@@ -132,8 +132,6 @@ export { Input } from "./Input";
 export type { InputTagProps } from "./InputTag";
 export { InputTag } from "./InputTag";
 export { Label } from "./Label";
-export type { LaisGlowOrbProps, LaisGlowOrbVariant } from "./LaisGlowOrb";
-export { LaisGlowOrb } from "./LaisGlowOrb";
 export type { LaisLogoProps } from "./LaisLogo";
 export { LaisLogo } from "./LaisLogo";
 export type {
