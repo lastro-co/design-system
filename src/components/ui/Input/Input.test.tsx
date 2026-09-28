@@ -14,6 +14,24 @@ describe("Input", () => {
     expect(screen.getByPlaceholderText("Search")).toBeVisible();
   });
 
+  it("renders the icon before the input by default", () => {
+    const icon = <span data-testid="test-icon">icon</span>;
+    render(<Input icon={icon} placeholder="Search" />);
+    const input = screen.getByPlaceholderText("Search");
+    expect(screen.getByTestId("test-icon").compareDocumentPosition(input)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING
+    );
+  });
+
+  it("renders the icon after the input when iconPosition is right", () => {
+    const icon = <span data-testid="test-icon">icon</span>;
+    render(<Input icon={icon} iconPosition="right" placeholder="Date" />);
+    const input = screen.getByPlaceholderText("Date");
+    expect(screen.getByTestId("test-icon").compareDocumentPosition(input)).toBe(
+      Node.DOCUMENT_POSITION_PRECEDING
+    );
+  });
+
   it("is disabled when disabled prop is true", () => {
     render(<Input disabled placeholder="Disabled input" />);
     expect(screen.getByPlaceholderText("Disabled input")).toBeDisabled();

@@ -4,6 +4,7 @@ import { XIcon } from "../../icons.v2";
 
 interface InputProps extends React.ComponentProps<"input"> {
   icon?: React.ReactNode;
+  iconPosition?: "left" | "right";
   onClear?: () => void;
   state?: "default" | "error" | "success";
 }
@@ -12,6 +13,7 @@ function Input({
   className,
   type,
   icon,
+  iconPosition = "left",
   onClear,
   state = "default",
   ...props
@@ -23,6 +25,19 @@ function Input({
     typeof onClear === "function" &&
     props.value &&
     !props.disabled;
+
+  const iconElement = icon && (
+    <span
+      className={cn(
+        "block shrink-0 text-gray-600 transition [&_svg]:size-4",
+        props.disabled && "text-gray-400",
+        isSuccess && "text-green-600",
+        isInvalid && "text-red-600"
+      )}
+    >
+      {icon}
+    </span>
+  );
 
   if (icon || showClearButton) {
     return (
@@ -37,18 +52,7 @@ function Input({
           className
         )}
       >
-        {icon && (
-          <span
-            className={cn(
-              "block shrink-0 text-gray-600 transition [&_svg]:size-4",
-              props.disabled && "text-gray-400",
-              isSuccess && "text-green-600",
-              isInvalid && "text-red-600"
-            )}
-          >
-            {icon}
-          </span>
-        )}
+        {iconPosition === "left" && iconElement}
         <input
           aria-invalid={isInvalid}
           className={cn(
@@ -62,6 +66,7 @@ function Input({
           type={type}
           {...props}
         />
+        {iconPosition === "right" && iconElement}
         {showClearButton && (
           <button
             aria-label="Clear search"
