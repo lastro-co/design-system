@@ -1,5 +1,6 @@
 import type { Meta } from "@storybook/react-vite";
 import { useState } from "react";
+import { CalendarIcon } from "@/components/icons";
 import { SearchIcon, UserIcon } from "@/components/icons.v2";
 import { FormItem } from "../Form";
 import { Label } from "../Label";
@@ -37,7 +38,12 @@ const meta: Meta<typeof Input> = {
     },
     icon: {
       control: false,
-      description: "Icon to display at the beginning of the input",
+      description: "Icon to display inside the input",
+    },
+    iconPosition: {
+      control: "select",
+      options: ["left", "right"],
+      description: "Side of the input the icon sits on",
     },
     state: {
       control: "select",
@@ -77,6 +83,15 @@ export const AllVariants = {
         <FormItem>
           <Label>With Icon</Label>
           <Input icon={<UserIcon />} placeholder="Digitando..." />
+        </FormItem>
+
+        <FormItem>
+          <Label>With Icon Right</Label>
+          <Input
+            icon={<CalendarIcon />}
+            iconPosition="right"
+            placeholder="dd/mm/aaaa"
+          />
         </FormItem>
 
         <FormItem>
