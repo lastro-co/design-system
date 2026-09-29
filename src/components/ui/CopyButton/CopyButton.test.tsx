@@ -26,10 +26,8 @@ describe("CopyButton", () => {
       render(<CopyButton value="test value" />);
 
       const button = screen.getByRole("button", { name: COPY_BUTTON_LABEL });
-      expect(button.querySelector('[aria-label="Copy Icon"]')).toBeVisible();
-      expect(
-        button.querySelector('[aria-label="Check Icon"]')
-      ).not.toBeInTheDocument();
+      expect(button.querySelector("svg.lucide-copy")).toBeVisible();
+      expect(button.querySelector("svg.lucide-check")).not.toBeInTheDocument();
     });
 
     it("renders children alongside the copy button", () => {
@@ -101,7 +99,7 @@ describe("CopyButton", () => {
       await user.click(button);
 
       await waitFor(() => {
-        expect(button.querySelector('[aria-label="Check Icon"]')).toBeVisible();
+        expect(button.querySelector("svg.lucide-check")).toBeVisible();
       });
 
       jest.useRealTimers();
@@ -117,18 +115,14 @@ describe("CopyButton", () => {
 
       const button = screen.getByRole("button", { name: COPY_BUTTON_LABEL });
 
-      expect(button.querySelector('[aria-label="Copy Icon"]')).toBeVisible();
-      expect(
-        button.querySelector('[aria-label="Check Icon"]')
-      ).not.toBeInTheDocument();
+      expect(button.querySelector("svg.lucide-copy")).toBeVisible();
+      expect(button.querySelector("svg.lucide-check")).not.toBeInTheDocument();
 
       await user.click(button);
 
       await waitFor(() => {
-        expect(button.querySelector('[aria-label="Check Icon"]')).toBeVisible();
-        expect(
-          button.querySelector('[aria-label="Copy Icon"]')
-        ).not.toBeInTheDocument();
+        expect(button.querySelector("svg.lucide-check")).toBeVisible();
+        expect(button.querySelector("svg.lucide-copy")).not.toBeInTheDocument();
       });
 
       act(() => {
@@ -136,9 +130,9 @@ describe("CopyButton", () => {
       });
 
       await waitFor(() => {
-        expect(button.querySelector('[aria-label="Copy Icon"]')).toBeVisible();
+        expect(button.querySelector("svg.lucide-copy")).toBeVisible();
         expect(
-          button.querySelector('[aria-label="Check Icon"]')
+          button.querySelector("svg.lucide-check")
         ).not.toBeInTheDocument();
       });
 
@@ -155,19 +149,19 @@ describe("CopyButton", () => {
 
       await user.click(button);
       await waitFor(() => {
-        expect(button.querySelector('[aria-label="Check Icon"]')).toBeVisible();
+        expect(button.querySelector("svg.lucide-check")).toBeVisible();
       });
 
       act(() => {
         jest.advanceTimersByTime(1500);
       });
       await waitFor(() => {
-        expect(button.querySelector('[aria-label="Copy Icon"]')).toBeVisible();
+        expect(button.querySelector("svg.lucide-copy")).toBeVisible();
       });
 
       await user.click(button);
       await waitFor(() => {
-        expect(button.querySelector('[aria-label="Check Icon"]')).toBeVisible();
+        expect(button.querySelector("svg.lucide-check")).toBeVisible();
       });
 
       jest.useRealTimers();
@@ -185,7 +179,7 @@ describe("CopyButton", () => {
       await user.click(button);
 
       await waitFor(() => {
-        expect(button.querySelector('[aria-label="Check Icon"]')).toBeVisible();
+        expect(button.querySelector("svg.lucide-check")).toBeVisible();
       });
 
       act(() => {
@@ -193,7 +187,7 @@ describe("CopyButton", () => {
       });
 
       await waitFor(() => {
-        expect(button.querySelector('[aria-label="Copy Icon"]')).toBeVisible();
+        expect(button.querySelector("svg.lucide-copy")).toBeVisible();
       });
 
       jest.useRealTimers();
@@ -237,7 +231,7 @@ describe("CopyButton", () => {
       await user.click(button);
 
       await waitFor(() => {
-        expect(button.querySelector('[aria-label="Check Icon"]')).toBeVisible();
+        expect(button.querySelector("svg.lucide-check")).toBeVisible();
       });
 
       jest.useRealTimers();
@@ -254,7 +248,7 @@ describe("CopyButton", () => {
       await user.click(button);
 
       await waitFor(() => {
-        expect(button.querySelector('[aria-label="Check Icon"]')).toBeVisible();
+        expect(button.querySelector("svg.lucide-check")).toBeVisible();
       });
 
       act(() => {
@@ -262,7 +256,7 @@ describe("CopyButton", () => {
       });
 
       await waitFor(() => {
-        expect(button.querySelector('[aria-label="Copy Icon"]')).toBeVisible();
+        expect(button.querySelector("svg.lucide-copy")).toBeVisible();
       });
 
       jest.useRealTimers();
@@ -278,9 +272,9 @@ describe("CopyButton", () => {
       await user.click(button);
 
       await waitFor(() => {
-        expect(button.querySelector('[aria-label="Copy Icon"]')).toBeVisible();
+        expect(button.querySelector("svg.lucide-copy")).toBeVisible();
         expect(
-          button.querySelector('[aria-label="Check Icon"]')
+          button.querySelector("svg.lucide-check")
         ).not.toBeInTheDocument();
       });
     });
@@ -321,7 +315,7 @@ describe("CopyButton", () => {
       await user.click(button);
 
       await waitFor(() => {
-        expect(button.querySelector('[aria-label="Check Icon"]')).toBeVisible();
+        expect(button.querySelector("svg.lucide-check")).toBeVisible();
       });
 
       act(() => {
@@ -329,7 +323,7 @@ describe("CopyButton", () => {
       });
 
       await waitFor(() => {
-        expect(button.querySelector('[aria-label="Copy Icon"]')).toBeVisible();
+        expect(button.querySelector("svg.lucide-copy")).toBeVisible();
       });
 
       jest.useRealTimers();
@@ -348,7 +342,7 @@ describe("CopyButton", () => {
       await expect(user.click(button)).resolves.not.toThrow();
 
       await waitFor(() => {
-        expect(button.querySelector('[aria-label="Copy Icon"]')).toBeVisible();
+        expect(button.querySelector("svg.lucide-copy")).toBeVisible();
       });
     });
   });
@@ -365,7 +359,7 @@ describe("CopyButton", () => {
       await user.keyboard("{Enter}");
 
       await waitFor(() => {
-        expect(button.querySelector('[aria-label="Check Icon"]')).toBeVisible();
+        expect(button.querySelector("svg.lucide-check")).toBeVisible();
       });
 
       jest.useRealTimers();
@@ -382,7 +376,7 @@ describe("CopyButton", () => {
       await user.keyboard(" ");
 
       await waitFor(() => {
-        expect(button.querySelector('[aria-label="Check Icon"]')).toBeVisible();
+        expect(button.querySelector("svg.lucide-check")).toBeVisible();
       });
 
       jest.useRealTimers();
@@ -397,12 +391,8 @@ describe("CopyButton", () => {
       button.focus();
       await user.keyboard("{Tab}");
 
-      expect(
-        button.querySelector('[aria-label="Copy Icon"]')
-      ).toBeInTheDocument();
-      expect(
-        button.querySelector('[aria-label="Check Icon"]')
-      ).not.toBeInTheDocument();
+      expect(button.querySelector("svg.lucide-copy")).toBeInTheDocument();
+      expect(button.querySelector("svg.lucide-check")).not.toBeInTheDocument();
     });
   });
 

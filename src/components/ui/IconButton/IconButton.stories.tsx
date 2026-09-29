@@ -1,8 +1,6 @@
 import type { Meta } from "@storybook/react-vite";
 import { Fragment } from "react";
-
-import { InfoIcon } from "@/components/icons";
-import { PlusIcon } from "@/components/icons.v2";
+import { InfoIcon, PlusIcon } from "@/components/icons.v2";
 import { IconButton } from "./IconButton";
 
 const meta: Meta<typeof IconButton> = {

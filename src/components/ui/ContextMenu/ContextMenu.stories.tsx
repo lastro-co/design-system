@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  ChatBubbleIcon,
-  CloseIcon,
-  GearIcon,
+  MessageSquareTextIcon,
   SearchIcon,
+  SettingsIcon,
   WhatsAppIcon,
-} from "@/components/icons";
+  XIcon,
+} from "@/components/icons.v2";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -112,19 +112,21 @@ export const WithIcons: Story = {
         Clique com botão direito aqui
       </ContextMenuTrigger>
       <ContextMenuContent>
-        <ContextMenuItem leftIcon={<ChatBubbleIcon size="sm" />}>
+        <ContextMenuItem
+          leftIcon={<MessageSquareTextIcon className="size-4" />}
+        >
           Ver conversa
         </ContextMenuItem>
         <ContextMenuSeparator />
-        <ContextMenuItem leftIcon={<WhatsAppIcon size="sm" />}>
+        <ContextMenuItem leftIcon={<WhatsAppIcon className="size-4" />}>
           Chamar no WhatsApp
         </ContextMenuItem>
         <ContextMenuSeparator />
-        <ContextMenuItem leftIcon={<SearchIcon size="sm" />}>
+        <ContextMenuItem leftIcon={<SearchIcon className="size-4" />}>
           Buscar
         </ContextMenuItem>
         <ContextMenuSeparator />
-        <ContextMenuItem leftIcon={<GearIcon size="sm" />}>
+        <ContextMenuItem leftIcon={<SettingsIcon className="size-4" />}>
           Configurações
         </ContextMenuItem>
       </ContextMenuContent>
@@ -141,14 +143,14 @@ export const WithRightIcons: Story = {
       </ContextMenuTrigger>
       <ContextMenuContent>
         <ContextMenuItem
-          leftIcon={<ChatBubbleIcon size="sm" />}
+          leftIcon={<MessageSquareTextIcon className="size-4" />}
           rightIcon={<span className="text-gray-400 text-xs">⌘K</span>}
         >
           Ver conversa
         </ContextMenuItem>
         <ContextMenuSeparator />
         <ContextMenuItem
-          leftIcon={<GearIcon size="sm" />}
+          leftIcon={<SettingsIcon className="size-4" />}
           rightIcon={<span className="text-gray-400 text-xs">⌘,</span>}
         >
           Configurações
@@ -212,7 +214,10 @@ export const DestructiveAction: Story = {
         <ContextMenuSeparator />
         <ContextMenuItem>Duplicar</ContextMenuItem>
         <ContextMenuSeparator />
-        <ContextMenuItem color="#DC2626" leftIcon={<CloseIcon size="sm" />}>
+        <ContextMenuItem
+          color="#DC2626"
+          leftIcon={<XIcon className="size-4" />}
+        >
           Excluir
         </ContextMenuItem>
       </ContextMenuContent>
@@ -228,11 +233,13 @@ export const CompleteExample: Story = {
         Clique com botão direito aqui
       </ContextMenuTrigger>
       <ContextMenuContent>
-        <ContextMenuItem leftIcon={<ChatBubbleIcon size="sm" />}>
+        <ContextMenuItem
+          leftIcon={<MessageSquareTextIcon className="size-4" />}
+        >
           Ver conversa
         </ContextMenuItem>
         <ContextMenuSeparator />
-        <ContextMenuItem leftIcon={<WhatsAppIcon size="sm" />}>
+        <ContextMenuItem leftIcon={<WhatsAppIcon className="size-4" />}>
           Chamar no WhatsApp
         </ContextMenuItem>
         <ContextMenuSeparator />
@@ -240,7 +247,10 @@ export const CompleteExample: Story = {
         <ContextMenuSeparator />
         <ContextMenuItem>Copiar CPF</ContextMenuItem>
         <ContextMenuSeparator />
-        <ContextMenuItem color="#DC2626" leftIcon={<CloseIcon size="sm" />}>
+        <ContextMenuItem
+          color="#DC2626"
+          leftIcon={<XIcon className="size-4" />}
+        >
           Cancelar solicitação
         </ContextMenuItem>
       </ContextMenuContent>
@@ -257,23 +267,25 @@ export const WithLabels: Story = {
       </ContextMenuTrigger>
       <ContextMenuContent>
         <ContextMenuLabel>Comunicação</ContextMenuLabel>
-        <ContextMenuItem leftIcon={<ChatBubbleIcon size="sm" />}>
+        <ContextMenuItem
+          leftIcon={<MessageSquareTextIcon className="size-4" />}
+        >
           Ver conversa
         </ContextMenuItem>
-        <ContextMenuItem leftIcon={<WhatsAppIcon size="sm" />}>
+        <ContextMenuItem leftIcon={<WhatsAppIcon className="size-4" />}>
           Chamar no WhatsApp
         </ContextMenuItem>
         <ContextMenuSeparator />
         <ContextMenuLabel>Ações</ContextMenuLabel>
-        <ContextMenuItem leftIcon={<SearchIcon size="sm" />}>
+        <ContextMenuItem leftIcon={<SearchIcon className="size-4" />}>
           Buscar
         </ContextMenuItem>
-        <ContextMenuItem leftIcon={<GearIcon size="sm" />}>
+        <ContextMenuItem leftIcon={<SettingsIcon className="size-4" />}>
           Configurações
         </ContextMenuItem>
         <ContextMenuSeparator />
         <ContextMenuLabel>Zona de Perigo</ContextMenuLabel>
-        <ContextMenuItem destructive leftIcon={<CloseIcon size="sm" />}>
+        <ContextMenuItem destructive leftIcon={<XIcon className="size-4" />}>
           Excluir
         </ContextMenuItem>
       </ContextMenuContent>

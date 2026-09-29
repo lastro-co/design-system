@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { InfoIcon } from "@/components/icons";
+import { InfoIcon } from "@/components/icons.v2";
 import { cn } from "@/lib/utils";
 import {
   Tooltip,

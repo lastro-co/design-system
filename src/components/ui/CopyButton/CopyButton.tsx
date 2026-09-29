@@ -2,8 +2,8 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
+import { CheckIcon, CopyIcon } from "@/components/icons.v2";
 import { cn } from "@/lib/utils";
-import { CheckIcon, CopyIcon } from "../../icons";
 import { IconButton, iconButtonVariants } from "../IconButton";
 
 export interface CopyButtonProps {
@@ -88,9 +88,9 @@ export function CopyButton({
   );
 
   const iconElement = copied ? (
-    <CheckIcon color="purple-800" size="xs" />
+    <CheckIcon className="text-purple-800" />
   ) : (
-    <CopyIcon color="purple-800" size="md" />
+    <CopyIcon className="text-purple-800" />
   );
 
   return (

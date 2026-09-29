@@ -1,7 +1,7 @@
 "use client";
 
+import { TrashIcon } from "@/components/icons.v2";
 import { cn, formatFileSize } from "@/lib/utils";
-import { TrashIcon } from "../../icons";
 import { IconButton } from "../IconButton";
 
 export interface ImagePreviewProps {
@@ -51,10 +51,7 @@ export function ImagePreview({
             size="small"
             variant="ghost"
           >
-            <TrashIcon
-              className="cursor-pointer text-gray-500 hover:text-red-500"
-              size="md"
-            />
+            <TrashIcon className="cursor-pointer text-gray-500 hover:text-red-500" />
           </IconButton>
         )}
       </div>

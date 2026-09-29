@@ -1,5 +1,5 @@
 import userEvent from "@testing-library/user-event";
-import { StarIcon } from "@/components/icons";
+import { StarIcon } from "@/components/icons.v2";
 import { render, screen } from "@/tests/app-test-utils";
 import { OpportunityCard } from "./OpportunityCard";
 
@@ -32,8 +32,8 @@ describe("OpportunityCard", () => {
   });
 
   it("does not render an icon when tagIcon is omitted", () => {
-    render(<OpportunityCard {...baseProps} />);
-    expect(screen.queryByLabelText("Star Icon")).not.toBeInTheDocument();
+    const { container } = render(<OpportunityCard {...baseProps} />);
+    expect(container.querySelector("svg.lucide-star")).not.toBeInTheDocument();
   });
 
   it("renders interpolated content in title", () => {

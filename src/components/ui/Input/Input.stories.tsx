@@ -1,7 +1,6 @@
 import type { Meta } from "@storybook/react-vite";
 import { useState } from "react";
-import { CalendarIcon } from "@/components/icons";
-import { SearchIcon, UserIcon } from "@/components/icons.v2";
+import { CalendarDaysIcon, SearchIcon, UserIcon } from "@/components/icons.v2";
 import { FormItem } from "../Form";
 import { Label } from "../Label";
 import { Input } from "./Input";
@@ -88,7 +87,7 @@ export const AllVariants = {
         <FormItem>
           <Label>With Icon Right</Label>
           <Input
-            icon={<CalendarIcon />}
+            icon={<CalendarDaysIcon />}
             iconPosition="right"
             placeholder="dd/mm/aaaa"
           />

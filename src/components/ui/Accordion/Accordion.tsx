@@ -2,8 +2,8 @@
 
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import type * as React from "react";
+import { ChevronDownIcon } from "@/components/icons.v2";
 import { cn } from "@/lib/utils";
-import { ChevronDownIcon } from "../../icons";
 
 function Accordion({
   ...props
@@ -48,11 +48,7 @@ function AccordionTrigger({
           className="inline-block overflow-hidden rounded-full transition-all group-hover:bg-purple-100"
           data-slot="accordion-icon"
         >
-          <ChevronDownIcon
-            className="pointer-events-none block shrink-0 translate-y-0.5 transition-transform duration-200 group-disabled:opacity-50"
-            color="purple-800"
-            size="lg"
-          />
+          <ChevronDownIcon className="pointer-events-none block size-6 shrink-0 translate-y-0.5 text-purple-800 transition-transform duration-200 group-disabled:opacity-50" />
         </span>
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>
