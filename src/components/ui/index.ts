@@ -24,10 +24,11 @@ export { Badge, badgeVariants } from "./Badge";
 export type { BreadcrumbItem, BreadcrumbProps } from "./Breadcrumb";
 export { Breadcrumb } from "./Breadcrumb";
 export { Button, buttonVariants } from "./Button";
-export type { MonthYearPickerProps } from "./Calendar";
+export type { CalendarPreset, MonthYearPickerProps } from "./Calendar";
 export {
   Calendar,
   CalendarDayButton,
+  getDefaultCalendarPresets,
   MONTHS_PT_BR,
   MONTHS_PT_BR_SHORT,
   MonthYearPicker,
@@ -66,6 +67,8 @@ export {
 } from "./ContextMenu";
 export { CopyButton } from "./CopyButton";
 export { DatePicker } from "./DatePicker";
+export type { DateRange, DateRangePickerProps } from "./DateRangePicker";
+export { DateRangePicker } from "./DateRangePicker";
 export {
   Dialog,
   DialogClose,
