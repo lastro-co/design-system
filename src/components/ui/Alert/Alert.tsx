@@ -57,10 +57,10 @@ const alertVariants = cva(
   {
     variants: {
       severity: {
-        success: "border-l-green-600 text-green-800 [&>svg]:text-green-600",
-        info: "border-l-blue-600 text-blue-800 [&>svg]:text-blue-600",
-        warning: "border-l-yellow-600 text-yellow-800 [&>svg]:text-yellow-600",
-        error: "border-l-red-600 text-red-800 [&>svg]:text-red-600",
+        success: "border-l-green-600 text-green-700 [&>svg]:text-green-600",
+        info: "border-l-blue-600 text-blue-700 [&>svg]:text-blue-600",
+        warning: "border-l-yellow-600 text-yellow-700 [&>svg]:text-yellow-600",
+        error: "border-l-red-600 text-red-700 [&>svg]:text-red-600",
       },
     },
     defaultVariants: {

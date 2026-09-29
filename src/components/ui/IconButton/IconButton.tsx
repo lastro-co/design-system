@@ -27,7 +27,7 @@ const iconButtonVariants = cva(
         ghost:
           "border border-transparent bg-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-800 active:bg-gray-50 active:text-gray-800",
         destructive:
-          "border-0 bg-white text-red-600 hover:bg-red-50 hover:text-red-800 active:bg-red-50 active:text-red-800",
+          "border-0 bg-white text-red-600 hover:bg-red-50 hover:text-red-700 active:bg-red-50 active:text-red-700",
       },
     },
     compoundVariants: [
