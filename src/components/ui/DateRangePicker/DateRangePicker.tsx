@@ -222,8 +222,12 @@ export function DateRangePicker({
 
       <PopoverContent
         align="start"
-        // The Calendar draws the only surface (sidebar, grid and footer).
-        className="w-auto border-0 bg-transparent p-0 shadow-none"
+        // The Calendar draws the only surface (sidebar, grid and footer). The
+        // popover is capped to the available height, so it scrolls when the
+        // viewport is short (e.g. a low iframe) instead of hiding the actions.
+        // The scroll box would clip the Calendar's own shadow, so the popover
+        // carries the shadow and radius instead.
+        className="w-auto overflow-y-auto rounded-md border-0 bg-transparent p-0 shadow-sm"
       >
         <DateRangePickerPanel
           applyLabel={applyLabel}

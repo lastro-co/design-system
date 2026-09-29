@@ -223,9 +223,23 @@ describe("DateRangePicker", () => {
 
       const content = await openPicker(user);
       expect(content).toHaveAttribute("data-align", "start");
-      expect(content).toHaveClass("border-0", "bg-transparent", "shadow-none");
+      expect(content).toHaveClass("border-0", "bg-transparent");
       const group = within(content).getByRole("group", { name: "Período" });
       expect(group.parentElement).toHaveClass(...SURFACE_CLASSES);
+    });
+
+    it("scrolls within the available height instead of hiding the actions", async () => {
+      const user = userEvent.setup();
+      render(<DateRangePicker showActions />);
+
+      const content = await openPicker(user);
+      // Popover caps its height to the Radix available space; the scroll box
+      // keeps the footer reachable in a short viewport (e.g. a low iframe).
+      // It carries the shadow/radius since overflow clips the Calendar's own.
+      expect(content).toHaveClass("overflow-y-auto", "rounded-md", "shadow-sm");
+      expect(content).toHaveClass(
+        "max-h-[var(--radix-popover-content-available-height)]"
+      );
     });
   });
 
