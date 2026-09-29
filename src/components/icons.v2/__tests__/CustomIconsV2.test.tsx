@@ -1,10 +1,20 @@
 import { createRef } from "react";
 import { render, screen } from "@/tests/app-test-utils";
-import { CredalugaIcon, IaMicIcon, WhatsAppIcon } from "../index";
+import {
+  CredalugaIcon,
+  HouseArrowUpIcon,
+  IaMicIcon,
+  MoneyBagIcon,
+  SupportNotificationIcon,
+  WhatsAppIcon,
+} from "../index";
 
 const GLYPH_ICONS = [
   ["CredalugaIcon", CredalugaIcon],
+  ["HouseArrowUpIcon", HouseArrowUpIcon],
   ["IaMicIcon", IaMicIcon],
+  ["MoneyBagIcon", MoneyBagIcon],
+  ["SupportNotificationIcon", SupportNotificationIcon],
   ["WhatsAppIcon", WhatsAppIcon],
 ] as const;
 
