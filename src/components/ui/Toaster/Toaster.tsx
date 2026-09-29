@@ -37,12 +37,12 @@ const Toaster = ({
         title: "font-bold font-display text-sm",
         description: "text-sm leading-normal mt-1",
         success:
-          "border-l-8 border-l-green-600 text-green-800 [&_[data-icon]]:text-green-600",
-        info: "border-l-8 border-l-blue-600 text-blue-800 [&_[data-icon]]:text-blue-600",
+          "border-l-8 border-l-green-600 text-green-700 [&_[data-icon]]:text-green-600",
+        info: "border-l-8 border-l-blue-600 text-blue-700 [&_[data-icon]]:text-blue-600",
         warning:
-          "border-l-8 border-l-yellow-600 text-yellow-800 [&_[data-icon]]:text-yellow-600",
+          "border-l-8 border-l-yellow-600 text-yellow-700 [&_[data-icon]]:text-yellow-600",
         error:
-          "border-l-8 border-l-red-600 text-red-800 [&_[data-icon]]:text-red-600",
+          "border-l-8 border-l-red-600 text-red-700 [&_[data-icon]]:text-red-600",
         loading:
           "border-l-8 border-l-purple-600 text-purple-800 [&_[data-icon]]:text-purple-600",
         closeButton:
