@@ -3,8 +3,6 @@ import { readFileSync, writeFileSync } from "node:fs";
 const files = [
   "dist/index.js",
   "dist/index.cjs",
-  "dist/icons.js",
-  "dist/icons.cjs",
   // icons.v2 bundles the lucide-animated client components (motion hooks).
   "dist/icons.v2.js",
   "dist/icons.v2.cjs",
