@@ -774,6 +774,28 @@ describe("Menu", () => {
       const wrapper = container.querySelector('[data-slot="menu-separator"]');
       expect(wrapper).toBeVisible();
     });
+
+    it("expanded: the gray-200 rule is inset 16px from the edges", () => {
+      const { container } = render(
+        <Menu>
+          <MenuSeparator />
+        </Menu>
+      );
+      const wrapper = container.querySelector('[data-slot="menu-separator"]');
+      expect(wrapper).toHaveClass("px-4", "py-3");
+      expect(wrapper?.firstElementChild).toHaveClass("h-px", "bg-gray-200");
+    });
+
+    it("collapsed: a 48px rule centered in the rail, 8px above and 12px below", () => {
+      const { container } = render(
+        <Menu defaultCollapsed>
+          <MenuSeparator />
+        </Menu>
+      );
+      const wrapper = container.querySelector('[data-slot="menu-separator"]');
+      expect(wrapper).toHaveClass("mx-auto", "w-12", "pt-2", "pb-3");
+      expect(wrapper?.firstElementChild).toHaveClass("bg-gray-200");
+    });
   });
 
   /* ------------------------------------------------------------------ */
@@ -3541,5 +3563,107 @@ describe("MenuAccordionItem — sticky gap coverage", () => {
     expect(screen.getByText("Real Sub")).toBeVisible();
     // The auto-hidden accordion's trigger isn't rendered either.
     expect(screen.queryByText("Accordion Empty")).not.toBeInTheDocument();
+  });
+});
+
+/* ------------------------------------------------------------------ */
+/* Resting colors — Figma DS 2026.2 (node 1426-11299)                 */
+/* ------------------------------------------------------------------ */
+
+describe("Menu resting colors (DS 2026.2)", () => {
+  const REST = ["text-gray-600", "hover:bg-gray-50", "hover:text-gray-800"];
+  const iconWrapper = (testId: string) =>
+    screen.getByTestId(testId).parentElement as HTMLElement;
+
+  it("MenuItem (expanded) rests in gray-600 with a gray-400 icon", () => {
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuItem icon={<svg data-testid="rest-icon" />} label="Disparos" />
+        </MenuSection>
+      </Menu>
+    );
+    expect(screen.getByRole("button", { name: "Disparos" })).toHaveClass(
+      ...REST
+    );
+    expect(iconWrapper("rest-icon")).toHaveClass("text-gray-400");
+  });
+
+  it("MenuItem (collapsed) rests in gray-600 with a gray-400 icon", () => {
+    render(
+      <Menu defaultCollapsed>
+        <MenuSection>
+          <MenuItem icon={<svg data-testid="rest-icon" />} label="Disparos" />
+        </MenuSection>
+      </Menu>
+    );
+    expect(screen.getByRole("button")).toHaveClass(...REST);
+    expect(iconWrapper("rest-icon")).toHaveClass("text-gray-400");
+  });
+
+  it("active MenuItem keeps the white text and icon", () => {
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuItem
+            active
+            icon={<svg data-testid="active-icon" />}
+            label="Conversas"
+          />
+        </MenuSection>
+      </Menu>
+    );
+    expect(screen.getByRole("button", { name: "Conversas" })).toHaveClass(
+      "bg-purple-800",
+      "text-white"
+    );
+    expect(iconWrapper("active-icon")).toHaveClass("text-white");
+  });
+
+  it("MenuAccordionItem trigger rests in gray-600 with a gray-400 icon", () => {
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem
+            icon={<svg data-testid="acc-icon" />}
+            label="Gestão de leads"
+          >
+            <MenuSubItem label="Leads" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+    expect(
+      screen.getByRole("button", { name: "Gestão de leads" })
+    ).toHaveClass(...REST);
+    expect(iconWrapper("acc-icon")).toHaveClass("text-gray-400");
+  });
+
+  it("MenuAccordionItem (collapsed) trigger rests in gray-600 with a gray-400 icon", () => {
+    render(
+      <Menu defaultCollapsed>
+        <MenuSection>
+          <MenuAccordionItem
+            icon={<svg data-testid="acc-icon" />}
+            label="Gestão de leads"
+          >
+            <MenuSubItem label="Leads" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+    expect(screen.getByRole("button")).toHaveClass(...REST);
+    expect(iconWrapper("acc-icon")).toHaveClass("text-gray-400");
+  });
+
+  it("MenuSubItem rests in gray-600", () => {
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuSubItem label="Leads" />
+        </MenuSection>
+      </Menu>
+    );
+    expect(screen.getByRole("button", { name: "Leads" })).toHaveClass(...REST);
   });
 });
