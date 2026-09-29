@@ -31,6 +31,7 @@ export {
   HelpCircle as HelpCircleIcon,
   Home as HomeIcon,
   Image as ImageIcon,
+  Inbox as InboxIcon,
   Info as InfoIcon,
   KeyRound as KeyRoundIcon,
   Link as LinkIcon,

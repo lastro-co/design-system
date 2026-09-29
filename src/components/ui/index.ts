@@ -98,6 +98,8 @@ export type {
   DropzoneProps,
 } from "./Dropzone";
 export { Dropzone, DropzoneContent, DropzoneEmptyState } from "./Dropzone";
+export type { EmptyStateProps } from "./EmptyState";
+export { EmptyState } from "./EmptyState";
 export type { ErrorStateProps } from "./ErrorState";
 export { ErrorState } from "./ErrorState";
 export type { FilePreviewProps } from "./FilePreview";
