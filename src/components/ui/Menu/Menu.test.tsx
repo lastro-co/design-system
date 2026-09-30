@@ -3639,6 +3639,23 @@ describe("Menu resting colors (DS 2026.2)", () => {
     expect(iconWrapper("acc-icon")).toHaveClass("text-gray-400");
   });
 
+  it("MenuAccordionItem chevron matches the icon in gray-400", () => {
+    render(
+      <Menu>
+        <MenuSection>
+          <MenuAccordionItem label="Gestão de leads">
+            <MenuSubItem label="Leads" />
+          </MenuAccordionItem>
+        </MenuSection>
+      </Menu>
+    );
+    const chevron = screen
+      .getByRole("button", { name: "Gestão de leads" })
+      .querySelector(".lucide-chevron-down");
+    expect(chevron).toHaveClass("text-gray-400");
+    expect(chevron).not.toHaveClass("text-gray-800");
+  });
+
   it("MenuAccordionItem (collapsed) trigger rests in gray-600 with a gray-400 icon", () => {
     render(
       <Menu defaultCollapsed>
