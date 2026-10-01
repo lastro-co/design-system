@@ -1,5 +1,5 @@
 import userEvent from "@testing-library/user-event";
-import { SearchIcon } from "@/components/icons";
+import { SearchIcon } from "@/components/icons.v2";
 import { render, screen } from "@/tests/app-test-utils";
 import { InputTag } from ".";
 

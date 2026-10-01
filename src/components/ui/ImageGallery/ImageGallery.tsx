@@ -2,8 +2,8 @@
 
 import type { ReactNode } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { ChevronLeftIcon, ChevronRightIcon } from "@/components/icons.v2";
 import { cn } from "@/lib/utils";
-import { ChevronLeftIcon, ChevronRightIcon } from "../../icons";
 import { IconButton } from "../IconButton";
 import { Spinner } from "../Spinner";
 

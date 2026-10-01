@@ -3,8 +3,8 @@
 import MapLibreGL from "maplibre-gl";
 import { useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
+import { XIcon } from "@/components/icons.v2";
 import { cn } from "@/lib/utils";
-import { CloseIcon } from "../../icons";
 
 import { DefaultMarkerIcon } from "./components";
 import { MarkerContext } from "./context";
@@ -238,7 +238,7 @@ export function MarkerPopup({
           onClick={handleClose}
           type="button"
         >
-          <CloseIcon size="sm" />
+          <XIcon className="size-4" />
           <span className="sr-only">Close</span>
         </button>
       )}

@@ -1,5 +1,5 @@
 import userEvent from "@testing-library/user-event";
-import { CloseIcon } from "@/components/icons";
+import { XIcon } from "@/components/icons.v2";
 import { render, screen } from "@/tests/app-test-utils";
 import { IconButton, iconButtonVariants } from "./IconButton";
 
@@ -7,7 +7,7 @@ describe("IconButton", () => {
   it("defaults the child icon to 16px, but lets an explicit size class win", () => {
     render(
       <IconButton aria-label="Close">
-        <CloseIcon />
+        <XIcon />
       </IconButton>
     );
 
@@ -16,7 +16,7 @@ describe("IconButton", () => {
 
     const { container } = render(
       <IconButton aria-label="Close">
-        <CloseIcon className="size-6" />
+        <XIcon className="size-6" />
       </IconButton>
     );
 
@@ -31,7 +31,7 @@ describe("IconButton", () => {
         size="small"
         variant="outline"
       >
-        <CloseIcon />
+        <XIcon />
       </IconButton>
     );
 
@@ -46,7 +46,7 @@ describe("IconButton", () => {
 
     rerender(
       <IconButton aria-label="Close" size="large" variant="default">
-        <CloseIcon />
+        <XIcon />
       </IconButton>
     );
 
@@ -55,7 +55,7 @@ describe("IconButton", () => {
 
     rerender(
       <IconButton aria-label="Close" shape="square" size="medium">
-        <CloseIcon />
+        <XIcon />
       </IconButton>
     );
 
@@ -66,7 +66,7 @@ describe("IconButton", () => {
   it("scales the square radius with size", () => {
     const { rerender } = render(
       <IconButton aria-label="Close" shape="square" size="small">
-        <CloseIcon />
+        <XIcon />
       </IconButton>
     );
 
@@ -75,7 +75,7 @@ describe("IconButton", () => {
 
     rerender(
       <IconButton aria-label="Close" shape="square" size="medium">
-        <CloseIcon />
+        <XIcon />
       </IconButton>
     );
 
@@ -84,7 +84,7 @@ describe("IconButton", () => {
 
     rerender(
       <IconButton aria-label="Close" shape="square" size="large">
-        <CloseIcon />
+        <XIcon />
       </IconButton>
     );
 
@@ -95,7 +95,7 @@ describe("IconButton", () => {
   it("renders the destructive variant", () => {
     render(
       <IconButton aria-label="Delete" variant="destructive">
-        <CloseIcon />
+        <XIcon />
       </IconButton>
     );
 
@@ -104,14 +104,14 @@ describe("IconButton", () => {
       "bg-white",
       "text-red-600",
       "hover:bg-red-50",
-      "hover:text-red-800"
+      "hover:text-red-700"
     );
   });
 
   it("renders the ghost variant", () => {
     render(
       <IconButton aria-label="Close" variant="ghost">
-        <CloseIcon />
+        <XIcon />
       </IconButton>
     );
 
@@ -127,7 +127,7 @@ describe("IconButton", () => {
   it("applies active and focus-visible classes", () => {
     render(
       <IconButton aria-label="Close" variant="default">
-        <CloseIcon />
+        <XIcon />
       </IconButton>
     );
 
@@ -143,7 +143,7 @@ describe("IconButton", () => {
   it("applies a distinct disabled style per variant", () => {
     const { rerender } = render(
       <IconButton aria-label="Close" disabled variant="default">
-        <CloseIcon />
+        <XIcon />
       </IconButton>
     );
 
@@ -153,7 +153,7 @@ describe("IconButton", () => {
 
     rerender(
       <IconButton aria-label="Close" disabled variant="outline">
-        <CloseIcon />
+        <XIcon />
       </IconButton>
     );
 
@@ -162,7 +162,7 @@ describe("IconButton", () => {
 
     rerender(
       <IconButton aria-label="Close" disabled variant="ghost">
-        <CloseIcon />
+        <XIcon />
       </IconButton>
     );
 
@@ -176,7 +176,7 @@ describe("IconButton", () => {
 
     render(
       <IconButton aria-label="Loading" loading onClick={handleClick}>
-        <CloseIcon />
+        <XIcon />
       </IconButton>
     );
 
@@ -196,7 +196,7 @@ describe("IconButton", () => {
   it("uses the real disabled attribute when disabled is explicitly set", () => {
     render(
       <IconButton aria-label="Close" disabled>
-        <CloseIcon />
+        <XIcon />
       </IconButton>
     );
 
@@ -209,7 +209,7 @@ describe("IconButton", () => {
     const ref = { current: null };
     render(
       <IconButton aria-label="Close" ref={ref}>
-        <CloseIcon />
+        <XIcon />
       </IconButton>
     );
 
@@ -220,7 +220,7 @@ describe("IconButton", () => {
     render(
       <IconButton aria-label="Close" asChild>
         <a href="/somewhere">
-          <CloseIcon />
+          <XIcon />
         </a>
       </IconButton>
     );
@@ -237,7 +237,7 @@ describe("IconButton", () => {
     render(
       <IconButton aria-label="Close" asChild onClick={handleClick}>
         <a href="/somewhere">
-          <CloseIcon />
+          <XIcon />
         </a>
       </IconButton>
     );
@@ -250,7 +250,7 @@ describe("IconButton", () => {
     render(
       <IconButton aria-label="Close" asChild disabled>
         <a href="/somewhere">
-          <CloseIcon />
+          <XIcon />
         </a>
       </IconButton>
     );

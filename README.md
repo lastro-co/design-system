@@ -75,7 +75,7 @@ pnpm add @lastro-co/design-system
 import { Button, Dialog, Badge, Card } from '@lastro-co/design-system';
 
 // Icons
-import { CheckIcon, HouseIcon, SearchIcon } from '@lastro-co/design-system/icons';
+import { CheckIcon, HomeIcon, SearchIcon } from '@lastro-co/design-system/icons.v2';
 
 // Utilities
 import { cn, formatFileSize } from '@lastro-co/design-system';
@@ -107,7 +107,7 @@ export default {
 | Path | Description |
 |------|-------------|
 | `@lastro-co/design-system` | All UI components + utilities (`cn`, `formatFileSize`) |
-| `@lastro-co/design-system/icons` | 94 SVG icons (92 standard + 2 colored) |
+| `@lastro-co/design-system/icons.v2` | Icons: [lucide](https://lucide.dev) re-exports (`XIcon`), animated variants (`AnimatedXIcon`) and custom brand icons |
 | `@lastro-co/design-system/styles.css` | Design tokens and global styles |
 | `@lastro-co/design-system/tailwind.config` | Tailwind preset (keyframes, theme) |
 

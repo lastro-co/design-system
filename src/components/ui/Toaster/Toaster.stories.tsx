@@ -1,7 +1,8 @@
 import type { Meta } from "@storybook/react-vite";
-import { toast } from "sonner";
+import type { ReactNode } from "react";
+import { fn } from "storybook/test";
 import { Button } from "../Button/Button";
-import { Toaster } from "./Toaster";
+import { Toaster, toast } from ".";
 
 const meta: Meta<typeof Toaster> = {
   title: "Components/Toaster (Sonner)",
@@ -30,15 +31,11 @@ const meta: Meta<typeof Toaster> = {
       description: "Toasts will be expanded by default",
       defaultValue: false,
     },
-    richColors: {
-      control: "boolean",
-      description: "Makes error and success toasts more colorful",
-      defaultValue: false,
-    },
     closeButton: {
       control: "boolean",
-      description: "Show close button on toasts",
-      defaultValue: true,
+      description:
+        "Show a close button on toasts. Off by default: the DS 2026.2 toast has none.",
+      defaultValue: false,
     },
     duration: {
       control: "number",
@@ -50,208 +47,363 @@ const meta: Meta<typeof Toaster> = {
 
 export default meta;
 
-export const AllToastTypes = {
-  name: "Tipos de Toast",
-  render: () => (
-    <div className="flex flex-col gap-4">
-      <Toaster />
-      <div className="space-y-4">
-        <h3 className="font-medium text-lg">Tipos de Toast</h3>
-        <p className="text-gray-600 text-sm">
-          Demonstração de todos os tipos de toast disponíveis com ícones
-          personalizados
-        </p>
-        <div className="flex flex-wrap gap-4">
-          <Button
-            onClick={() =>
-              toast.success("Operação realizada com sucesso!", {
-                description: "Suas alterações foram salvas.",
-              })
-            }
-          >
-            Success
-          </Button>
-          <Button
-            onClick={() =>
-              toast.info("Informação importante", {
-                description: "Verifique os detalhes antes de continuar.",
-              })
-            }
-          >
-            Info
-          </Button>
-          <Button
-            onClick={() =>
-              toast.warning("Atenção necessária", {
-                description: "Esta ação requer sua confirmação.",
-              })
-            }
-          >
-            Warning
-          </Button>
-          <Button
-            onClick={() =>
-              toast.error("Erro ao processar", {
-                description: "Tente novamente mais tarde.",
-              })
-            }
-          >
-            Error
-          </Button>
-        </div>
+const EVENT = "Evento criado";
+const EVENT_DATE = "Segunda-feira, 3 de Janeiro às 18:00";
+
+function Section({
+  title,
+  description,
+  children,
+}: {
+  title: string;
+  description?: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="space-y-3">
+      <div>
+        <h3 className="font-display font-semibold text-gray-900 text-lg">
+          {title}
+        </h3>
+        {description && <p className="text-gray-600 text-sm">{description}</p>}
       </div>
+      <div className="flex flex-wrap gap-3">{children}</div>
     </div>
+  );
+}
+
+function Demo({ children }: { children: ReactNode }) {
+  return (
+    <div className="flex w-180 max-w-full flex-col gap-8">
+      <Toaster />
+      {children}
+    </div>
+  );
+}
+
+/** Title only, title + description and a long description that wraps. */
+export const Default = {
+  name: "Padrão",
+  render: () => (
+    <Demo>
+      <Section title="Padrão">
+        <Button onClick={() => toast("Evento foi criado.")} variant="outline">
+          Só título
+        </Button>
+        <Button
+          onClick={() => toast(EVENT, { description: EVENT_DATE })}
+          variant="outline"
+        >
+          Título + descrição
+        </Button>
+        <Button
+          onClick={() =>
+            toast(EVENT, {
+              description: `${EVENT_DATE}, na sala de reuniões do 4º andar, com os corretores do time comercial.`,
+            })
+          }
+          variant="outline"
+        >
+          Descrição longa
+        </Button>
+      </Section>
+    </Demo>
   ),
 };
 
-export const PromiseToast = {
-  name: "Promise Toast",
+export const AllToastTypes = {
+  name: "Tipos",
   render: () => (
-    <div className="flex flex-col gap-4">
-      <Toaster />
-      <div className="space-y-4">
-        <h3 className="font-medium text-lg">Promise Toast</h3>
-        <p className="text-gray-600 text-sm">
-          Toast com estado de loading que se transforma em success ou error
-        </p>
-        <div className="flex flex-wrap gap-4">
-          <Button
-            onClick={() => {
-              const myPromise = new Promise<{ name: string }>(
-                (resolve, reject) => {
-                  setTimeout(() => {
-                    if (Math.random() > 0.5) {
-                      resolve({ name: "Tarefa" });
-                    } else {
-                      reject("Erro ao processar");
-                    }
-                  }, 3000);
-                }
-              );
+    <Demo>
+      <Section title="Com descrição">
+        <Button
+          onClick={() =>
+            toast.success("Sucesso!", {
+              description: "Suas alterações foram salvas.",
+            })
+          }
+          variant="outline"
+        >
+          Sucesso
+        </Button>
+        <Button
+          onClick={() =>
+            toast.error("Erro!", {
+              description: "Algo deu errado. Por favor, tente novamente.",
+            })
+          }
+          variant="outline"
+        >
+          Erro
+        </Button>
+        <Button
+          onClick={() =>
+            toast.warning("Aviso", {
+              description: "Esta ação pode ter efeitos colaterais.",
+            })
+          }
+          variant="outline"
+        >
+          Aviso
+        </Button>
+        <Button
+          onClick={() =>
+            toast.info("Informação", {
+              description: "Aqui estão algumas informações úteis.",
+            })
+          }
+          variant="outline"
+        >
+          Info
+        </Button>
+      </Section>
+      <Section title="Só título">
+        <Button onClick={() => toast.success("Sucesso!")} variant="outline">
+          Sucesso
+        </Button>
+        <Button onClick={() => toast.error("Erro!")} variant="outline">
+          Erro
+        </Button>
+        <Button onClick={() => toast.warning("Aviso")} variant="outline">
+          Aviso
+        </Button>
+        <Button onClick={() => toast.info("Informação")} variant="outline">
+          Info
+        </Button>
+      </Section>
+    </Demo>
+  ),
+};
 
-              toast.promise(myPromise, {
-                loading: "Processando tarefa...",
-                success: (data) => `${data.name} concluída com sucesso!`,
-                error: "Erro ao processar tarefa",
-              });
-            }}
-          >
-            Executar Promise
-          </Button>
-        </div>
-      </div>
-    </div>
+/**
+ * `action` renders the white button and `cancel` the gray one. Both close
+ * the toast after their `onClick`.
+ */
+export const WithButtons = {
+  name: "Com botões",
+  render: () => (
+    <Demo>
+      <Section title="Com botões">
+        <Button
+          onClick={() =>
+            toast(EVENT, {
+              description: EVENT_DATE,
+              action: { label: "Desfazer", onClick: fn() },
+            })
+          }
+          variant="outline"
+        >
+          Ação — título + descrição
+        </Button>
+        <Button
+          onClick={() =>
+            toast(EVENT, {
+              action: { label: "Desfazer", onClick: fn() },
+            })
+          }
+          variant="outline"
+        >
+          Ação — só título
+        </Button>
+        <Button
+          onClick={() =>
+            toast.success("Sucesso!", {
+              description: "Suas alterações foram salvas.",
+              action: { label: "Ver", onClick: fn() },
+            })
+          }
+          variant="outline"
+        >
+          Ação em toast tipado
+        </Button>
+        <Button
+          onClick={() =>
+            toast(EVENT, {
+              description: EVENT_DATE,
+              cancel: { label: "Cancelar", onClick: fn() },
+              action: { label: "Desfazer", onClick: fn() },
+            })
+          }
+          variant="outline"
+        >
+          Cancelar + ação
+        </Button>
+        <Button
+          onClick={() =>
+            toast(EVENT, {
+              description: EVENT_DATE,
+              cancel: { label: "Cancelar", onClick: fn() },
+            })
+          }
+          variant="outline"
+        >
+          Só cancelar
+        </Button>
+      </Section>
+    </Demo>
+  ),
+};
+
+const report = (ok: boolean) =>
+  new Promise<void>((resolve, reject) => {
+    setTimeout(() => (ok ? resolve() : reject(new Error("fail"))), 2500);
+  });
+
+export const PromiseToast = {
+  name: "Promise / loading",
+  render: () => (
+    <Demo>
+      <Section
+        description="`toast.loading` mostra o spinner; `toast.promise` troca para sucesso ou erro quando a promise termina."
+        title="Promise / loading"
+      >
+        <Button
+          onClick={() => toast.loading("Gerando relatório...")}
+          variant="outline"
+        >
+          Loading — só título
+        </Button>
+        <Button
+          onClick={() =>
+            toast.loading("Gerando relatório...", {
+              description: "Isso pode levar alguns segundos.",
+            })
+          }
+          variant="outline"
+        >
+          Loading — título + descrição
+        </Button>
+        <Button
+          onClick={() =>
+            toast.promise(report(true), {
+              loading: "Gerando relatório...",
+              success: "Report gerado com sucesso!",
+              error: "Falha ao gerar relatório.",
+            })
+          }
+          variant="outline"
+        >
+          Promise resolvida
+        </Button>
+        <Button
+          onClick={() =>
+            toast.promise(report(false), {
+              loading: "Gerando relatório...",
+              success: "Report gerado com sucesso!",
+              error: "Falha ao gerar relatório.",
+            })
+          }
+          variant="outline"
+        >
+          Promise rejeitada
+        </Button>
+      </Section>
+    </Demo>
+  ),
+};
+
+/**
+ * At rest only the front toast shows; the ones behind lift 14px and scale to
+ * 0.95 / 0.90 with their content hidden. Hover opens the stack. At most 3 are
+ * visible (`visibleToasts`).
+ */
+export const Stacking = {
+  name: "Empilhamento",
+  render: () => (
+    <Demo>
+      <Section
+        description="Passe o mouse sobre a pilha para abrir."
+        title="Empilhamento"
+      >
+        <Button
+          onClick={() => {
+            toast.error("Erro!", {
+              description: "Algo deu errado. Por favor, tente novamente.",
+            });
+            toast.success("Sucesso!", {
+              description: "Suas alterações foram salvas.",
+            });
+            toast("Evento foi criado.");
+          }}
+          variant="outline"
+        >
+          Disparar 3 toasts
+        </Button>
+      </Section>
+    </Demo>
   ),
 };
 
 export const CustomDuration = {
-  name: "Duração Customizada",
+  name: "Duração customizada",
   render: () => (
-    <div className="flex flex-col gap-4">
-      <Toaster />
-      <div className="space-y-4">
-        <h3 className="font-medium text-lg">Duração Customizada</h3>
-        <p className="text-gray-600 text-sm">
-          Controle quanto tempo cada toast permanece visível
-        </p>
-        <div className="flex flex-wrap gap-4">
-          <Button
-            onClick={() =>
-              toast.success("Toast rápido (1s)", {
-                duration: 1000,
-              })
-            }
-          >
-            1 Segundo
-          </Button>
-          <Button
-            onClick={() =>
-              toast.success("Toast padrão (4s)", {
-                duration: 4000,
-              })
-            }
-          >
-            4 Segundos (Padrão)
-          </Button>
-          <Button
-            onClick={() =>
-              toast.success("Toast longo (10s)", {
-                duration: 10_000,
-              })
-            }
-          >
-            10 Segundos
-          </Button>
-          <Button
-            onClick={() =>
-              toast.success("Toast infinito", {
-                duration: Number.POSITIVE_INFINITY,
-              })
-            }
-          >
-            Infinito
-          </Button>
-        </div>
-      </div>
-    </div>
+    <Demo>
+      <Section
+        description="Controle quanto tempo cada toast permanece visível."
+        title="Duração customizada"
+      >
+        <Button
+          onClick={() => toast.success("Toast rápido (1s)", { duration: 1000 })}
+          variant="outline"
+        >
+          1 segundo
+        </Button>
+        <Button
+          onClick={() => toast.success("Toast padrão (4s)", { duration: 4000 })}
+          variant="outline"
+        >
+          4 segundos (padrão)
+        </Button>
+        <Button
+          onClick={() =>
+            toast.success("Toast longo (10s)", { duration: 10_000 })
+          }
+          variant="outline"
+        >
+          10 segundos
+        </Button>
+        <Button
+          onClick={() =>
+            toast.success("Toast infinito", {
+              duration: Number.POSITIVE_INFINITY,
+            })
+          }
+          variant="outline"
+        >
+          Infinito
+        </Button>
+      </Section>
+    </Demo>
   ),
 };
 
 export const Positions = {
   name: "Posições",
   render: () => (
-    <div className="flex flex-col gap-4">
-      <div className="space-y-4">
-        <h3 className="font-medium text-lg">Posições</h3>
-        <p className="text-gray-600 text-sm">
-          Toast pode aparecer em diferentes posições na tela
-        </p>
-        <div className="grid grid-cols-3 gap-4">
+    <Demo>
+      <Section
+        description="O toast pode aparecer em diferentes posições na tela."
+        title="Posições"
+      >
+        {(
+          [
+            "top-left",
+            "top-center",
+            "top-right",
+            "bottom-left",
+            "bottom-center",
+            "bottom-right",
+          ] as const
+        ).map((position) => (
           <Button
-            onClick={() => {
-              toast.success("Top Left", { position: "top-left" });
-            }}
+            key={position}
+            onClick={() => toast.success(position, { position })}
+            variant="outline"
           >
-            Top Left
+            {position}
           </Button>
-          <Button
-            onClick={() => {
-              toast.success("Top Center", { position: "top-center" });
-            }}
-          >
-            Top Center
-          </Button>
-          <Button
-            onClick={() => {
-              toast.success("Top Right", { position: "top-right" });
-            }}
-          >
-            Top Right
-          </Button>
-          <Button
-            onClick={() => {
-              toast.success("Bottom Left", { position: "bottom-left" });
-            }}
-          >
-            Bottom Left
-          </Button>
-          <Button
-            onClick={() => {
-              toast.success("Bottom Center", { position: "bottom-center" });
-            }}
-          >
-            Bottom Center
-          </Button>
-          <Button
-            onClick={() => {
-              toast.success("Bottom Right", { position: "bottom-right" });
-            }}
-          >
-            Bottom Right
-          </Button>
-        </div>
-      </div>
-      <Toaster />
-    </div>
+        ))}
+      </Section>
+    </Demo>
   ),
 };

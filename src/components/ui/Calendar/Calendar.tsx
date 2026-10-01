@@ -12,13 +12,13 @@ import {
   getDefaultClassNames,
 } from "react-day-picker";
 import { ptBR } from "react-day-picker/locale";
-import { cn } from "@/lib/utils";
 import {
   CheckIcon,
   ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-} from "../../icons";
+} from "@/components/icons.v2";
+import { cn } from "@/lib/utils";
 import { MONTHS_PT_BR, WEEKDAYS_PT_BR_SHORT } from "./constants";
 import type { PickerView } from "./hooks";
 import { generateYearRange, parseDateString } from "./utils/date-utils";
@@ -75,9 +75,7 @@ const CalendarRoot = ({
                 onClick={() => handleMonthSelect(index)}
                 type="button"
               >
-                {isSelected && (
-                  <CheckIcon className="size-5" color={"purple-900"} />
-                )}
+                {isSelected && <CheckIcon className="size-5 text-purple-900" />}
                 <span className={cn(!isSelected && "ml-6")}>{month}</span>
               </button>
             );
@@ -101,9 +99,7 @@ const CalendarRoot = ({
                 onClick={() => handleYearSelect(year)}
                 type="button"
               >
-                {isSelected && (
-                  <CheckIcon className="size-5" color={"purple-900"} />
-                )}
+                {isSelected && <CheckIcon className="size-5 text-purple-900" />}
                 <span className={cn(!isSelected && "ml-6")}>{year}</span>
               </button>
             );
@@ -140,9 +136,9 @@ const CalendarNavChevron = ({
   orientation,
 }: React.ComponentProps<typeof Chevron>) =>
   orientation === "left" ? (
-    <ChevronLeftIcon className="size-5" color="gray-600" />
+    <ChevronLeftIcon className="size-5 text-gray-600" />
   ) : (
-    <ChevronRightIcon className="size-5" color="gray-600" />
+    <ChevronRightIcon className="size-5 text-gray-600" />
   );
 
 const CalendarWeekNumber = ({
@@ -219,7 +215,7 @@ const CalendarMonthCaption = ({
           type="button"
         >
           {capitalizeFirst(format(displayMonth, "MMM", { locale: ptBRLocale }))}
-          <ChevronDownIcon className="size-6" color={"purple-900"} />
+          <ChevronDownIcon className="size-6 text-purple-900" />
         </button>
 
         <button
@@ -259,7 +255,7 @@ const CalendarMonthCaption = ({
           type="button"
         >
           {displayMonth.getFullYear()}
-          <ChevronDownIcon className="size-6" color={"purple-900"} />
+          <ChevronDownIcon className="size-6 text-purple-900" />
         </button>
 
         <button

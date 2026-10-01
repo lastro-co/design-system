@@ -1,5 +1,5 @@
+import { ChevronLeftIcon, ChevronRightIcon } from "@/components/icons.v2";
 import { cn } from "@/lib/utils";
-import { ChevronLeftIcon, ChevronRightIcon } from "../../../icons";
 import { MONTHS_PT_BR } from "../constants";
 
 interface MonthPickerProps {

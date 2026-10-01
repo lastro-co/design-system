@@ -137,7 +137,7 @@ function InteractiveRecorderExample() {
 
       {recordedBlob && (
         <div className="rounded-lg border border-green-200 bg-green-50 p-3">
-          <p className="text-green-800 text-sm">
+          <p className="text-green-700 text-sm">
             Recording saved! Size: {(recordedBlob.size / 1024).toFixed(2)} KB
           </p>
           <p className="text-green-600 text-xs">Type: {recordedBlob.type}</p>
