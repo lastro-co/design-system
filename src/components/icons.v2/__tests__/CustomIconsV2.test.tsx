@@ -61,6 +61,14 @@ describe("icons.v2 — custom glyph icons", () => {
     );
   });
 
+  it("crops the WhatsApp viewBox to the glyph to match lucide's optical size", () => {
+    const { container } = render(<WhatsAppIcon />);
+    expect(container.querySelector("svg")).toHaveAttribute(
+      "viewBox",
+      "3.25 2.25 18.5 18.5"
+    );
+  });
+
   it("keeps the Credaluga brand color", () => {
     const { container } = render(<CredalugaIcon />);
     for (const path of container.querySelectorAll("path")) {

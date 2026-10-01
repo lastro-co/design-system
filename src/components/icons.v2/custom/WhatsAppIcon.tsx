@@ -1,7 +1,11 @@
 import { createCustomIcon } from "./createCustomIcon";
 
-/** WhatsApp logo. */
+/**
+ * WhatsApp logo. The glyph is drawn in a 17u box off-centre in 24u, so the
+ * viewBox is cropped to it to match lucide's optical size and centring.
+ */
 export const WhatsAppIcon = createCustomIcon("WhatsAppIcon", {
+  viewBox: "3.25 2.25 18.5 18.5",
   children: (
     <>
       <path
