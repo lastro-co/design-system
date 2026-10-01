@@ -9,14 +9,14 @@ const badgeVariants = cva(
   {
     variants: {
       color: {
-        blue: "border-blue-800/10 bg-blue-50 text-blue-800",
+        blue: "border-blue-700/10 bg-blue-50 text-blue-700",
         gray: "border-gray-800/10 bg-gray-100 text-gray-800",
-        green: "border-green-800/10 bg-green-50 text-green-800",
-        orange: "border-orange-800/10 bg-orange-50 text-orange-800",
+        green: "border-green-700/10 bg-green-50 text-green-700",
+        orange: "border-orange-700/10 bg-orange-50 text-orange-700",
         purple: "border-purple-800/10 bg-purple-100 text-purple-800",
-        red: "border-red-800/10 bg-red-50 text-red-800",
+        red: "border-red-700/10 bg-red-50 text-red-700",
         white: "border-gray-800/10 bg-white text-gray-800",
-        yellow: "border-yellow-800/10 bg-yellow-50 text-yellow-800",
+        yellow: "border-yellow-700/10 bg-yellow-50 text-yellow-700",
       },
       size: {
         small: "px-2 text-xs",

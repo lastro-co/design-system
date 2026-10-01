@@ -104,7 +104,7 @@ describe("IconButton", () => {
       "bg-white",
       "text-red-600",
       "hover:bg-red-50",
-      "hover:text-red-800"
+      "hover:text-red-700"
     );
   });
 

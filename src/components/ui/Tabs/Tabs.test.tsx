@@ -135,7 +135,7 @@ describe("Tabs", () => {
 
     const badge = screen.getByText("15");
     expect(badge).toHaveAttribute("data-slot", "badge");
-    expect(badge).toHaveClass("bg-red-50", "text-red-800", "min-w-5");
+    expect(badge).toHaveClass("bg-red-50", "text-red-700", "min-w-5");
   });
 
   it("should honor color and isNumber on an object badge", () => {
@@ -154,7 +154,7 @@ describe("Tabs", () => {
     );
 
     const badge = screen.getByText("NOVO");
-    expect(badge).toHaveClass("bg-green-50", "text-green-800");
+    expect(badge).toHaveClass("bg-green-50", "text-green-700");
     expect(badge).not.toHaveClass("min-w-5");
   });
 

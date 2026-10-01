@@ -25,29 +25,45 @@
   --color-white: #ffffff;
   --color-black: #1a1a1a;
 
-  --color-blue-800: #0c4a8a;
+  --color-blue-700: #0c4a8a;
   --color-blue-600: #1d6bb5;
   --color-blue-500: #2563eb;
+  --color-blue-400: #60a5fa;
+  --color-blue-300: #93c5fd;
   --color-blue-100: #dbeafe;
   --color-blue-50: #eff6ff;
 
-  --color-green-800: #166534;
+  --color-green-700: #166534;
   --color-green-600: #16a34a;
   --color-green-500: #22c55e;
+  --color-green-400: #4ade80;
+  --color-green-300: #86efac;
   --color-green-100: #dcfce7;
   --color-green-50: #f0fdf4;
 
-  --color-yellow-800: #854d0e;
+  --color-yellow-700: #854d0e;
   --color-yellow-600: #ca8a04;
   --color-yellow-500: #eab308;
+  --color-yellow-400: #facc15;
+  --color-yellow-300: #fde047;
   --color-yellow-100: #fef9c3;
   --color-yellow-50: #fefce8;
 
-  --color-red-800: #991b1b;
+  --color-red-700: #991b1b;
   --color-red-600: #b91c1c;
   --color-red-500: #ef4444;
+  --color-red-400: #f87171;
+  --color-red-300: #fca5a5;
   --color-red-100: #fee2e2;
   --color-red-50: #fef2f2;
+
+  --color-orange-700: #9a3412;
+  --color-orange-600: #c2410c;
+  --color-orange-500: #f97316;
+  --color-orange-400: #fb923c;
+  --color-orange-300: #fdba74;
+  --color-orange-100: #ffedd5;
+  --color-orange-50: #fff7ed;
 
   --color-apricot-50: #fff1e7;
   --color-apricot-500: #ff793e;
@@ -88,6 +104,11 @@
   --shadow-sm: 0 0 16px 0 rgba(0, 0, 0, 0.08);
   --shadow-md: 0 0 8px 0 rgba(0, 0, 0, 0.25);
   --shadow-lg: 0 0 16px 0 rgba(0, 0, 0, 0.16);
+
+  /* Elevação do Card (DS 2026.2). Token semântico: não é um degrau da escala
+     acima, é a sombra específica da superfície de card. */
+  --shadow-card:
+    0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.02);
 
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
