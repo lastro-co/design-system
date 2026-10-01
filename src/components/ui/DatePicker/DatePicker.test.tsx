@@ -1,560 +1,439 @@
-import userEvent from "@testing-library/user-event";
-import { fireEvent, render, screen, waitFor } from "@/tests/app-test-utils";
+import { useState } from "react";
+import {
+  render,
+  screen,
+  userEvent,
+  waitFor,
+  within,
+} from "@/tests/app-test-utils";
 import { DatePicker } from "./DatePicker";
 
-const DAY_BUTTON_REGEX = /^\d+$/;
-const DATE_FORMAT_REGEX = /\d{2}\/\d{2}\/\d{4}/;
+const PLACEHOLDER = "Selecione uma data";
+const SEPTEMBER_12_2026 = new Date(2026, 8, 12);
+const SEPTEMBER_LABEL = "12 de setembro de 2026";
+const NEXT_MONTH_LABEL = "Ir para o próximo mês";
+
+const openPicker = async (user: ReturnType<typeof userEvent.setup>) => {
+  await user.click(screen.getByRole("button"));
+  return screen.findByRole("dialog");
+};
 
 describe("DatePicker", () => {
-  describe("Rendering", () => {
-    it("should render with placeholder", () => {
-      render(<DatePicker placeholder="Selecione uma data" />);
-      expect(
-        screen.getByPlaceholderText("Selecione uma data")
-      ).toBeInTheDocument();
-    });
-
-    it("should render with default placeholder when not provided", () => {
+  describe("Trigger label", () => {
+    it("shows the placeholder when there is no value", () => {
       render(<DatePicker />);
+
+      const trigger = screen.getByRole("button", { name: PLACEHOLDER });
+      expect(trigger).toBeVisible();
+      expect(screen.getByText(PLACEHOLDER)).toHaveClass("text-gray-600");
+    });
+
+    it("shows a custom placeholder", () => {
+      render(<DatePicker placeholder="Data de nascimento" />);
+
       expect(
-        screen.getByPlaceholderText("Selecione uma data")
-      ).toBeInTheDocument();
+        screen.getByRole("button", { name: "Data de nascimento" })
+      ).toBeVisible();
     });
 
-    it("should display formatted date when value is provided", () => {
-      const date = new Date(2025, 5, 1); // June 1, 2025 (month is 0-indexed)
-      render(<DatePicker value={date} />);
-      const input = screen.getByPlaceholderText("Selecione uma data");
-      expect(input).toHaveValue("01/06/2025");
+    it("shows the value in long Portuguese format with a lowercase month", () => {
+      render(<DatePicker value={SEPTEMBER_12_2026} />);
+
+      expect(
+        screen.getByRole("button", { name: SEPTEMBER_LABEL })
+      ).toBeVisible();
+      expect(screen.getByText(SEPTEMBER_LABEL)).toHaveClass("text-gray-700");
     });
 
-    it("should display empty string when no value is provided", () => {
-      render(<DatePicker placeholder="Selecione uma data" />);
-      const input = screen.getByPlaceholderText("Selecione uma data");
-      expect(input).toHaveValue("");
+    it("does not zero-pad single-digit days", () => {
+      render(<DatePicker value={new Date(2026, 0, 5)} />);
+
+      expect(screen.getByText("5 de janeiro de 2026")).toBeVisible();
     });
 
-    it("should render calendar icon", () => {
-      const { container } = render(
-        <DatePicker placeholder="Selecione uma data" />
-      );
-      expect(container.querySelector("svg.lucide-calendar-days")).toBeVisible();
+    it("keeps the icons out of the accessible name", () => {
+      render(<DatePicker value={SEPTEMBER_12_2026} />);
+
+      const trigger = screen.getByRole("button");
+      expect(trigger).toHaveAccessibleName(SEPTEMBER_LABEL);
+      for (const icon of trigger.querySelectorAll("svg")) {
+        expect(icon).toHaveAttribute("aria-hidden", "true");
+      }
     });
 
-    it("should accept custom className", () => {
-      const { container } = render(<DatePicker className="custom-class" />);
-      expect(container.querySelector(".custom-class")).toBeInTheDocument();
+    it("shows the calendar icon and the chevron while empty", () => {
+      render(<DatePicker />);
+
+      const trigger = screen.getByRole("button");
+      expect(trigger.querySelector(".lucide-calendar")).toBeVisible();
+      expect(trigger.querySelector(".lucide-chevron-down")).toBeVisible();
     });
 
-    it("should pass additional props to input element", () => {
+    it("drops the chevron once a date is selected, as in the Figma", () => {
+      render(<DatePicker value={SEPTEMBER_12_2026} />);
+
+      const trigger = screen.getByRole("button");
+      expect(trigger.querySelector(".lucide-calendar")).toBeVisible();
+      expect(
+        trigger.querySelector(".lucide-chevron-down")
+      ).not.toBeInTheDocument();
+    });
+
+    it("updates the label when the controlled value changes externally", () => {
+      const { rerender } = render(<DatePicker value={SEPTEMBER_12_2026} />);
+      expect(screen.getByText(SEPTEMBER_LABEL)).toBeVisible();
+
+      rerender(<DatePicker value={new Date(2026, 11, 10)} />);
+      expect(screen.getByText("10 de dezembro de 2026")).toBeVisible();
+
+      rerender(<DatePicker value={undefined} />);
+      expect(screen.getByText(PLACEHOLDER)).toBeVisible();
+    });
+  });
+
+  describe("Trigger element", () => {
+    it("is a native type=button so it never submits a form", () => {
+      render(<DatePicker />);
+
+      expect(screen.getByRole("button")).toHaveAttribute("type", "button");
+    });
+
+    it("announces a dialog popup and its expanded state", async () => {
+      const user = userEvent.setup();
+      render(<DatePicker />);
+      const trigger = screen.getByRole("button");
+
+      expect(trigger).toHaveAttribute("aria-haspopup", "dialog");
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
+
+      await user.click(trigger);
+      expect(trigger).toHaveAttribute("aria-expanded", "true");
+      expect(trigger).toHaveAttribute("data-state", "open");
+    });
+
+    it("forwards id, data-* and className to the button", () => {
       render(
-        <DatePicker data-testid="date-input" placeholder="Selecione uma data" />
+        <DatePicker className="w-fit" data-testid="picker" id="visit-date" />
       );
-      const input = screen.getByTestId("date-input");
-      expect(input).toBeInTheDocument();
+
+      const trigger = screen.getByTestId("picker");
+      expect(trigger.tagName).toBe("BUTTON");
+      expect(trigger).toHaveAttribute("id", "visit-date");
+      expect(trigger).toHaveClass("w-fit");
+    });
+
+    it("is labelled by an external <label htmlFor>", () => {
+      render(
+        <>
+          <label htmlFor="visit-date">Data da visita</label>
+          <DatePicker id="visit-date" />
+        </>
+      );
+
+      expect(
+        screen.getByRole("button", { name: "Data da visita" })
+      ).toBeVisible();
+    });
+
+    it("is reachable by keyboard and opens with Enter", async () => {
+      const user = userEvent.setup();
+      render(<DatePicker />);
+
+      await user.tab();
+      expect(screen.getByRole("button")).toHaveFocus();
+
+      await user.keyboard("{Enter}");
+      expect(await screen.findByRole("dialog")).toBeVisible();
     });
   });
 
-  describe("Disabled State", () => {
-    it("should be disabled when disabled prop is true", () => {
-      render(<DatePicker disabled placeholder="Selecione uma data" />);
-      const input = screen.getByPlaceholderText("Selecione uma data");
-      expect(input).toBeDisabled();
+  describe("States", () => {
+    it("uses the default border when there is no state", () => {
+      render(<DatePicker />);
+
+      const trigger = screen.getByRole("button");
+      expect(trigger).toHaveClass("border-gray-300");
+      expect(trigger).toHaveAttribute("aria-invalid", "false");
     });
 
-    it("should apply disabled styles to container", () => {
-      const { container } = render(
-        <DatePicker disabled placeholder="Selecione uma data" />
-      );
-      const wrapper = container.querySelector('[data-slot="popover-trigger"]');
-      expect(wrapper).toHaveClass("bg-gray-50");
+    it("marks the button invalid for state=error", () => {
+      render(<DatePicker state="error" />);
+
+      const trigger = screen.getByRole("button");
+      expect(trigger).toHaveAttribute("aria-invalid", "true");
+      expect(trigger).toHaveClass("border-red-600");
+      expect(trigger).not.toHaveClass("border-gray-300");
     });
 
-    it("should apply pointer-events-none when disabled", () => {
-      const { container } = render(
-        <DatePicker disabled placeholder="Selecione uma data" />
+    it("keeps the error border while focused or open", async () => {
+      const user = userEvent.setup();
+      render(<DatePicker state="error" />);
+      const trigger = screen.getByRole("button");
+
+      await user.click(trigger);
+      expect(trigger).toHaveAttribute("data-state", "open");
+      expect(trigger).toHaveClass("border-red-600");
+      for (const purple of [
+        "focus-visible:border-purple-800",
+        "data-[state=open]:border-purple-800",
+      ]) {
+        expect(trigger).not.toHaveClass(purple);
+      }
+    });
+
+    it("keeps an aria-invalid passed by the consumer", () => {
+      render(<DatePicker aria-invalid />);
+
+      expect(screen.getByRole("button")).toHaveAttribute(
+        "aria-invalid",
+        "true"
       );
-      const wrapper = container.querySelector('[data-slot="popover-trigger"]');
-      expect(wrapper).toHaveClass("pointer-events-none");
+    });
+
+    it("applies the success border for state=success", () => {
+      render(<DatePicker state="success" />);
+
+      const trigger = screen.getByRole("button");
+      expect(trigger).toHaveClass("border-green-500");
+      expect(trigger).toHaveAttribute("aria-invalid", "false");
+    });
+
+    it("lets error take precedence over success", () => {
+      render(<DatePicker aria-invalid state="success" />);
+
+      const trigger = screen.getByRole("button");
+      expect(trigger).toHaveAttribute("aria-invalid", "true");
+      expect(trigger).not.toHaveClass("border-green-500");
+    });
+
+    it("shows the purple focus border when open", () => {
+      render(<DatePicker />);
+
+      expect(screen.getByRole("button")).toHaveClass(
+        "focus-visible:border-purple-800",
+        "data-[state=open]:border-purple-800"
+      );
     });
   });
 
-  describe("Error State", () => {
-    it("should apply error styles when aria-invalid is true", () => {
-      const { container } = render(
-        <DatePicker aria-invalid={true} placeholder="Selecione uma data" />
+  describe("Disabled", () => {
+    it("disables the native button with muted styles", () => {
+      render(<DatePicker disabled value={SEPTEMBER_12_2026} />);
+
+      const trigger = screen.getByRole("button");
+      expect(trigger).toBeDisabled();
+      expect(trigger).toHaveClass(
+        "disabled:bg-gray-50",
+        "disabled:cursor-not-allowed"
       );
-      const wrapper = container.querySelector('[data-slot="popover-trigger"]');
-      expect(wrapper).toHaveClass("has-aria-invalid:border-red-600");
-      const input = screen.getByPlaceholderText("Selecione uma data");
-      expect(input).toHaveAttribute("aria-invalid", "true");
+      expect(screen.getByText(SEPTEMBER_LABEL)).toHaveClass("text-gray-400");
     });
 
-    it("should apply error border via state prop", () => {
-      const { container } = render(
-        <DatePicker placeholder="Selecione uma data" state="error" />
-      );
-      const input = screen.getByPlaceholderText("Selecione uma data");
-      expect(input).toHaveAttribute("aria-invalid", "true");
-      const wrapper = container.querySelector('[data-slot="popover-trigger"]');
-      expect(wrapper).toHaveClass("has-aria-invalid:border-red-600");
-    });
-  });
+    it("does not open when clicked", async () => {
+      const user = userEvent.setup();
+      render(<DatePicker disabled />);
 
-  describe("Success State", () => {
-    it("should apply success border via state prop", () => {
-      const { container } = render(
-        <DatePicker placeholder="Selecione uma data" state="success" />
-      );
-      const input = screen.getByPlaceholderText("Selecione uma data");
-      expect(input).toHaveAttribute("aria-invalid", "false");
-      const wrapper = container.querySelector('[data-slot="popover-trigger"]');
-      expect(wrapper).toHaveClass("border-green-500");
-    });
-
-    it("error state takes precedence over success state", () => {
-      const { container } = render(
-        <DatePicker
-          aria-invalid={true}
-          placeholder="Selecione uma data"
-          state="success"
-        />
-      );
-      const input = screen.getByPlaceholderText("Selecione uma data");
-      expect(input).toHaveAttribute("aria-invalid", "true");
-      const wrapper = container.querySelector('[data-slot="popover-trigger"]');
-      expect(wrapper).not.toHaveClass("border-green-500");
+      await user.click(screen.getByRole("button"));
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     });
   });
 
-  describe("Input Interaction", () => {
-    it("should call onChange with undefined when input is cleared", async () => {
+  describe("Popover", () => {
+    it("opens the calendar on click", async () => {
+      const user = userEvent.setup();
+      render(<DatePicker />);
+
+      const dialog = await openPicker(user);
+      expect(within(dialog).getByRole("grid")).toBeVisible();
+    });
+
+    it("shows only the calendar's surface, not a second popover one", async () => {
+      const user = userEvent.setup();
+      render(<DatePicker />);
+
+      const content = await openPicker(user);
+      expect(content).toHaveClass(
+        "border-0",
+        "bg-transparent",
+        "p-0",
+        "shadow-none",
+        "w-auto"
+      );
+      for (const popoverSurface of ["border", "shadow-sm", "p-4"]) {
+        expect(content).not.toHaveClass(popoverSurface);
+      }
+
+      const calendar = content.querySelector('[data-slot="calendar"]');
+      expect(calendar).toHaveClass(
+        "rounded-md",
+        "border",
+        "border-gray-200",
+        "bg-white",
+        "shadow-sm"
+      );
+    });
+
+    it("left-aligns the popover with the trigger", async () => {
+      const user = userEvent.setup();
+      render(<DatePicker />);
+
+      const content = await openPicker(user);
+      expect(content).toHaveAttribute("data-align", "start");
+    });
+
+    it("uses the plain caption header, not the dropdown one", async () => {
+      const user = userEvent.setup();
+      render(<DatePicker value={SEPTEMBER_12_2026} />);
+
+      const dialog = await openPicker(user);
+      expect(within(dialog).getByText("Setembro de 2026")).toBeVisible();
+    });
+
+    it("opens on the month of the value", async () => {
+      const user = userEvent.setup();
+      render(<DatePicker value={new Date(2026, 11, 10)} />);
+
+      const dialog = await openPicker(user);
+      expect(within(dialog).getByText("Dezembro de 2026")).toBeVisible();
+    });
+
+    it("opens on the current month when there is no value", async () => {
+      jest.useFakeTimers({ advanceTimers: true, now: new Date(2026, 2, 4) });
+      try {
+        const user = userEvent.setup({
+          advanceTimers: jest.advanceTimersByTime,
+        });
+        render(<DatePicker />);
+
+        const dialog = await openPicker(user);
+        expect(within(dialog).getByText("Março de 2026")).toBeVisible();
+      } finally {
+        jest.useRealTimers();
+      }
+    });
+
+    it("re-seeds the month from an externally changed value on the next open", async () => {
+      const user = userEvent.setup();
+      const { rerender } = render(<DatePicker value={SEPTEMBER_12_2026} />);
+
+      await openPicker(user);
+      await user.keyboard("{Escape}");
+      await waitFor(() =>
+        expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
+      );
+
+      rerender(<DatePicker value={new Date(2027, 1, 3)} />);
+
+      const dialog = await openPicker(user);
+      expect(within(dialog).getByText("Fevereiro de 2027")).toBeVisible();
+    });
+
+    it("forgets in-popover navigation after closing", async () => {
+      const user = userEvent.setup();
+      render(<DatePicker value={SEPTEMBER_12_2026} />);
+
+      let dialog = await openPicker(user);
+      await user.click(
+        within(dialog).getByRole("button", { name: NEXT_MONTH_LABEL })
+      );
+      expect(within(dialog).getByText("Outubro de 2026")).toBeVisible();
+
+      await user.keyboard("{Escape}");
+      await waitFor(() =>
+        expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
+      );
+
+      dialog = await openPicker(user);
+      expect(within(dialog).getByText("Setembro de 2026")).toBeVisible();
+    });
+  });
+
+  describe("Selection", () => {
+    it("calls onChange with the clicked date and closes", async () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
-      const date = new Date(2025, 5, 1);
-      render(
-        <DatePicker
-          onChange={handleChange}
-          placeholder="Selecione uma data"
-          value={date}
-        />
-      );
+      render(<DatePicker onChange={handleChange} value={SEPTEMBER_12_2026} />);
 
-      const input = screen.getByPlaceholderText("Selecione uma data");
-      await user.clear(input);
+      const dialog = await openPicker(user);
+      await user.click(within(dialog).getByText("20"));
+
+      expect(handleChange).toHaveBeenCalledTimes(1);
+      expect(handleChange).toHaveBeenCalledWith(new Date(2026, 8, 20));
+      await waitFor(() =>
+        expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
+      );
+    });
+
+    it("updates the label after a selection in a controlled form", async () => {
+      const user = userEvent.setup();
+      const Controlled = () => {
+        const [date, setDate] = useState<Date | undefined>(SEPTEMBER_12_2026);
+        return <DatePicker onChange={setDate} value={date} />;
+      };
+      render(<Controlled />);
+
+      const dialog = await openPicker(user);
+      await user.click(within(dialog).getByText("20"));
+
+      expect(
+        await screen.findByRole("button", { name: "20 de setembro de 2026" })
+      ).toBeVisible();
+    });
+
+    it("deselects (onChange(undefined)) when the selected day is clicked again", async () => {
+      const user = userEvent.setup();
+      const handleChange = jest.fn();
+      render(<DatePicker onChange={handleChange} value={SEPTEMBER_12_2026} />);
+
+      const dialog = await openPicker(user);
+      await user.click(within(dialog).getByText("12"));
 
       expect(handleChange).toHaveBeenCalledWith(undefined);
-    });
-
-    it("should format date as DD/MM/YYYY while typing", () => {
-      render(<DatePicker placeholder="Selecione uma data" />);
-
-      const input = screen.getByPlaceholderText(
-        "Selecione uma data"
-      ) as HTMLInputElement;
-
-      // Simulate typing a complete date
-      fireEvent.change(input, { target: { value: "15062025" } });
-      expect(input.value).toBe("15/06/2025");
-    });
-
-    it("should only allow numbers and format automatically", () => {
-      render(<DatePicker placeholder="Selecione uma data" />);
-
-      const input = screen.getByPlaceholderText(
-        "Selecione uma data"
-      ) as HTMLInputElement;
-
-      // Try typing letters and numbers mixed
-      fireEvent.change(input, { target: { value: "a1b5c0d6e2f0g2h5" } });
-      expect(input.value).toBe("15/06/2025");
-    });
-
-    it("should call onChange with correct date when valid date is typed", () => {
-      const handleChange = jest.fn();
-      render(
-        <DatePicker onChange={handleChange} placeholder="Selecione uma data" />
+      await waitFor(() =>
+        expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
       );
-
-      const input = screen.getByPlaceholderText(
-        "Selecione uma data"
-      ) as HTMLInputElement;
-      fireEvent.change(input, { target: { value: "15062025" } });
-
-      expect(input.value).toBe("15/06/2025");
-      expect(handleChange).toHaveBeenCalledWith(expect.any(Date));
-
-      const calledDate = handleChange.mock.calls[0][0];
-      expect(calledDate.getDate()).toBe(15);
-      expect(calledDate.getMonth()).toBe(5); // June (0-indexed)
-      expect(calledDate.getFullYear()).toBe(2025);
-    });
-
-    it("should not call onChange when incomplete date is typed", () => {
-      const handleChange = jest.fn();
-      render(
-        <DatePicker onChange={handleChange} placeholder="Selecione uma data" />
-      );
-
-      const input = screen.getByPlaceholderText(
-        "Selecione uma data"
-      ) as HTMLInputElement;
-      fireEvent.change(input, { target: { value: "1506" } });
-
-      expect(input.value).toBe("15/06");
-      expect(handleChange).not.toHaveBeenCalled();
-    });
-
-    it("should not call onChange when invalid date values are typed", () => {
-      const handleChange = jest.fn();
-      render(
-        <DatePicker onChange={handleChange} placeholder="Selecione uma data" />
-      );
-
-      const input = screen.getByPlaceholderText(
-        "Selecione uma data"
-      ) as HTMLInputElement;
-      // June 32, 2025 (invalid day)
-      fireEvent.change(input, { target: { value: "32062025" } });
-
-      expect(input.value).toBe("32/06/2025");
-      expect(handleChange).not.toHaveBeenCalled();
-    });
-
-    it("should not call onChange when invalid date is typed", async () => {
-      const user = userEvent.setup();
-      const handleChange = jest.fn();
-      render(
-        <DatePicker onChange={handleChange} placeholder="Selecione uma data" />
-      );
-
-      const input = screen.getByPlaceholderText("Selecione uma data");
-      await user.type(input, "invalid date");
-
-      expect(handleChange).not.toHaveBeenCalled();
-    });
-
-    it("should handle partial date input correctly", () => {
-      const handleChange = jest.fn();
-      render(
-        <DatePicker onChange={handleChange} placeholder="Selecione uma data" />
-      );
-
-      const input = screen.getByPlaceholderText(
-        "Selecione uma data"
-      ) as HTMLInputElement;
-
-      // Type partial date
-      fireEvent.change(input, { target: { value: "15" } });
-      expect(input.value).toBe("15");
-      expect(handleChange).not.toHaveBeenCalled();
-
-      // Continue typing
-      fireEvent.change(input, { target: { value: "1506" } });
-      expect(input.value).toBe("15/06");
-      expect(handleChange).not.toHaveBeenCalled();
-    });
-
-    it("should handle backspace correctly", () => {
-      render(<DatePicker placeholder="Selecione uma data" />);
-
-      const input = screen.getByPlaceholderText(
-        "Selecione uma data"
-      ) as HTMLInputElement;
-
-      // Type complete date
-      fireEvent.change(input, { target: { value: "15062025" } });
-      expect(input.value).toBe("15/06/2025");
-
-      // Simulate backspace by setting shorter value
-      fireEvent.change(input, { target: { value: "150620" } });
-      expect(input.value).toBe("15/06/20");
-    });
-
-    it("should allow typing leading zeros", () => {
-      render(<DatePicker placeholder="Selecione uma data" />);
-
-      const input = screen.getByPlaceholderText(
-        "Selecione uma data"
-      ) as HTMLInputElement;
-
-      fireEvent.change(input, { target: { value: "01012025" } });
-      expect(input.value).toBe("01/01/2025");
     });
   });
 
-  describe("Popover Interaction", () => {
-    it("should open popover when trigger is clicked", async () => {
-      const user = userEvent.setup();
-      const { container } = render(
-        <DatePicker placeholder="Selecione uma data" />
-      );
+  describe("disabledDates", () => {
+    const getDayButton = (dialog: HTMLElement, day: string) =>
+      within(dialog).getByText(day).closest("button") as HTMLButtonElement;
 
-      const trigger = container.querySelector('[data-slot="popover-trigger"]');
-      expect(trigger).toBeInTheDocument();
-
-      if (trigger) {
-        await user.click(trigger);
-
-        await waitFor(() => {
-          expect(screen.getByRole("dialog")).toBeInTheDocument();
-        });
-      }
-    });
-
-    it("should render calendar when popover is opened", async () => {
-      const user = userEvent.setup();
-      const { container } = render(
-        <DatePicker placeholder="Selecione uma data" />
-      );
-
-      const trigger = container.querySelector('[data-slot="popover-trigger"]');
-
-      if (trigger) {
-        await user.click(trigger);
-
-        await waitFor(() => {
-          expect(screen.getByRole("dialog")).toBeInTheDocument();
-          expect(screen.getAllByRole("gridcell").length).toBeGreaterThan(0);
-        });
-      }
-    });
-
-    it("should close popover when date is selected from calendar", async () => {
+    it("accepts a matcher function", async () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
-      const { container } = render(
-        <DatePicker onChange={handleChange} placeholder="Selecione uma data" />
-      );
-
-      const trigger = container.querySelector('[data-slot="popover-trigger"]');
-
-      if (trigger) {
-        await user.click(trigger);
-
-        await waitFor(() => {
-          expect(screen.getByRole("dialog")).toBeInTheDocument();
-        });
-
-        // Click on a date button
-        const dayButtons = screen
-          .getAllByRole("button")
-          .filter((button) => DAY_BUTTON_REGEX.test(button.textContent || ""));
-
-        if (dayButtons.length > 0) {
-          await user.click(dayButtons[15]);
-
-          await waitFor(() => {
-            expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-          });
-
-          expect(handleChange).toHaveBeenCalled();
-        }
-      }
-    });
-
-    it("should update input value when date is selected from calendar", async () => {
-      const user = userEvent.setup();
-      const { container } = render(
-        <DatePicker placeholder="Selecione uma data" />
-      );
-
-      const input = screen.getByPlaceholderText(
-        "Selecione uma data"
-      ) as HTMLInputElement;
-      const trigger = container.querySelector('[data-slot="popover-trigger"]');
-
-      if (trigger) {
-        await user.click(trigger);
-
-        await waitFor(() => {
-          expect(screen.getByRole("dialog")).toBeInTheDocument();
-        });
-
-        const dayButtons = screen
-          .getAllByRole("button")
-          .filter((button) => DAY_BUTTON_REGEX.test(button.textContent || ""));
-
-        if (dayButtons.length > 0) {
-          await user.click(dayButtons[15]);
-
-          await waitFor(() => {
-            expect(input.value).toMatch(DATE_FORMAT_REGEX);
-          });
-        }
-      }
-    });
-
-    it("should show current month in calendar by default", async () => {
-      const user = userEvent.setup();
-      const { container } = render(
-        <DatePicker placeholder="Selecione uma data" />
-      );
-
-      const trigger = container.querySelector('[data-slot="popover-trigger"]');
-
-      if (trigger) {
-        await user.click(trigger);
-
-        await waitFor(() => {
-          const calendar = screen.getByRole("dialog");
-          expect(calendar).toBeInTheDocument();
-        });
-      }
-    });
-  });
-
-  describe("Initial Value", () => {
-    it("should display initial value when provided", () => {
-      const initialDate = new Date(2025, 2, 15); // March 15, 2025
-      render(<DatePicker value={initialDate} />);
-
-      const input = screen.getByPlaceholderText(
-        "Selecione uma data"
-      ) as HTMLInputElement;
-      expect(input.value).toBe("15/03/2025");
-    });
-
-    it("should start with empty input when no initial value", () => {
-      render(<DatePicker />);
-
-      const input = screen.getByPlaceholderText(
-        "Selecione uma data"
-      ) as HTMLInputElement;
-      expect(input.value).toBe("");
-    });
-  });
-
-  describe("onChange Callback", () => {
-    it("should call onChange when valid date is selected from calendar", async () => {
-      const user = userEvent.setup();
-      const handleChange = jest.fn();
-      const { container } = render(
-        <DatePicker onChange={handleChange} placeholder="Selecione uma data" />
-      );
-
-      const trigger = container.querySelector('[data-slot="popover-trigger"]');
-
-      if (trigger) {
-        await user.click(trigger);
-
-        await waitFor(() => {
-          expect(screen.getByRole("dialog")).toBeInTheDocument();
-        });
-
-        const dayButtons = screen
-          .getAllByRole("button")
-          .filter((button) => DAY_BUTTON_REGEX.test(button.textContent || ""));
-
-        if (dayButtons.length > 0) {
-          await user.click(dayButtons[10]);
-          expect(handleChange).toHaveBeenCalledWith(expect.any(Date));
-        }
-      }
-    });
-
-    it("should not call onChange multiple times for same action", () => {
-      const handleChange = jest.fn();
+      const isWeekend = (date: Date) =>
+        date.getDay() === 0 || date.getDay() === 6;
       render(
-        <DatePicker onChange={handleChange} placeholder="Selecione uma data" />
+        <DatePicker
+          disabledDates={isWeekend}
+          onChange={handleChange}
+          value={SEPTEMBER_12_2026}
+        />
       );
 
-      const input = screen.getByPlaceholderText(
-        "Selecione uma data"
-      ) as HTMLInputElement;
+      const dialog = await openPicker(user);
+      // 13/09/2026 is a Sunday, 14/09/2026 a Monday.
+      expect(getDayButton(dialog, "13")).toBeDisabled();
+      expect(getDayButton(dialog, "14")).toBeEnabled();
 
-      fireEvent.change(input, { target: { value: "15062025" } });
-
-      // Should be called exactly once
-      expect(handleChange).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  describe("Calendar Month Sync", () => {
-    it("should sync calendar month with typed date", () => {
-      render(<DatePicker placeholder="Selecione uma data" />);
-
-      const input = screen.getByPlaceholderText(
-        "Selecione uma data"
-      ) as HTMLInputElement;
-
-      // Type a date
-      fireEvent.change(input, { target: { value: "15062025" } });
-      expect(input.value).toBe("15/06/2025");
-
-      // The calendar should now show June 2025 when opened
-      // This is tested indirectly through the hook's setMonth call
-    });
-  });
-
-  describe("Accessibility", () => {
-    it("should have proper input attributes", () => {
-      render(<DatePicker placeholder="Selecione uma data" />);
-      const input = screen.getByPlaceholderText("Selecione uma data");
-      expect(input).toHaveAttribute("type", "text");
-      expect(input).toHaveAttribute("data-slot", "input");
-    });
-
-    it("should be keyboard navigable", async () => {
-      const user = userEvent.setup();
-      render(<DatePicker placeholder="Selecione uma data" />);
-
-      const input = screen.getByPlaceholderText("Selecione uma data");
-      await user.tab();
-      expect(input).toHaveFocus();
-    });
-
-    it("should support aria-invalid attribute", () => {
-      render(<DatePicker aria-invalid={true} />);
-      const input = screen.getByPlaceholderText("Selecione uma data");
-      expect(input).toHaveAttribute("aria-invalid", "true");
-    });
-  });
-
-  describe("Edge Cases", () => {
-    it("should handle February 29 in leap year", () => {
-      const handleChange = jest.fn();
-      render(
-        <DatePicker onChange={handleChange} placeholder="Selecione uma data" />
-      );
-
-      const input = screen.getByPlaceholderText(
-        "Selecione uma data"
-      ) as HTMLInputElement;
-
-      fireEvent.change(input, { target: { value: "29022024" } });
-      expect(input.value).toBe("29/02/2024");
-      expect(handleChange).toHaveBeenCalledWith(expect.any(Date));
-    });
-
-    it("should reject February 29 in non-leap year", () => {
-      const handleChange = jest.fn();
-      render(
-        <DatePicker onChange={handleChange} placeholder="Selecione uma data" />
-      );
-
-      const input = screen.getByPlaceholderText(
-        "Selecione uma data"
-      ) as HTMLInputElement;
-
-      fireEvent.change(input, { target: { value: "29022025" } });
-      expect(input.value).toBe("29/02/2025");
-      // Should not call onChange with invalid date
+      await user.click(getDayButton(dialog, "13"));
       expect(handleChange).not.toHaveBeenCalled();
     });
 
-    it("should handle maximum input length", () => {
-      render(<DatePicker placeholder="Selecione uma data" />);
+    it("accepts a Date[] (backward compatible)", async () => {
+      const user = userEvent.setup();
+      render(
+        <DatePicker
+          disabledDates={[new Date(2026, 8, 15), new Date(2026, 8, 16)]}
+          value={SEPTEMBER_12_2026}
+        />
+      );
 
-      const input = screen.getByPlaceholderText(
-        "Selecione uma data"
-      ) as HTMLInputElement;
-
-      // Try to type more than 10 characters (DD/MM/YYYY format)
-      fireEvent.change(input, { target: { value: "150620251234567890" } });
-
-      // Should be limited to 10 characters (DD/MM/YYYY)
-      expect(input.value).toBe("15/06/2025");
+      const dialog = await openPicker(user);
+      expect(getDayButton(dialog, "15")).toBeDisabled();
+      expect(getDayButton(dialog, "16")).toBeDisabled();
+      expect(getDayButton(dialog, "17")).toBeEnabled();
     });
   });
 });
