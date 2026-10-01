@@ -2,7 +2,6 @@ import userEvent from "@testing-library/user-event";
 import { fireEvent, render, screen, waitFor } from "@/tests/app-test-utils";
 import { DatePicker } from "./DatePicker";
 
-const CALENDAR_REGEX = /calendar/i;
 const DAY_BUTTON_REGEX = /^\d+$/;
 const DATE_FORMAT_REGEX = /\d{2}\/\d{2}\/\d{4}/;
 
@@ -36,9 +35,10 @@ describe("DatePicker", () => {
     });
 
     it("should render calendar icon", () => {
-      render(<DatePicker placeholder="Selecione uma data" />);
-      const icon = screen.getByRole("img", { name: CALENDAR_REGEX });
-      expect(icon).toBeInTheDocument();
+      const { container } = render(
+        <DatePicker placeholder="Selecione uma data" />
+      );
+      expect(container.querySelector("svg.lucide-calendar-days")).toBeVisible();
     });
 
     it("should accept custom className", () => {

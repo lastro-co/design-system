@@ -1,7 +1,7 @@
 "use client";
 
+import { PauseIcon, PlayIcon } from "@/components/icons.v2";
 import { cn } from "@/lib/utils";
-import { PauseIcon, PlayIcon } from "../../icons";
 import { useWaveformPlayer } from "./hooks";
 import { formatDuration, type WaveformPlayerProps } from "./types";
 
@@ -53,13 +53,13 @@ export function WaveformPlayer({
         >
           {isPlaying ? (
             <PauseIcon
-              className="text-gray-600 transition-all duration-200 ease-out hover:text-gray-900"
-              size="md"
+              className="size-5 text-gray-600 transition-all duration-200 ease-out hover:text-gray-900"
+              fill="currentColor"
             />
           ) : (
             <PlayIcon
-              className="text-gray-600 transition-all duration-200 ease-out hover:text-gray-900"
-              size="md"
+              className="size-5 text-gray-600 transition-all duration-200 ease-out hover:text-gray-900"
+              fill="currentColor"
             />
           )}
         </button>

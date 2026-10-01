@@ -7,6 +7,10 @@ export {
   type ActivityIconHandle as AnimatedActivityIconHandle,
 } from "./Activity";
 export {
+  AlarmClockIcon as AnimatedAlarmClockIcon,
+  type AlarmClockIconHandle as AnimatedAlarmClockIconHandle,
+} from "./AlarmClock";
+export {
   BellIcon as AnimatedBellIcon,
   type BellIconHandle as AnimatedBellIconHandle,
 } from "./Bell";
@@ -18,6 +22,10 @@ export {
   BriefcaseBusinessIcon as AnimatedBriefcaseBusinessIcon,
   type BriefcaseBusinessIconHandle as AnimatedBriefcaseBusinessIconHandle,
 } from "./BriefcaseBusiness";
+export {
+  CalendarDaysIcon as AnimatedCalendarDaysIcon,
+  type CalendarDaysIconHandle as AnimatedCalendarDaysIconHandle,
+} from "./CalendarDays";
 export {
   ChartBarIncreasingIcon as AnimatedChartBarIncreasingIcon,
   type ChartBarIncreasingIconHandle as AnimatedChartBarIncreasingIconHandle,
@@ -42,6 +50,18 @@ export {
   ChevronUpIcon as AnimatedChevronUpIcon,
   type ChevronUpIconHandle as AnimatedChevronUpIconHandle,
 } from "./ChevronUp";
+export {
+  CircleCheckIcon as AnimatedCircleCheckIcon,
+  type CircleCheckIconHandle as AnimatedCircleCheckIconHandle,
+} from "./CircleCheck";
+export {
+  CircleXIcon as AnimatedCircleXIcon,
+  type CircleXIconHandle as AnimatedCircleXIconHandle,
+} from "./CircleX";
+export {
+  ClipboardCheckIcon as AnimatedClipboardCheckIcon,
+  type ClipboardCheckIconHandle as AnimatedClipboardCheckIconHandle,
+} from "./ClipboardCheck";
 export {
   ClipboardListIcon as AnimatedClipboardListIcon,
   type ClipboardListIconHandle as AnimatedClipboardListIconHandle,
@@ -83,6 +103,14 @@ export {
   type LayersIconHandle as AnimatedLayersIconHandle,
 } from "./Layers";
 export {
+  LinkIcon as AnimatedLinkIcon,
+  type LinkIconHandle as AnimatedLinkIconHandle,
+} from "./Link";
+export {
+  MapPinHouseIcon as AnimatedMapPinHouseIcon,
+  type MapPinHouseIconHandle as AnimatedMapPinHouseIconHandle,
+} from "./MapPinHouse";
+export {
   MessageSquareIcon as AnimatedMessageSquareIcon,
   type MessageSquareIconHandle as AnimatedMessageSquareIconHandle,
 } from "./MessageSquare";
@@ -103,6 +131,10 @@ export {
   type SearchIconHandle as AnimatedSearchIconHandle,
 } from "./Search";
 export {
+  SendIcon as AnimatedSendIcon,
+  type SendIconHandle as AnimatedSendIconHandle,
+} from "./Send";
+export {
   SettingsIcon as AnimatedSettingsIcon,
   type SettingsIconHandle as AnimatedSettingsIconHandle,
 } from "./Settings";
@@ -110,6 +142,10 @@ export {
   SmartphoneNfcIcon as AnimatedSmartphoneNfcIcon,
   type SmartphoneNfcIconHandle as AnimatedSmartphoneNfcIconHandle,
 } from "./SmartphoneNfc";
+export {
+  SparklesIcon as AnimatedSparklesIcon,
+  type SparklesIconHandle as AnimatedSparklesIconHandle,
+} from "./Sparkles";
 export {
   TrendingUpIcon as AnimatedTrendingUpIcon,
   type TrendingUpIconHandle as AnimatedTrendingUpIconHandle,

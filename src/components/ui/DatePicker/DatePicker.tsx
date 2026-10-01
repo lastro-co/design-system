@@ -1,8 +1,8 @@
 "use client";
 
 import type * as React from "react";
+import { CalendarDaysIcon } from "@/components/icons.v2";
 import { cn } from "@/lib/utils";
-import { CalendarIcon } from "../../icons";
 import { Calendar, Popover, PopoverContent, PopoverTrigger } from "..";
 import { useDatePicker } from "./hooks";
 
@@ -73,7 +73,7 @@ export function DatePicker({
               disabled && "text-gray-400"
             )}
           >
-            <CalendarIcon size="sm" />
+            <CalendarDaysIcon className="size-4" />
           </span>
         </div>
       </PopoverTrigger>

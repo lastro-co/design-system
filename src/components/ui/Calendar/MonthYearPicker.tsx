@@ -2,12 +2,12 @@
 
 import type { VariantProps } from "class-variance-authority";
 import { useState } from "react";
-import { cn } from "@/lib/utils";
 import {
   ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-} from "../../icons";
+} from "@/components/icons.v2";
+import { cn } from "@/lib/utils";
 import { Button, type buttonVariants } from "../Button";
 import { Popover, PopoverContent, PopoverTrigger } from "../Popover";
 import { MONTHS_PT_BR, MONTHS_PT_BR_SHORT } from "./constants";
@@ -72,7 +72,7 @@ export function MonthYearPicker({
             onClick={() => setDisplayYear((y) => y - 1)}
             type="button"
           >
-            <ChevronLeftIcon size="sm" />
+            <ChevronLeftIcon className="size-4" />
           </button>
           <span className="font-medium text-gray-900 text-sm">
             {displayYear}
@@ -88,7 +88,7 @@ export function MonthYearPicker({
             onClick={() => setDisplayYear((y) => y + 1)}
             type="button"
           >
-            <ChevronRightIcon size="sm" />
+            <ChevronRightIcon className="size-4" />
           </button>
         </div>
 

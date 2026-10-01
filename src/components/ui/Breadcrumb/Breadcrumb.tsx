@@ -1,7 +1,7 @@
 "use client";
 
 import type { ComponentProps, ReactNode } from "react";
-import { ChevronRightIcon } from "@/components/icons";
+import { ChevronRightIcon } from "@/components/icons.v2";
 import { cn } from "@/lib/utils";
 
 export type BreadcrumbItem = {
@@ -94,8 +94,7 @@ function Breadcrumb({
               {index > 0 && (
                 <ChevronRightIcon
                   aria-hidden="true"
-                  className="text-gray-400"
-                  size="sm"
+                  className="size-4 text-gray-400"
                 />
               )}
               {renderItem()}

@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback } from "react";
+import { MicIcon, PauseIcon, SendIcon, TrashIcon } from "@/components/icons.v2";
 import { cn } from "@/lib/utils";
-import { MicIcon, PaperPlaneIcon, PauseIcon, TrashIcon } from "../../icons";
 import { IconButton } from "../IconButton";
 import { Spinner } from "../Spinner";
 import { useWaveformRecorder } from "./hooks";
@@ -66,10 +66,9 @@ export function WaveformRecorder({
         <TrashIcon
           className={cn(
             "transition-all duration-200 ease-out",
+            "text-gray-600",
             loading ? "cursor-not-allowed" : "cursor-pointer hover:text-red-600"
           )}
-          color="gray-600"
-          size="lg"
         />
       </IconButton>
 
@@ -94,19 +93,18 @@ export function WaveformRecorder({
           <PauseIcon
             className={cn(
               "transition-all duration-200 ease-out",
+              "text-purple-800",
               loading ? "cursor-not-allowed" : "cursor-pointer"
             )}
-            color="purple-800"
-            size="sm"
+            fill="currentColor"
           />
         ) : (
           <MicIcon
             className={cn(
               "transition-all duration-200 ease-out",
+              "text-purple-800",
               loading ? "cursor-not-allowed" : "cursor-pointer"
             )}
-            color="purple-800"
-            size="md"
           />
         )}
       </IconButton>
@@ -123,11 +121,7 @@ export function WaveformRecorder({
         {loading ? (
           <Spinner color="purple-800" size="md" />
         ) : (
-          <PaperPlaneIcon
-            className="cursor-pointer transition-all duration-200 ease-out"
-            color="white"
-            size="sm"
-          />
+          <SendIcon className="cursor-pointer text-white transition-all duration-200 ease-out" />
         )}
       </IconButton>
     </div>

@@ -25,16 +25,6 @@
         "default": "./dist/index.cjs"
       }
     },
-    "./icons": {
-      "import": {
-        "types": "./dist/icons.d.ts",
-        "default": "./dist/icons.js"
-      },
-      "require": {
-        "types": "./dist/icons.d.cts",
-        "default": "./dist/icons.cjs"
-      }
-    },
     "./icons.v2": {
       "import": {
         "types": "./dist/icons.v2.d.ts",
