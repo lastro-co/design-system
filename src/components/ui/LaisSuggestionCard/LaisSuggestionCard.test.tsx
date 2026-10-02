@@ -141,6 +141,14 @@ describe("LaisSuggestionCard", () => {
     expect(orbs(container)).toHaveLength(0);
   });
 
+  // A fixed width overflows a narrow host, and the consumer may not override it.
+  it("is fluid up to 480px instead of a fixed width", () => {
+    const { container } = render(<LaisSuggestionCard {...baseProps} />);
+    const root = container.querySelector('[data-slot="lais-suggestion-card"]');
+    expect(root).toHaveClass("w-full", "max-w-[480px]");
+    expect(root).not.toHaveClass("w-[480px]");
+  });
+
   it("merges className on the root and announces politely", () => {
     const { container } = render(
       <LaisSuggestionCard {...baseProps} className="w-[320px]" />
