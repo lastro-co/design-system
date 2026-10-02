@@ -80,7 +80,9 @@ export function LaisSuggestionCard({
 }: LaisSuggestionCardProps) {
   return (
     <div
-      className={cn("relative isolate w-[480px]", className)}
+      // Fluid up to the design's 480px, so a narrow host (a chat footer on a phone)
+      // does not have to override the width from outside.
+      className={cn("relative isolate w-full max-w-[480px]", className)}
       data-slot="lais-suggestion-card"
     >
       {glow && (

@@ -152,4 +152,47 @@ describe("LaisLogo", () => {
       expect(screen.getByTestId("lais-logo-test")).toBeVisible();
     });
   });
+
+  describe("badge", () => {
+    it("renders a 20x20 symbol with an accessible name", () => {
+      render(<LaisLogo badge />);
+      const svg = screen.getByRole("img", { name: "Lais" });
+      expect(svg).toBeVisible();
+      expect(svg).toHaveAttribute("width", "20");
+      expect(svg).toHaveAttribute("height", "20");
+      expect(svg).toHaveAttribute("data-variant", "badge");
+    });
+
+    it("draws only the symbol, at 60% of the circle", () => {
+      const { container } = render(<LaisLogo badge />);
+      const svg = container.querySelector("svg");
+      expect(container.querySelectorAll("g path")).toHaveLength(9);
+      expect(svg?.getAttribute("viewBox")).toBe(
+        "-10.666666666666668 -10.666666666666668 53.333333333333336 53.333333333333336"
+      );
+    });
+
+    // The fill is CSS, not an SVG gradient: many badges in one list must not
+    // share gradient ids.
+    it("paints the circle with the CSS utility and defines no SVG gradient", () => {
+      const { container } = render(<LaisLogo badge />);
+      const svg = container.querySelector("svg");
+      expect(svg).toHaveClass("lais-logo-badge", "rounded-full", "-rotate-90");
+      expect(container.querySelector("radialGradient")).not.toBeInTheDocument();
+      expect(container.querySelector("[id]")).not.toBeInTheDocument();
+    });
+
+    it("does not animate on hover unless asked", () => {
+      const { container, rerender } = render(<LaisLogo badge />);
+      expect(container.querySelector("svg")).not.toHaveClass("cursor-pointer");
+
+      rerender(<LaisLogo animateOnHover badge />);
+      expect(container.querySelector("svg")).toHaveClass("cursor-pointer");
+    });
+
+    it("accepts a size from className", () => {
+      const { container } = render(<LaisLogo badge className="size-8" />);
+      expect(container.querySelector("svg")).toHaveClass("size-8");
+    });
+  });
 });
