@@ -412,6 +412,19 @@
  * the card, so across the card it resolves to a linear ramp (verified: the
  * gradient parameter at the centre equals the mean of the four corners).
  */
+/*
+ * Fill for <LaisLogo badge />. Lives in CSS, not in an SVG <radialGradient>, so a
+ * list rendering many badges has no gradient ids to collide.
+ */
+@utility lais-logo-badge {
+  background-image: radial-gradient(
+    100.83% 100.83% at 30.21% 5.21%,
+    var(--color-purple-400) 0%,
+    var(--color-purple-800) 49.93%,
+    var(--color-purple-900) 100%
+  );
+}
+
 @utility lais-suggestion-surface {
   position: relative;
   /*

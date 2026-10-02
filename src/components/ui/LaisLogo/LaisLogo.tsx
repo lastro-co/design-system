@@ -5,8 +5,23 @@ import { cn } from "@/lib/utils";
 
 export interface LaisLogoProps extends React.SVGProps<SVGSVGElement> {
   symbolOnly?: boolean;
+  /**
+   * The symbol inside a gradient circle, sized for tags and list rows (20px).
+   * Implies `symbolOnly`; hover animation defaults to off.
+   */
+  badge?: boolean;
+  /** @default true, or false when `badge` */
   animateOnHover?: boolean;
 }
+
+/*
+ * The badge draws the 32-unit symbol at 60% of the circle by widening the viewBox
+ * instead of nesting a second element, so the root stays a single <svg>.
+ */
+const BADGE_SYMBOL_RATIO = 0.6;
+const BADGE_VIEWBOX_SIZE = 32 / BADGE_SYMBOL_RATIO;
+const BADGE_VIEWBOX_OFFSET = (32 - BADGE_VIEWBOX_SIZE) / 2;
+const BADGE_VIEWBOX = `${BADGE_VIEWBOX_OFFSET} ${BADGE_VIEWBOX_OFFSET} ${BADGE_VIEWBOX_SIZE} ${BADGE_VIEWBOX_SIZE}`;
 
 const symbolPaths = [
   "M16.0127 1.55949L18.6038 2.01301L17.8082 6.55489L19.4525 6.84132L20.5214 0.742613L16.2845 0L16.0127 1.55949Z",
@@ -49,11 +64,13 @@ function AnimatedSymbol({
 function LaisLogo({
   className,
   symbolOnly,
-  animateOnHover = true,
+  badge,
+  animateOnHover: animateOnHoverProp,
   "aria-label": ariaLabel = "Lais",
   ...props
 }: LaisLogoProps) {
   const [hovered, setHovered] = React.useState(false);
+  const animateOnHover = animateOnHoverProp ?? !badge;
 
   const shared = {
     fill: "none",
@@ -63,6 +80,30 @@ function LaisLogo({
     onMouseEnter: animateOnHover ? () => setHovered(true) : undefined,
     onMouseLeave: animateOnHover ? () => setHovered(false) : undefined,
   };
+
+  if (badge) {
+    return (
+      <svg
+        className={cn(
+          // Rotating the whole badge, not just the glyph, is what puts the
+          // gradient's highlight where the design has it.
+          "lais-logo-badge -rotate-90 shrink-0 rounded-full border-[0.5px] border-white text-white",
+          animateOnHover && "cursor-pointer",
+          className
+        )}
+        data-slot="lais-logo"
+        data-variant="badge"
+        height="20"
+        viewBox={BADGE_VIEWBOX}
+        width="20"
+        {...shared}
+        {...props}
+      >
+        <title>{ariaLabel}</title>
+        <AnimatedSymbol animate={animateOnHover} hovered={hovered} />
+      </svg>
+    );
+  }
 
   if (symbolOnly) {
     return (
