@@ -144,17 +144,9 @@ export const Badge: Story = {
   },
   render: (args) => (
     <div className="flex flex-col items-center gap-6 p-8">
-      <div className="flex items-center gap-6">
-        <LaisLogo {...args} />
-        <LaisLogo {...args} className="size-8" />
-        <span className="inline-flex items-center gap-2 rounded-full bg-purple-100 py-1 pr-3 pl-1 text-purple-800 text-sm">
-          <LaisLogo {...args} aria-hidden="true" />
-          Sugestão
-        </span>
-      </div>
+      <LaisLogo {...args} />
       <span className="text-gray-600 text-xs">
-        <code className="rounded bg-gray-100 px-1.5 py-0.5">badge</code> —
-        símbolo em círculo com gradiente, para tags e linhas de lista
+        Símbolo em círculo com gradiente — ideal para tags e linhas de lista
       </span>
     </div>
   ),
