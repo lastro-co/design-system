@@ -758,14 +758,15 @@ function MenuSeparator({ className }: MenuSeparatorProps) {
   return (
     <div
       className={cn(
-        "w-full self-stretch",
-        collapsed ? "py-2" : "py-3",
+        // Figma DS 2026.2: inset 16px from the edges when expanded; a 48px
+        // rule centered in the rail when collapsed.
+        collapsed ? "mx-auto w-12 pt-2 pb-3" : "w-full self-stretch px-4 py-3",
         className
       )}
       data-slot="menu-separator"
     >
       <SeparatorPrimitive.Root
-        className="h-px w-full bg-gray-300"
+        className="h-px w-full bg-gray-200"
         decorative
         orientation="horizontal"
       />
@@ -817,7 +818,7 @@ function MenuItem({
               "relative flex size-11 cursor-pointer items-center justify-center rounded-lg transition-all duration-150",
               active
                 ? cn(activeBg, styleActive ? "text-white" : "text-gray-800")
-                : "text-gray-800 hover:bg-gray-50 hover:text-gray-900",
+                : "text-gray-600 hover:bg-gray-50 hover:text-gray-800",
               disabled && "pointer-events-none opacity-50",
               className
             )}
@@ -835,7 +836,7 @@ function MenuItem({
               <MenuItemIcon
                 animatedIcon={animatedIcon}
                 animation={animation}
-                className={styleActive ? "text-white" : "text-gray-800"}
+                className={styleActive ? "text-white" : "text-gray-400"}
                 hovered={hovered}
                 icon={icon}
               />
@@ -859,7 +860,7 @@ function MenuItem({
               activeBg,
               styleActive ? "font-medium text-white" : "text-gray-800"
             )
-          : "text-gray-800 hover:bg-gray-50 hover:text-gray-900",
+          : "text-gray-600 hover:bg-gray-50 hover:text-gray-800",
         disabled && "pointer-events-none opacity-50",
         className
       )}
@@ -877,7 +878,7 @@ function MenuItem({
         <MenuItemIcon
           animatedIcon={animatedIcon}
           animation={animation}
-          className={styleActive ? "text-white" : "text-gray-800"}
+          className={styleActive ? "text-white" : "text-gray-400"}
           hovered={hovered}
           icon={icon}
         />
@@ -1136,7 +1137,7 @@ function MenuAccordionItem({
                   "relative flex size-11 cursor-pointer items-center justify-center rounded-lg transition-all duration-150",
                   active
                     ? cn(activeBg, styleActive ? "text-white" : "text-gray-800")
-                    : "text-gray-800 hover:bg-gray-50 hover:text-gray-900",
+                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-800",
                   disabled && "pointer-events-none opacity-50",
                   className
                 )}
@@ -1154,7 +1155,7 @@ function MenuAccordionItem({
                   <MenuItemIcon
                     animatedIcon={animatedIcon}
                     animation={animation}
-                    className={styleActive ? "text-white" : "text-gray-800"}
+                    className={styleActive ? "text-white" : "text-gray-400"}
                     hovered={hovered}
                     icon={icon}
                   />
@@ -1251,7 +1252,7 @@ function MenuAccordionItem({
                   "group flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-left text-[13px] transition-all duration-150",
                   active
                     ? "font-medium text-black hover:bg-gray-50"
-                    : "text-gray-800 hover:bg-gray-50 hover:text-gray-900",
+                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-800",
                   disabled && "pointer-events-none opacity-50",
                   className
                 )}
@@ -1311,7 +1312,7 @@ function AccordionTriggerContent({
       <MenuItemIcon
         animatedIcon={animatedIcon}
         animation={animation}
-        className="text-gray-800"
+        className="text-gray-400"
         hovered={hovered}
         icon={icon}
       />
@@ -1325,7 +1326,7 @@ function AccordionTriggerContent({
           {badge}
         </Badge>
       )}
-      <ChevronDownIcon className="size-4 text-gray-800 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+      <ChevronDownIcon className="size-4 text-gray-400 transition-transform duration-200 group-data-[state=open]:rotate-180" />
     </>
   );
 }
@@ -1382,7 +1383,7 @@ function MenuSubItem({
         "relative w-full cursor-pointer rounded-md px-3 py-1.5 text-left text-[13px] transition-colors duration-150",
         active
           ? activeClasses
-          : "text-gray-800 hover:bg-gray-50 hover:text-gray-900",
+          : "text-gray-600 hover:bg-gray-50 hover:text-gray-800",
         disabled && "pointer-events-none opacity-50",
         className
       )}
