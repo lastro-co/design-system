@@ -1,4 +1,4 @@
-import { LoaderIcon } from "@/components/icons.v2";
+import { LastroLoaderIcon } from "@/components/icons.v2";
 import { cn } from "@/lib/utils";
 import type { IconProps } from "../Icon";
 import { iconVariants } from "../Icon";
@@ -13,7 +13,7 @@ function Spinner({
   ...props
 }: Omit<IconProps, "children" | "aria-label">) {
   return (
-    <LoaderIcon
+    <LastroLoaderIcon
       aria-label="Loader Icon"
       className={cn(iconVariants({ size, color }), "animate-spin", className)}
       role="status"

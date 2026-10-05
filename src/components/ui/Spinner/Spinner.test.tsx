@@ -15,6 +15,13 @@ describe("Spinner", () => {
     expect(spinner).toBeVisible();
   });
 
+  it("should render the Lastro segmented loader, not lucide's Loader", () => {
+    render(<Spinner />);
+    const spinner = screen.getByRole("status");
+    expect(spinner).toHaveAttribute("fill", "currentColor");
+    expect(spinner.querySelectorAll("path")).toHaveLength(9);
+  });
+
   it("should accept custom className, size and color props", () => {
     render(<Spinner className="custom-class" color="blue-600" size="xl" />);
     const spinner = screen.getByRole("status");

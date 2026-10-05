@@ -3,7 +3,7 @@
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
-  LoaderIcon,
+  LastroLoaderIcon,
   LocateIcon,
   MaximizeIcon,
   MinusIcon,
@@ -203,7 +203,7 @@ export function MapControls({
             onClick={handleLocate}
           >
             {waitingForLocation ? (
-              <LoaderIcon className="size-4 animate-spin text-purple-800" />
+              <LastroLoaderIcon className="size-4 animate-spin text-purple-800" />
             ) : (
               <LocateIcon className="size-4 text-purple-800" />
             )}
