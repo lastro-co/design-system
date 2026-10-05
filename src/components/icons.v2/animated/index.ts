@@ -147,6 +147,10 @@ export {
   type SparklesIconHandle as AnimatedSparklesIconHandle,
 } from "./Sparkles";
 export {
+  SplitIcon as AnimatedSplitIcon,
+  type SplitIconHandle as AnimatedSplitIconHandle,
+} from "./Split";
+export {
   TrendingUpIcon as AnimatedTrendingUpIcon,
   type TrendingUpIconHandle as AnimatedTrendingUpIconHandle,
 } from "./TrendingUp";
