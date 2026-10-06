@@ -87,6 +87,10 @@ export {
   type FlameIconHandle as AnimatedFlameIconHandle,
 } from "./Flame";
 export {
+  GlobeIcon as AnimatedGlobeIcon,
+  type GlobeIconHandle as AnimatedGlobeIconHandle,
+} from "./Globe";
+export {
   GraduationCapIcon as AnimatedGraduationCapIcon,
   type GraduationCapIconHandle as AnimatedGraduationCapIconHandle,
 } from "./GraduationCap";
@@ -110,6 +114,14 @@ export {
   MapPinHouseIcon as AnimatedMapPinHouseIcon,
   type MapPinHouseIconHandle as AnimatedMapPinHouseIconHandle,
 } from "./MapPinHouse";
+export {
+  MegaphoneIcon as AnimatedMegaphoneIcon,
+  type MegaphoneIconHandle as AnimatedMegaphoneIconHandle,
+} from "./Megaphone";
+export {
+  MessageCircleIcon as AnimatedMessageCircleIcon,
+  type MessageCircleIconHandle as AnimatedMessageCircleIconHandle,
+} from "./MessageCircle";
 export {
   MessageSquareIcon as AnimatedMessageSquareIcon,
   type MessageSquareIconHandle as AnimatedMessageSquareIconHandle,
