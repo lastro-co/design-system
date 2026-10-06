@@ -3,10 +3,12 @@ import type React from "react";
 import {
   ArrowRightLeftIcon,
   Building2Icon,
+  ChevronDownIcon,
   HomeIcon,
   SendIcon,
 } from "@/components/icons.v2";
 import { FormItem } from "../Form";
+import { IconButton } from "../IconButton";
 import { Label } from "../Label";
 import {
   Select,
@@ -167,6 +169,35 @@ export const WithIcons: Story = {
           <SelectItem icon={<ArrowRightLeftIcon />} value="permuta">
             Permuta
           </SelectItem>
+        </SelectContent>
+      </Select>
+    );
+  },
+};
+
+export const IconTrigger: Story = {
+  render: (args) => {
+    const {
+      "aria-invalid": _ariaInvalid,
+      variant: _variant,
+      ...selectArgs
+    } = args;
+    return (
+      <Select {...selectArgs}>
+        <SelectTrigger asChild>
+          <IconButton
+            aria-label="Mais filtros"
+            shape="circular"
+            size="small"
+            variant="outline"
+          >
+            <ChevronDownIcon />
+          </IconButton>
+        </SelectTrigger>
+        <SelectContent align="end">
+          <SelectItem value="unread">Não lidas</SelectItem>
+          <SelectItem value="pinned">Fixadas</SelectItem>
+          <SelectItem value="mine">Atribuídas a mim</SelectItem>
         </SelectContent>
       </Select>
     );

@@ -1,4 +1,6 @@
+import { ChevronDownIcon } from "@/components/icons.v2";
 import { render, screen, userEvent } from "@/tests/app-test-utils";
+import { IconButton } from "../IconButton";
 import {
   Select,
   SelectContent,
@@ -724,6 +726,101 @@ describe("Select", () => {
 
       await user.click(screen.getByText("Laranja"));
       expect(onValueChange).toHaveBeenCalledWith("b");
+    });
+  });
+
+  describe("asChild trigger", () => {
+    const renderIconTrigger = (onValueChange?: (value: string) => void) =>
+      render(
+        <Select onValueChange={onValueChange}>
+          <SelectTrigger asChild>
+            <IconButton aria-label="Mais filtros" shape="circular" size="small">
+              <ChevronDownIcon data-testid="child-icon" />
+            </IconButton>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="unread">Não lidas</SelectItem>
+            <SelectItem value="pinned">Fixadas</SelectItem>
+          </SelectContent>
+        </Select>
+      );
+
+    it("renders the child as the trigger without wrapper or chevron", () => {
+      renderIconTrigger();
+
+      const trigger = screen.getByRole("combobox", { name: "Mais filtros" });
+      expect(trigger).toBeVisible();
+      expect(trigger.tagName).toBe("BUTTON");
+      expect(trigger).toHaveAttribute("data-slot", "select-trigger");
+      expect(trigger).toHaveClass("rounded-full", "size-8");
+      expect(trigger).not.toHaveClass("h-10", "w-full");
+      expect(trigger.querySelectorAll("svg")).toHaveLength(1);
+      expect(screen.getByTestId("child-icon")).toBeVisible();
+    });
+
+    it("does not set aria-invalid by default", () => {
+      renderIconTrigger();
+
+      expect(screen.getByRole("combobox")).not.toHaveAttribute("aria-invalid");
+    });
+
+    it("forwards aria-invalid when the state is error", () => {
+      render(
+        <Select>
+          <SelectTrigger asChild state="error">
+            <IconButton aria-label="Mais filtros">
+              <ChevronDownIcon />
+            </IconButton>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="a">A</SelectItem>
+          </SelectContent>
+        </Select>
+      );
+
+      expect(screen.getByRole("combobox")).toHaveAttribute(
+        "aria-invalid",
+        "true"
+      );
+    });
+
+    it("opens the options when the child is clicked", async () => {
+      const user = userEvent.setup();
+      renderIconTrigger();
+
+      await user.click(screen.getByRole("combobox", { name: "Mais filtros" }));
+
+      expect(screen.getByRole("option", { name: "Não lidas" })).toBeVisible();
+      expect(screen.getByRole("option", { name: "Fixadas" })).toBeVisible();
+    });
+
+    it("calls onValueChange when an item is selected", async () => {
+      const user = userEvent.setup();
+      const onValueChange = jest.fn();
+      renderIconTrigger(onValueChange);
+
+      await user.click(screen.getByRole("combobox", { name: "Mais filtros" }));
+      await user.click(screen.getByRole("option", { name: "Fixadas" }));
+
+      expect(onValueChange).toHaveBeenCalledWith("pinned");
+    });
+
+    it("keeps the default trigger styling and chevron without asChild", () => {
+      render(
+        <Select>
+          <SelectTrigger>
+            <SelectValue placeholder="Padrão" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="a">A</SelectItem>
+          </SelectContent>
+        </Select>
+      );
+
+      const trigger = screen.getByRole("combobox");
+      expect(trigger).toHaveClass("h-10", "w-full");
+      const chevron = trigger.querySelector("svg");
+      expect(chevron).toHaveClass("size-4", "text-gray-400");
     });
   });
 });
