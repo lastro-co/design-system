@@ -54,13 +54,13 @@ const LaisSuggestionButton = React.forwardRef<
       >
         {!isPale && (
           /*
-           * The card's glow frame (307.3 x 301.3, both orbs inside), centred
-           * on the pill and flattened to roughly its size (~170 x 60) at 60%
-           * opacity: a subtle halo that hugs the pill, as the design has it,
-           * not the card's wide ambient glow.
+           * The card's glow frame (307.3 x 301.3, both orbs inside), scaled
+           * to the spec's "Circles" size, 57.04 x 48 (0.1856 x 0.1593), and
+           * centred behind the pill. The halo around the pill comes from the
+           * spec's shadows in `lais-suggestion-button`.
            */
           <LaisGlow
-            className="-z-10 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 h-[301.3px] w-[307.3px] scale-x-[0.55] scale-y-[0.2] opacity-60"
+            className="-z-10 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 h-[301.3px] w-[307.3px] scale-x-[0.1856] scale-y-[0.1593]"
             data-slot="lais-suggestion-button-glow"
           />
         )}
@@ -70,7 +70,7 @@ const LaisSuggestionButton = React.forwardRef<
             "inline-flex h-8 shrink-0 select-none items-center justify-center gap-2 whitespace-nowrap rounded-full border px-3 font-medium font-text text-sm leading-5 antialiased outline-none transition-[filter,background-color,color] duration-200 ease-out focus-visible:outline-2 focus-visible:outline-purple-400 focus-visible:outline-offset-2 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
             isPale
               ? "cursor-not-allowed border-gray-200 bg-gray-50 text-gray-500"
-              : "lais-suggestion-button cursor-pointer border-transparent text-white enabled:active:brightness-95 enabled:hover:brightness-110",
+              : "lais-suggestion-button cursor-pointer border-transparent text-white backdrop-blur-[2px] enabled:active:brightness-95 enabled:hover:brightness-110",
             loading && "cursor-progress",
             className
           )}

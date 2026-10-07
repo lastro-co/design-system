@@ -226,9 +226,8 @@ describe("LaisSuggestionButton", () => {
       expect(frame).toHaveClass(
         "lais-suggestion-glow",
         "-z-10",
-        "scale-x-[0.55]",
-        "scale-y-[0.2]",
-        "opacity-60"
+        "scale-x-[0.1856]",
+        "scale-y-[0.1593]"
       );
       expect(
         frame.querySelectorAll('[data-slot="lais-glow-orb"]')
