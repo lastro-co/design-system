@@ -68,11 +68,22 @@ function SelectValue({
   return <SelectPrimitive.Value data-slot="select-value" {...props} />;
 }
 
+/**
+ * Opens the select.
+ *
+ * With `asChild`, the single child becomes the trigger: it owns its look (no
+ * input styling, no chevron is appended) and must be a focusable element such
+ * as `IconButton`. Give it an `aria-label`, since there is no `SelectValue`.
+ * The opening direction is set with `align` on `SelectContent` (`"start"`,
+ * the default, grows right from the trigger's left edge; `"end"` grows left
+ * from its right edge; `"center"`).
+ */
 function SelectTrigger({
   className,
   children,
   variant,
   state = "default",
+  asChild = false,
   "aria-invalid": ariaInvalid,
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Trigger> &
@@ -81,6 +92,20 @@ function SelectTrigger({
   }) {
   const isInvalid = state === "error" || Boolean(ariaInvalid);
   const isSuccess = state === "success" && !isInvalid;
+
+  if (asChild) {
+    return (
+      <SelectPrimitive.Trigger
+        aria-invalid={isInvalid || undefined}
+        asChild
+        className={className}
+        data-slot="select-trigger"
+        {...props}
+      >
+        {children}
+      </SelectPrimitive.Trigger>
+    );
+  }
 
   return (
     <SelectPrimitive.Trigger

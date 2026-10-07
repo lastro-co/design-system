@@ -3,8 +3,8 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import type * as React from "react";
 import { useEffect, useState } from "react";
+import { XIcon } from "@/components/icons.v2";
 import { cn } from "@/lib/utils";
-import { CloseIcon } from "../../icons";
 import { IconButton } from "../IconButton";
 
 const MIN_ZOOM = 1;
@@ -33,7 +33,7 @@ export interface ImageLightboxProps {
   /**
    * Custom close control rendered in the top-right corner (wrapped in the
    * dialog Close slot, so clicking it closes the lightbox). Defaults to a
-   * ghost IconButton with the CloseIcon.
+   * ghost IconButton with the XIcon.
    */
   closeButton?: React.ReactElement;
 }
@@ -178,7 +178,7 @@ export function ImageLightbox({
                   size="medium"
                   variant="ghost"
                 >
-                  <CloseIcon className="size-5" />
+                  <XIcon className="size-5" />
                 </IconButton>
               )}
             </DialogPrimitive.Close>

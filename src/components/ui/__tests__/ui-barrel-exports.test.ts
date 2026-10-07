@@ -184,6 +184,10 @@ describe("components/ui barrel exports", () => {
     expect(uiExports.LaisSuggestionCard).toBeDefined();
   });
 
+  it("exports LaisSuggestionButton", () => {
+    expect(uiExports.LaisSuggestionButton).toBeDefined();
+  });
+
   it("exports LoadingOverlay", () => {
     expect(uiExports.LoadingOverlay).toBeDefined();
   });

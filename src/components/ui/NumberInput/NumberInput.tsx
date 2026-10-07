@@ -1,7 +1,7 @@
 import type * as React from "react";
 import { useCallback } from "react";
+import { ChevronDownIcon, ChevronUpIcon } from "@/components/icons.v2";
 import { cn } from "@/lib/utils";
-import { ChevronDownIcon, ChevronUpIcon } from "../../icons";
 import { Input } from "../Input";
 
 export interface NumberInputProps

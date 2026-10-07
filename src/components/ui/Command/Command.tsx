@@ -2,8 +2,8 @@
 
 import { Command as CommandPrimitive } from "cmdk";
 import type * as React from "react";
+import { SearchIcon } from "@/components/icons.v2";
 import { cn } from "@/lib/utils";
-import { SearchIcon } from "../../icons";
 import {
   DialogContent,
   DialogDescription,
@@ -73,7 +73,7 @@ function CommandInput({
       className="flex h-12 items-center gap-2 border-gray-100 border-b px-4"
       data-slot="command-input-wrapper"
     >
-      <SearchIcon className="shrink-0 text-gray-600" size="sm" />
+      <SearchIcon className="size-4 shrink-0 text-gray-600" />
       <CommandPrimitive.Input
         className={cn(
           "flex h-11 w-full rounded-md bg-transparent py-3 text-black text-sm outline-none placeholder:text-gray-600 disabled:cursor-not-allowed disabled:opacity-50",

@@ -1,8 +1,8 @@
 "use client";
 
 import { forwardRef } from "react";
+import { SlidersHorizontalIcon } from "@/components/icons.v2";
 import { cn } from "@/lib/utils";
-import { TuneIcon } from "../../icons";
 import { Button } from "../Button";
 
 export interface FilterButtonProps
@@ -13,7 +13,7 @@ export interface FilterButtonProps
   labelPosition?: "left" | "right";
   /** Number of active filters (shows counter badge when > 0) */
   count?: number;
-  /** Custom icon to display (defaults to TuneIcon) */
+  /** Custom icon to display (defaults to SlidersHorizontalIcon) */
   icon?: React.ReactNode;
   /** Whether to show the icon when count > 0 (default: false, shows counter instead) */
   showIconWithCount?: boolean;
@@ -50,7 +50,7 @@ export const FilterButton = forwardRef<HTMLButtonElement, FilterButtonProps>(
   ) => {
     const hasActiveFilters = count > 0;
     const IconComponent = icon ?? (
-      <TuneIcon
+      <SlidersHorizontalIcon
         className={cn(disabled ? "text-gray-600" : "text-purple-800")}
       />
     );

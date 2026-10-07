@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { CloseIcon } from "../../icons";
+import { XIcon } from "@/components/icons.v2";
 import { Button } from "../Button";
 import { IconButton } from "../IconButton";
 import { ImageLightbox } from "./ImageLightbox";
@@ -67,7 +67,7 @@ function CustomizedDemo() {
         alt="Casa com jardim"
         closeButton={
           <IconButton aria-label="Fechar" variant="default">
-            <CloseIcon className="size-5" />
+            <XIcon className="size-5" />
           </IconButton>
         }
         onOpenChange={setOpen}

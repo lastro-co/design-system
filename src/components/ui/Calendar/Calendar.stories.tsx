@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { subDays } from "date-fns";
 import { useState } from "react";
 import type { DateRange } from "react-day-picker";
 import { Calendar } from "./Calendar";
+import { getDefaultCalendarPresets } from "./presets";
 
 const meta: Meta<typeof Calendar> = {
   title: "Components/Calendar",
@@ -86,28 +86,6 @@ export const RangeSelection: Story = {
   },
 };
 
-export const RangeWithPresets: Story = {
-  render: () => {
-    const [selected, setSelected] = useState<DateRange | undefined>();
-    const today = new Date();
-    const presets = [7, 15, 30].map((days) => ({
-      label: `${days} dias`,
-      range: { from: subDays(today, days - 1), to: today },
-    }));
-    return (
-      <Calendar
-        customPresetLabel="Personalizado"
-        mode="range"
-        onPresetSelect={setSelected}
-        onSelect={setSelected}
-        presets={presets}
-        selected={selected}
-        showOutsideDays
-      />
-    );
-  },
-};
-
 export const WithDisabledDates: Story = {
   render: () => {
     const [selected, setSelected] = useState<Date>();
@@ -149,6 +127,122 @@ export const WithEnabledDates: Story = {
           </p>
         )}
       </div>
+    );
+  },
+};
+
+// Fixed dates keep visual snapshots stable regardless of the run date.
+// Calendar always drives DayPicker with `month`, so `defaultMonth` would be
+// ignored: the stories own the month state instead.
+const SEPTEMBER_2026 = new Date(2026, 8, 1);
+const FIXED_TODAY = new Date(2026, 8, 15);
+// Matches the Figma "Date range picker — período" frames.
+const PRESETS_TODAY = new Date(2026, 8, 23);
+const AUGUST_2026 = new Date(2026, 7, 1);
+const DEFAULT_PRESETS = getDefaultCalendarPresets(PRESETS_TODAY);
+const LAST_30_DAYS = DEFAULT_PRESETS[4].range;
+
+export const RangeWithPresets: Story = {
+  render: () => {
+    const [selected, setSelected] = useState<DateRange | undefined>();
+    const [month, setMonth] = useState(AUGUST_2026);
+    return (
+      <Calendar
+        customPresetLabel="Personalizado"
+        mode="range"
+        month={month}
+        numberOfMonths={2}
+        onMonthChange={setMonth}
+        onPresetSelect={setSelected}
+        onSelect={setSelected}
+        presets={DEFAULT_PRESETS}
+        selected={selected}
+        showOutsideDays
+        today={PRESETS_TODAY}
+      />
+    );
+  },
+};
+
+export const RangeWithActivePreset: Story = {
+  render: () => {
+    const [selected, setSelected] = useState<DateRange | undefined>(
+      LAST_30_DAYS
+    );
+    const [month, setMonth] = useState(AUGUST_2026);
+    return (
+      <Calendar
+        customPresetLabel="Personalizado"
+        mode="range"
+        month={month}
+        numberOfMonths={2}
+        onMonthChange={setMonth}
+        onPresetSelect={setSelected}
+        onSelect={setSelected}
+        presets={DEFAULT_PRESETS}
+        selected={selected}
+        showOutsideDays
+        today={PRESETS_TODAY}
+      />
+    );
+  },
+};
+
+export const TwoMonthsRange: Story = {
+  render: () => {
+    const [selected, setSelected] = useState<DateRange | undefined>({
+      from: new Date(2026, 8, 3),
+      to: new Date(2026, 8, 23),
+    });
+    const [month, setMonth] = useState(SEPTEMBER_2026);
+    return (
+      <Calendar
+        mode="range"
+        month={month}
+        numberOfMonths={2}
+        onMonthChange={setMonth}
+        onSelect={setSelected}
+        selected={selected}
+        showOutsideDays
+        today={FIXED_TODAY}
+      />
+    );
+  },
+};
+
+export const WithToday: Story = {
+  render: () => {
+    const [selected, setSelected] = useState<Date>();
+    const [month, setMonth] = useState(SEPTEMBER_2026);
+    return (
+      <Calendar
+        mode="single"
+        month={month}
+        onMonthChange={setMonth}
+        onSelect={setSelected}
+        selected={selected}
+        showOutsideDays
+        today={FIXED_TODAY}
+      />
+    );
+  },
+};
+
+export const DropdownCaption: Story = {
+  render: () => {
+    const [selected, setSelected] = useState<Date>();
+    const [month, setMonth] = useState(SEPTEMBER_2026);
+    return (
+      <Calendar
+        captionLayout="dropdown"
+        mode="single"
+        month={month}
+        onMonthChange={setMonth}
+        onSelect={setSelected}
+        selected={selected}
+        showOutsideDays
+        today={FIXED_TODAY}
+      />
     );
   },
 };

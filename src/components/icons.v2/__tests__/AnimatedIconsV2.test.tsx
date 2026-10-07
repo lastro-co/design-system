@@ -2,32 +2,45 @@ import { createRef } from "react";
 import { act, fireEvent, render } from "@/tests/app-test-utils";
 import {
   AnimatedActivityIcon,
+  AnimatedAlarmClockIcon,
   AnimatedBellIcon,
   AnimatedBookOpenIcon,
   AnimatedBriefcaseBusinessIcon,
+  AnimatedCalendarDaysIcon,
   AnimatedChartBarIncreasingIcon,
   AnimatedChevronDownIcon,
   AnimatedChevronLeftIcon,
   AnimatedChevronRightIcon,
   AnimatedChevronsUpDownIcon,
   AnimatedChevronUpIcon,
+  AnimatedCircleCheckIcon,
+  AnimatedCircleXIcon,
+  AnimatedClipboardCheckIcon,
   AnimatedClipboardListIcon,
   AnimatedDollarSignIcon,
   AnimatedEyeIcon,
   AnimatedEyeOffIcon,
   AnimatedFileTextIcon,
   AnimatedFlameIcon,
+  AnimatedGlobeIcon,
   AnimatedGraduationCapIcon,
   AnimatedHelpCircleIcon,
   AnimatedHomeIcon,
   AnimatedLayersIcon,
+  AnimatedLinkIcon,
+  AnimatedMapPinHouseIcon,
+  AnimatedMegaphoneIcon,
+  AnimatedMessageCircleIcon,
   AnimatedMessageSquareIcon,
   AnimatedPhoneIcon,
   AnimatedPlugZapIcon,
   AnimatedReceiptIcon,
   AnimatedSearchIcon,
+  AnimatedSendIcon,
   AnimatedSettingsIcon,
   AnimatedSmartphoneNfcIcon,
+  AnimatedSparklesIcon,
+  AnimatedSplitIcon,
   AnimatedTrendingUpIcon,
   AnimatedUserCheckIcon,
   AnimatedUsersIcon,
@@ -41,32 +54,45 @@ import {
 
 const ANIMATED_ICONS = [
   ["AnimatedActivityIcon", AnimatedActivityIcon],
+  ["AnimatedAlarmClockIcon", AnimatedAlarmClockIcon],
   ["AnimatedBellIcon", AnimatedBellIcon],
   ["AnimatedBookOpenIcon", AnimatedBookOpenIcon],
   ["AnimatedBriefcaseBusinessIcon", AnimatedBriefcaseBusinessIcon],
+  ["AnimatedCalendarDaysIcon", AnimatedCalendarDaysIcon],
   ["AnimatedChartBarIncreasingIcon", AnimatedChartBarIncreasingIcon],
   ["AnimatedChevronDownIcon", AnimatedChevronDownIcon],
   ["AnimatedChevronLeftIcon", AnimatedChevronLeftIcon],
   ["AnimatedChevronRightIcon", AnimatedChevronRightIcon],
   ["AnimatedChevronsUpDownIcon", AnimatedChevronsUpDownIcon],
   ["AnimatedChevronUpIcon", AnimatedChevronUpIcon],
+  ["AnimatedCircleCheckIcon", AnimatedCircleCheckIcon],
+  ["AnimatedCircleXIcon", AnimatedCircleXIcon],
+  ["AnimatedClipboardCheckIcon", AnimatedClipboardCheckIcon],
   ["AnimatedClipboardListIcon", AnimatedClipboardListIcon],
   ["AnimatedDollarSignIcon", AnimatedDollarSignIcon],
   ["AnimatedEyeIcon", AnimatedEyeIcon],
   ["AnimatedEyeOffIcon", AnimatedEyeOffIcon],
   ["AnimatedFileTextIcon", AnimatedFileTextIcon],
   ["AnimatedFlameIcon", AnimatedFlameIcon],
+  ["AnimatedGlobeIcon", AnimatedGlobeIcon],
   ["AnimatedGraduationCapIcon", AnimatedGraduationCapIcon],
   ["AnimatedHelpCircleIcon", AnimatedHelpCircleIcon],
   ["AnimatedHomeIcon", AnimatedHomeIcon],
   ["AnimatedLayersIcon", AnimatedLayersIcon],
+  ["AnimatedLinkIcon", AnimatedLinkIcon],
+  ["AnimatedMapPinHouseIcon", AnimatedMapPinHouseIcon],
+  ["AnimatedMegaphoneIcon", AnimatedMegaphoneIcon],
+  ["AnimatedMessageCircleIcon", AnimatedMessageCircleIcon],
   ["AnimatedMessageSquareIcon", AnimatedMessageSquareIcon],
   ["AnimatedPhoneIcon", AnimatedPhoneIcon],
   ["AnimatedPlugZapIcon", AnimatedPlugZapIcon],
   ["AnimatedReceiptIcon", AnimatedReceiptIcon],
   ["AnimatedSearchIcon", AnimatedSearchIcon],
+  ["AnimatedSendIcon", AnimatedSendIcon],
   ["AnimatedSettingsIcon", AnimatedSettingsIcon],
   ["AnimatedSmartphoneNfcIcon", AnimatedSmartphoneNfcIcon],
+  ["AnimatedSplitIcon", AnimatedSplitIcon],
+  ["AnimatedSparklesIcon", AnimatedSparklesIcon],
   ["AnimatedTrendingUpIcon", AnimatedTrendingUpIcon],
   ["AnimatedUserCheckIcon", AnimatedUserCheckIcon],
   ["AnimatedUsersIcon", AnimatedUsersIcon],
@@ -131,7 +157,7 @@ describe("icons.v2 — animated icons", () => {
     }
   );
 
-  it("all 32 animated icons render without crashing", () => {
+  it("all animated icons render without crashing", () => {
     const { container } = render(
       <div>
         {ANIMATED_ICONS.map(([name, Icon]) => (
@@ -139,7 +165,9 @@ describe("icons.v2 — animated icons", () => {
         ))}
       </div>
     );
-    expect(container.querySelectorAll("svg")).toHaveLength(32);
+    expect(container.querySelectorAll("svg")).toHaveLength(
+      ANIMATED_ICONS.length
+    );
   });
 
   it("applies className to the wrapper element", () => {

@@ -1,6 +1,6 @@
 import type * as React from "react";
+import { ChevronLeftIcon, ChevronRightIcon } from "@/components/icons.v2";
 import { cn } from "@/lib/utils";
-import { ChevronLeftIcon, ChevronRightIcon } from "../../icons";
 
 type PaginationRange = (number | "ellipsis")[];
 
@@ -142,7 +142,7 @@ function DynamicPagination({
               onClick={handlePrevious}
               type="button"
             >
-              <ChevronLeftIcon className="size-4" color={"purple-800"} />
+              <ChevronLeftIcon className="size-4 text-purple-800" />
               {previousLabel}
             </button>
           </li>
@@ -183,7 +183,7 @@ function DynamicPagination({
               onClick={handleNext}
               type="button"
             >
-              <ChevronRightIcon className="size-4" color={"purple-800"} />
+              <ChevronRightIcon className="size-4 text-purple-800" />
               {nextLabel}
             </button>
           </li>

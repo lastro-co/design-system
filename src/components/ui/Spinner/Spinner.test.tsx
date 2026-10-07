@@ -11,8 +11,15 @@ describe("Spinner", () => {
 
   it("should be accessible with aria-label", () => {
     render(<Spinner />);
-    const spinner = screen.getByLabelText("Loader Icon");
+    const spinner = screen.getByLabelText("Carregando");
     expect(spinner).toBeVisible();
+  });
+
+  it("should render the Lastro segmented loader, not lucide's Loader", () => {
+    render(<Spinner />);
+    const spinner = screen.getByRole("status");
+    expect(spinner).toHaveAttribute("fill", "currentColor");
+    expect(spinner.querySelectorAll("path")).toHaveLength(9);
   });
 
   it("should accept custom className, size and color props", () => {

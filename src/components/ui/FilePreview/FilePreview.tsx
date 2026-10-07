@@ -1,7 +1,7 @@
 "use client";
 
+import { TrashIcon } from "@/components/icons.v2";
 import { cn, formatFileSize } from "@/lib/utils";
-import { TrashIcon } from "../../icons";
 import { FileTypeIcon } from "../FileTypeIcon";
 
 export interface FilePreviewProps {
@@ -54,7 +54,7 @@ export function FilePreview({
           onClick={onRemove}
           type="button"
         >
-          <TrashIcon size="md" />
+          <TrashIcon className="size-5" />
           Excluir
         </button>
       )}

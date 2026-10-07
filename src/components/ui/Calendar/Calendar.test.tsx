@@ -1,9 +1,17 @@
 import userEvent from "@testing-library/user-event";
 import type { DateRange } from "react-day-picker";
-import { render, screen, waitFor } from "@/tests/app-test-utils";
+import { render, screen, waitFor, within } from "@/tests/app-test-utils";
 import { Calendar } from "./Calendar";
 
 const DIGIT_REGEX = /\d+/;
+const SEPTEMBER_ABBR_REGEX = /^Set/;
+const SURFACE_CLASSES = [
+  "rounded-md",
+  "border",
+  "border-gray-200",
+  "bg-white",
+  "shadow-sm",
+];
 
 describe("Calendar", () => {
   describe("Rendering", () => {
@@ -14,9 +22,9 @@ describe("Calendar", () => {
 
     it("should display month name in custom caption", () => {
       const january2026 = new Date(2026, 0, 15);
-      render(<Calendar month={january2026} />);
-      // The custom caption shows month abbreviation (first 3 letters)
-      expect(screen.getByText("Jan")).toBeInTheDocument();
+      render(<Calendar captionLayout="dropdown" month={january2026} />);
+      // The dropdown caption shows month abbreviation (first 3 letters)
+      expect(screen.getByText("Jan")).toBeVisible();
     });
 
     it("should accept custom className", () => {
@@ -40,8 +48,8 @@ describe("Calendar", () => {
     it("should render with specific month when month prop is provided", () => {
       const specificDate = new Date(2025, 5, 15); // June 15, 2025
       render(<Calendar month={specificDate} />);
-      // Custom caption shows month abbreviation
-      expect(screen.getByText("Jun")).toBeInTheDocument();
+      // Plain caption shows the full month name and year
+      expect(screen.getByText("Junho de 2025")).toBeVisible();
     });
   });
 
@@ -76,7 +84,9 @@ describe("Calendar", () => {
   describe("Custom Month/Year Picker", () => {
     it("should open month picker when clicking month button", async () => {
       const user = userEvent.setup();
-      render(<Calendar month={new Date(2026, 0, 15)} />);
+      render(
+        <Calendar captionLayout="dropdown" month={new Date(2026, 0, 15)} />
+      );
 
       const monthButton = screen.getByText("Jan");
       await user.click(monthButton);
@@ -91,7 +101,9 @@ describe("Calendar", () => {
     it("should open year picker when clicking year button", async () => {
       const user = userEvent.setup();
       const year = 2026;
-      render(<Calendar month={new Date(year, 0, 15)} />);
+      render(
+        <Calendar captionLayout="dropdown" month={new Date(year, 0, 15)} />
+      );
 
       const yearButton = screen.getByText(year.toString());
       await user.click(yearButton);
@@ -110,7 +122,11 @@ describe("Calendar", () => {
       const user = userEvent.setup();
       const onMonthChange = jest.fn();
       render(
-        <Calendar month={new Date(2026, 0, 15)} onMonthChange={onMonthChange} />
+        <Calendar
+          captionLayout="dropdown"
+          month={new Date(2026, 0, 15)}
+          onMonthChange={onMonthChange}
+        />
       );
 
       const monthButton = screen.getByText("Jan");
@@ -130,7 +146,11 @@ describe("Calendar", () => {
       const user = userEvent.setup();
       const onMonthChange = jest.fn();
       render(
-        <Calendar month={new Date(2026, 0, 15)} onMonthChange={onMonthChange} />
+        <Calendar
+          captionLayout="dropdown"
+          month={new Date(2026, 0, 15)}
+          onMonthChange={onMonthChange}
+        />
       );
 
       // Find all buttons with chevron icons
@@ -151,7 +171,11 @@ describe("Calendar", () => {
       const user = userEvent.setup();
       const onMonthChange = jest.fn();
       render(
-        <Calendar month={new Date(2026, 0, 15)} onMonthChange={onMonthChange} />
+        <Calendar
+          captionLayout="dropdown"
+          month={new Date(2026, 0, 15)}
+          onMonthChange={onMonthChange}
+        />
       );
 
       const allButtons = screen.getAllByRole("button");
@@ -169,7 +193,9 @@ describe("Calendar", () => {
 
     it("should close month picker and return to days view when month is selected", async () => {
       const user = userEvent.setup();
-      render(<Calendar month={new Date(2026, 0, 15)} />);
+      render(
+        <Calendar captionLayout="dropdown" month={new Date(2026, 0, 15)} />
+      );
 
       const monthButton = screen.getByText("Jan");
       await user.click(monthButton);
@@ -414,16 +440,17 @@ describe("Calendar", () => {
   describe("Localization", () => {
     it("should display custom weekday abbreviations", () => {
       render(<Calendar />);
-      // Custom formatter shows single letter abbreviations
-      expect(screen.getByText("D")).toBeInTheDocument(); // Domingo
-      // S, T, Q appear multiple times for different days
-      const allText = screen.getByRole("grid").textContent;
-      expect(allText).toContain("D");
+      // Custom formatter shows short uppercase abbreviations (Figma header)
+      for (const weekday of ["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SAB"]) {
+        expect(screen.getByText(weekday)).toBeVisible();
+      }
     });
 
     it("should display month names in Portuguese in month picker", async () => {
       const user = userEvent.setup();
-      render(<Calendar month={new Date(2026, 0, 15)} />);
+      render(
+        <Calendar captionLayout="dropdown" month={new Date(2026, 0, 15)} />
+      );
 
       const monthButton = screen.getByText("Jan");
       await user.click(monthButton);
@@ -438,7 +465,9 @@ describe("Calendar", () => {
   describe("Edge Cases", () => {
     it("should handle switching between picker modes", async () => {
       const user = userEvent.setup();
-      render(<Calendar month={new Date(2026, 0, 15)} />);
+      render(
+        <Calendar captionLayout="dropdown" month={new Date(2026, 0, 15)} />
+      );
 
       // Open month picker
       const monthButton = screen.getByText("Jan");
@@ -484,21 +513,38 @@ describe("Calendar range presets", () => {
     { label: "7 dias", range: range7 },
     { label: "30 dias", range: range30 },
   ];
+  const custom: DateRange = {
+    from: new Date(2026, 6, 1),
+    to: new Date(2026, 6, 5),
+  };
 
-  it("renders a chip per preset when presets is provided", () => {
+  it("renders a titled sidebar group with an item per preset", () => {
     render(<Calendar mode="range" presets={presets} />);
-    expect(screen.getByRole("button", { name: "7 dias" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "30 dias" })).toBeInTheDocument();
-  });
-
-  it("renders no chips when presets is omitted", () => {
-    render(<Calendar mode="range" />);
+    const group = screen.getByRole("group", { name: "Período" });
+    expect(group).toBeVisible();
+    expect(screen.getByText("Período")).toHaveClass("uppercase");
     expect(
-      screen.queryByRole("button", { name: "7 dias" })
-    ).not.toBeInTheDocument();
+      within(group).getByRole("button", { name: "7 dias" })
+    ).toHaveAttribute("type", "button");
+    expect(
+      within(group).getByRole("button", { name: "30 dias" })
+    ).toBeVisible();
   });
 
-  it("fires onPresetSelect with the preset range on chip click", async () => {
+  it("uses presetsTitle as the sidebar heading and group name", () => {
+    render(<Calendar mode="range" presets={presets} presetsTitle="Atalhos" />);
+    expect(screen.getByRole("group", { name: "Atalhos" })).toBeVisible();
+    expect(screen.queryByText("Período")).not.toBeInTheDocument();
+  });
+
+  it("renders no sidebar when presets is omitted or empty", () => {
+    const { rerender } = render(<Calendar mode="range" />);
+    expect(screen.queryByRole("group")).not.toBeInTheDocument();
+    rerender(<Calendar mode="range" presets={[]} />);
+    expect(screen.queryByRole("group")).not.toBeInTheDocument();
+  });
+
+  it("fires onPresetSelect with the preset range on item click", async () => {
     const onPresetSelect = jest.fn();
     const user = userEvent.setup();
     render(
@@ -512,37 +558,39 @@ describe("Calendar range presets", () => {
     expect(onPresetSelect).toHaveBeenCalledWith(range7);
   });
 
-  it("marks the chip matching the selected range as pressed", () => {
+  it("marks the item matching the selected range as pressed", () => {
     render(<Calendar mode="range" presets={presets} selected={range7} />);
-    expect(screen.getByRole("button", { name: "7 dias" })).toHaveAttribute(
-      "aria-pressed",
-      "true"
-    );
-    expect(screen.getByRole("button", { name: "30 dias" })).toHaveAttribute(
-      "aria-pressed",
-      "false"
-    );
+    const active = screen.getByRole("button", { name: "7 dias" });
+    expect(active).toHaveAttribute("aria-pressed", "true");
+    expect(active).toHaveClass("bg-purple-50", "text-purple-800");
+    const inactive = screen.getByRole("button", { name: "30 dias" });
+    expect(inactive).toHaveAttribute("aria-pressed", "false");
+    expect(inactive).toHaveClass("text-gray-600");
   });
 
-  it("shows a disabled custom chip when the selection matches no preset", () => {
-    const custom: DateRange = {
-      from: new Date(2026, 6, 1),
-      to: new Date(2026, 6, 5),
-    };
+  it("shows a read-only custom item when a complete selection matches no preset", async () => {
+    const onPresetSelect = jest.fn();
+    const user = userEvent.setup();
     render(
       <Calendar
         customPresetLabel="Personalizado"
         mode="range"
+        onPresetSelect={onPresetSelect}
         presets={presets}
         selected={custom}
       />
     );
-    const chip = screen.getByRole("button", { name: "Personalizado" });
-    expect(chip).toBeDisabled();
-    expect(chip).toHaveAttribute("aria-pressed", "true");
+    const item = screen.getByText("Personalizado");
+    expect(item).toBeVisible();
+    expect(item).toHaveClass("bg-purple-50", "text-purple-800");
+    expect(
+      screen.queryByRole("button", { name: "Personalizado" })
+    ).not.toBeInTheDocument();
+    await user.click(item);
+    expect(onPresetSelect).not.toHaveBeenCalled();
   });
 
-  it("hides the custom chip when a preset matches", () => {
+  it("hides the custom item when a preset matches", () => {
     render(
       <Calendar
         customPresetLabel="Personalizado"
@@ -551,8 +599,366 @@ describe("Calendar range presets", () => {
         selected={range7}
       />
     );
-    expect(
-      screen.queryByRole("button", { name: "Personalizado" })
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText("Personalizado")).not.toBeInTheDocument();
+  });
+
+  it("hides the custom item while the range is incomplete", () => {
+    render(
+      <Calendar
+        customPresetLabel="Personalizado"
+        mode="range"
+        presets={presets}
+        selected={{ from: custom.from, to: undefined }}
+      />
+    );
+    expect(screen.queryByText("Personalizado")).not.toBeInTheDocument();
+  });
+
+  it("draws one surface around sidebar and grid", () => {
+    const { container } = render(
+      <Calendar mode="range" numberOfMonths={2} presets={presets} />
+    );
+    const group = screen.getByRole("group", { name: "Período" });
+    const wrapper = group.parentElement as HTMLElement;
+    expect(wrapper).toHaveClass(...SURFACE_CLASSES);
+    expect(group).toHaveClass("border-r", "border-gray-200");
+
+    const root = container.querySelector('[data-slot="calendar"]');
+    expect(wrapper).toContainElement(root as HTMLElement);
+    for (const surfaceClass of SURFACE_CLASSES) {
+      expect(root).not.toHaveClass(surfaceClass);
+    }
+    expect(screen.getAllByRole("grid")).toHaveLength(2);
+  });
+});
+
+describe("Calendar plain header and Figma states", () => {
+  const september2026 = new Date(2026, 8, 1);
+  const PREVIOUS_MONTH_LABEL = "Ir para o mês anterior";
+  const NEXT_MONTH_LABEL = "Ir para o próximo mês";
+
+  const getDayButton = (container: HTMLElement, date: Date) =>
+    container.querySelector(
+      `button[data-day="${date.toLocaleDateString()}"]`
+    ) as HTMLButtonElement;
+
+  it("renders the plain 'Mês de AAAA' label with no clickable month/year", () => {
+    render(<Calendar month={september2026} />);
+    const label = screen.getByText("Setembro de 2026");
+    expect(label).toBeVisible();
+    expect(label.closest("button")).toBeNull();
+    expect(screen.queryByText("Set")).not.toBeInTheDocument();
+    expect(screen.queryByText("2026")).not.toBeInTheDocument();
+  });
+
+  it("navigates months through the edge chevrons", async () => {
+    const user = userEvent.setup();
+    const onMonthChange = jest.fn();
+    render(<Calendar month={september2026} onMonthChange={onMonthChange} />);
+
+    await user.click(
+      screen.getByRole("button", { name: PREVIOUS_MONTH_LABEL })
+    );
+    expect(onMonthChange).toHaveBeenLastCalledWith(new Date(2026, 7, 1));
+
+    await user.click(screen.getByRole("button", { name: NEXT_MONTH_LABEL }));
+    expect(onMonthChange).toHaveBeenLastCalledWith(new Date(2026, 9, 1));
+  });
+
+  it("keeps the dropdown caption and its month list when captionLayout='dropdown'", async () => {
+    const user = userEvent.setup();
+    render(<Calendar captionLayout="dropdown" month={september2026} />);
+
+    expect(screen.queryByText("Setembro de 2026")).not.toBeInTheDocument();
+    // The dropdown caption is wider than the 252px Figma month.
+    expect(screen.getByRole("grid").parentElement).toHaveClass("w-84");
+    await user.click(
+      screen.getByRole("button", { name: SEPTEMBER_ABBR_REGEX })
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("Janeiro")).toBeVisible();
+    });
+  });
+
+  it("marks today with bold purple text and a dot", () => {
+    const today = new Date(2026, 8, 15);
+    const { container } = render(
+      <Calendar mode="single" month={september2026} today={today} />
+    );
+    const button = getDayButton(container, today);
+    expect(button).toHaveAttribute("data-today", "true");
+    expect(button).toHaveClass(
+      "font-bold",
+      "text-purple-800",
+      "after:bg-purple-800"
+    );
+  });
+
+  it("turns the today dot white when today is selected", () => {
+    const today = new Date(2026, 8, 15);
+    const { container } = render(
+      <Calendar
+        mode="single"
+        month={september2026}
+        selected={today}
+        today={today}
+      />
+    );
+    const button = getDayButton(container, today);
+    expect(button).toHaveClass("bg-purple-800", "text-white", "after:bg-white");
+    expect(button).not.toHaveClass("font-bold");
+  });
+
+  it("fills a single selected day with a purple circle", () => {
+    const selected = new Date(2026, 8, 10);
+    const { container } = render(
+      <Calendar mode="single" month={september2026} selected={selected} />
+    );
+    expect(getDayButton(container, selected)).toHaveClass(
+      "bg-purple-800",
+      "font-medium",
+      "text-white"
+    );
+  });
+
+  it("styles range endpoints as circles and connects them with a band", () => {
+    const range: DateRange = {
+      from: new Date(2026, 8, 3),
+      to: new Date(2026, 8, 23),
+    };
+    const { container } = render(
+      <Calendar mode="range" month={september2026} selected={range} />
+    );
+
+    const start = getDayButton(container, range.from as Date);
+    const middle = getDayButton(container, new Date(2026, 8, 10));
+    const end = getDayButton(container, range.to as Date);
+
+    expect(start).toHaveAttribute("data-range-start", "true");
+    expect(start).toHaveClass("bg-purple-800", "text-white");
+    expect(start.closest("td")).toHaveClass("bg-linear-to-r", "to-purple-50");
+
+    expect(middle).toHaveAttribute("data-range-middle", "true");
+    expect(middle).toHaveClass(
+      "font-medium",
+      "text-purple-800",
+      "hover:bg-purple-100"
+    );
+    expect(middle).not.toHaveClass("bg-purple-800");
+    expect(middle.closest("td")).toHaveClass("bg-purple-50");
+
+    expect(end).toHaveAttribute("data-range-end", "true");
+    expect(end).toHaveClass("bg-purple-800", "text-white");
+    expect(end.closest("td")).toHaveClass("bg-linear-to-l", "to-purple-50");
+  });
+
+  it("keeps outside days grayed on the range band", () => {
+    const range: DateRange = {
+      from: new Date(2026, 7, 25),
+      to: new Date(2026, 8, 23),
+    };
+    const { container } = render(
+      <Calendar mode="range" month={september2026} selected={range} />
+    );
+    // Aug 31 is an outside day of the September grid, inside the range.
+    const outside = container.querySelector(
+      `td[data-outside="true"] button[data-day="${new Date(2026, 7, 31).toLocaleDateString()}"]`
+    ) as HTMLButtonElement;
+    expect(outside).toHaveAttribute("data-range-middle", "true");
+    expect(outside).toHaveClass("text-gray-300");
+    expect(outside).not.toHaveClass("text-purple-800");
+    expect(outside.closest("td")).toHaveClass("bg-purple-50");
+  });
+
+  it("renders day numbers at 13px inside a 32px circle", () => {
+    const { container } = render(
+      <Calendar mode="single" month={september2026} />
+    );
+    expect(getDayButton(container, new Date(2026, 8, 10))).toHaveClass(
+      "text-[13px]",
+      "size-(--cell-size)",
+      "rounded-full"
+    );
+  });
+
+  it("draws no half-band on a one-day range", () => {
+    const day = new Date(2026, 8, 3);
+    const { container } = render(
+      <Calendar
+        mode="range"
+        month={september2026}
+        selected={{ from: day, to: day }}
+      />
+    );
+    const cell = getDayButton(container, day).closest("td");
+    expect(cell).not.toHaveClass("bg-linear-to-r");
+    expect(cell).not.toHaveClass("bg-linear-to-l");
+  });
+
+  it("renders two grids with nav only at the outer edges when numberOfMonths=2", () => {
+    const { container } = render(
+      <Calendar mode="range" month={september2026} numberOfMonths={2} />
+    );
+
+    const grids = screen.getAllByRole("grid");
+    expect(grids).toHaveLength(2);
+    expect(screen.getByText("Setembro de 2026")).toBeVisible();
+    expect(screen.getByText("Outubro de 2026")).toBeVisible();
+
+    const previous = screen.getAllByRole("button", {
+      name: PREVIOUS_MONTH_LABEL,
+    });
+    const next = screen.getAllByRole("button", { name: NEXT_MONTH_LABEL });
+    expect(previous).toHaveLength(1);
+    expect(next).toHaveLength(1);
+
+    const [firstMonth, secondMonth] = grids.map((grid) => grid.parentElement);
+    expect(firstMonth).toContainElement(previous[0]);
+    expect(secondMonth).toContainElement(next[0]);
+
+    const root = container.querySelector('[data-slot="calendar"]');
+    expect(root).toHaveClass("w-fit", ...SURFACE_CLASSES);
+    expect(firstMonth).toHaveClass("w-63");
+    expect(secondMonth).toHaveClass("w-63");
+  });
+
+  it("draws the Figma surface on the root and hugs a 252px month", () => {
+    const { container } = render(<Calendar month={september2026} />);
+    const root = container.querySelector('[data-slot="calendar"]');
+    expect(root).toHaveClass("w-fit", "p-4", ...SURFACE_CLASSES);
+    expect(screen.getByRole("grid").parentElement).toHaveClass("w-63");
+  });
+
+  it("forwards Matcher[] to disabled", () => {
+    const disabledDay = new Date(2026, 8, 20);
+    const { container } = render(
+      <Calendar
+        disabled={[disabledDay, { before: new Date(2026, 8, 5) }]}
+        mode="single"
+        month={september2026}
+      />
+    );
+    expect(getDayButton(container, disabledDay)).toBeDisabled();
+    expect(getDayButton(container, new Date(2026, 8, 2))).toBeDisabled();
+    expect(getDayButton(container, new Date(2026, 8, 10))).toBeEnabled();
+  });
+});
+
+describe("Calendar initial month", () => {
+  it("honours defaultMonth when month is uncontrolled", () => {
+    render(<Calendar defaultMonth={new Date(2026, 11, 1)} />);
+
+    expect(screen.getByText("Dezembro de 2026")).toBeVisible();
+  });
+
+  it("falls back to the selected date's month without defaultMonth", () => {
+    render(<Calendar mode="single" selected={new Date(2026, 8, 12)} />);
+
+    expect(screen.getByText("Setembro de 2026")).toBeVisible();
+  });
+
+  it("falls back to a range's start month", () => {
+    render(
+      <Calendar
+        mode="range"
+        selected={{ from: new Date(2027, 1, 3), to: new Date(2027, 1, 9) }}
+      />
+    );
+
+    expect(screen.getByText("Fevereiro de 2027")).toBeVisible();
+  });
+
+  it("falls back to the first date of a multiple selection", () => {
+    render(
+      <Calendar
+        mode="multiple"
+        selected={[new Date(2026, 4, 2), new Date(2026, 6, 8)]}
+      />
+    );
+
+    expect(screen.getByText("Maio de 2026")).toBeVisible();
+  });
+
+  it("prefers a controlled month over defaultMonth", () => {
+    render(
+      <Calendar
+        defaultMonth={new Date(2026, 11, 1)}
+        month={new Date(2026, 2, 1)}
+      />
+    );
+
+    expect(screen.getByText("Março de 2026")).toBeVisible();
+  });
+
+  it("keeps navigating from defaultMonth and fires onMonthChange", async () => {
+    const user = userEvent.setup();
+    const handleMonthChange = jest.fn();
+    render(
+      <Calendar
+        defaultMonth={new Date(2026, 11, 1)}
+        onMonthChange={handleMonthChange}
+      />
+    );
+
+    await user.click(
+      screen.getByRole("button", { name: "Ir para o próximo mês" })
+    );
+
+    expect(screen.getByText("Janeiro de 2027")).toBeVisible();
+    expect(handleMonthChange).toHaveBeenCalledTimes(1);
+    expect(handleMonthChange.mock.calls[0][0]).toEqual(new Date(2027, 0, 1));
+  });
+});
+
+describe("Calendar footer", () => {
+  const september2026 = new Date(2026, 8, 1);
+  const presets = [
+    {
+      label: "Setembro",
+      range: { from: new Date(2026, 8, 1), to: new Date(2026, 8, 30) },
+    },
+  ];
+
+  it("renders nothing extra without a footer", () => {
+    const { container } = render(<Calendar month={september2026} />);
+    const root = container.querySelector('[data-slot="calendar"]');
+    expect(root).toHaveClass(...SURFACE_CLASSES);
+    expect(container.querySelector(".border-t")).toBeNull();
+  });
+
+  it("moves the surface to a wrapper around grid and footer", () => {
+    const { container } = render(
+      <Calendar footer={<span>Ações</span>} month={september2026} />
+    );
+    const footer = screen.getByText("Ações").parentElement as HTMLElement;
+    expect(footer).toHaveClass("border-t", "border-gray-200", "justify-end");
+
+    const surface = footer.parentElement as HTMLElement;
+    expect(surface).toHaveClass(...SURFACE_CLASSES);
+    const root = container.querySelector('[data-slot="calendar"]');
+    expect(surface).toContainElement(root as HTMLElement);
+    for (const surfaceClass of SURFACE_CLASSES) {
+      expect(root).not.toHaveClass(surfaceClass);
+    }
+  });
+
+  it("spans sidebar and grid under one surface with presets", () => {
+    render(
+      <Calendar
+        footer={<span>Ações</span>}
+        mode="range"
+        month={september2026}
+        presets={presets}
+      />
+    );
+    const group = screen.getByRole("group", { name: "Período" });
+    const row = group.parentElement as HTMLElement;
+    expect(row).toHaveClass("flex");
+    expect(row).not.toHaveClass("shadow-sm");
+
+    const surface = row.parentElement as HTMLElement;
+    expect(surface).toHaveClass(...SURFACE_CLASSES);
+    expect(surface).toContainElement(screen.getByText("Ações"));
   });
 });

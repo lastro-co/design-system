@@ -30,6 +30,18 @@ export const MONTHS_PT_BR_SHORT = [
 
 export const WEEKDAYS_PT_BR = ["D", "S", "T", "Q", "Q", "S", "S"] as const;
 
+// Indexed by date-fns `getDay` (0 = Sunday). "SAB" drops the accent on purpose
+// to match the Figma weekday header.
+export const WEEKDAYS_PT_BR_SHORT = [
+  "DOM",
+  "SEG",
+  "TER",
+  "QUA",
+  "QUI",
+  "SEX",
+  "SAB",
+] as const;
+
 export const YEAR_RANGE = 100;
 
 export const MONTHS_PER_ROW = 4;

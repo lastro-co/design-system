@@ -1,9 +1,10 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { CloseIcon } from "@/components/icons";
+import { XIcon } from "@/components/icons.v2";
 import { cn } from "@/lib/utils";
 import { Button } from "../Button";
+import { LaisGlow } from "../LaisGlow";
 import { LaisLogo } from "../LaisLogo";
 
 export interface LaisSuggestionCardAction {
@@ -37,37 +38,6 @@ export interface LaisSuggestionCardProps {
   className?: string;
 }
 
-/**
- * One of the two counter-phased orbs that make up the ambient glow. Purely
- * decorative, and only ever used by this card — `primary` spins clockwise from
- * 0deg over an opaque mint core, `secondary` counter-clockwise from -21.1deg
- * with the mint core fading out. The surfaces and the animations live in
- * `lais-glow-orb-*` in tokens.css; the blur is applied by the clipping frame,
- * not here (see `lais-suggestion-glow`).
- */
-function GlowOrb({
-  variant,
-  className,
-}: {
-  variant: "primary" | "secondary";
-  className: string;
-}) {
-  return (
-    <div
-      aria-hidden="true"
-      className={cn(
-        "pointer-events-none absolute size-[200px] rounded-full blur-[32.5px]",
-        variant === "primary"
-          ? "lais-glow-orb-primary"
-          : "lais-glow-orb-secondary",
-        className
-      )}
-      data-slot="lais-glow-orb"
-      data-variant={variant}
-    />
-  );
-}
-
 export function LaisSuggestionCard({
   category,
   label = "Sugestão da Lais",
@@ -87,20 +57,13 @@ export function LaisSuggestionCard({
     >
       {glow && (
         /*
-         * Glow frame — see `lais-suggestion-glow` in tokens.css. Offsets below
-         * are the orbs' positions inside Figma's "Circles" frame.
+         * Glow frame — see `lais-suggestion-glow` in tokens.css. Sized to
+         * Figma's "Circles" frame, which is narrower than the card.
          */
-        <div
-          aria-hidden="true"
-          className="lais-suggestion-glow -top-8 bottom-0 left-[calc(50%-153.65px)] w-[307.3px]"
+        <LaisGlow
+          className="-top-8 bottom-0 left-[calc(50%-153.65px)] w-[307.3px]"
           data-slot="lais-suggestion-card-glow"
-        >
-          <GlowOrb className="top-[29.3px] left-[107.3px]" variant="primary" />
-          <GlowOrb
-            className="top-[101.3px] left-[29.3px]"
-            variant="secondary"
-          />
-        </div>
+        />
       )}
 
       <div className="lais-suggestion-float relative z-10">
@@ -131,7 +94,7 @@ export function LaisSuggestionCard({
                   onClick={onDismiss}
                   type="button"
                 >
-                  <CloseIcon className="size-4" />
+                  <XIcon className="size-4" />
                 </button>
               )}
             </div>
