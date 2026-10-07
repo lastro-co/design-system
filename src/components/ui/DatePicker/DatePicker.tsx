@@ -3,7 +3,7 @@
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import * as React from "react";
-import type { Matcher } from "react-day-picker";
+import type { DayPickerProps, Matcher } from "react-day-picker";
 import { cn } from "@/lib/utils";
 import { Calendar, Popover, PopoverContent, PopoverTrigger } from "..";
 import type { PickerTriggerState } from "./PickerTrigger";
@@ -22,6 +22,15 @@ interface DatePickerProps
   className?: string;
   disabledDates?: Matcher | Matcher[];
   state?: PickerTriggerState;
+  /**
+   * `"dropdown"` adds month/year selects to the caption, the way to reach
+   * distant dates (e.g. a birth date). Defaults to `"label"`: arrows only.
+   */
+  captionLayout?: DayPickerProps["captionLayout"];
+  /** First month reachable by the navigation and the caption dropdowns. */
+  startMonth?: Date;
+  /** Last month reachable by the navigation and the caption dropdowns. */
+  endMonth?: Date;
 }
 
 export function DatePicker({
@@ -32,6 +41,9 @@ export function DatePicker({
   disabled,
   disabledDates,
   state = "default",
+  captionLayout,
+  startMonth,
+  endMonth,
   ...props
 }: DatePickerProps) {
   const [open, setOpen] = React.useState(false);
@@ -67,11 +79,14 @@ export function DatePicker({
         {/* The content unmounts on close, so every open re-seeds the visible
             month from the current `value` (or today). */}
         <Calendar
+          captionLayout={captionLayout}
           defaultMonth={value}
           disabled={disabledDates}
+          endMonth={endMonth}
           mode="single"
           onSelect={handleSelect}
           selected={value}
+          startMonth={startMonth}
         />
       </PopoverContent>
     </Popover>

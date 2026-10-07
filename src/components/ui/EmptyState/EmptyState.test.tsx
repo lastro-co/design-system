@@ -53,6 +53,18 @@ describe("EmptyState", () => {
     expect(getIcon(container)).not.toBeInTheDocument();
   });
 
+  it("renders the title as h2 by default and as titleAs when given", () => {
+    const { rerender } = render(<EmptyState title={TITLE} />);
+    expect(
+      screen.getByRole("heading", { level: 2, name: TITLE })
+    ).toBeVisible();
+
+    rerender(<EmptyState title={TITLE} titleAs="h3" />);
+    expect(
+      screen.getByRole("heading", { level: 3, name: TITLE })
+    ).toBeVisible();
+  });
+
   it("renders the description alone, without a heading or top spacing", () => {
     render(<EmptyState description={DESCRIPTION} />);
 
@@ -88,7 +100,7 @@ describe("EmptyState", () => {
       "rounded-lg",
       "border-gray-200",
       "bg-white",
-      "shadow-card"
+      "shadow-xxs"
     );
   });
 

@@ -14,7 +14,7 @@ function Spinner({
 }: Omit<IconProps, "children" | "aria-label">) {
   return (
     <LastroLoaderIcon
-      aria-label="Loader Icon"
+      aria-label="Carregando"
       className={cn(iconVariants({ size, color }), "animate-spin", className)}
       role="status"
       {...props}

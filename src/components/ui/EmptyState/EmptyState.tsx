@@ -13,6 +13,8 @@ type EmptyStateProps = Omit<
   icon?: React.ReactNode;
   /** Heading of the state. Optional — the Figma pattern allows a description alone. */
   title?: React.ReactNode;
+  /** Element of the title, to fit the heading outline of the page. Defaults to `h2`. */
+  titleAs?: "h2" | "h3" | "h4" | "p";
   /** Supporting text explaining why it is empty and what to do next. */
   description?: React.ReactNode;
   /** Call to action, usually a `<Button variant="outline">`. */
@@ -26,6 +28,7 @@ function EmptyState({
   className,
   icon = <InboxIcon />,
   title,
+  titleAs: TitleTag = "h2",
   description,
   action,
   ...props
@@ -33,7 +36,7 @@ function EmptyState({
   return (
     <div
       className={cn(
-        "flex w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white px-6 py-12 text-center shadow-card",
+        "flex w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white px-6 py-12 text-center shadow-xxs",
         className
       )}
       data-slot="empty-state"
@@ -49,12 +52,12 @@ function EmptyState({
         </div>
       )}
       {title && (
-        <h2
+        <TitleTag
           className="font-display font-semibold text-gray-800 text-lg leading-7 tracking-[-0.01em]"
           data-slot="empty-state-title"
         >
           {title}
-        </h2>
+        </TitleTag>
       )}
       {description && (
         <p

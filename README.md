@@ -111,6 +111,82 @@ export default {
 | `@lastro-co/design-system/styles.css` | Design tokens and global styles |
 | `@lastro-co/design-system/tailwind.config` | Tailwind preset (keyframes, theme) |
 
+## Upgrading to 2.0
+
+2.0 aligns the package with the Figma DS 2026.2. Most of the breaks below **do not fail the build**, so search for them instead of relying on `tsc`.
+
+### Status colors: `*-800` → `*-700`
+
+The top step of `green`, `blue`, `yellow`, `red` and `orange` is now `700`, with the same hex the old `800` had. `gray-800` and `purple-800` are unchanged.
+
+A leftover `text-red-800` still compiles: the token is gone, so Tailwind falls back to its **native** `red-800`, a different color. Find them with:
+
+```bash
+grep -rnE '\b[a-z:-]*(red|green|blue|yellow|orange)-800\b' src
+```
+
+The new `-300`/`-400` steps and the whole `orange-*` scale now carry DS hexes, so classes such as `bg-green-400` or `text-orange-700` that used to resolve to Tailwind's palette change color.
+
+### `shadow-xxs` is the card elevation
+
+`shadow-xxs` keeps its name and now carries the DS 2026.2 card shadow (`0 1px 3px rgba(0,0,0,.04), 0 1px 2px rgba(0,0,0,.02)`), softer than the old `0 1px 1px rgba(0,0,0,.08)`. Everything already using `shadow-xxs` (e.g. chat bubbles) picks it up with no code change.
+
+### Icons: `icons` (v1) removed
+
+Import from `@lastro-co/design-system/icons.v2`. Two traps compile fine and still render wrong:
+
+- **Same name, different icon.** Names present in both sets now render the lucide glyph. The notable one is `LoaderIcon`: in v2 it is lucide's `Loader`; the Lastro segmented loader is `LastroLoaderIcon`.
+- **v1 props.** `size="sm"` and `color="purple-800"` type-check against lucide's `size: string | number` and `color: string`, but end up as `width="sm"` and `stroke="purple-800"`. Size and color the icon with classes instead: `className="size-4 text-purple-800"`.
+
+```bash
+grep -rnE 'Icon[^>]*(size="(xs|sm|md|lg|xl)"|color="[a-z]+-[0-9]+")' src
+```
+
+Renamed icons, as migrated in casa-da-lais and chat-module (for the rest, search [lucide.dev](https://lucide.dev)):
+
+| v1 | v2 |
+|---|---|
+| `CloseIcon` | `XIcon` |
+| `GearIcon` | `SettingsIcon` |
+| `ReportIcon` | `OctagonAlertIcon` |
+| `ReportProblemIcon` | `TriangleAlertIcon` |
+| `CheckBoxIcon` | `SquareCheckIcon` |
+| `TranscriptIcon` | `AudioLinesIcon` |
+| `PersonIcon` | `UserRoundIcon` |
+| `PersonOutlineIcon` | `UserIcon` |
+| `PersonCheckIcon` | `UserCheckIcon` |
+| `TeamGroupIcon` | `UsersIcon` |
+| `HouseIcon` | `HomeIcon` |
+| `GridIcon` | `LayoutGridIcon` |
+| `EmojiIcon` | `SmileIcon` |
+| `PaperPlaneIcon` | `SendIcon` |
+| `TuneIcon` | `SlidersHorizontalIcon` |
+| `SyncIcon` | `RefreshCwIcon` |
+| `PadlockIcon` | `LockIcon` |
+| `CredentialsIcon` | `KeyRoundIcon` |
+| `MoneyCircleIcon` | `CircleDollarSignIcon` |
+| `ChatBubbleOutlineIcon` | `MessageCircleIcon` |
+| `PhoneOutlineIcon` | `PhoneIcon` |
+| `ExternalLinkOutlineIcon` | `ExternalLinkIcon` |
+| `ShieldFilledIcon` | `ShieldIcon` |
+| `ConnectedAppsIcon` | `WorkflowIcon` |
+| `ThumbUpIcon` / `ThumbDownIcon` | `ThumbsUpIcon` / `ThumbsDownIcon` |
+
+### Toaster: `closeButton` is `false` by default
+
+A toast with `duration: Infinity` needs `closeButton: true`, or it can only be swiped away. `toast.custom` is not affected.
+
+### DatePicker: the trigger is a button
+
+- No typing: the `dd/MM/yyyy` mask and its parsing are gone. The date is picked in the calendar only.
+- The props extend `<button>`, not `<input>`: `name`, `readOnly`, `required` and a `register()` ref no longer apply. Use a controlled `value`/`onChange` (e.g. `Controller` in react-hook-form).
+- The label reads `6 de outubro de 2026` instead of `06/10/2026`.
+- The calendar caption shows arrows only. For distant dates (a birth date), pass `captionLayout="dropdown"` with `startMonth`/`endMonth`. The standalone `Calendar` defaults to `captionLayout="label"` too.
+
+### Alert
+
+`iconPlacement` is deprecated and ignored: the icon is always on the left. The severity icons are now labelled in Portuguese (`Sucesso`, `Informação`, `Aviso`, `Erro`, `Novidade`), so tests that query them by name (`getByRole('img', { name: 'Info' })`) need the new label. The `Spinner` is labelled `Carregando`.
+
 ## Development
 
 ```bash

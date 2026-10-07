@@ -836,7 +836,9 @@ function MenuItem({
               <MenuItemIcon
                 animatedIcon={animatedIcon}
                 animation={animation}
-                className={styleActive ? "text-white" : "text-gray-400"}
+                // Collapsed, the icon is the item's only visual cue, so it
+                // inherits the button color (gray-400 would fall under 3:1).
+                className={styleActive ? "text-white" : undefined}
                 hovered={hovered}
                 icon={icon}
               />
@@ -1155,7 +1157,8 @@ function MenuAccordionItem({
                   <MenuItemIcon
                     animatedIcon={animatedIcon}
                     animation={animation}
-                    className={styleActive ? "text-white" : "text-gray-400"}
+                    // Same as the collapsed MenuItem: inherit for contrast.
+                    className={styleActive ? "text-white" : undefined}
                     hovered={hovered}
                     icon={icon}
                   />

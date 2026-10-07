@@ -49,6 +49,20 @@ describe("icons.v2 — custom glyph icons", () => {
     }
   );
 
+  it.each(GLYPH_ICONS)(
+    "%s is exposed as an image when labelled by another element",
+    (_name, Icon) => {
+      render(
+        <>
+          <span id="icon-label">Rótulo externo</span>
+          <Icon aria-labelledby="icon-label" />
+        </>
+      );
+      const svg = screen.getByRole("img", { name: "Rótulo externo" });
+      expect(svg).not.toHaveAttribute("aria-hidden");
+    }
+  );
+
   it.each(GLYPH_ICONS)("%s forwards its ref to the svg", (_name, Icon) => {
     const ref = createRef<SVGSVGElement>();
     render(<Icon ref={ref} />);

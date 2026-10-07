@@ -683,5 +683,66 @@ describe("DateRangePicker", () => {
       expect(previous).toHaveAttribute("aria-disabled", "true");
       expect(next).toHaveAttribute("aria-disabled", "true");
     });
+
+    it("trims a preset that runs past the disabled days", async () => {
+      const user = userEvent.setup();
+      const handleChange = jest.fn();
+      render(
+        <DateRangePicker
+          disabledDates={{ after: TODAY }}
+          onChange={handleChange}
+          today={TODAY}
+        />
+      );
+
+      const dialog = await openPicker(user);
+      await user.click(
+        within(dialog).getByRole("button", { name: "Mês atual" })
+      );
+      expect(handleChange).toHaveBeenCalledWith({
+        from: new Date(2026, 8, 1),
+        to: TODAY,
+      });
+    });
+
+    it("trims a preset to startMonth", async () => {
+      const user = userEvent.setup();
+      const handleChange = jest.fn();
+      render(
+        <DateRangePicker
+          onChange={handleChange}
+          startMonth={new Date(2026, 8, 1)}
+          today={TODAY}
+        />
+      );
+
+      const dialog = await openPicker(user);
+      await user.click(
+        within(dialog).getByRole("button", { name: "Últimos 30 dias" })
+      );
+      expect(handleChange).toHaveBeenCalledWith({
+        from: new Date(2026, 8, 1),
+        to: TODAY,
+      });
+    });
+
+    it("drops a preset with no selectable day", async () => {
+      const user = userEvent.setup();
+      render(
+        <DateRangePicker
+          disabledDates={{ after: new Date(2026, 8, 10) }}
+          today={TODAY}
+        />
+      );
+
+      const dialog = await openPicker(user);
+      const group = within(dialog).getByRole("group", { name: "Período" });
+      expect(
+        within(group).queryByRole("button", { name: "Últimos 7 dias" })
+      ).not.toBeInTheDocument();
+      expect(
+        within(group).getByRole("button", { name: "Mês atual" })
+      ).toBeVisible();
+    });
   });
 });

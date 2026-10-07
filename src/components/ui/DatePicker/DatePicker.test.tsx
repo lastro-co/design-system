@@ -135,6 +135,37 @@ describe("DatePicker", () => {
       ).toBeVisible();
     });
 
+    it("keeps the selected date announced next to an external <label htmlFor>", () => {
+      render(
+        <>
+          <label htmlFor="visit-date">Data da visita</label>
+          <DatePicker id="visit-date" value={new Date(2026, 9, 6)} />
+        </>
+      );
+
+      expect(
+        screen.getByRole("button", { name: "Data da visita" })
+      ).toHaveAccessibleDescription("6 de outubro de 2026");
+    });
+
+    it("leaves the description alone when the host composes aria-labelledby", () => {
+      render(
+        <>
+          <span id="visit-title">Data da visita</span>
+          <DatePicker
+            aria-labelledby="visit-title visit-date"
+            id="visit-date"
+            value={new Date(2026, 9, 6)}
+          />
+        </>
+      );
+
+      const trigger = screen.getByRole("button", {
+        name: "Data da visita 6 de outubro de 2026",
+      });
+      expect(trigger).not.toHaveAttribute("aria-describedby");
+    });
+
     it("is reachable by keyboard and opens with Enter", async () => {
       const user = userEvent.setup();
       render(<DatePicker />);
@@ -287,6 +318,23 @@ describe("DatePicker", () => {
 
       const dialog = await openPicker(user);
       expect(within(dialog).getByText("Setembro de 2026")).toBeVisible();
+    });
+
+    it('switches to the month/year caption with captionLayout="dropdown"', async () => {
+      const user = userEvent.setup();
+      render(
+        <DatePicker
+          captionLayout="dropdown"
+          startMonth={new Date(1900, 0)}
+          value={SEPTEMBER_12_2026}
+        />
+      );
+
+      const dialog = await openPicker(user);
+      expect(within(dialog).getByText("Set")).toBeVisible();
+      expect(
+        within(dialog).queryByText("Setembro de 2026")
+      ).not.toBeInTheDocument();
     });
 
     it("opens on the month of the value", async () => {

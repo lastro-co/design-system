@@ -3589,7 +3589,7 @@ describe("Menu resting colors (DS 2026.2)", () => {
     expect(iconWrapper("rest-icon")).toHaveClass("text-gray-400");
   });
 
-  it("MenuItem (collapsed) rests in gray-600 with a gray-400 icon", () => {
+  it("MenuItem (collapsed) icon inherits the gray-600 of the button", () => {
     render(
       <Menu defaultCollapsed>
         <MenuSection>
@@ -3598,7 +3598,7 @@ describe("Menu resting colors (DS 2026.2)", () => {
       </Menu>
     );
     expect(screen.getByRole("button")).toHaveClass(...REST);
-    expect(iconWrapper("rest-icon")).toHaveClass("text-gray-400");
+    expect(iconWrapper("rest-icon")).not.toHaveClass("text-gray-400");
   });
 
   it("active MenuItem keeps the white text and icon", () => {
@@ -3656,7 +3656,7 @@ describe("Menu resting colors (DS 2026.2)", () => {
     expect(chevron).not.toHaveClass("text-gray-800");
   });
 
-  it("MenuAccordionItem (collapsed) trigger rests in gray-600 with a gray-400 icon", () => {
+  it("MenuAccordionItem (collapsed) trigger icon inherits the gray-600 of the button", () => {
     render(
       <Menu defaultCollapsed>
         <MenuSection>
@@ -3670,7 +3670,7 @@ describe("Menu resting colors (DS 2026.2)", () => {
       </Menu>
     );
     expect(screen.getByRole("button")).toHaveClass(...REST);
-    expect(iconWrapper("acc-icon")).toHaveClass("text-gray-400");
+    expect(iconWrapper("acc-icon")).not.toHaveClass("text-gray-400");
   });
 
   it("MenuSubItem rests in gray-600", () => {

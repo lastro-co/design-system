@@ -1,8 +1,17 @@
 "use client";
 
-import { format, isBefore } from "date-fns";
+import {
+  addDays,
+  endOfMonth,
+  format,
+  isAfter,
+  isBefore,
+  startOfMonth,
+  subDays,
+} from "date-fns";
 import * as React from "react";
 import type { DateRange, Matcher } from "react-day-picker";
+import { dateMatchModifiers } from "react-day-picker";
 import { cn } from "@/lib/utils";
 import {
   Button,
@@ -26,7 +35,8 @@ export interface DateRangePickerProps
     "value" | "onChange" | "children"
   > {
   value?: DateRange;
-  onChange?: (range: DateRange | undefined) => void;
+  /** Called with the complete range; the picker has no way to clear it, that is up to the host. */
+  onChange?: (range: DateRange) => void;
   placeholder?: string;
   /** Sidebar shortcuts. Defaults to `getDefaultCalendarPresets()`, recomputed on every open; `false` hides the sidebar. */
   presets?: CalendarPreset[] | false;
@@ -70,6 +80,55 @@ function nextDraft(draft: DateRange | undefined, day: Date): DateRange {
   return isBefore(day, draft.from)
     ? { from: day, to: draft.from }
     : { from: draft.from, to: day };
+}
+
+type SelectableBounds = Pick<
+  DateRangePickerProps,
+  "disabledDates" | "startMonth" | "endMonth"
+>;
+
+function isSelectableDay(
+  day: Date,
+  { disabledDates, startMonth, endMonth }: SelectableBounds
+): boolean {
+  if (startMonth && isBefore(day, startOfMonth(startMonth))) {
+    return false;
+  }
+  if (endMonth && isAfter(day, endOfMonth(endMonth))) {
+    return false;
+  }
+  return !(disabledDates && dateMatchModifiers(day, disabledDates));
+}
+
+// Trims a preset's ends to the days the grid lets you pick: "Semana atual" and
+// "Mês atual" run past today, which a `{ after: today }` matcher forbids.
+// Returns undefined when no selectable day is left.
+function clampToSelectable(
+  range: DateRange,
+  bounds: SelectableBounds
+): DateRange | undefined {
+  if (!(range.from && range.to)) {
+    return range;
+  }
+  let from = range.from;
+  let to = range.to;
+  while (!isAfter(from, to) && !isSelectableDay(from, bounds)) {
+    from = addDays(from, 1);
+  }
+  while (!isAfter(from, to) && !isSelectableDay(to, bounds)) {
+    to = subDays(to, 1);
+  }
+  return isAfter(from, to) ? undefined : { from, to };
+}
+
+function clampPresets(
+  presets: CalendarPreset[] | undefined,
+  bounds: SelectableBounds
+): CalendarPreset[] | undefined {
+  return presets?.flatMap((preset) => {
+    const range = clampToSelectable(preset.range, bounds);
+    return range ? [{ ...preset, range }] : [];
+  });
 }
 
 interface DateRangePickerPanelProps
@@ -118,8 +177,12 @@ function DateRangePickerPanel({
   const [defaultPresets] = React.useState(() =>
     getDefaultCalendarPresets(today)
   );
-  const resolvedPresets =
-    presets === false ? undefined : (presets ?? defaultPresets);
+  // Presets that fall wholly outside the bounds are dropped; the rest are
+  // trimmed, so the highlighted item always matches what gets applied.
+  const resolvedPresets = clampPresets(
+    presets === false ? undefined : (presets ?? defaultPresets),
+    { disabledDates, startMonth, endMonth }
+  );
 
   const handleSelect = (_range: DateRange | undefined, day: Date) => {
     const next = nextDraft(draft, day);

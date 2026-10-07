@@ -94,6 +94,21 @@ describe("Alert", () => {
   });
 });
 
+describe("Alert severity icon", () => {
+  it.each([
+    ["success", "Sucesso"],
+    ["info", "Informação"],
+    ["warning", "Aviso"],
+    ["error", "Erro"],
+    ["neutral", "Informação"],
+    ["brand", "Novidade"],
+  ] as const)("labels the %s icon in Portuguese", (severity, label) => {
+    render(<Alert severity={severity}>Mensagem</Alert>);
+
+    expect(screen.getByRole("img", { name: label })).toBeInTheDocument();
+  });
+});
+
 describe("Alert action", () => {
   it("renders the action slot", () => {
     render(

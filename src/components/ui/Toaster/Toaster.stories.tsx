@@ -366,6 +366,8 @@ export const CustomDuration = {
           onClick={() =>
             toast.success("Toast infinito", {
               duration: Number.POSITIVE_INFINITY,
+              // Without a timeout the toast needs its own way out.
+              closeButton: true,
             })
           }
           variant="outline"

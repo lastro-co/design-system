@@ -1,6 +1,6 @@
 "use client";
 
-import type * as React from "react";
+import * as React from "react";
 import { cn } from "@/lib/utils";
 import { CalendarIcon, ChevronDownIcon } from "../../icons.v2";
 
@@ -39,6 +39,7 @@ export function PickerTrigger({
   disabled,
   ...props
 }: PickerTriggerProps) {
+  const valueId = React.useId();
   const isInvalid = state === "error" || Boolean(props["aria-invalid"]);
   const isSuccess = state === "success" && !isInvalid;
   const contentColor = cn(
@@ -46,9 +47,20 @@ export function PickerTrigger({
     disabled && "text-gray-400"
   );
 
+  // A `<label for>` outranks the content in a button's accessible name, so the
+  // selected value would go unannounced; it goes in the description instead.
+  // Skipped when the host composes `aria-labelledby` with the value itself.
+  const describesValue =
+    hasValue && Boolean(props.id) && !props["aria-labelledby"];
+  const describedBy =
+    [props["aria-describedby"], describesValue && valueId]
+      .filter(Boolean)
+      .join(" ") || undefined;
+
   return (
     <button
       {...props}
+      aria-describedby={describedBy}
       aria-invalid={isInvalid}
       className={cn(
         "flex cursor-pointer items-center rounded-md border border-gray-300 bg-white outline-none transition",
@@ -73,7 +85,10 @@ export function PickerTrigger({
           className={cn("size-4 shrink-0", contentColor)}
         />
       )}
-      <span className={cn("flex-1 truncate text-left", contentColor)}>
+      <span
+        className={cn("flex-1 truncate text-left", contentColor)}
+        id={valueId}
+      >
         {label}
       </span>
       {showChevron && (

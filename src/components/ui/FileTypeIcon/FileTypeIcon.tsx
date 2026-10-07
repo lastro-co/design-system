@@ -1,6 +1,6 @@
 "use client";
 
-import { FileTextIcon } from "@/components/icons.v2";
+import { FileIcon } from "@/components/icons.v2";
 import { cn } from "@/lib/utils";
 import { iconVariants } from "../Icon";
 
@@ -154,9 +154,7 @@ export default function FileTypeIcon({
           {config.label}
         </span>
       ) : (
-        <FileTextIcon
-          className={cn(iconVariants({ size }), config.textColor)}
-        />
+        <FileIcon className={cn(iconVariants({ size }), config.textColor)} />
       )}
     </div>
   );

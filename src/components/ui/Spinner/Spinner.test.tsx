@@ -11,7 +11,7 @@ describe("Spinner", () => {
 
   it("should be accessible with aria-label", () => {
     render(<Spinner />);
-    const spinner = screen.getByLabelText("Loader Icon");
+    const spinner = screen.getByLabelText("Carregando");
     expect(spinner).toBeVisible();
   });
 

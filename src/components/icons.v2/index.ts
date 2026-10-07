@@ -55,6 +55,7 @@ export {
   ExternalLink as ExternalLinkIcon,
   Eye as EyeIcon,
   EyeOff as EyeOffIcon,
+  File as FileIcon,
   FileInput as FileInputIcon,
   FileLock as FileLockIcon,
   FilePenLine as FilePenLineIcon,

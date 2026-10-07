@@ -48,12 +48,12 @@ const SEVERITY_ICON = {
 } as const;
 
 const SEVERITY_ICON_LABEL = {
-  success: "Success",
-  info: "Info",
-  warning: "Warning",
-  error: "Error",
-  neutral: "Info",
-  brand: "Announcement",
+  success: "Sucesso",
+  info: "Informação",
+  warning: "Aviso",
+  error: "Erro",
+  neutral: "Informação",
+  brand: "Novidade",
 } as const;
 
 // Description and dismiss button use the severity color at 80% (Figma DS 2026.2).
@@ -96,7 +96,7 @@ const alertVariants = cva(
   }
 );
 
-type AlertProps = Omit<React.ComponentProps<"div">, "title"> &
+type AlertProps = React.ComponentProps<"div"> &
   VariantProps<typeof alertVariants> & {
     /**
      * Replaces the severity icon. Rendered at 20px in the severity color.

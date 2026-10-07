@@ -14,29 +14,35 @@ interface CustomIconOptions {
 /**
  * Builds a filled glyph icon with the same call signature as the lucide
  * exports (`size`, `className`, SVG props, ref). Decorative by default
- * (`aria-hidden`), exposed as `role="img"` once an `aria-label` is passed.
+ * (`aria-hidden`), exposed as `role="img"` once labelled (`aria-label`,
+ * `aria-labelledby` or an explicit `role`), like lucide's `hasA11yProp`.
  */
 export function createCustomIcon(
   displayName: string,
   { viewBox = "0 0 24 24", children }: CustomIconOptions
 ) {
   const CustomIcon = forwardRef<SVGSVGElement, CustomIconProps>(
-    ({ size = 24, "aria-label": ariaLabel, ...props }, ref) => (
-      <svg
-        aria-hidden={ariaLabel ? undefined : true}
-        aria-label={ariaLabel}
-        fill="currentColor"
-        height={size}
-        ref={ref}
-        role={ariaLabel ? "img" : undefined}
-        viewBox={viewBox}
-        width={size}
-        xmlns="http://www.w3.org/2000/svg"
-        {...props}
-      >
-        {children}
-      </svg>
-    )
+    ({ size = 24, ...props }, ref) => {
+      const isLabelled = Boolean(
+        props["aria-label"] || props["aria-labelledby"] || props.role
+      );
+
+      return (
+        <svg
+          aria-hidden={isLabelled ? undefined : true}
+          fill="currentColor"
+          height={size}
+          ref={ref}
+          role={isLabelled ? "img" : undefined}
+          viewBox={viewBox}
+          width={size}
+          xmlns="http://www.w3.org/2000/svg"
+          {...props}
+        >
+          {children}
+        </svg>
+      );
+    }
   );
 
   CustomIcon.displayName = displayName;

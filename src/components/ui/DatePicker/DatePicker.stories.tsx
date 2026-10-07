@@ -196,7 +196,14 @@ export const InForm: Story = {
           <label className="font-medium text-gray-900 text-sm" htmlFor="birth">
             Data de Nascimento
           </label>
-          <DatePicker id="birth" onChange={setBirthDate} value={birthDate} />
+          <DatePicker
+            captionLayout="dropdown"
+            endMonth={new Date()}
+            id="birth"
+            onChange={setBirthDate}
+            startMonth={new Date(1900, 0)}
+            value={birthDate}
+          />
         </div>
 
         <div className="flex flex-col gap-2">
