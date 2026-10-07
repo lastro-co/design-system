@@ -74,6 +74,9 @@ function SelectValue({
  * With `asChild`, the single child becomes the trigger: it owns its look (no
  * input styling, no chevron is appended) and must be a focusable element such
  * as `IconButton`. Give it an `aria-label`, since there is no `SelectValue`.
+ * The opening direction is set with `align` on `SelectContent` (`"start"`,
+ * the default, grows right from the trigger's left edge; `"end"` grows left
+ * from its right edge; `"center"`).
  */
 function SelectTrigger({
   className,

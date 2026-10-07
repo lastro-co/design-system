@@ -175,33 +175,70 @@ export const WithIcons: Story = {
   },
 };
 
+function renderIconTrigger(
+  args: SelectStoryArgs,
+  align: "start" | "center" | "end"
+) {
+  const {
+    "aria-invalid": _ariaInvalid,
+    variant: _variant,
+    ...selectArgs
+  } = args;
+  return (
+    <Select {...selectArgs}>
+      <SelectTrigger asChild>
+        <IconButton
+          aria-label="Mais filtros"
+          shape="circular"
+          size="small"
+          variant="outline"
+        >
+          <ChevronDownIcon />
+        </IconButton>
+      </SelectTrigger>
+      <SelectContent align={align}>
+        <SelectItem value="unread">Não lidas</SelectItem>
+        <SelectItem value="pinned">Fixadas</SelectItem>
+        <SelectItem value="mine">Atribuídas a mim</SelectItem>
+      </SelectContent>
+    </Select>
+  );
+}
+
 export const IconTrigger: Story = {
-  render: (args) => {
-    const {
-      "aria-invalid": _ariaInvalid,
-      variant: _variant,
-      ...selectArgs
-    } = args;
-    return (
-      <Select {...selectArgs}>
-        <SelectTrigger asChild>
-          <IconButton
-            aria-label="Mais filtros"
-            shape="circular"
-            size="small"
-            variant="outline"
-          >
-            <ChevronDownIcon />
-          </IconButton>
-        </SelectTrigger>
-        <SelectContent align="end">
-          <SelectItem value="unread">Não lidas</SelectItem>
-          <SelectItem value="pinned">Fixadas</SelectItem>
-          <SelectItem value="mine">Atribuídas a mim</SelectItem>
-        </SelectContent>
-      </Select>
-    );
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`SelectTrigger asChild` with an `IconButton` as the trigger. The menu opening direction is set with `align` on `SelectContent` — `"start"` (default) lines it up with the trigger\'s left edge and grows right, `"end"` lines it up with the right edge and grows left, `"center"` centers it. Collision avoidance is off, so pick the side that has room (e.g. `"end"` for a trigger near the right edge).',
+      },
+    },
   },
+  render: (args) => renderIconTrigger(args, "end"),
+};
+
+export const IconTriggerAlignStart: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`align="start"`: the menu opens from the trigger\'s left edge and grows to the right.',
+      },
+    },
+  },
+  render: (args) => renderIconTrigger(args, "start"),
+};
+
+export const IconTriggerAlignEnd: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`align="end"`: the menu opens from the trigger\'s right edge and grows to the left.',
+      },
+    },
+  },
+  render: (args) => renderIconTrigger(args, "end"),
 };
 
 export const Borderless: Story = {
