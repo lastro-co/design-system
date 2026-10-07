@@ -19,6 +19,11 @@ const meta: Meta<typeof DatePicker> = {
       control: "boolean",
       description: "Desabilita o componente",
     },
+    state: {
+      control: "select",
+      options: ["default", "error", "success"],
+      description: "Estado visual de validação do campo",
+    },
   },
 };
 
@@ -91,12 +96,32 @@ export const WithError: Story = {
     return (
       <div className="flex flex-col gap-2">
         <DatePicker
-          aria-invalid={true}
           onChange={setSelectedDate}
           placeholder="Selecione uma data"
+          state="error"
           value={selectedDate}
         />
-        <p className="text-red-600 text-sm">Campo obrigatório</p>
+        <p className="-mt-1 text-red-600 text-xs">Campo obrigatório</p>
+      </div>
+    );
+  },
+};
+
+export const WithSuccess: Story = {
+  render: () => {
+    const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+      new Date()
+    );
+
+    return (
+      <div className="flex flex-col gap-2">
+        <DatePicker
+          onChange={setSelectedDate}
+          placeholder="Selecione uma data"
+          state="success"
+          value={selectedDate}
+        />
+        <p className="-mt-1 text-green-600 text-xs">Data válida.</p>
       </div>
     );
   },

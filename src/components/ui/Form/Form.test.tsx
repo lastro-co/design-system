@@ -157,6 +157,29 @@ function FormMessageWithChildrenComponent() {
   );
 }
 
+/** Form with a FormMessage in success state */
+function FormMessageSuccessComponent() {
+  const form = useForm({ defaultValues: { name: "" } });
+  return (
+    <Form {...form}>
+      <form>
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <input {...field} />
+              </FormControl>
+              <FormMessage state="success">Email válido.</FormMessage>
+            </FormItem>
+          )}
+        />
+      </form>
+    </Form>
+  );
+}
+
 /** Form with custom className on FormDescription */
 function FormDescriptionCustomClassComponent() {
   const form = useForm({ defaultValues: { name: "" } });
@@ -430,6 +453,14 @@ describe("Form Components Integration", () => {
     });
   });
 
+  describe("FormMessage success state", () => {
+    it("applies success text color when state is success and no error", () => {
+      render(<FormMessageSuccessComponent />);
+      const message = screen.getByText("Email válido.");
+      expect(message).toHaveClass("text-green-600");
+    });
+  });
+
   describe("FormLabel required prop", () => {
     it("should render asterisk when required is true", () => {
       render(<RequiredLabelFormComponent />);
@@ -464,7 +495,7 @@ describe("Form Components Integration", () => {
     it("applies default muted styles to FormDescription", () => {
       render(<FormDescriptionCustomClassComponent />);
       const desc = screen.getByText("Helper text");
-      expect(desc).toHaveClass("text-muted-foreground", "text-sm");
+      expect(desc).toHaveClass("text-muted-foreground", "text-xs");
     });
   });
 });
@@ -489,7 +520,7 @@ describe("Form Component Rendering", () => {
     render(<TestFormComponent />);
 
     const description = screen.getByText("This is your public display name.");
-    expect(description).toHaveClass("text-muted-foreground", "text-sm");
+    expect(description).toHaveClass("text-muted-foreground", "text-xs");
     expect(description).toHaveAttribute("data-slot", "form-description");
   });
 
@@ -508,6 +539,13 @@ describe("Form Component Rendering", () => {
 
     const formItem = document.querySelector('[data-slot="form-item"]');
     expect(formItem).toHaveClass("grid", "gap-2");
+  });
+
+  it("should render FormMessage with a 4px offset from the gap-2 baseline", () => {
+    render(<FormMessageWithChildrenComponent />);
+
+    const message = screen.getByText("Static hint message");
+    expect(message).toHaveClass("-mt-1");
   });
 
   it("should render FormControl with data-slot attribute", () => {

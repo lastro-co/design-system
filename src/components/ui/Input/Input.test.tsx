@@ -14,6 +14,24 @@ describe("Input", () => {
     expect(screen.getByPlaceholderText("Search")).toBeVisible();
   });
 
+  it("renders the icon before the input by default", () => {
+    const icon = <span data-testid="test-icon">icon</span>;
+    render(<Input icon={icon} placeholder="Search" />);
+    const input = screen.getByPlaceholderText("Search");
+    expect(screen.getByTestId("test-icon").compareDocumentPosition(input)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING
+    );
+  });
+
+  it("renders the icon after the input when iconPosition is right", () => {
+    const icon = <span data-testid="test-icon">icon</span>;
+    render(<Input icon={icon} iconPosition="right" placeholder="Date" />);
+    const input = screen.getByPlaceholderText("Date");
+    expect(screen.getByTestId("test-icon").compareDocumentPosition(input)).toBe(
+      Node.DOCUMENT_POSITION_PRECEDING
+    );
+  });
+
   it("is disabled when disabled prop is true", () => {
     render(<Input disabled placeholder="Disabled input" />);
     expect(screen.getByPlaceholderText("Disabled input")).toBeDisabled();
@@ -60,6 +78,38 @@ describe("Input", () => {
     expect(screen.getByPlaceholderText("Error with icon")).toHaveAttribute(
       "aria-invalid"
     );
+  });
+
+  it("applies error border via state prop", () => {
+    render(<Input placeholder="Error input" state="error" />);
+    const input = screen.getByPlaceholderText("Error input");
+    expect(input).toHaveAttribute("aria-invalid", "true");
+    expect(input).toHaveClass("aria-invalid:border-red-600");
+  });
+
+  it("applies success border via state prop", () => {
+    render(<Input placeholder="Success input" state="success" />);
+    const input = screen.getByPlaceholderText("Success input");
+    expect(input).toHaveClass("border-green-500");
+    expect(input).toHaveAttribute("aria-invalid", "false");
+  });
+
+  it("applies success border via state prop with icon", () => {
+    const icon = <span data-testid="success-icon">icon</span>;
+    render(
+      <Input icon={icon} placeholder="Success with icon" state="success" />
+    );
+    const wrapper = screen
+      .getByPlaceholderText("Success with icon")
+      .closest("div");
+    expect(wrapper).toHaveClass("border-green-500");
+  });
+
+  it("error state takes precedence over success state", () => {
+    render(<Input aria-invalid placeholder="Both states" state="success" />);
+    const input = screen.getByPlaceholderText("Both states");
+    expect(input).toHaveAttribute("aria-invalid", "true");
+    expect(input).not.toHaveClass("border-green-500");
   });
 
   it("renders different input types", () => {

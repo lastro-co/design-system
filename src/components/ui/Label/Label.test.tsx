@@ -49,6 +49,19 @@ describe("Label", () => {
     expect(screen.getByTestId("test-label")).toBeInTheDocument();
   });
 
+  it("renders a red asterisk when required is true", () => {
+    render(<Label required>Email</Label>);
+    const asterisk = screen.getByText("*");
+    expect(asterisk).toBeInTheDocument();
+    expect(asterisk).toHaveAttribute("aria-hidden", "true");
+    expect(asterisk).toHaveClass("text-red-600");
+  });
+
+  it("does not render an asterisk when required is not set", () => {
+    render(<Label>Email</Label>);
+    expect(screen.queryByText("*")).not.toBeInTheDocument();
+  });
+
   it("exports labelVariants from index", () => {
     expect(labelVariants).toBeDefined();
     expect(typeof labelVariants).toBe("function");

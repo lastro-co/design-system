@@ -6,10 +6,16 @@ import { cn } from "@/lib/utils";
 interface TextareaProps extends React.ComponentProps<"textarea"> {
   resizable?: boolean;
   maxRows?: number;
+  state?: "default" | "error" | "success";
 }
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, resizable = false, maxRows, ...props }, ref) => {
+  (
+    { className, resizable = false, maxRows, state = "default", ...props },
+    ref
+  ) => {
+    const isInvalid = state === "error" || Boolean(props["aria-invalid"]);
+    const isSuccess = state === "success" && !isInvalid;
     const internalRef = React.useRef<HTMLTextAreaElement>(null);
 
     const adjustHeight = React.useCallback(
@@ -132,13 +138,16 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 
     return (
       <textarea
+        aria-invalid={isInvalid}
         className={cn(
-          "flex min-h-12 w-full rounded-md border border-gray-300 bg-white p-2.5 pl-4 text-base text-gray-900 outline-none transition placeholder:text-gray-600",
-          "disabled:pointer-events-none disabled:cursor-not-allowed disabled:select-none disabled:bg-gray-100 disabled:text-gray-600",
+          "flex min-h-10 w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-gray-800 text-sm outline-none transition placeholder:text-gray-500",
+          "focus-visible:border-purple-800 focus-visible:ring-2 focus-visible:ring-purple-400/15",
+          "disabled:pointer-events-none disabled:cursor-not-allowed disabled:select-none disabled:bg-gray-50 disabled:text-gray-400 disabled:opacity-50",
           "selection:bg-text-gray-900 selection:text-purple-foreground",
           "aria-invalid:border-red-600",
+          isSuccess && "border-green-500",
           !resizable && "resize-none",
-          maxRows ? "h-auto" : "h-12",
+          maxRows ? "h-auto" : "h-10",
           className
         )}
         data-slot="textarea"

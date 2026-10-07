@@ -237,6 +237,31 @@ describe("InputTag", () => {
     });
   });
 
+  describe("validation state", () => {
+    it("applies error border via state prop", () => {
+      const { container } = render(<InputTag state="error" />);
+      const input = screen.getByRole("textbox");
+      expect(input).toHaveAttribute("aria-invalid", "true");
+      expect(container.firstChild).toHaveClass(
+        "has-aria-invalid:border-red-600"
+      );
+    });
+
+    it("applies success border via state prop", () => {
+      const { container } = render(<InputTag state="success" />);
+      const input = screen.getByRole("textbox");
+      expect(input).toHaveAttribute("aria-invalid", "false");
+      expect(container.firstChild).toHaveClass("border-green-500");
+    });
+
+    it("error state takes precedence over success state", () => {
+      const { container } = render(<InputTag aria-invalid state="success" />);
+      const input = screen.getByRole("textbox");
+      expect(input).toHaveAttribute("aria-invalid", "true");
+      expect(container.firstChild).not.toHaveClass("border-green-500");
+    });
+  });
+
   it("index.ts exports work correctly", () => {
     const indexExports = require("./index");
     expect(indexExports.InputTag).toBeDefined();

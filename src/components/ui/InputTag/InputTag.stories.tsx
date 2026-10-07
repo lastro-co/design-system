@@ -1,7 +1,9 @@
 import type { Meta } from "@storybook/react-vite";
 import { useState } from "react";
 
-import { PersonIcon, SearchIcon } from "@/components/icons";
+import { SearchIcon, UserIcon } from "@/components/icons.v2";
+import { FormItem } from "../Form";
+import { Label } from "../Label";
 import { InputTag } from "./InputTag";
 
 const meta: Meta<typeof InputTag> = {
@@ -33,6 +35,11 @@ const meta: Meta<typeof InputTag> = {
     placeholder: {
       control: "text",
       description: "Placeholder text when no tags",
+    },
+    state: {
+      control: "select",
+      options: ["default", "error", "success"],
+      description: "Visual validation state of the input",
     },
   },
 };
@@ -92,7 +99,7 @@ export const WithIconRight = {
     return (
       <div className="w-80">
         <InputTag
-          icon={<PersonIcon className="size-4" />}
+          icon={<UserIcon className="size-4" />}
           iconPosition="right"
           onChange={setTags}
           placeholder="Add people..."
@@ -157,20 +164,22 @@ export const AllVariants = {
     const [withIcon, setWithIcon] = useState(["Search 1"]);
     const [limited, setLimited] = useState(["One", "Two"]);
     const [rightIcon, setRightIcon] = useState<string[]>([]);
+    const [errorTags, setErrorTags] = useState<string[]>([]);
+    const [successTags, setSuccessTags] = useState(["Tag válida"]);
 
     return (
       <div className="flex w-80 flex-col gap-6">
-        <div className="space-y-2">
-          <h3 className="font-medium text-lg">Basic</h3>
+        <FormItem>
+          <Label>Default</Label>
           <InputTag
             onChange={setBasic}
             placeholder="Type and press Enter..."
             value={basic}
           />
-        </div>
+        </FormItem>
 
-        <div className="space-y-2">
-          <h3 className="font-medium text-lg">With Icon (Left)</h3>
+        <FormItem>
+          <Label>With Icon (Left)</Label>
           <InputTag
             icon={<SearchIcon className="size-4" />}
             iconPosition="left"
@@ -178,21 +187,21 @@ export const AllVariants = {
             placeholder="Search..."
             value={withIcon}
           />
-        </div>
+        </FormItem>
 
-        <div className="space-y-2">
-          <h3 className="font-medium text-lg">With Icon (Right)</h3>
+        <FormItem>
+          <Label>With Icon (Right)</Label>
           <InputTag
-            icon={<PersonIcon className="size-4" />}
+            icon={<UserIcon className="size-4" />}
             iconPosition="right"
             onChange={setRightIcon}
             placeholder="Add names..."
             value={rightIcon}
           />
-        </div>
+        </FormItem>
 
-        <div className="space-y-2">
-          <h3 className="font-medium text-lg">Max 3 Tags</h3>
+        <FormItem>
+          <Label>Max 3 Tags</Label>
           <InputTag
             maxTags={3}
             onChange={setLimited}
@@ -200,13 +209,49 @@ export const AllVariants = {
             value={limited}
           />
           <p className="text-gray-500 text-xs">{limited.length}/3 tags</p>
-        </div>
+        </FormItem>
 
-        <div className="space-y-2">
-          <h3 className="font-medium text-lg">Disabled</h3>
+        <FormItem>
+          <Label required>Error</Label>
+          <InputTag
+            onChange={setErrorTags}
+            placeholder="Adicione ao menos uma tag..."
+            state="error"
+            value={errorTags}
+          />
+          <p className="-mt-1 text-red-600 text-xs">
+            Este campo é obrigatório.
+          </p>
+        </FormItem>
+
+        <FormItem>
+          <Label required>Success</Label>
+          <InputTag
+            onChange={setSuccessTags}
+            placeholder="Adicione tags..."
+            state="success"
+            value={successTags}
+          />
+          <p className="-mt-1 text-green-600 text-xs">Tags válidas.</p>
+        </FormItem>
+
+        <FormItem>
+          <Label>Disabled</Label>
           {/* biome-ignore lint/suspicious/noEmptyBlockStatements: noop for disabled story */}
           <InputTag disabled onChange={() => {}} value={["Cannot", "Edit"]} />
-        </div>
+        </FormItem>
+
+        <FormItem className="pb-6">
+          <Label>Disabled with Icon</Label>
+          <InputTag
+            disabled
+            icon={<SearchIcon className="size-4" />}
+            iconPosition="left"
+            // biome-ignore lint/suspicious/noEmptyBlockStatements: noop for disabled story
+            onChange={() => {}}
+            value={["Cannot", "Edit"]}
+          />
+        </FormItem>
       </div>
     );
   },

@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "../Button/Button";
 import { Checkbox } from "../Checkbox/Checkbox";
+import { Input } from "../Input/Input";
+import { Textarea } from "../Textarea/Textarea";
 import {
   Form,
   FormControl,
@@ -206,11 +208,7 @@ export const InputForm = {
                 <FormItem>
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <input
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:font-medium file:text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                      placeholder="shadcn"
-                      {...field}
-                    />
+                    <Input placeholder="shadcn" {...field} />
                   </FormControl>
                   <FormDescription>
                     This is your public display name.
@@ -272,11 +270,7 @@ export const ProfileForm = {
                 <FormItem>
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <input
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:font-medium file:text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                      placeholder="johndoe"
-                      {...field}
-                    />
+                    <Input placeholder="johndoe" {...field} />
                   </FormControl>
                   <FormDescription>
                     This is your public display name. It can be your real name
@@ -293,8 +287,7 @@ export const ProfileForm = {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <input
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:font-medium file:text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    <Input
                       placeholder="john@example.com"
                       type="email"
                       {...field}
@@ -314,8 +307,7 @@ export const ProfileForm = {
                 <FormItem>
                   <FormLabel>Bio</FormLabel>
                   <FormControl>
-                    <textarea
-                      className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    <Textarea
                       placeholder="Tell us a little bit about yourself"
                       {...field}
                     />
@@ -473,8 +465,7 @@ export const LoginForm = {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <input
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:font-medium file:text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    <Input
                       placeholder="john@example.com"
                       type="email"
                       {...field}
@@ -491,8 +482,7 @@ export const LoginForm = {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <input
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:font-medium file:text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    <Input
                       placeholder="Enter your password"
                       type="password"
                       {...field}

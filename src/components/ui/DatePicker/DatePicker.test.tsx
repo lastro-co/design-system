@@ -67,7 +67,7 @@ describe("DatePicker", () => {
         <DatePicker disabled placeholder="Selecione uma data" />
       );
       const wrapper = container.querySelector('[data-slot="popover-trigger"]');
-      expect(wrapper).toHaveClass("bg-gray-100");
+      expect(wrapper).toHaveClass("bg-gray-50");
     });
 
     it("should apply pointer-events-none when disabled", () => {
@@ -85,7 +85,45 @@ describe("DatePicker", () => {
         <DatePicker aria-invalid={true} placeholder="Selecione uma data" />
       );
       const wrapper = container.querySelector('[data-slot="popover-trigger"]');
-      expect(wrapper).toHaveClass("border-red-600");
+      expect(wrapper).toHaveClass("has-aria-invalid:border-red-600");
+      const input = screen.getByPlaceholderText("Selecione uma data");
+      expect(input).toHaveAttribute("aria-invalid", "true");
+    });
+
+    it("should apply error border via state prop", () => {
+      const { container } = render(
+        <DatePicker placeholder="Selecione uma data" state="error" />
+      );
+      const input = screen.getByPlaceholderText("Selecione uma data");
+      expect(input).toHaveAttribute("aria-invalid", "true");
+      const wrapper = container.querySelector('[data-slot="popover-trigger"]');
+      expect(wrapper).toHaveClass("has-aria-invalid:border-red-600");
+    });
+  });
+
+  describe("Success State", () => {
+    it("should apply success border via state prop", () => {
+      const { container } = render(
+        <DatePicker placeholder="Selecione uma data" state="success" />
+      );
+      const input = screen.getByPlaceholderText("Selecione uma data");
+      expect(input).toHaveAttribute("aria-invalid", "false");
+      const wrapper = container.querySelector('[data-slot="popover-trigger"]');
+      expect(wrapper).toHaveClass("border-green-500");
+    });
+
+    it("error state takes precedence over success state", () => {
+      const { container } = render(
+        <DatePicker
+          aria-invalid={true}
+          placeholder="Selecione uma data"
+          state="success"
+        />
+      );
+      const input = screen.getByPlaceholderText("Selecione uma data");
+      expect(input).toHaveAttribute("aria-invalid", "true");
+      const wrapper = container.querySelector('[data-slot="popover-trigger"]');
+      expect(wrapper).not.toHaveClass("border-green-500");
     });
   });
 
