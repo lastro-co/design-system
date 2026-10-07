@@ -3,6 +3,8 @@ import { CloseIcon } from "@/components/icons";
 import { render, screen } from "@/tests/app-test-utils";
 import { IconButton, iconButtonVariants } from "./IconButton";
 
+const TEXT_COLOR_CLASS = /\btext-/;
+
 describe("IconButton", () => {
   it("defaults the child icon to 16px, but lets an explicit size class win", () => {
     render(
@@ -122,6 +124,52 @@ describe("IconButton", () => {
       "hover:bg-gray-50",
       "hover:text-gray-800"
     );
+  });
+
+  it("renders the selected variant with the ToggleChip selected tokens", () => {
+    render(
+      <IconButton aria-label="Filters" variant="selected">
+        <CloseIcon />
+      </IconButton>
+    );
+
+    const button = screen.getByRole("button");
+    expect(button).toHaveClass(
+      "border",
+      "border-purple-600",
+      "bg-purple-50",
+      "text-purple-800",
+      "hover:bg-purple-100",
+      "active:bg-purple-100",
+      "disabled:border-purple-600",
+      "disabled:bg-purple-50"
+    );
+  });
+
+  it("paints the child icon purple-800 in the selected variant via currentColor", () => {
+    const { container } = render(
+      <IconButton aria-label="Filters" variant="selected">
+        <CloseIcon />
+      </IconButton>
+    );
+
+    const icon = container.querySelector("svg");
+    expect(icon).toHaveAttribute("fill", "currentColor");
+    expect(icon?.getAttribute("class") ?? "").not.toMatch(TEXT_COLOR_CLASS);
+    expect(screen.getByRole("button")).toHaveClass("text-purple-800");
+  });
+
+  it("keeps the other variants free of the selected tokens", () => {
+    for (const variant of [
+      "default",
+      "outline",
+      "ghost",
+      "destructive",
+    ] as const) {
+      const classes = iconButtonVariants({ variant });
+      expect(classes).not.toContain("bg-purple-50");
+      expect(classes).not.toContain("border-purple-600");
+    }
   });
 
   it("applies active and focus-visible classes", () => {
@@ -293,6 +341,9 @@ describe("IconButton", () => {
     );
     expect(iconButtonVariants({ variant: "destructive" })).toContain(
       "text-red-600"
+    );
+    expect(iconButtonVariants({ variant: "selected" })).toContain(
+      "bg-purple-50"
     );
   });
 
