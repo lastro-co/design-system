@@ -2,7 +2,7 @@ import type { Meta } from "@storybook/react-vite";
 import { Fragment } from "react";
 
 import { InfoIcon } from "@/components/icons";
-import { PlusIcon } from "@/components/icons.v2";
+import { ChevronDownIcon, PlusIcon } from "@/components/icons.v2";
 import { IconButton } from "./IconButton";
 
 const meta: Meta<typeof IconButton> = {
@@ -26,7 +26,7 @@ const meta: Meta<typeof IconButton> = {
     },
     variant: {
       control: "select",
-      options: ["default", "outline", "ghost", "destructive"],
+      options: ["default", "outline", "ghost", "destructive", "selected"],
       description: "IconButton visual style variant",
     },
     loading: {
@@ -72,7 +72,23 @@ export const AsChild = {
   ),
 };
 
-const VARIANTS = ["default", "outline", "ghost", "destructive"] as const;
+export const Selected = {
+  args: {
+    "aria-label": "Filtros ativos",
+    children: <ChevronDownIcon />,
+    shape: "circular",
+    size: "small",
+    variant: "selected",
+  },
+};
+
+const VARIANTS = [
+  "default",
+  "outline",
+  "ghost",
+  "destructive",
+  "selected",
+] as const;
 
 export const AllVariants = {
   render: () => (
