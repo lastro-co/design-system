@@ -52,7 +52,7 @@ describe("LaisSuggestionButton", () => {
         "text-white",
         "focus-visible:outline-purple-400"
       );
-      expect(button).not.toHaveClass("bg-gray-50");
+      expect(button).not.toHaveClass("bg-gray-100");
     });
 
     it("renders the label antialiased without changing the medium weight", () => {
@@ -126,9 +126,14 @@ describe("LaisSuggestionButton", () => {
       await user.click(button);
       expect(onClick).not.toHaveBeenCalled();
       expect(button).toBeDisabled();
+      // Spec "Button - corretor" disabled: gray-400 text and icon, gray-300
+      // halo shadows, 2px backdrop blur, light gray-100 pill.
       expect(button).toHaveClass(
-        "bg-gray-50",
-        "text-gray-500",
+        "lais-suggestion-button-disabled",
+        "bg-gray-100",
+        "border-gray-100",
+        "text-gray-400",
+        "backdrop-blur-[2px]",
         "cursor-not-allowed"
       );
       expect(button).not.toHaveClass("lais-suggestion-button", "text-white");
@@ -159,7 +164,7 @@ describe("LaisSuggestionButton", () => {
       );
       const button = screen.getByRole("button", { name: "Corrigindo…" });
       expect(button).toHaveClass("lais-suggestion-button", "cursor-progress");
-      expect(button).not.toHaveClass("bg-gray-50");
+      expect(button).not.toHaveClass("bg-gray-100");
       expect(iconSlot(container)).toHaveClass(
         "animate-spin",
         "motion-reduce:animate-none"

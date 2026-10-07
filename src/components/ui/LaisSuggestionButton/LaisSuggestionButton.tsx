@@ -70,7 +70,7 @@ const LaisSuggestionButton = React.forwardRef<
           className={cn(
             "inline-flex h-8 shrink-0 select-none items-center justify-center gap-2 whitespace-nowrap rounded-full border-[0.5px] pr-3 pl-2 font-medium font-text text-sm leading-5 antialiased outline-none transition-[filter,background-color,color] duration-200 ease-out focus-visible:outline-2 focus-visible:outline-purple-400 focus-visible:outline-offset-2 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
             isPale
-              ? "cursor-not-allowed border-gray-200 bg-gray-50 text-gray-500"
+              ? "lais-suggestion-button-disabled cursor-not-allowed border-gray-100 bg-gray-100 text-gray-400 backdrop-blur-[2px]"
               : "lais-suggestion-button cursor-pointer border-purple-200/80 text-white backdrop-blur-[1px] enabled:active:brightness-95 enabled:hover:brightness-110",
             loading && "cursor-progress",
             className
