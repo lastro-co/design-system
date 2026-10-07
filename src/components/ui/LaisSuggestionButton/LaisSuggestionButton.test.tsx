@@ -223,7 +223,13 @@ describe("LaisSuggestionButton", () => {
       expect(frame.parentElement).toBe(root);
       expect(button.parentElement).toBe(root);
       expect(button).not.toContainElement(frame);
-      expect(frame).toHaveClass("lais-suggestion-glow", "-z-10", "scale-[0.4]");
+      expect(frame).toHaveClass(
+        "lais-suggestion-glow",
+        "-z-10",
+        "scale-x-[0.55]",
+        "scale-y-[0.2]",
+        "opacity-60"
+      );
       expect(
         frame.querySelectorAll('[data-slot="lais-glow-orb"]')
       ).toHaveLength(2);

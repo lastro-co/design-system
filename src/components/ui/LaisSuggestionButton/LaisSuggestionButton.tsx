@@ -55,11 +55,12 @@ const LaisSuggestionButton = React.forwardRef<
         {!isPale && (
           /*
            * The card's glow frame (307.3 x 301.3, both orbs inside), centred
-           * on the pill and scaled down as a whole so gradients, blur and
-           * motion keep their proportions.
+           * on the pill and flattened to roughly its size (~170 x 60) at 60%
+           * opacity: a subtle halo that hugs the pill, as the design has it,
+           * not the card's wide ambient glow.
            */
           <LaisGlow
-            className="-z-10 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 h-[301.3px] w-[307.3px] scale-[0.4]"
+            className="-z-10 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 h-[301.3px] w-[307.3px] scale-x-[0.55] scale-y-[0.2] opacity-60"
             data-slot="lais-suggestion-button-glow"
           />
         )}
