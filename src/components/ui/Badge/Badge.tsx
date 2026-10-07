@@ -5,27 +5,43 @@ import type * as React from "react";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex h-6 w-fit shrink-0 select-none items-center justify-center gap-1.5 overflow-hidden whitespace-nowrap rounded-full border py-0.5 font-medium has-[>img]:pl-[3px] has-[>svg]:pl-[3px] [&>img]:size-4 [&>svg]:pointer-events-none [&>svg]:size-4 [&>svg]:antialiased [&>svg]:subpixel-antialiased",
+  "inline-flex h-6 w-fit shrink-0 select-none items-center justify-center gap-1 overflow-hidden whitespace-nowrap rounded-full border border-transparent py-0.5 font-medium has-[>img]:pl-[3px] has-[>svg]:pl-[3px] [&>img]:size-4 [&>svg]:pointer-events-none [&>svg]:size-4 [&>svg]:antialiased [&>svg]:subpixel-antialiased",
   {
     variants: {
       color: {
-        blue: "border-blue-700/10 bg-blue-50 text-blue-700",
-        gray: "border-gray-800/10 bg-gray-100 text-gray-800",
-        green: "border-green-700/10 bg-green-50 text-green-700",
-        orange: "border-orange-700/10 bg-orange-50 text-orange-700",
-        purple: "border-purple-800/10 bg-purple-100 text-purple-800",
-        red: "border-red-700/10 bg-red-50 text-red-700",
+        default: "bg-purple-800 text-white",
+        secondary: "bg-white text-gray-700",
+        destructive: "bg-red-600 text-white",
+        outline: "border-gray-800 bg-transparent text-gray-800",
+        blue: "bg-blue-100 text-blue-700",
+        gray: "bg-gray-100 text-gray-700",
+        green: "bg-green-100 text-green-700",
+        orange: "bg-[#ffedd5] text-[#9a3412]",
+        purple: "bg-purple-100 text-purple-800",
+        red: "bg-red-100 text-red-700",
         white: "border-gray-800/10 bg-white text-gray-800",
-        yellow: "border-yellow-700/10 bg-yellow-50 text-yellow-700",
+        yellow: "bg-yellow-100 text-yellow-700",
       },
       size: {
-        small: "px-2 text-xs",
-        medium: "px-3 text-sm",
+        small: "px-2 text-xs leading-4",
+        medium: "px-3 text-sm leading-5",
       },
       isNumber: {
         true: "h-5 min-w-5 p-1",
       },
     },
+    compoundVariants: [
+      {
+        color: "outline",
+        size: "small",
+        class: "px-[7px] py-px",
+      },
+      {
+        color: "outline",
+        size: "medium",
+        class: "px-[11px] py-px",
+      },
+    ],
     defaultVariants: {
       color: "gray",
       size: "small",

@@ -10,7 +10,7 @@ describe("Badge", () => {
   it("should apply color variant", () => {
     const { container } = render(<Badge color="blue">Blue Badge</Badge>);
     const badge = container.querySelector('[data-slot="badge"]');
-    expect(badge).toHaveClass("bg-blue-50", "text-blue-700");
+    expect(badge).toHaveClass("bg-blue-100", "text-blue-700");
   });
 
   it("should apply size variant", () => {
@@ -71,13 +71,14 @@ describe("Badge", () => {
 
   it("should apply all color variants", () => {
     const colorMap = {
-      gray: ["bg-gray-100", "text-gray-800"],
-      green: ["bg-green-50", "text-green-700"],
-      orange: ["bg-orange-50", "text-orange-700"],
+      gray: ["bg-gray-100", "text-gray-700"],
+      green: ["bg-green-100", "text-green-700"],
+      orange: ["bg-[#ffedd5]", "text-[#9a3412]"],
       purple: ["bg-purple-100", "text-purple-800"],
-      red: ["bg-red-50", "text-red-700"],
+      red: ["bg-red-100", "text-red-700"],
+      yellow: ["bg-yellow-100", "text-yellow-700"],
+      blue: ["bg-blue-100", "text-blue-700"],
       white: ["bg-white", "text-gray-800"],
-      yellow: ["bg-yellow-50", "text-yellow-700"],
     } as const;
 
     for (const [color, classes] of Object.entries(colorMap)) {
@@ -88,5 +89,46 @@ describe("Badge", () => {
       expect(badge).toHaveClass(...classes);
       unmount();
     }
+  });
+
+  it("should apply the default color", () => {
+    const { container } = render(<Badge color="default">Default</Badge>);
+    const badge = container.querySelector('[data-slot="badge"]');
+    expect(badge).toHaveClass("bg-purple-800", "text-white");
+  });
+
+  it("should apply the secondary color", () => {
+    const { container } = render(<Badge color="secondary">Secondary</Badge>);
+    const badge = container.querySelector('[data-slot="badge"]');
+    expect(badge).toHaveClass("bg-white", "text-gray-700");
+  });
+
+  it("should apply the destructive color", () => {
+    const { container } = render(
+      <Badge color="destructive">Destructive</Badge>
+    );
+    const badge = container.querySelector('[data-slot="badge"]');
+    expect(badge).toHaveClass("bg-red-600", "text-white");
+  });
+
+  it("should apply the outline color with its border and compensated padding", () => {
+    const { container } = render(<Badge color="outline">Outline</Badge>);
+    const badge = container.querySelector('[data-slot="badge"]');
+    expect(badge).toHaveClass(
+      "border-gray-800",
+      "bg-transparent",
+      "text-gray-800",
+      "px-[7px]"
+    );
+  });
+
+  it("should apply outline padding for medium size", () => {
+    const { container } = render(
+      <Badge color="outline" size="medium">
+        Outline
+      </Badge>
+    );
+    const badge = container.querySelector('[data-slot="badge"]');
+    expect(badge).toHaveClass("px-[11px]");
   });
 });
