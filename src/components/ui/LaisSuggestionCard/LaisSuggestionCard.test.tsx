@@ -134,11 +134,40 @@ describe("LaisSuggestionCard", () => {
     expect(orbs(frame)).toHaveLength(2);
   });
 
+  it("positions the shared glow frame and orbs exactly as the card design", () => {
+    const { container } = render(<LaisSuggestionCard {...baseProps} />);
+    const frame = container.querySelector(
+      '[data-slot="lais-suggestion-card-glow"]'
+    ) as HTMLElement;
+    expect(frame).toHaveClass(
+      "-top-8",
+      "bottom-0",
+      "left-[calc(50%-153.65px)]",
+      "w-[307.3px]"
+    );
+    expect(frame.querySelector(".lais-glow-orb-primary")).toHaveClass(
+      "top-[29.3px]",
+      "left-[107.3px]"
+    );
+    expect(frame.querySelector(".lais-glow-orb-secondary")).toHaveClass(
+      "top-[101.3px]",
+      "left-[29.3px]"
+    );
+  });
+
   it("drops the glow orbs when glow is false", () => {
     const { container } = render(
       <LaisSuggestionCard {...baseProps} glow={false} />
     );
     expect(orbs(container)).toHaveLength(0);
+  });
+
+  // A fixed width overflows a narrow host, and the consumer may not override it.
+  it("is fluid up to 480px instead of a fixed width", () => {
+    const { container } = render(<LaisSuggestionCard {...baseProps} />);
+    const root = container.querySelector('[data-slot="lais-suggestion-card"]');
+    expect(root).toHaveClass("w-full", "max-w-[480px]");
+    expect(root).not.toHaveClass("w-[480px]");
   });
 
   it("merges className on the root and announces politely", () => {

@@ -161,8 +161,9 @@
  * node 9852:36974). Timings below are the exported keyframe times (fractions of
  * the 6s timeline) converted to percentages.
  *
- * The `lais-glow-orb-*` utilities back the card's private GlowOrb; they are not
- * meant to be used on their own.
+ * The `lais-glow-orb-*` and `lais-suggestion-glow` utilities back the shared
+ * Lais glow (internal `LaisGlow`, used by LaisSuggestionCard and
+ * LaisSuggestionButton); they are not meant to be used on their own.
  * ------------------------------------------------------------------------- */
 
 /* --- Glow orb ---------------------------------------------------------------
@@ -430,6 +431,19 @@
  * the card, so across the card it resolves to a linear ramp (verified: the
  * gradient parameter at the centre equals the mean of the four corners).
  */
+/*
+ * Fill for <LaisLogo badge />. Lives in CSS, not in an SVG <radialGradient>, so a
+ * list rendering many badges has no gradient ids to collide.
+ */
+@utility lais-logo-badge {
+  background-image: radial-gradient(
+    100.83% 100.83% at 30.21% 5.21%,
+    var(--color-purple-400) 0%,
+    var(--color-purple-800) 49.93%,
+    var(--color-purple-900) 100%
+  );
+}
+
 @utility lais-suggestion-surface {
   position: relative;
   /*
@@ -514,4 +528,36 @@
   @media (prefers-reduced-motion: reduce) {
     animation: none;
   }
+}
+
+/* ---------------------------------------------------------------------------
+ * LaisSuggestionButton
+ * Pill-shaped Lais action that sits above the chat composer ("Corrigir texto").
+ * Radial purple fill and halo shadows exactly as Figma Dev Mode exports them. Per
+ * the design spec, the effect behind the pill is the suggestion card's
+ * "Circles" (`LaisGlow`, sized to 57.04 x 48 by the component) plus the two
+ * halo shadows below; the component adds the 1px backdrop blur. Focus is drawn
+ * with `outline` by the component so it does not replace these shadows.
+ * ------------------------------------------------------------------------- */
+@utility lais-suggestion-button {
+  /* Figma Dev Mode, "SPEC / BUTTON". The 0.5px purple-200/80 border is set by
+   * the component; no inset ring here, or the pill reads as double-bordered. */
+  background: radial-gradient(
+    703.7% 171.61% at 112.81% 138.78%,
+    color-mix(in srgb, var(--color-purple-400) 60%, transparent) 0%,
+    color-mix(in srgb, var(--color-purple-900) 90%, transparent) 61.54%,
+    var(--color-purple-700) 100%
+  );
+  box-shadow:
+    0 0 120px 0 color-mix(in srgb, var(--color-purple-300) 35%, transparent),
+    0 0 40px 0 color-mix(in srgb, var(--color-purple-400) 45%, transparent);
+}
+
+/* Disabled LaisSuggestionButton, spec "Button - corretor": the same two halo
+ * shadows as the enabled pill, in gray-300 (hsla(240, 10%, 84%, 1)). Text and
+ * icon are gray-400 and the 2px backdrop blur is set by the component. */
+@utility lais-suggestion-button-disabled {
+  box-shadow:
+    0 0 40px 0 var(--color-gray-300),
+    0 0 120px 0 var(--color-gray-300);
 }

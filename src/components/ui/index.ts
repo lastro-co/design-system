@@ -139,6 +139,8 @@ export { InputTag } from "./InputTag";
 export { Label } from "./Label";
 export type { LaisLogoProps } from "./LaisLogo";
 export { LaisLogo } from "./LaisLogo";
+export type { LaisSuggestionButtonProps } from "./LaisSuggestionButton";
+export { LaisSuggestionButton } from "./LaisSuggestionButton";
 export type {
   LaisSuggestionCardAction,
   LaisSuggestionCardProps,

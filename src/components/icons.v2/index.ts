@@ -156,6 +156,7 @@ export {
   Trash2 as TrashIcon,
   TrendingUp as TrendingUpIcon,
   TriangleAlert as TriangleAlertIcon,
+  Undo2 as UndoIcon,
   User as UserIcon,
   UserCheck as UserCheckIcon,
   UserRound as UserRoundIcon,
