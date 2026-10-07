@@ -128,6 +128,7 @@ export { ThumbUpIcon } from "./ThumbUpIcon";
 export { TranscriptIcon } from "./TranscriptIcon";
 export { TrashIcon } from "./TrashIcon";
 export { TuneIcon } from "./TuneIcon";
+export { UndoIcon } from "./UndoIcon";
 export { UserVoiceIcon } from "./UserVoiceIcon";
 export { WalletIcon } from "./WalletIcon";
 export { WhatsAppIcon } from "./WhatsAppIcon";
