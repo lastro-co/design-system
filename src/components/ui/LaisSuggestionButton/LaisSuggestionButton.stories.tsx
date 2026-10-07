@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { RotateCcwIcon } from "@/components/icons";
+import { UndoIcon } from "@/components/icons";
 import { LaisSuggestionButton } from "./LaisSuggestionButton";
 
 const meta: Meta<typeof LaisSuggestionButton> = {
@@ -78,7 +78,7 @@ export const WithCustomIcon: Story = {
   name: "Com ícone customizado",
   args: {
     children: "Desfazer correção",
-    icon: <RotateCcwIcon className="size-4" />,
+    icon: <UndoIcon className="size-4" />,
   },
 };
 
@@ -89,7 +89,7 @@ export const States: Story = {
       <div className="flex flex-wrap items-center justify-center gap-4">
         <LaisSuggestionButton>Corrigir texto</LaisSuggestionButton>
         <LaisSuggestionButton loading>Corrigindo…</LaisSuggestionButton>
-        <LaisSuggestionButton icon={<RotateCcwIcon className="size-4" />}>
+        <LaisSuggestionButton icon={<UndoIcon className="size-4" />}>
           Desfazer correção
         </LaisSuggestionButton>
         <LaisSuggestionButton disabled>Corrigir texto</LaisSuggestionButton>

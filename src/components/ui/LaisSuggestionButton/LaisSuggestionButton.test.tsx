@@ -1,6 +1,6 @@
 import userEvent from "@testing-library/user-event";
 import { createRef } from "react";
-import { RotateCcwIcon } from "@/components/icons";
+import { UndoIcon } from "@/components/icons";
 import { render, screen } from "@/tests/app-test-utils";
 import { LaisSuggestionButton } from "./LaisSuggestionButton";
 
@@ -163,7 +163,7 @@ describe("LaisSuggestionButton", () => {
     it("shows the spinning Lais symbol even when a custom icon is set", () => {
       const { container } = render(
         <LaisSuggestionButton
-          icon={<RotateCcwIcon data-testid="undo-icon" />}
+          icon={<UndoIcon data-testid="undo-icon" />}
           loading
         >
           Corrigindo…
@@ -179,7 +179,7 @@ describe("LaisSuggestionButton", () => {
   describe("custom icon", () => {
     it("replaces the Lais symbol and stays decorative", () => {
       const { container } = render(
-        <LaisSuggestionButton icon={<RotateCcwIcon data-testid="undo-icon" />}>
+        <LaisSuggestionButton icon={<UndoIcon data-testid="undo-icon" />}>
           Desfazer correção
         </LaisSuggestionButton>
       );
