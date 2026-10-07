@@ -10,7 +10,7 @@ describe("Badge", () => {
   it("should apply color variant", () => {
     const { container } = render(<Badge color="blue">Blue Badge</Badge>);
     const badge = container.querySelector('[data-slot="badge"]');
-    expect(badge).toHaveClass("bg-blue-50", "text-blue-800");
+    expect(badge).toHaveClass("bg-blue-50", "text-blue-700");
   });
 
   it("should apply size variant", () => {
@@ -72,12 +72,12 @@ describe("Badge", () => {
   it("should apply all color variants", () => {
     const colorMap = {
       gray: ["bg-gray-100", "text-gray-800"],
-      green: ["bg-green-50", "text-green-800"],
-      orange: ["bg-orange-50", "text-orange-800"],
+      green: ["bg-green-50", "text-green-700"],
+      orange: ["bg-orange-50", "text-orange-700"],
       purple: ["bg-purple-100", "text-purple-800"],
-      red: ["bg-red-50", "text-red-800"],
+      red: ["bg-red-50", "text-red-700"],
       white: ["bg-white", "text-gray-800"],
-      yellow: ["bg-yellow-50", "text-yellow-800"],
+      yellow: ["bg-yellow-50", "text-yellow-700"],
     } as const;
 
     for (const [color, classes] of Object.entries(colorMap)) {

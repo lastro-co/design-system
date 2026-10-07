@@ -46,7 +46,7 @@ const IntroductionPage = () => (
       />
       <h3 style={h3Style}>Importar ícones</h3>
       <CodeBlock
-        code={`import { CheckIcon, HouseIcon, SearchIcon } from "@lastro-co/design-system/icons";`}
+        code={`import { CheckIcon, HomeIcon, SearchIcon } from "@lastro-co/design-system/icons.v2";`}
       />
       <h3 style={h3Style}>Importar utilitários</h3>
       <CodeBlock
@@ -92,11 +92,13 @@ export default {
         <li>Dados — Table, Badge, Avatar, Calendar</li>
       </ul>
       <h3 style={h3Style}>
-        Ícones (<code style={codeStyle}>@lastro-co/design-system/icons</code>)
+        Ícones (<code style={codeStyle}>@lastro-co/design-system/icons.v2</code>
+        )
       </h3>
       <p>
-        93+ ícones SVG com suporte a tamanhos, cores e variantes
-        (outline/filled).
+        Ícones do lucide com o sufixo <code style={codeStyle}>Icon</code>,
+        variantes animadas (<code style={codeStyle}>AnimatedXIcon</code>) e
+        ícones de marca (WhatsApp, Credaluga).
       </p>
       <h3 style={h3Style}>Design Tokens</h3>
       <p>

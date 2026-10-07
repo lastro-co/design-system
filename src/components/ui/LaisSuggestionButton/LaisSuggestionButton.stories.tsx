@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { UndoIcon } from "@/components/icons";
+import { UndoIcon } from "@/components/icons.v2";
 import { LaisSuggestionButton } from "./LaisSuggestionButton";
 
 const meta: Meta<typeof LaisSuggestionButton> = {

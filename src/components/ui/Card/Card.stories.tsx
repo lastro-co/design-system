@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ChevronRightIcon } from "@/components/icons/ChevronRightIcon";
+import { ChevronRightIcon } from "@/components/icons.v2";
 import {
   Card,
   CardContent,

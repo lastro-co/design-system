@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { StarIcon } from "@/components/icons";
-import { StarIcon as StarOutlineIcon } from "@/components/icons.v2";
+import { StarIcon } from "@/components/icons.v2";
 import { OpportunityCard } from "./OpportunityCard";
 
 const noop = () => {
@@ -28,7 +27,7 @@ type Story = StoryObj<typeof OpportunityCard>;
 
 const remarketingDefaults = {
   tag: "Oportunidade",
-  tagIcon: <StarOutlineIcon className="size-4" />,
+  tagIcon: <StarIcon className="size-4" />,
   title: "Dispare um remarketing para 72 leads",
   description:
     "Você tem leads que não responderam nos últimos 7 dias. A Lais sugere um disparo em massa para eles.",
@@ -86,7 +85,7 @@ export const LegacyDefaults: Story = {
     ...remarketingDefaults,
     size: "medium",
     actionsAlignment: "end",
-    tagIcon: <StarIcon className="size-4" />,
+    tagIcon: <StarIcon className="size-4" fill="currentColor" />,
   },
 };
 

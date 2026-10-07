@@ -2,14 +2,14 @@
 
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
 import {
-  LoaderIcon,
+  LastroLoaderIcon,
   LocateIcon,
   MaximizeIcon,
   MinusIcon,
   PlusIcon,
-} from "../../icons";
+} from "@/components/icons.v2";
+import { cn } from "@/lib/utils";
 
 import { useMap } from "./hooks";
 import type { MapControlsProps } from "./types";
@@ -176,17 +176,17 @@ export function MapControls({
       {showZoom && (
         <ControlGroup>
           <ControlButton label="Zoom in" onClick={handleZoomIn}>
-            <PlusIcon className="text-purple-800" size="sm" />
+            <PlusIcon className="size-4 text-purple-800" />
           </ControlButton>
           <ControlButton label="Zoom out" onClick={handleZoomOut}>
-            <MinusIcon className="text-purple-800" size="sm" />
+            <MinusIcon className="size-4 text-purple-800" />
           </ControlButton>
         </ControlGroup>
       )}
       {showRecenter && onRecenter && (
         <ControlGroup>
           <ControlButton label="Recenter map" onClick={onRecenter}>
-            <LocateIcon className="text-purple-800" size="sm" />
+            <LocateIcon className="size-4 text-purple-800" />
           </ControlButton>
         </ControlGroup>
       )}
@@ -203,9 +203,9 @@ export function MapControls({
             onClick={handleLocate}
           >
             {waitingForLocation ? (
-              <LoaderIcon className="animate-spin text-purple-800" size="sm" />
+              <LastroLoaderIcon className="size-4 animate-spin text-purple-800" />
             ) : (
-              <LocateIcon className="text-purple-800" size="sm" />
+              <LocateIcon className="size-4 text-purple-800" />
             )}
           </ControlButton>
         </ControlGroup>
@@ -213,7 +213,7 @@ export function MapControls({
       {showFullscreen && (
         <ControlGroup>
           <ControlButton label="Toggle fullscreen" onClick={handleFullscreen}>
-            <MaximizeIcon className="text-purple-800" size="sm" />
+            <MaximizeIcon className="size-4 text-purple-800" />
           </ControlButton>
         </ControlGroup>
       )}

@@ -3,8 +3,8 @@
 import MapLibreGL from "maplibre-gl";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { XIcon } from "@/components/icons.v2";
 import { cn } from "@/lib/utils";
-import { CloseIcon } from "../../icons";
 
 import { useMap } from "./hooks";
 import type { MapPopupProps } from "./types";
@@ -125,7 +125,7 @@ export function MapPopup({
           onClick={handleClose}
           type="button"
         >
-          <CloseIcon size="sm" />
+          <XIcon className="size-4" />
           <span className="sr-only">Close</span>
         </button>
       )}

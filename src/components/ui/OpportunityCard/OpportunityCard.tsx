@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { CloseIcon } from "@/components/icons";
+import { XIcon } from "@/components/icons.v2";
 import { cn } from "@/lib/utils";
 
 export interface OpportunityCardAction {
@@ -72,7 +72,7 @@ export function OpportunityCard({
             onClick={onDismiss}
             type="button"
           >
-            <CloseIcon className="size-4" />
+            <XIcon className="size-4" />
           </button>
         )}
       </div>

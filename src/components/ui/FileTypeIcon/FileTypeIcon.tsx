@@ -1,7 +1,8 @@
 "use client";
 
+import { FileIcon } from "@/components/icons.v2";
 import { cn } from "@/lib/utils";
-import { FileIcon } from "../../icons";
+import { iconVariants } from "../Icon";
 
 type FileType = "pdf" | "doc" | "xls" | "txt" | "image" | "default";
 
@@ -153,7 +154,7 @@ export default function FileTypeIcon({
           {config.label}
         </span>
       ) : (
-        <FileIcon className={config.textColor} size={size} />
+        <FileIcon className={cn(iconVariants({ size }), config.textColor)} />
       )}
     </div>
   );

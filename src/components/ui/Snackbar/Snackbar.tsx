@@ -2,8 +2,8 @@
 
 import { cva, type VariantProps } from "class-variance-authority";
 import type * as React from "react";
+import { XIcon } from "@/components/icons.v2";
 import { cn } from "@/lib/utils";
-import { CloseIcon } from "../../icons";
 
 const snackbarVariants = cva(
   "flex w-full items-center gap-4 px-6 py-3 font-medium text-sm text-white",
@@ -60,7 +60,7 @@ function Snackbar({
           onClick={onDismiss}
           type="button"
         >
-          <CloseIcon color="white" size="sm" />
+          <XIcon className="size-4 text-white" />
         </button>
       ) : null}
     </div>

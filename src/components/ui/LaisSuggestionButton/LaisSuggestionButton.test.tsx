@@ -1,6 +1,6 @@
 import userEvent from "@testing-library/user-event";
 import { createRef } from "react";
-import { UndoIcon } from "@/components/icons";
+import { UndoIcon } from "@/components/icons.v2";
 import { render, screen } from "@/tests/app-test-utils";
 import { LaisSuggestionButton } from "./LaisSuggestionButton";
 

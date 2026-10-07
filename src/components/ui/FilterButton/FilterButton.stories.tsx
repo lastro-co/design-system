@@ -1,6 +1,6 @@
 import type { Meta } from "@storybook/react-vite";
 
-import { GearIcon, SearchIcon } from "@/components/icons";
+import { SearchIcon, SettingsIcon } from "@/components/icons.v2";
 import { FilterButton } from "./FilterButton";
 
 const meta: Meta<typeof FilterButton> = {
@@ -110,7 +110,7 @@ export const AllVariants = {
           />
           <FilterButton
             count={1}
-            icon={<GearIcon className="text-purple-800" />}
+            icon={<SettingsIcon className="text-purple-800" />}
             label="Config"
           />
         </div>

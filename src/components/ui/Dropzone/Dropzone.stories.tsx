@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useCallback, useState } from "react";
-import { DocumentUpIcon, ImageUpIcon } from "@/components/icons/colored";
+import { FileInputIcon, ImageUpIcon } from "@/components/icons.v2";
 import { FilePreview, ImagePreview } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import { Dropzone, DropzoneContent, DropzoneEmptyState } from "./Dropzone";
@@ -77,7 +77,7 @@ function ImageUploadDropzone() {
     >
       <DropzoneEmptyState>
         <div className="flex max-w-[364px] flex-col items-center justify-center text-gray-900">
-          <ImageUpIcon />
+          <ImageUpIcon className="size-12 text-purple-800" />
           <p className="mt-4 w-full text-wrap text-center font-text text-sm">
             Arraste e solte aqui a imagem no formato .png, .jpg ou .jpeg ou
             selecione o arquivo do seu dispositivo.
@@ -140,7 +140,7 @@ function FileUploadDropzone() {
     >
       <DropzoneEmptyState>
         <div className="flex max-w-[364px] flex-col items-center justify-center text-gray-900">
-          <DocumentUpIcon />
+          <FileInputIcon className="size-12 text-purple-800" />
           <p className="mt-4 w-full text-wrap text-center font-text text-sm">
             Arraste e solte aqui o arquivo no formato .pdf, .doc ou .xls ou
             selecione o arquivo do seu dispositivo.

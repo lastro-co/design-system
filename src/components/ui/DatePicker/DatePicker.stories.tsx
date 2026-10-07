@@ -30,9 +30,54 @@ const meta: Meta<typeof DatePicker> = {
 export default meta;
 type Story = StoryObj<typeof DatePicker>;
 
+// Figma's closed trigger frame is 240px wide; the picker itself is w-full.
+const figmaWidth: Story["decorators"] = [
+  (Story) => (
+    <div className="w-60">
+      <Story />
+    </div>
+  ),
+];
+
 export const Default: Story = {
+  decorators: figmaWidth,
   args: {
     placeholder: "Selecione uma data",
+  },
+};
+
+export const WithValue: Story = {
+  decorators: figmaWidth,
+  args: {
+    value: new Date(2026, 8, 12),
+  },
+};
+
+export const Open: Story = {
+  decorators: figmaWidth,
+  args: {
+    value: new Date(2026, 11, 10),
+  },
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole("button"));
+  },
+};
+
+export const WithDisabledDates: Story = {
+  decorators: figmaWidth,
+  render: () => {
+    const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+    const isWeekend = (date: Date) =>
+      date.getDay() === 0 || date.getDay() === 6;
+
+    return (
+      <DatePicker
+        disabledDates={isWeekend}
+        onChange={setSelectedDate}
+        placeholder="Selecione um dia útil"
+        value={selectedDate}
+      />
+    );
   },
 };
 
@@ -59,6 +104,7 @@ export const Controlled: Story = {
 };
 
 export const WithCustomPlaceholder: Story = {
+  decorators: figmaWidth,
   render: () => {
     const [selectedDate, setSelectedDate] = useState<Date | undefined>();
 
@@ -73,6 +119,7 @@ export const WithCustomPlaceholder: Story = {
 };
 
 export const Disabled: Story = {
+  decorators: figmaWidth,
   render: () => {
     const [selectedDate, setSelectedDate] = useState<Date | undefined>(
       new Date()
@@ -90,6 +137,7 @@ export const Disabled: Story = {
 };
 
 export const WithError: Story = {
+  decorators: figmaWidth,
   render: () => {
     const [selectedDate, setSelectedDate] = useState<Date | undefined>();
 
@@ -108,6 +156,7 @@ export const WithError: Story = {
 };
 
 export const WithSuccess: Story = {
+  decorators: figmaWidth,
   render: () => {
     const [selectedDate, setSelectedDate] = useState<Date | undefined>(
       new Date()
@@ -148,9 +197,11 @@ export const InForm: Story = {
             Data de Nascimento
           </label>
           <DatePicker
+            captionLayout="dropdown"
+            endMonth={new Date()}
             id="birth"
             onChange={setBirthDate}
-            placeholder="dd/mm/aaaa"
+            startMonth={new Date(1900, 0)}
             value={birthDate}
           />
         </div>
@@ -165,7 +216,6 @@ export const InForm: Story = {
           <DatePicker
             id="subscription"
             onChange={setSubscriptionDate}
-            placeholder="dd/mm/aaaa"
             value={subscriptionDate}
           />
         </div>
