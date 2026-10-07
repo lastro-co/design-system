@@ -63,6 +63,20 @@ describe("LaisSuggestionButton", () => {
       );
     });
 
+    it("draws a single 0.5px border with the spec's padding and blur", () => {
+      render(<LaisSuggestionButton>{LABEL}</LaisSuggestionButton>);
+      const button = screen.getByRole("button", { name: LABEL });
+      expect(button).toHaveClass(
+        "border-[0.5px]",
+        "border-purple-200/80",
+        "pl-2",
+        "pr-3",
+        "backdrop-blur-[1px]"
+      );
+      // A transparent border over the gradient read as a second outline.
+      expect(button).not.toHaveClass("border-transparent");
+    });
+
     it("respects an explicit type", () => {
       render(
         <LaisSuggestionButton type="submit">{LABEL}</LaisSuggestionButton>

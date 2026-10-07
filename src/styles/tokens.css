@@ -515,23 +515,22 @@
 /* ---------------------------------------------------------------------------
  * LaisSuggestionButton
  * Pill-shaped Lais action that sits above the chat composer ("Corrigir texto").
- * Dark brand ramp built from the same purple stops as `lais-logo-badge`. Per
+ * Radial purple fill and halo shadows exactly as Figma Dev Mode exports them. Per
  * the design spec, the effect behind the pill is the suggestion card's
  * "Circles" (`LaisGlow`, sized to 57.04 x 48 by the component) plus the two
- * halo shadows below; the component adds the 2px backdrop blur. Focus is drawn
+ * halo shadows below; the component adds the 1px backdrop blur. Focus is drawn
  * with `outline` by the component so it does not replace these shadows.
  * ------------------------------------------------------------------------- */
 @utility lais-suggestion-button {
-  background-image: linear-gradient(
-    100deg,
-    var(--color-purple-900) 0%,
-    var(--color-purple-800) 55%,
+  /* Figma Dev Mode, "SPEC / BUTTON". The 0.5px purple-200/80 border is set by
+   * the component; no inset ring here, or the pill reads as double-bordered. */
+  background: radial-gradient(
+    703.7% 171.61% at 112.81% 138.78%,
+    color-mix(in srgb, var(--color-purple-400) 60%, transparent) 0%,
+    color-mix(in srgb, var(--color-purple-900) 90%, transparent) 61.54%,
     var(--color-purple-700) 100%
   );
-  /* Spec "SPEC / BUTTON": inner 1px ring, then the two halo shadows
-   * (#9664FA 45% · 0 0 40px, #B18DFB 35% · 0 0 120px). */
   box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--color-purple-300) 25%, transparent),
-    0 0 40px 0 color-mix(in srgb, var(--color-purple-400) 45%, transparent),
-    0 0 120px 0 color-mix(in srgb, var(--color-purple-300) 35%, transparent);
+    0 0 120px 0 color-mix(in srgb, var(--color-purple-300) 35%, transparent),
+    0 0 40px 0 color-mix(in srgb, var(--color-purple-400) 45%, transparent);
 }
