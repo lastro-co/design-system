@@ -23,7 +23,7 @@ export default meta;
 type Story = StoryObj<typeof Card>;
 
 /**
- * Card no estado de repouso: raio 8px, borda `gray-200`, sombra `shadow-card` e
+ * Card no estado de repouso: raio 8px, borda `gray-200`, sombra `shadow-xxs` e
  * padding de 24px em todos os lados. **Sem subtítulo, o conteúdo começa 24px
  * abaixo do título.** Passe o mouse para ver a borda escurecer para `gray-300`.
  */
