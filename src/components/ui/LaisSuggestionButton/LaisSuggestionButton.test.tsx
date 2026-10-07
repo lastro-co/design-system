@@ -11,6 +11,11 @@ const iconSlot = (container: HTMLElement) =>
     '[data-slot="lais-suggestion-button-icon"]'
   ) as HTMLElement;
 
+const glowFrame = (container: HTMLElement) =>
+  container.querySelector(
+    '[data-slot="lais-suggestion-button-glow"]'
+  ) as HTMLElement | null;
+
 describe("LaisSuggestionButton", () => {
   describe("Rendering", () => {
     it("renders a button named by its label", () => {
@@ -48,6 +53,14 @@ describe("LaisSuggestionButton", () => {
         "focus-visible:outline-purple-400"
       );
       expect(button).not.toHaveClass("bg-gray-50");
+    });
+
+    it("renders the label antialiased without changing the medium weight", () => {
+      render(<LaisSuggestionButton>{LABEL}</LaisSuggestionButton>);
+      expect(screen.getByRole("button", { name: LABEL })).toHaveClass(
+        "antialiased",
+        "font-medium"
+      );
     });
 
     it("respects an explicit type", () => {
@@ -191,6 +204,55 @@ describe("LaisSuggestionButton", () => {
       expect(
         screen.getByRole("button", { name: "Desfazer correção" })
       ).toBeVisible();
+    });
+  });
+
+  describe("glow", () => {
+    it("renders the shared Lais glow behind the enabled button", () => {
+      const { container } = render(
+        <LaisSuggestionButton>{LABEL}</LaisSuggestionButton>
+      );
+      const root = container.querySelector(
+        '[data-slot="lais-suggestion-button-root"]'
+      ) as HTMLElement;
+      const frame = glowFrame(container) as HTMLElement;
+      const button = screen.getByRole("button", { name: LABEL });
+
+      expect(root).toHaveClass("relative", "isolate");
+      // Sibling of the button, not a child: a child would paint over the pill.
+      expect(frame.parentElement).toBe(root);
+      expect(button.parentElement).toBe(root);
+      expect(button).not.toContainElement(frame);
+      expect(frame).toHaveClass("lais-suggestion-glow", "-z-10", "scale-[0.4]");
+      expect(
+        frame.querySelectorAll('[data-slot="lais-glow-orb"]')
+      ).toHaveLength(2);
+    });
+
+    it("keeps the glow while loading", () => {
+      const { container } = render(
+        <LaisSuggestionButton loading>Corrigindo…</LaisSuggestionButton>
+      );
+      expect(glowFrame(container)).toHaveClass("lais-suggestion-glow");
+    });
+
+    it("drops the glow when disabled", () => {
+      const { container } = render(
+        <LaisSuggestionButton disabled>{LABEL}</LaisSuggestionButton>
+      );
+      expect(glowFrame(container)).not.toBeInTheDocument();
+      expect(
+        container.querySelector('[data-slot="lais-glow-orb"]')
+      ).not.toBeInTheDocument();
+    });
+
+    it("is decorative and stays out of the accessible name", () => {
+      const { container } = render(
+        <LaisSuggestionButton>{LABEL}</LaisSuggestionButton>
+      );
+      expect(glowFrame(container)).toHaveAttribute("aria-hidden", "true");
+      expect(screen.getAllByRole("button")).toHaveLength(1);
+      expect(screen.getByRole("button")).toHaveAccessibleName(LABEL);
     });
   });
 
