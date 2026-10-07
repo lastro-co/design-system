@@ -147,6 +147,7 @@ export {
   SquareArrowUpRight as SquareArrowUpRightIcon,
   SquareCheck as SquareCheckIcon,
   SquarePen as SquarePenIcon,
+  SquareSlash as SquareSlashIcon,
   Star as StarIcon,
   Tag as TagIcon,
   Target as TargetIcon,
