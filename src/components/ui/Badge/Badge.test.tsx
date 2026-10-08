@@ -131,4 +131,25 @@ describe("Badge", () => {
     const badge = container.querySelector('[data-slot="badge"]');
     expect(badge).toHaveClass("px-[11px]");
   });
+
+  it("should render asChild without showDot", () => {
+    render(
+      <Badge asChild color="purple">
+        <button type="button">Preço</button>
+      </Badge>
+    );
+    expect(screen.getByRole("button", { name: "Preço" })).toBeVisible();
+  });
+
+  it("should render asChild with showDot", () => {
+    const { container } = render(
+      <Badge asChild color="purple" showDot>
+        <button type="button">Preço</button>
+      </Badge>
+    );
+    const button = screen.getByRole("button", { name: "Preço" });
+    expect(button).toBeVisible();
+    const dot = container.querySelector(".rounded-full.h-2.w-2");
+    expect(dot).toBeInTheDocument();
+  });
 });
