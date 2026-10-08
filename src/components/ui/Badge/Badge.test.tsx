@@ -17,7 +17,8 @@ describe("Badge", () => {
       "inline-flex",
       "rounded-full",
       "has-[>img]:pl-1.5",
-      "has-[>svg]:pl-1.5"
+      "has-[>svg]:pl-1.5",
+      "has-[>[data-slot=badge-dot]]:pl-1.5"
     );
   });
 
@@ -56,6 +57,12 @@ describe("Badge", () => {
     const dot = container.querySelector("span > span");
     expect(dot).toBeInTheDocument();
     expect(dot).toHaveClass("rounded-full");
+  });
+
+  it("should mark the dot with data-slot=badge-dot so it gets the same left padding as img/svg", () => {
+    const { container } = render(<Badge showDot>With dot</Badge>);
+    const dot = container.querySelector('[data-slot="badge-dot"]');
+    expect(dot).toBeInTheDocument();
   });
 
   it("should not render dot when showDot is false", () => {
