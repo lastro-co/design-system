@@ -96,7 +96,6 @@ describe("Badge", () => {
       red: ["bg-red-100", "text-red-700"],
       yellow: ["bg-yellow-100", "text-yellow-700"],
       blue: ["bg-blue-100", "text-blue-700"],
-      white: ["bg-white", "text-gray-800"],
     } as const;
 
     for (const [color, classes] of Object.entries(colorMap)) {
