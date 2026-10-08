@@ -1,10 +1,24 @@
 import { render, screen } from "@/tests/app-test-utils";
 import { Badge } from ".";
 
+const NEWLINE_REGEX = /\n/;
+
 describe("Badge", () => {
   it("should render with text content", () => {
     render(<Badge>Badge Text</Badge>);
     expect(screen.getByText("Badge Text")).toBeVisible();
+  });
+
+  it("should apply the base layout classes as a single unbroken className", () => {
+    const { container } = render(<Badge>Base</Badge>);
+    const badge = container.querySelector('[data-slot="badge"]');
+    expect(badge?.className).not.toMatch(NEWLINE_REGEX);
+    expect(badge).toHaveClass(
+      "inline-flex",
+      "rounded-full",
+      "has-[>img]:pl-1.5",
+      "has-[>svg]:pl-1.5"
+    );
   });
 
   it("should apply color variant", () => {
@@ -22,7 +36,7 @@ describe("Badge", () => {
   it("should apply medium size variant", () => {
     const { container } = render(<Badge size="medium">Medium Badge</Badge>);
     const badge = container.querySelector('[data-slot="badge"]');
-    expect(badge).toHaveClass("text-sm", "px-3");
+    expect(badge).toHaveClass("text-sm", "h-6");
   });
 
   it("should accept custom className", () => {
@@ -34,7 +48,7 @@ describe("Badge", () => {
   it("should apply isNumber variant", () => {
     const { container } = render(<Badge isNumber>2</Badge>);
     const badge = container.querySelector('[data-slot="badge"]');
-    expect(badge).toHaveClass("h-5", "min-w-5", "p-1");
+    expect(badge).toHaveClass("h-5", "min-w-5", "px-1");
   });
 
   it("should render dot when showDot is true", () => {
@@ -71,6 +85,10 @@ describe("Badge", () => {
 
   it("should apply all color variants", () => {
     const colorMap = {
+      default: ["bg-purple-800", "text-white"],
+      secondary: ["bg-white", "text-gray-700"],
+      destructive: ["bg-red-600", "text-white"],
+      outline: ["border-gray-800", "bg-transparent", "text-gray-800"],
       gray: ["bg-gray-100", "text-gray-700"],
       green: ["bg-green-100", "text-green-700"],
       orange: ["bg-orange-100", "text-orange-700"],
@@ -83,53 +101,12 @@ describe("Badge", () => {
 
     for (const [color, classes] of Object.entries(colorMap)) {
       const { container, unmount } = render(
-        <Badge color={color as any}>{color}</Badge>
+        <Badge color={color as keyof typeof colorMap}>{color}</Badge>
       );
       const badge = container.querySelector('[data-slot="badge"]');
       expect(badge).toHaveClass(...classes);
       unmount();
     }
-  });
-
-  it("should apply the default color", () => {
-    const { container } = render(<Badge color="default">Default</Badge>);
-    const badge = container.querySelector('[data-slot="badge"]');
-    expect(badge).toHaveClass("bg-purple-800", "text-white");
-  });
-
-  it("should apply the secondary color", () => {
-    const { container } = render(<Badge color="secondary">Secondary</Badge>);
-    const badge = container.querySelector('[data-slot="badge"]');
-    expect(badge).toHaveClass("bg-white", "text-gray-700");
-  });
-
-  it("should apply the destructive color", () => {
-    const { container } = render(
-      <Badge color="destructive">Destructive</Badge>
-    );
-    const badge = container.querySelector('[data-slot="badge"]');
-    expect(badge).toHaveClass("bg-red-600", "text-white");
-  });
-
-  it("should apply the outline color with its border and compensated padding", () => {
-    const { container } = render(<Badge color="outline">Outline</Badge>);
-    const badge = container.querySelector('[data-slot="badge"]');
-    expect(badge).toHaveClass(
-      "border-gray-800",
-      "bg-transparent",
-      "text-gray-800",
-      "px-[7px]"
-    );
-  });
-
-  it("should apply outline padding for medium size", () => {
-    const { container } = render(
-      <Badge color="outline" size="medium">
-        Outline
-      </Badge>
-    );
-    const badge = container.querySelector('[data-slot="badge"]');
-    expect(badge).toHaveClass("px-[11px]");
   });
 
   it("should render asChild without showDot", () => {

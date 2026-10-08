@@ -5,7 +5,8 @@ import type * as React from "react";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex h-6 w-fit shrink-0 select-none items-center justify-center gap-1 overflow-hidden whitespace-nowrap rounded-full border border-transparent py-0.5 font-medium has-[>img]:pl-[3px] has-[>svg]:pl-[3px] [&>img]:size-4 [&>svg]:pointer-events-none [&>svg]:size-4 [&>svg]:antialiased [&>svg]:subpixel-antialiased",
+  `inline-flex h-5 w-fit shrink-0 select-none items-center justify-center gap-1 overflow-hidden whitespace-nowrap rounded-full border border-transparent py-0.5 font-medium px-2.5 py-0 leading-none
+  has-[>img]:pl-1.5 has-[>svg]:pl-1.5 [&>img]:size-4 [&>svg]:pointer-events-none [&>svg]:size-4 [&>svg]:antialiased [&>svg]:subpixel-antialiased`,
   {
     variants: {
       color: {
@@ -23,25 +24,13 @@ const badgeVariants = cva(
         yellow: "bg-yellow-100 text-yellow-700",
       },
       size: {
-        small: "px-2 text-xs leading-4",
-        medium: "px-3 text-sm leading-5",
+        small: "text-xs",
+        medium: "h-6 text-sm",
       },
       isNumber: {
-        true: "h-5 min-w-5 p-1",
+        true: "h-5 min-w-5 px-1",
       },
     },
-    compoundVariants: [
-      {
-        color: "outline",
-        size: "small",
-        class: "px-[7px] py-px",
-      },
-      {
-        color: "outline",
-        size: "medium",
-        class: "px-[11px] py-px",
-      },
-    ],
     defaultVariants: {
       color: "gray",
       size: "small",
