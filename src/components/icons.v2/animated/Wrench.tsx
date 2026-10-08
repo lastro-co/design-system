@@ -78,6 +78,7 @@ const WrenchIcon = forwardRef<WrenchIconHandle, WrenchIconProps>(
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="2"
+          style={{ width: size, height: size }}
           variants={SVG_VARIANTS}
           viewBox="0 0 24 24"
           width={size}

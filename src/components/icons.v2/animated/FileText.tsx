@@ -68,6 +68,7 @@ const FILE_TEXT = forwardRef<FileTextIconHandle, FileTextIconProps>(
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="2"
+          style={{ width: size, height: size }}
           variants={{
             normal: { scale: 1 },
             animate: {

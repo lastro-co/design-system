@@ -66,6 +66,7 @@ const SearchIcon = forwardRef<SearchIconHandle, SearchIconProps>(
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="2"
+          style={{ width: size, height: size }}
           transition={{
             duration: 1,
             bounce: 0.3,

@@ -71,6 +71,7 @@ const BellIcon = forwardRef<BellIconHandle, BellIconProps>(
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="2"
+          style={{ width: size, height: size }}
           transition={{
             duration: 0.5,
             ease: "easeInOut",
