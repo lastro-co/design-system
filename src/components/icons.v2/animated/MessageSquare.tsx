@@ -91,6 +91,7 @@ const MessageSquareIcon = forwardRef<
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="2"
+        style={{ width: size, height: size }}
         variants={ICON_VARIANTS}
         viewBox="0 0 24 24"
         width={size}

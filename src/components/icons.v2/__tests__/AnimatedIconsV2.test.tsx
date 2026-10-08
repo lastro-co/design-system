@@ -157,6 +157,24 @@ describe("icons.v2 — animated icons", () => {
     }
   );
 
+  // Button/IconButton size child icons with `[&_svg:not([class*='size-'])]:size-4`;
+  // the svg carries no class, so only an inline size keeps the `size` prop.
+  it.each(ANIMATED_ICONS)(
+    "%s pins its size inline so container size rules can't shrink it",
+    (_name, Icon) => {
+      const { container } = render(<Icon size={24} />);
+      const svg = container.querySelector("svg");
+      expect(svg).toHaveStyle({ width: "24px", height: "24px" });
+    }
+  );
+
+  it("keeps the existing inline styles of the svg", () => {
+    const { container } = render(<AnimatedMegaphoneIcon size={24} />);
+    const svg = container.querySelector("svg");
+    expect(svg).toHaveStyle({ width: "24px", height: "24px" });
+    expect(svg?.style.transformOrigin).toBe("25% 58%");
+  });
+
   it("all animated icons render without crashing", () => {
     const { container } = render(
       <div>
