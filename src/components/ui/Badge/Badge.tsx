@@ -32,7 +32,7 @@ const badgeVariants = cva(
     },
     defaultVariants: {
       color: "gray",
-      size: "small",
+      size: "medium",
       isNumber: false,
     },
   }
