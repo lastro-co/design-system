@@ -35,6 +35,13 @@ export interface LaisSuggestionCardProps {
    * @default true
    */
   glow?: boolean;
+  /**
+   * Keeps the card drifting up and down after it settles. Turn it off where a
+   * permanently moving card would be a distraction — a dense list, or a surface
+   * that already animates.
+   * @default true
+   */
+  float?: boolean;
   className?: string;
 }
 
@@ -46,6 +53,7 @@ export function LaisSuggestionCard({
   onDismiss,
   dismissLabel = "Fechar",
   glow = true,
+  float = true,
   className,
 }: LaisSuggestionCardProps) {
   return (
@@ -66,7 +74,10 @@ export function LaisSuggestionCard({
         />
       )}
 
-      <div className="lais-suggestion-float relative z-10">
+      <div
+        className={cn("relative z-10", float && "lais-suggestion-float")}
+        data-slot="lais-suggestion-card-float"
+      >
         {/* biome-ignore lint/a11y/useSemanticElements: role="status" on a div is the idiomatic ARIA pattern for a non-critical suggestion card; <output> implies a calculation result. */}
         <div
           aria-atomic="true"
