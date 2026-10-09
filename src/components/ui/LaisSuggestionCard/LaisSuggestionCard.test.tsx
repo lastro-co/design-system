@@ -155,6 +155,22 @@ describe("LaisSuggestionCard", () => {
     );
   });
 
+  it("floats by default and stops floating when float is false", () => {
+    const floatWrapper = (c: HTMLElement) =>
+      c.querySelector('[data-slot="lais-suggestion-card-float"]');
+
+    const { container, rerender } = render(
+      <LaisSuggestionCard {...baseProps} />
+    );
+    expect(floatWrapper(container)).toHaveClass("lais-suggestion-float");
+
+    rerender(<LaisSuggestionCard {...baseProps} float={false} />);
+    const wrapper = floatWrapper(container);
+    // The wrapper stays — it owns the stacking context above the glow.
+    expect(wrapper).toHaveClass("relative", "z-10");
+    expect(wrapper).not.toHaveClass("lais-suggestion-float");
+  });
+
   it("drops the glow orbs when glow is false", () => {
     const { container } = render(
       <LaisSuggestionCard {...baseProps} glow={false} />
