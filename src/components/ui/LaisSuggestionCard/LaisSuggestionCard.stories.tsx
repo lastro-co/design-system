@@ -42,6 +42,10 @@ export const WithoutGlow: Story = {
   args: { glow: false },
 };
 
+export const WithoutFloat: Story = {
+  args: { float: false },
+};
+
 export const WithoutDismiss: Story = {
   args: { onDismiss: undefined },
 };
