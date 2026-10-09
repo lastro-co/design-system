@@ -27,6 +27,9 @@ const iconButtonVariants = cva(
         // `active` keeps the pressed look (e.g. unread items, a toggle that is on)
         ghost:
           "border border-transparent bg-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-800 active:bg-gray-50 active:text-gray-800 data-[active=true]:bg-gray-50 data-[active=true]:text-gray-800",
+        // ghost colors on a resting gray-50 surface
+        subtle:
+          "border border-transparent bg-gray-50 text-gray-600 hover:text-gray-800 active:text-gray-800",
         destructive:
           "border-0 bg-white text-red-600 hover:bg-red-50 hover:text-red-700 active:bg-red-50 active:text-red-700",
         // mirrors ToggleChip's selected state so the button reads as an active chip

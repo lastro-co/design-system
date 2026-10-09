@@ -24,7 +24,14 @@ const meta: Meta<typeof IconButton> = {
     },
     variant: {
       control: "select",
-      options: ["default", "outline", "ghost", "destructive", "selected"],
+      options: [
+        "default",
+        "outline",
+        "ghost",
+        "subtle",
+        "destructive",
+        "selected",
+      ],
       description: "IconButton visual style variant",
     },
     loading: {
@@ -95,6 +102,7 @@ const VARIANTS = [
   "outline",
   "ghost",
   "destructive",
+  "subtle",
   "selected",
 ] as const;
 

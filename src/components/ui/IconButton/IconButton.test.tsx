@@ -126,6 +126,20 @@ describe("IconButton", () => {
     );
   });
 
+  it("renders the subtle variant on a gray-50 surface with ghost text colors", () => {
+    render(
+      <IconButton aria-label="Configurações" variant="subtle">
+        <XIcon />
+      </IconButton>
+    );
+
+    expect(screen.getByRole("button")).toHaveClass(
+      "bg-gray-50",
+      "text-gray-600",
+      "hover:text-gray-800"
+    );
+  });
+
   it("keeps the pressed look on the ghost variant while active", () => {
     const { rerender } = render(
       <IconButton aria-label="Notificações" variant="ghost">
