@@ -80,6 +80,16 @@ export const Selected = {
   },
 };
 
+export const GhostActive = {
+  args: {
+    active: true,
+    "aria-label": "Notificações",
+    children: <PlusIcon />,
+    size: "small",
+    variant: "ghost",
+  },
+};
+
 const VARIANTS = [
   "default",
   "outline",
