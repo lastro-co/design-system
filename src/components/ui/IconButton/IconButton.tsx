@@ -24,8 +24,12 @@ const iconButtonVariants = cva(
           "border-0 bg-purple-800 text-white hover:bg-purple-900 active:bg-purple-950 disabled:bg-gray-300",
         outline:
           "border border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-50 disabled:border-gray-300 disabled:bg-white",
+        // `active` keeps the pressed look (e.g. unread items, a toggle that is on)
         ghost:
-          "border border-transparent bg-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-800 active:bg-gray-50 active:text-gray-800",
+          "border border-transparent bg-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-800 active:bg-gray-50 active:text-gray-800 data-[active=true]:bg-gray-50 data-[active=true]:text-gray-800",
+        // ghost colors on a resting gray-50 surface
+        subtle:
+          "border border-transparent bg-gray-50 text-gray-600 hover:text-gray-800 active:text-gray-800",
         destructive:
           "border-0 bg-white text-red-600 hover:bg-red-50 hover:text-red-700 active:bg-red-50 active:text-red-700",
         // mirrors ToggleChip's selected state so the button reads as an active chip
@@ -65,6 +69,8 @@ export interface IconButtonProps
   children: ReactNode;
   loading?: boolean;
   asChild?: boolean;
+  /** Keeps the pressed look while on. Styled by the `ghost` variant. */
+  active?: boolean;
   "aria-label": string;
 }
 
@@ -77,6 +83,7 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
       variant,
       loading = false,
       asChild = false,
+      active = false,
       children,
       disabled,
       type = "button",
@@ -108,6 +115,7 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
           iconButtonVariants({ size, shape, variant, className }),
           blockedByLoading && "pointer-events-none"
         )}
+        data-active={active || undefined}
         data-slot="icon-button"
         onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
           if (!blockIfInactive(event)) {

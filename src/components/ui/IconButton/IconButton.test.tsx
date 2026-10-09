@@ -126,6 +126,53 @@ describe("IconButton", () => {
     );
   });
 
+  it("renders the subtle variant on a gray-50 surface with ghost text colors", () => {
+    render(
+      <IconButton aria-label="Configurações" variant="subtle">
+        <XIcon />
+      </IconButton>
+    );
+
+    expect(screen.getByRole("button")).toHaveClass(
+      "bg-gray-50",
+      "text-gray-600",
+      "hover:text-gray-800"
+    );
+  });
+
+  it("keeps the pressed look on the ghost variant while active", () => {
+    const { rerender } = render(
+      <IconButton aria-label="Notificações" variant="ghost">
+        <XIcon />
+      </IconButton>
+    );
+    const button = screen.getByRole("button");
+    expect(button).not.toHaveAttribute("data-active");
+    expect(button).toHaveClass(
+      "data-[active=true]:bg-gray-50",
+      "data-[active=true]:text-gray-800"
+    );
+
+    rerender(
+      <IconButton active aria-label="Notificações" variant="ghost">
+        <XIcon />
+      </IconButton>
+    );
+    expect(button).toHaveAttribute("data-active", "true");
+  });
+
+  it("forwards active to the child element when asChild is true", () => {
+    render(
+      <IconButton active aria-label="Notificações" asChild variant="ghost">
+        <a href="/notifications">
+          <XIcon />
+        </a>
+      </IconButton>
+    );
+
+    expect(screen.getByRole("link")).toHaveAttribute("data-active", "true");
+  });
+
   it("renders the selected variant with the ToggleChip selected tokens", () => {
     render(
       <IconButton aria-label="Filters" variant="selected">
