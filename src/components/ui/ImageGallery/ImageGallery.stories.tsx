@@ -74,7 +74,7 @@ export const WithOverlays: Story = {
       </div>
     ),
     topRightOverlay: (
-      <Badge color="green" showDot size="medium">
+      <Badge color="green" size="medium">
         Ativo
       </Badge>
     ),
@@ -86,7 +86,7 @@ export const WithInactiveStatus: Story = {
     images: SAMPLE_IMAGES.slice(0, 3),
     alt: "Propriedade inativa",
     topRightOverlay: (
-      <Badge color="red" showDot size="medium">
+      <Badge color="red" size="medium">
         Inativo
       </Badge>
     ),

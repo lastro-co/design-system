@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
   `inline-flex h-5 w-fit shrink-0 select-none items-center justify-center gap-1 overflow-hidden whitespace-nowrap rounded-full border border-transparent py-0.5 font-medium px-2.5 py-0 leading-none
-  has-[>img]:pl-1.5 has-[>svg]:pl-1.5 has-[>[data-slot=badge-dot]]:pl-1.5 [&>img]:size-4 [&>svg]:pointer-events-none [&>svg]:size-4 [&>svg]:antialiased [&>svg]:subpixel-antialiased`,
+  has-[>img]:pl-1.5 has-[>svg]:pl-1.5 [&>img]:size-4 [&>svg]:pointer-events-none [&>svg]:size-4 [&>svg]:antialiased [&>svg]:subpixel-antialiased`,
   {
     variants: {
       color: {
@@ -42,10 +42,6 @@ interface BadgeProps
   extends Omit<React.ComponentProps<"span">, "color">,
     VariantProps<typeof badgeVariants> {
   asChild?: boolean;
-  /** Show a dot indicator before the badge text */
-  showDot?: boolean;
-  /** Custom color for the dot (defaults to currentColor) */
-  dotColor?: string;
 }
 
 function Badge({
@@ -54,8 +50,6 @@ function Badge({
   size,
   isNumber,
   asChild = false,
-  showDot = false,
-  dotColor,
   children,
   ...props
 }: BadgeProps) {
@@ -67,13 +61,6 @@ function Badge({
       data-slot="badge"
       {...props}
     >
-      {showDot && (
-        <span
-          className="h-2 w-2 shrink-0 rounded-full"
-          data-slot="badge-dot"
-          style={{ backgroundColor: dotColor || "currentColor" }}
-        />
-      )}
       <Slottable>{children}</Slottable>
     </Comp>
   );

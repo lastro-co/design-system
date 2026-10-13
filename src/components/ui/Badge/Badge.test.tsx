@@ -17,8 +17,7 @@ describe("Badge", () => {
       "inline-flex",
       "rounded-full",
       "has-[>img]:pl-1.5",
-      "has-[>svg]:pl-1.5",
-      "has-[>[data-slot=badge-dot]]:pl-1.5"
+      "has-[>svg]:pl-1.5"
     );
   });
 
@@ -52,44 +51,6 @@ describe("Badge", () => {
     expect(badge).toHaveClass("h-5", "min-w-5", "px-1");
   });
 
-  it("should render dot when showDot is true", () => {
-    const { container } = render(<Badge showDot>With dot</Badge>);
-    const dot = container.querySelector("span > span");
-    expect(dot).toBeInTheDocument();
-    expect(dot).toHaveClass("rounded-full");
-  });
-
-  it("should mark the dot with data-slot=badge-dot so it gets the same left padding as img/svg", () => {
-    const { container } = render(<Badge showDot>With dot</Badge>);
-    const dot = container.querySelector('[data-slot="badge-dot"]');
-    expect(dot).toBeInTheDocument();
-  });
-
-  it("should not render dot when showDot is false", () => {
-    const { container } = render(<Badge>No dot</Badge>);
-    // The badge span itself has no inner dot span
-    const badge = container.querySelector('[data-slot="badge"]');
-    const dot = badge?.querySelector(".rounded-full.h-2.w-2");
-    expect(dot).not.toBeInTheDocument();
-  });
-
-  it("should apply custom dotColor when showDot is true", () => {
-    const { container } = render(
-      <Badge dotColor="#ff0000" showDot>
-        Colored dot
-      </Badge>
-    );
-    const dot = container.querySelector("span > span") as HTMLElement;
-    expect(dot).toHaveStyle({ backgroundColor: "#ff0000" });
-  });
-
-  it("should use currentColor for dot when dotColor is not provided", () => {
-    const { container } = render(<Badge showDot>Default dot</Badge>);
-    const dot = container.querySelector("span > span") as HTMLElement;
-    // JSDOM normalizes "currentColor" to "currentcolor" (lowercase)
-    expect(dot.style.backgroundColor).toBe("currentcolor");
-  });
-
   it("should apply all color variants", () => {
     const colorMap = {
       default: ["bg-purple-800", "text-white"],
@@ -115,24 +76,12 @@ describe("Badge", () => {
     }
   });
 
-  it("should render asChild without showDot", () => {
+  it("should render asChild with a single child", () => {
     render(
       <Badge asChild color="purple">
         <button type="button">Preço</button>
       </Badge>
     );
     expect(screen.getByRole("button", { name: "Preço" })).toBeVisible();
-  });
-
-  it("should render asChild with showDot", () => {
-    const { container } = render(
-      <Badge asChild color="purple" showDot>
-        <button type="button">Preço</button>
-      </Badge>
-    );
-    const button = screen.getByRole("button", { name: "Preço" });
-    expect(button).toBeVisible();
-    const dot = container.querySelector(".rounded-full.h-2.w-2");
-    expect(dot).toBeInTheDocument();
   });
 });

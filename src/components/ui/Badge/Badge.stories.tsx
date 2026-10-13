@@ -34,14 +34,6 @@ const meta: Meta<typeof Badge> = {
       options: ["small", "medium"],
       description: "Size of the badge",
     },
-    showDot: {
-      control: "boolean",
-      description: "Show a dot indicator before the badge text",
-    },
-    dotColor: {
-      control: "color",
-      description: "Custom color for the dot (defaults to currentColor)",
-    },
     isNumber: {
       control: "boolean",
       description: "Apply number badge styling (compact sizing)",
@@ -121,9 +113,6 @@ export const AllVariants: Story = {
         <h3 className="font-medium text-lg">Compositions</h3>
         <div className="flex flex-wrap items-center gap-4">
           <Badge color="purple">Text only</Badge>
-          <Badge color="purple" showDot>
-            Text + dot
-          </Badge>
           <Badge color="purple">
             <CheckIcon />
             Text + icon
@@ -181,25 +170,6 @@ export const WithIcon: Story = {
     ),
     color: "green",
     size: "medium",
-  },
-};
-
-export const WithDot: Story = {
-  args: {
-    children: "Status",
-    color: "gray",
-    size: "small",
-    showDot: true,
-  },
-};
-
-export const WithCustomDotColor: Story = {
-  args: {
-    children: "Cancelada",
-    color: "red",
-    size: "small",
-    showDot: true,
-    dotColor: "#B31919",
   },
 };
 
