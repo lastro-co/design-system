@@ -24,7 +24,14 @@ const meta: Meta<typeof IconButton> = {
     },
     variant: {
       control: "select",
-      options: ["default", "outline", "ghost", "destructive", "selected"],
+      options: [
+        "default",
+        "outline",
+        "ghost",
+        "subtle",
+        "destructive",
+        "selected",
+      ],
       description: "IconButton visual style variant",
     },
     loading: {
@@ -80,11 +87,22 @@ export const Selected = {
   },
 };
 
+export const GhostActive = {
+  args: {
+    active: true,
+    "aria-label": "Notificações",
+    children: <PlusIcon />,
+    size: "small",
+    variant: "ghost",
+  },
+};
+
 const VARIANTS = [
   "default",
   "outline",
   "ghost",
   "destructive",
+  "subtle",
   "selected",
 ] as const;
 
