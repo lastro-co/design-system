@@ -24,7 +24,7 @@ const badgeVariants = cva(
       },
       size: {
         small: "text-xs",
-        medium: "h-6 text-sm",
+        medium: "h-6 text-xs",
       },
       isNumber: {
         true: "h-5 min-w-5 px-1",

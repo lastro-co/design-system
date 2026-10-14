@@ -36,7 +36,8 @@ describe("Badge", () => {
   it("should apply medium size variant", () => {
     const { container } = render(<Badge size="medium">Medium Badge</Badge>);
     const badge = container.querySelector('[data-slot="badge"]');
-    expect(badge).toHaveClass("text-sm", "h-6");
+    expect(badge).toHaveClass("text-xs", "h-6");
+    expect(badge).not.toHaveClass("text-sm");
   });
 
   it("should accept custom className", () => {
