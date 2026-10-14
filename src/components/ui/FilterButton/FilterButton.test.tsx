@@ -189,6 +189,24 @@ describe("FilterButton", () => {
     expect(label).toHaveClass("text-gray-400");
   });
 
+  it("tints the background when active", () => {
+    render(<FilterButton active count={2} label="Filter" />);
+
+    const button = screen.getByRole("button");
+    expect(button).toHaveClass("bg-gray-50");
+    expect(button).not.toHaveClass("bg-white");
+    expect(button).toHaveAttribute("data-active", "true");
+  });
+
+  it("keeps the outline background when not active", () => {
+    render(<FilterButton count={2} label="Filter" />);
+
+    const button = screen.getByRole("button");
+    expect(button).toHaveClass("bg-white");
+    expect(button).not.toHaveClass("bg-gray-50");
+    expect(button).not.toHaveAttribute("data-active");
+  });
+
   it("index.ts exports work correctly", () => {
     const indexExports = require("./index");
     expect(indexExports.FilterButton).toBeDefined();

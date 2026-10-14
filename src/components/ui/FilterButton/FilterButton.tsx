@@ -17,6 +17,8 @@ export interface FilterButtonProps
   icon?: React.ReactNode;
   /** Whether to show the icon when count > 0 (default: false, shows counter instead) */
   showIconWithCount?: boolean;
+  /** Tints the background to signal that filters are applied (default: false) */
+  active?: boolean;
 }
 
 /**
@@ -42,6 +44,7 @@ export const FilterButton = forwardRef<HTMLButtonElement, FilterButtonProps>(
       count = 0,
       icon,
       showIconWithCount = false,
+      active = false,
       disabled = false,
       className,
       ...props
@@ -85,7 +88,8 @@ export const FilterButton = forwardRef<HTMLButtonElement, FilterButtonProps>(
 
     return (
       <Button
-        className={className}
+        className={cn(active && "bg-gray-50 disabled:bg-gray-50", className)}
+        data-active={active ? "true" : undefined}
         disabled={disabled}
         ref={ref}
         size="small"
