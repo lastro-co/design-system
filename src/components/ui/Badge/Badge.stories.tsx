@@ -119,7 +119,7 @@ export const AllVariants: Story = {
               <Badge color={color} iconOnly size="medium">
                 <ZapIcon />
               </Badge>
-              <Badge color={color} isNumber>
+              <Badge color={color} isNumber size="medium">
                 2
               </Badge>
             </Fragment>
