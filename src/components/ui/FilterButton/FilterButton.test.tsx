@@ -193,7 +193,7 @@ describe("FilterButton", () => {
     render(<FilterButton active count={2} label="Filter" />);
 
     const button = screen.getByRole("button");
-    expect(button).toHaveClass("bg-purple-50");
+    expect(button).toHaveClass("bg-gray-50");
     expect(button).not.toHaveClass("bg-white");
     expect(button).toHaveAttribute("data-active", "true");
   });
@@ -203,7 +203,7 @@ describe("FilterButton", () => {
 
     const button = screen.getByRole("button");
     expect(button).toHaveClass("bg-white");
-    expect(button).not.toHaveClass("bg-purple-50");
+    expect(button).not.toHaveClass("bg-gray-50");
     expect(button).not.toHaveAttribute("data-active");
   });
 

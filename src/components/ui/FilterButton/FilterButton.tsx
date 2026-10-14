@@ -88,11 +88,7 @@ export const FilterButton = forwardRef<HTMLButtonElement, FilterButtonProps>(
 
     return (
       <Button
-        className={cn(
-          active &&
-            "bg-purple-50 hover:bg-purple-100 active:bg-purple-100 disabled:bg-purple-50",
-          className
-        )}
+        className={cn(active && "bg-gray-50 disabled:bg-gray-50", className)}
         data-active={active ? "true" : undefined}
         disabled={disabled}
         ref={ref}
