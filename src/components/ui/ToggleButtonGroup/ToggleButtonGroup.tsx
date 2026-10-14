@@ -24,7 +24,7 @@ export function ToggleButtonGroup<T extends string>({
   buttonProps = {},
 }: ToggleButtonGroupProps<T>) {
   return (
-    <div className={cn("flex items-center gap-2", className)}>
+    <div className={cn("flex items-center gap-1", className)}>
       {options.map((option) => (
         <ToggleChip
           {...buttonProps}

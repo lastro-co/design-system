@@ -38,7 +38,7 @@ const ChipGroup = () => {
     { value: "ended", label: "Encerrada" },
   ];
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-1">
       {options.map((option) => (
         <ToggleChip
           key={option.value}

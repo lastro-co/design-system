@@ -85,6 +85,18 @@ describe("ToggleButtonGroup", () => {
     expect(container.firstChild).toHaveClass("custom-class");
   });
 
+  it("spaces the chips 4px apart", () => {
+    const { container } = render(
+      <ToggleButtonGroup
+        onValueChange={jest.fn()}
+        options={defaultOptions}
+        value="month"
+      />
+    );
+
+    expect(container.firstChild).toHaveClass("gap-1");
+  });
+
   it("renders buttons with correct type attribute", () => {
     render(
       <ToggleButtonGroup
