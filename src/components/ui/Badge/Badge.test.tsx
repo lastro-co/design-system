@@ -1,4 +1,5 @@
 import { render, screen } from "@/tests/app-test-utils";
+import { LaisLogo } from "../LaisLogo";
 import { Badge } from ".";
 
 describe("Badge", () => {
@@ -35,6 +36,22 @@ describe("Badge", () => {
     const { container } = render(<Badge isNumber>2</Badge>);
     const badge = container.querySelector('[data-slot="badge"]');
     expect(badge).toHaveClass("h-5", "min-w-5", "p-1");
+  });
+
+  it("normalizes icons to 16px but leaves the Lais logo at its own size", () => {
+    const { container } = render(
+      <Badge>
+        <LaisLogo badge size={20} />
+        Sugestão
+      </Badge>
+    );
+    const badge = container.querySelector('[data-slot="badge"]');
+    expect(badge).toHaveClass("[&>svg:not([data-slot=lais-logo])]:size-4");
+    expect(badge).not.toHaveClass("[&>svg]:size-4");
+
+    const logo = container.querySelector('[data-slot="lais-logo"]');
+    expect(logo).toHaveAttribute("width", "20");
+    expect(logo).toHaveAttribute("height", "20");
   });
 
   it("should render dot when showDot is true", () => {

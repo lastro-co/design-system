@@ -6,12 +6,18 @@ import { cn } from "@/lib/utils";
 export interface LaisLogoProps extends React.SVGProps<SVGSVGElement> {
   symbolOnly?: boolean;
   /**
-   * The symbol inside a gradient circle, sized for tags and list rows (20px).
+   * The symbol inside a gradient circle, sized for tags and list rows (20px by default).
    * Implies `symbolOnly`; hover animation defaults to off.
    */
   badge?: boolean;
   /** @default true, or false when `badge` */
   animateOnHover?: boolean;
+  /**
+   * Height in px (or any CSS length), like the icons' `size`. The symbol and the badge are
+   * square; the wordmark keeps its proportion.
+   * @default 20 for `badge`, 32 otherwise
+   */
+  size?: number | string;
 }
 
 /*
@@ -22,6 +28,15 @@ const BADGE_SYMBOL_RATIO = 0.6;
 const BADGE_VIEWBOX_SIZE = 32 / BADGE_SYMBOL_RATIO;
 const BADGE_VIEWBOX_OFFSET = (32 - BADGE_VIEWBOX_SIZE) / 2;
 const BADGE_VIEWBOX = `${BADGE_VIEWBOX_OFFSET} ${BADGE_VIEWBOX_OFFSET} ${BADGE_VIEWBOX_SIZE} ${BADGE_VIEWBOX_SIZE}`;
+
+const BADGE_SIZE = 20;
+const SYMBOL_SIZE = 32;
+const WORDMARK_RATIO = 110 / 32;
+
+// A CSS length can't be multiplied in an attribute; "auto" lets the viewBox keep the ratio.
+function wordmarkWidth(size: number | string): number | string {
+  return typeof size === "number" ? size * WORDMARK_RATIO : "auto";
+}
 
 const symbolPaths = [
   "M16.0127 1.55949L18.6038 2.01301L17.8082 6.55489L19.4525 6.84132L20.5214 0.742613L16.2845 0L16.0127 1.55949Z",
@@ -66,6 +81,7 @@ function LaisLogo({
   symbolOnly,
   badge,
   animateOnHover: animateOnHoverProp,
+  size,
   "aria-label": ariaLabel = "Lais",
   ...props
 }: LaisLogoProps) {
@@ -93,9 +109,9 @@ function LaisLogo({
         )}
         data-slot="lais-logo"
         data-variant="badge"
-        height="20"
+        height={size ?? BADGE_SIZE}
         viewBox={BADGE_VIEWBOX}
-        width="20"
+        width={size ?? BADGE_SIZE}
         {...shared}
         {...props}
       >
@@ -114,9 +130,9 @@ function LaisLogo({
           className
         )}
         data-slot="lais-logo"
-        height="32"
+        height={size ?? SYMBOL_SIZE}
         viewBox="0 0 32 32"
-        width="32"
+        width={size ?? SYMBOL_SIZE}
         {...shared}
         {...props}
       >
@@ -134,9 +150,9 @@ function LaisLogo({
         className
       )}
       data-slot="lais-logo"
-      height="32"
+      height={size ?? SYMBOL_SIZE}
       viewBox="0 0 110 32"
-      width="110"
+      width={size === undefined ? 110 : wordmarkWidth(size)}
       {...shared}
       {...props}
     >

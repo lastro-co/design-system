@@ -64,6 +64,50 @@ describe("LaisLogo", () => {
     });
   });
 
+  describe("size", () => {
+    it("keeps 20px on the badge and 32px on the symbol by default", () => {
+      const { container } = render(
+        <>
+          <LaisLogo badge />
+          <LaisLogo symbolOnly />
+        </>
+      );
+      const [badge, symbol] = container.querySelectorAll("svg");
+      expect(badge).toHaveAttribute("width", "20");
+      expect(badge).toHaveAttribute("height", "20");
+      expect(symbol).toHaveAttribute("width", "32");
+      expect(symbol).toHaveAttribute("height", "32");
+    });
+
+    it("sizes the badge and the symbol as squares", () => {
+      const { container } = render(
+        <>
+          <LaisLogo badge size={24} />
+          <LaisLogo size="1.5rem" symbolOnly />
+        </>
+      );
+      const [badge, symbol] = container.querySelectorAll("svg");
+      expect(badge).toHaveAttribute("width", "24");
+      expect(badge).toHaveAttribute("height", "24");
+      expect(symbol).toHaveAttribute("width", "1.5rem");
+      expect(symbol).toHaveAttribute("height", "1.5rem");
+    });
+
+    it("keeps the wordmark proportion", () => {
+      const { container } = render(
+        <>
+          <LaisLogo size={16} />
+          <LaisLogo size="2rem" />
+        </>
+      );
+      const [numeric, css] = container.querySelectorAll("svg");
+      expect(numeric).toHaveAttribute("height", "16");
+      expect(numeric).toHaveAttribute("width", "55");
+      expect(css).toHaveAttribute("height", "2rem");
+      expect(css).toHaveAttribute("width", "auto");
+    });
+  });
+
   describe("animateOnHover={false}", () => {
     it("does NOT have cursor-pointer class", () => {
       const { container } = render(<LaisLogo animateOnHover={false} />);

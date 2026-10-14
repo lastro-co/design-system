@@ -4,8 +4,9 @@ import type * as React from "react";
 
 import { cn } from "@/lib/utils";
 
+// Icons are normalized to 16px; the Lais logo keeps its own `size` (20px as a badge).
 const badgeVariants = cva(
-  "inline-flex h-6 w-fit shrink-0 select-none items-center justify-center gap-1.5 overflow-hidden whitespace-nowrap rounded-full border py-0.5 font-medium has-[>img]:pl-[3px] has-[>svg]:pl-[3px] [&>img]:size-4 [&>svg]:pointer-events-none [&>svg]:size-4 [&>svg]:antialiased [&>svg]:subpixel-antialiased",
+  "inline-flex h-6 w-fit shrink-0 select-none items-center justify-center gap-1.5 overflow-hidden whitespace-nowrap rounded-full border py-0.5 font-medium has-[>img]:pl-[3px] has-[>svg]:pl-[3px] [&>img]:size-4 [&>svg:not([data-slot=lais-logo])]:size-4 [&>svg]:pointer-events-none [&>svg]:antialiased [&>svg]:subpixel-antialiased",
   {
     variants: {
       color: {

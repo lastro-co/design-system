@@ -24,7 +24,12 @@ const meta: Meta<typeof LaisLogo> = {
     badge: {
       control: { type: "boolean" },
       description:
-        "Símbolo dentro de um círculo com gradiente (20×20), para tags e linhas de lista. Implica `symbolOnly` e desliga a animação por padrão.",
+        "Símbolo dentro de um círculo com gradiente (20×20 por padrão, ajustável via `size`), para tags e linhas de lista. Implica `symbolOnly` e desliga a animação por padrão.",
+    },
+    size: {
+      control: { type: "number" },
+      description:
+        "Altura em px (ou qualquer medida CSS), como o `size` dos ícones. Símbolo e badge são quadrados; o wordmark mantém a proporção. Default: 20 no badge, 32 nos demais.",
     },
     animateOnHover: {
       control: { type: "boolean" },
@@ -109,11 +114,18 @@ export const Sizes: Story = {
         <LaisLogo className="size-8" symbolOnly />
         <LaisLogo className="size-12" symbolOnly />
       </div>
+      <div className="flex items-center gap-8">
+        <LaisLogo badge size={16} />
+        <LaisLogo badge />
+        <LaisLogo badge size={24} />
+      </div>
       <span className="text-gray-600 text-xs">
         Escale via{" "}
-        <code className="rounded bg-gray-100 px-1.5 py-0.5">className</code>{" "}
-        (ex:{" "}
-        <code className="rounded bg-gray-100 px-1.5 py-0.5">h-7 w-auto</code>)
+        <code className="rounded bg-gray-100 px-1.5 py-0.5">size</code>, como os
+        ícones (ex:{" "}
+        <code className="rounded bg-gray-100 px-1.5 py-0.5">size={"{24}"}</code>
+        ), ou via{" "}
+        <code className="rounded bg-gray-100 px-1.5 py-0.5">className</code>
       </span>
     </div>
   ),
