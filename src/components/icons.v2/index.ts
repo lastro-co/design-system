@@ -1,6 +1,7 @@
 export {
   AlarmClock as AlarmClockIcon,
   Archive as ArchiveIcon,
+  ArchiveRestore as ArchiveRestoreIcon,
   ArrowLeft as ArrowLeftIcon,
   ArrowRight as ArrowRightIcon,
   ArrowRightLeft as ArrowRightLeftIcon,

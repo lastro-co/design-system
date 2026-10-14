@@ -2,6 +2,7 @@ import { render, screen } from "@/tests/app-test-utils";
 import {
   AlarmClockIcon,
   ArchiveIcon,
+  ArchiveRestoreIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
   ArrowRightLeftIcon,
@@ -166,6 +167,7 @@ import {
 const LUCIDE_ICONS = [
   ["AlarmClockIcon", AlarmClockIcon],
   ["ArchiveIcon", ArchiveIcon],
+  ["ArchiveRestoreIcon", ArchiveRestoreIcon],
   ["ArrowLeftIcon", ArrowLeftIcon],
   ["ArrowRightIcon", ArrowRightIcon],
   ["ArrowRightLeftIcon", ArrowRightLeftIcon],
