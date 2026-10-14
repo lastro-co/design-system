@@ -123,12 +123,14 @@ export const AllVariants: Story = {
       <div className="space-y-2">
         <h3 className="font-medium text-lg">Compositions</h3>
         <div className="flex flex-wrap items-center gap-4">
-          <Badge color="purple">Text only</Badge>
-          <Badge color="purple">
+          <Badge color="purple" size="medium">
+            Text only
+          </Badge>
+          <Badge color="purple" size="medium">
             <CheckIcon />
             Text + icon
           </Badge>
-          <Badge color="purple" iconOnly>
+          <Badge color="purple" iconOnly size="medium">
             <CheckIcon />
           </Badge>
         </div>
@@ -145,7 +147,7 @@ export const AllVariants: Story = {
             <span className="w-40 font-medium text-gray-900 text-sm">
               Green, forced red icon
             </span>
-            <Badge color="green">
+            <Badge color="green" size="medium">
               <ZapIcon className="text-red-600" />
               Forced red icon
             </Badge>
@@ -154,16 +156,16 @@ export const AllVariants: Story = {
             <span className="w-40 font-medium text-gray-900 text-sm">
               Outline, default icon
             </span>
-            <Badge color="outline">
+            <Badge color="outline" size="medium">
               <ZapIcon />
               Outline default
             </Badge>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 pb-6">
             <span className="w-40 font-medium text-gray-900 text-sm">
               Outline, forced red icon
             </span>
-            <Badge color="outline">
+            <Badge color="outline" size="medium">
               <ZapIcon className="text-red-600" />
               Outline forced red icon
             </Badge>
