@@ -1,5 +1,7 @@
 import userEvent from "@testing-library/user-event";
-import { render, screen, waitFor } from "@/tests/app-test-utils";
+import { toast } from "sonner";
+import { act, render, screen, waitFor } from "@/tests/app-test-utils";
+import { Toaster } from "../Toaster";
 import {
   Drawer,
   DrawerClose,
@@ -517,5 +519,131 @@ describe("Drawer", () => {
       expect(exports.DrawerTitle).toBeDefined();
       expect(exports.DrawerDescription).toBeDefined();
     });
+  });
+});
+
+const CLOSE_TOAST_LABEL = "Close toast";
+const TOAST_MESSAGE = "Subset salvo";
+
+function renderOpenDrawerWithToaster(
+  props: Partial<React.ComponentProps<typeof DrawerContent>> = {}
+) {
+  const onOpenChange = jest.fn();
+  render(
+    <>
+      <Drawer onOpenChange={onOpenChange} open>
+        <DrawerContent {...props}>
+          <DrawerTitle>Drawer Title</DrawerTitle>
+          <DrawerDescription>Drawer Description</DrawerDescription>
+        </DrawerContent>
+      </Drawer>
+      <Toaster />
+    </>
+  );
+  return { onOpenChange };
+}
+
+const overlay = () => {
+  const element = document.querySelector<HTMLElement>(
+    '[data-slot="drawer-overlay"]'
+  );
+  if (!element) {
+    throw new Error("drawer overlay is not rendered");
+  }
+  return element;
+};
+
+describe("Drawer with a Toaster", () => {
+  afterEach(() => {
+    act(() => {
+      toast.dismiss();
+    });
+  });
+
+  it("lets the toast close button be clicked without closing the drawer", async () => {
+    const user = userEvent.setup();
+    const { onOpenChange } = renderOpenDrawerWithToaster();
+    act(() => {
+      toast(TOAST_MESSAGE, {
+        closeButton: true,
+        duration: Number.POSITIVE_INFINITY,
+      });
+    });
+
+    await user.click(
+      await screen.findByRole("button", { name: CLOSE_TOAST_LABEL })
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByText(TOAST_MESSAGE)).not.toBeInTheDocument();
+    });
+    expect(onOpenChange).not.toHaveBeenCalled();
+    expect(screen.getByText("Drawer Title")).toBeVisible();
+  });
+
+  it("runs a toast action without closing the drawer", async () => {
+    const user = userEvent.setup();
+    const onUndo = jest.fn();
+    const { onOpenChange } = renderOpenDrawerWithToaster();
+    act(() => {
+      toast(TOAST_MESSAGE, {
+        action: { label: "Desfazer", onClick: onUndo },
+        duration: Number.POSITIVE_INFINITY,
+      });
+    });
+
+    await user.click(await screen.findByRole("button", { name: "Desfazer" }));
+
+    expect(onUndo).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).not.toHaveBeenCalled();
+  });
+
+  it("still closes when the overlay is pressed", async () => {
+    const user = userEvent.setup();
+    const { onOpenChange } = renderOpenDrawerWithToaster();
+
+    await user.click(overlay());
+
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
+
+  it("still closes on Escape", async () => {
+    const user = userEvent.setup();
+    const { onOpenChange } = renderOpenDrawerWithToaster();
+
+    await user.keyboard("{Escape}");
+
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
+
+  it("calls the caller's onPointerDownOutside, for the overlay and for a toast", async () => {
+    const user = userEvent.setup();
+    const onPointerDownOutside = jest.fn();
+    renderOpenDrawerWithToaster({ onPointerDownOutside });
+    act(() => {
+      toast(TOAST_MESSAGE, {
+        closeButton: true,
+        duration: Number.POSITIVE_INFINITY,
+      });
+    });
+
+    await user.click(
+      await screen.findByRole("button", { name: CLOSE_TOAST_LABEL })
+    );
+    expect(onPointerDownOutside).toHaveBeenCalledTimes(1);
+
+    await user.click(overlay());
+    expect(onPointerDownOutside).toHaveBeenCalledTimes(2);
+  });
+
+  it("stays open when the caller's onPointerDownOutside prevents the dismiss", async () => {
+    const user = userEvent.setup();
+    const { onOpenChange } = renderOpenDrawerWithToaster({
+      onPointerDownOutside: (event) => event.preventDefault(),
+    });
+
+    await user.click(overlay());
+
+    expect(onOpenChange).not.toHaveBeenCalled();
   });
 });

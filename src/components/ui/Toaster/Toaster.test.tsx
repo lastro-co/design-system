@@ -272,3 +272,35 @@ describe("Toaster loading and promise", () => {
     ).toBeInTheDocument();
   });
 });
+
+describe("Toaster under a modal", () => {
+  afterEach(() => {
+    document.body.style.pointerEvents = "";
+  });
+
+  it("re-enables pointer events on the toast list", async () => {
+    render(<Toaster />);
+    act(() => {
+      toast("Evento criado");
+    });
+
+    await waitFor(() => expect(toasterEl()).toBeVisible());
+    expect(toasterEl()?.style.pointerEvents).toBe("auto");
+  });
+
+  it("keeps toast buttons clickable while <body> has pointer-events none", async () => {
+    const onUndo = jest.fn();
+    const user = userEvent.setup();
+    render(<Toaster />);
+    document.body.style.pointerEvents = "none";
+    act(() => {
+      toast("Evento criado", {
+        action: { label: "Desfazer", onClick: onUndo },
+      });
+    });
+
+    await user.click(await screen.findByRole("button", { name: "Desfazer" }));
+
+    expect(onUndo).toHaveBeenCalledTimes(1);
+  });
+});
