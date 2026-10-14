@@ -51,6 +51,27 @@ describe("Badge", () => {
     expect(badge).toHaveClass("h-5", "min-w-5", "px-1");
   });
 
+  it("should apply iconOnly variant", () => {
+    const { container } = render(
+      <Badge iconOnly>
+        <svg aria-hidden="true" />
+      </Badge>
+    );
+    const badge = container.querySelector('[data-slot="badge"]');
+    expect(badge).toHaveClass("aspect-square", "px-0");
+    expect(badge).not.toHaveClass("px-2.5");
+  });
+
+  it("should apply iconOnly without the icon left-padding compensation", () => {
+    const { container } = render(
+      <Badge iconOnly>
+        <svg aria-hidden="true" />
+      </Badge>
+    );
+    const badge = container.querySelector('[data-slot="badge"]');
+    expect(badge).not.toHaveClass("has-[>svg]:pl-1.5");
+  });
+
   it("should apply all color variants", () => {
     const colorMap = {
       default: ["bg-purple-800", "text-white"],

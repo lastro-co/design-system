@@ -38,6 +38,11 @@ const meta: Meta<typeof Badge> = {
       control: "boolean",
       description: "Apply number badge styling (compact sizing)",
     },
+    iconOnly: {
+      control: "boolean",
+      description:
+        "Render as a circle sized to fit a single icon/image, no text padding",
+    },
     children: {
       control: "text",
       description: "Content to be rendered inside the badge",
@@ -117,6 +122,9 @@ export const AllVariants: Story = {
             <CheckIcon />
             Text + icon
           </Badge>
+          <Badge color="purple" iconOnly>
+            <CheckIcon />
+          </Badge>
         </div>
       </div>
       <div className="space-y-2">
@@ -177,5 +185,13 @@ export const NumberBadge: Story = {
   args: {
     children: "2",
     isNumber: true,
+  },
+};
+
+export const IconOnlyBadge: Story = {
+  args: {
+    children: <CheckIcon />,
+    color: "green",
+    iconOnly: true,
   },
 };

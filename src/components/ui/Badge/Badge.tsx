@@ -29,11 +29,15 @@ const badgeVariants = cva(
       isNumber: {
         true: "h-5 min-w-5 px-1",
       },
+      iconOnly: {
+        true: "aspect-square px-0 has-[>img]:pl-0 has-[>svg]:pl-0",
+      },
     },
     defaultVariants: {
       color: "gray",
       size: "small",
       isNumber: false,
+      iconOnly: false,
     },
   }
 );
@@ -49,6 +53,7 @@ function Badge({
   color,
   size,
   isNumber,
+  iconOnly,
   asChild = false,
   children,
   ...props
@@ -57,7 +62,10 @@ function Badge({
 
   return (
     <Comp
-      className={cn(badgeVariants({ color, size, isNumber }), className)}
+      className={cn(
+        badgeVariants({ color, size, isNumber, iconOnly }),
+        className
+      )}
       data-slot="badge"
       {...props}
     >
