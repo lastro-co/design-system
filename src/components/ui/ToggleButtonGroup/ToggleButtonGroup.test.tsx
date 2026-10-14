@@ -35,10 +35,10 @@ describe("ToggleButtonGroup", () => {
     const weekButton = screen.getByText("Week").closest("button");
     const monthButton = screen.getByText("Month").closest("button");
 
-    // Selected button should have contained variant (no border class, but has bg)
-    expect(weekButton).toHaveClass("bg-purple-800");
-    // Unselected button should have outlined variant
-    expect(monthButton).toHaveClass("border-gray-300");
+    expect(weekButton).toHaveAttribute("aria-pressed", "true");
+    expect(weekButton).toHaveClass("bg-purple-100", "text-purple-800");
+    expect(monthButton).toHaveAttribute("aria-pressed", "false");
+    expect(monthButton).toHaveClass("bg-white", "text-gray-600");
   });
 
   it("calls onValueChange when option is clicked", async () => {
@@ -66,11 +66,10 @@ describe("ToggleButtonGroup", () => {
       />
     );
 
-    // All buttons should be outlined (not contained)
-    const buttons = screen.getAllByRole("button");
-    buttons.forEach((button) => {
-      expect(button).toHaveClass("border-gray-300");
-    });
+    for (const button of screen.getAllByRole("button")) {
+      expect(button).toHaveAttribute("aria-pressed", "false");
+      expect(button).toHaveClass("bg-white");
+    }
   });
 
   it("applies custom className to container", () => {
@@ -143,6 +142,22 @@ describe("ToggleButtonGroup", () => {
   it("index.ts exports work correctly", () => {
     const indexExports = require("./index");
     expect(indexExports.ToggleButtonGroup).toBeDefined();
+  });
+
+  it("forwards buttonProps to every chip", () => {
+    render(
+      <ToggleButtonGroup
+        buttonProps={{ className: "flex-1", disabled: true }}
+        onValueChange={jest.fn()}
+        options={defaultOptions}
+        value="month"
+      />
+    );
+
+    for (const button of screen.getAllByRole("button")) {
+      expect(button).toBeDisabled();
+      expect(button).toHaveClass("flex-1");
+    }
   });
 
   it("renders pill-shaped buttons", () => {

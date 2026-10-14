@@ -1,9 +1,7 @@
 "use client";
 
-import type { VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
-import { Button } from "../Button";
-import type { buttonVariants } from "../Button/Button";
+import { ToggleChip } from "../ToggleChip";
 
 interface ToggleButtonGroupOption<T extends string> {
   value: T;
@@ -15,10 +13,7 @@ interface ToggleButtonGroupProps<T extends string> {
   value: T | undefined;
   onValueChange: (value: T) => void;
   className?: string;
-  buttonProps?: Omit<
-    React.ComponentProps<"button"> & VariantProps<typeof buttonVariants>,
-    "onClick" | "children" | "variant"
-  >;
+  buttonProps?: Omit<React.ComponentProps<"button">, "onClick" | "children">;
 }
 
 export function ToggleButtonGroup<T extends string>({
@@ -30,22 +25,17 @@ export function ToggleButtonGroup<T extends string>({
 }: ToggleButtonGroupProps<T>) {
   return (
     <div className={cn("flex items-center gap-2", className)}>
-      {options.map((option) => {
-        const isSelected = value === option.value;
-        return (
-          <Button
-            {...buttonProps}
-            className={cn("rounded-full", buttonProps.className)}
-            key={option.value}
-            onClick={() => onValueChange(option.value)}
-            size="small"
-            type="button"
-            variant={isSelected ? "default" : "outline"}
-          >
-            {option.label}
-          </Button>
-        );
-      })}
+      {options.map((option) => (
+        <ToggleChip
+          {...buttonProps}
+          key={option.value}
+          // a group never deselects: clicking the active option re-emits it
+          onSelectedChange={() => onValueChange(option.value)}
+          selected={value === option.value}
+        >
+          {option.label}
+        </ToggleChip>
+      ))}
     </div>
   );
 }
