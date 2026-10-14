@@ -211,9 +211,12 @@ function SelectItem({
   className,
   children,
   icon,
+  indicator = true,
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Item> & {
   icon?: React.ReactNode;
+  /** Shows the check on the selected item. Default: true. */
+  indicator?: boolean;
 }) {
   const search = React.useContext(SelectSearchContext);
 
@@ -241,9 +244,11 @@ function SelectItem({
         {icon}
         <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
       </span>
-      <SelectPrimitive.ItemIndicator>
-        <CheckIcon className="size-4" />
-      </SelectPrimitive.ItemIndicator>
+      {indicator && (
+        <SelectPrimitive.ItemIndicator>
+          <CheckIcon className="size-4" />
+        </SelectPrimitive.ItemIndicator>
+      )}
     </SelectPrimitive.Item>
   );
 }
