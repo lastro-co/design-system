@@ -84,7 +84,7 @@ export const AllVariants: Story = {
           The icon has no fixed color — it inherits each variant's text color
           via <code>currentColor</code>, exactly like the Figma spec.
         </p>
-        <div className="grid grid-cols-[max-content_repeat(5,max-content)] items-center gap-x-8 gap-y-4">
+        <div className="grid grid-cols-[max-content_repeat(4,max-content)] items-center gap-x-8 gap-y-4">
           <span />
           <span className="font-medium text-gray-600 text-xs uppercase">
             Small
@@ -97,9 +97,6 @@ export const AllVariants: Story = {
           </span>
           <span className="font-medium text-gray-600 text-xs uppercase">
             Icon Only
-          </span>
-          <span className="font-medium text-gray-600 text-xs uppercase">
-            Number
           </span>
           {COLORS.map((color) => (
             <Fragment key={color}>
@@ -118,9 +115,6 @@ export const AllVariants: Story = {
               </Badge>
               <Badge color={color} iconOnly size="medium">
                 <ZapIcon />
-              </Badge>
-              <Badge color={color} isNumber>
-                2
               </Badge>
             </Fragment>
           ))}
