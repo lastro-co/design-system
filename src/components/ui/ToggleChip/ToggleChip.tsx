@@ -19,10 +19,10 @@ function ToggleChip({
       {...props}
       aria-pressed={selected}
       className={cn(
-        "inline-flex cursor-pointer items-center rounded-full border px-3 py-1.5 font-medium text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 disabled:cursor-not-allowed",
+        "inline-flex h-8 cursor-pointer select-none items-center gap-2 whitespace-nowrap rounded-full border px-2 font-normal font-text text-sm leading-normal transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 disabled:cursor-not-allowed disabled:opacity-45",
         selected
-          ? "border-purple-600 bg-purple-50 text-purple-800"
-          : "border-gray-200 bg-white text-gray-700 hover:border-purple-100",
+          ? "border-purple-800/10 bg-purple-100 text-purple-800"
+          : "border-gray-200 bg-white text-gray-600 hover:border-purple-100",
         className
       )}
       onClick={() => onSelectedChange(!selected)}

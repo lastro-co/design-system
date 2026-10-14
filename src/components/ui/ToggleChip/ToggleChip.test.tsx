@@ -52,4 +52,35 @@ describe("ToggleChip", () => {
     expect(chip).toBeVisible();
     expect(chip).toHaveClass("custom-class");
   });
+
+  it("renders the selected state with the DS 2026 chip tokens", () => {
+    render(
+      <ToggleChip onSelectedChange={jest.fn()} selected>
+        Todas
+      </ToggleChip>
+    );
+    expect(screen.getByRole("button")).toHaveClass(
+      "h-8",
+      "px-2",
+      "rounded-full",
+      "font-normal",
+      "text-sm",
+      "border-purple-800/10",
+      "bg-purple-100",
+      "text-purple-800"
+    );
+  });
+
+  it("renders the unselected state with the DS 2026 chip tokens", () => {
+    render(
+      <ToggleChip onSelectedChange={jest.fn()} selected={false}>
+        Minhas
+      </ToggleChip>
+    );
+    expect(screen.getByRole("button")).toHaveClass(
+      "border-gray-200",
+      "bg-white",
+      "text-gray-600"
+    );
+  });
 });
