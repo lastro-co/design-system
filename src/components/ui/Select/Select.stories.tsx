@@ -79,6 +79,30 @@ export const Default: Story = {
   },
 };
 
+export const WithoutIndicator: Story = {
+  render: (args) => {
+    const { "aria-invalid": ariaInvalid, variant, ...selectArgs } = args;
+    return (
+      <Select defaultValue="option1" {...selectArgs}>
+        <SelectTrigger aria-invalid={ariaInvalid} variant={variant}>
+          <SelectValue placeholder="Selecione uma opção" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem indicator={false} value="option1">
+            Opção 1
+          </SelectItem>
+          <SelectItem indicator={false} value="option2">
+            Opção 2
+          </SelectItem>
+          <SelectItem indicator={false} value="option3">
+            Opção 3
+          </SelectItem>
+        </SelectContent>
+      </Select>
+    );
+  },
+};
+
 export const WithGroups: Story = {
   render: (args) => {
     const { "aria-invalid": ariaInvalid, variant, ...selectArgs } = args;
