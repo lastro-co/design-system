@@ -1,5 +1,7 @@
 import userEvent from "@testing-library/user-event";
-import { render, screen } from "@/tests/app-test-utils";
+import { toast } from "sonner";
+import { act, render, screen, waitFor } from "@/tests/app-test-utils";
+import { Toaster } from "../Toaster";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -617,5 +619,47 @@ describe("AlertDialog barrel exports", () => {
     expect(exports.AlertDialogRoot).toBeDefined();
     expect(exports.AlertDialogTitle).toBeDefined();
     expect(exports.AlertDialogTrigger).toBeDefined();
+  });
+});
+
+const TOAST_MESSAGE = "Evento criado";
+
+describe("AlertDialog with a Toaster", () => {
+  afterEach(() => {
+    act(() => {
+      toast.dismiss();
+    });
+  });
+
+  it("lets the toast close button be clicked without closing the alert dialog", async () => {
+    const user = userEvent.setup();
+    const onOpenChange = jest.fn();
+    render(
+      <>
+        <AlertDialog
+          description="Description"
+          onOpenChange={onOpenChange}
+          open
+          title="Title"
+        />
+        <Toaster />
+      </>
+    );
+    act(() => {
+      toast(TOAST_MESSAGE, {
+        closeButton: true,
+        duration: Number.POSITIVE_INFINITY,
+      });
+    });
+
+    await user.click(
+      await screen.findByRole("button", { name: "Close toast" })
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByText(TOAST_MESSAGE)).not.toBeInTheDocument();
+    });
+    expect(onOpenChange).not.toHaveBeenCalled();
+    expect(screen.getByRole("alertdialog")).toBeVisible();
   });
 });

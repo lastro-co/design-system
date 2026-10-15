@@ -3,6 +3,7 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import type { VariantProps } from "class-variance-authority";
 import type * as React from "react";
+import { keepOpenOnToasterPointerDown } from "@/lib/toaster-guard";
 import { cn } from "@/lib/utils";
 import { XIcon } from "../../icons.v2";
 import { Button, type buttonVariants } from "../Button";
@@ -144,6 +145,7 @@ function DialogContent({
   onAction,
   onCancel,
   container,
+  onPointerDownOutside,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
   showCloseButton?: boolean;
@@ -175,6 +177,9 @@ function DialogContent({
           className
         )}
         data-slot="dialog-content"
+        onPointerDownOutside={keepOpenOnToasterPointerDown(
+          onPointerDownOutside
+        )}
         {...props}
       >
         {(title || description) && (
