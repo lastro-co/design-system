@@ -5,8 +5,8 @@ import type * as React from "react";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  `inline-flex h-5 w-fit shrink-0 select-none items-center justify-center gap-1 overflow-hidden whitespace-nowrap rounded-full border border-transparent py-0.5 font-medium px-2.5 py-0 leading-none
-  has-[>img]:pl-1.5 has-[>svg]:pl-1.5 [&>img]:size-4 [&>svg]:pointer-events-none [&>svg]:size-4 [&>svg]:antialiased [&>svg]:subpixel-antialiased`,
+  `inline-flex h-5 w-fit shrink-0 select-none items-center justify-center gap-1 overflow-hidden whitespace-nowrap rounded-full border border-transparent py-0.5 font-medium px-2 py-0 leading-none
+  has-[>img]:pl-1.5 has-[>svg]:pl-1.5 has-[>[data-slot=badge-icon]]:pl-1.5 has-[>img]:pr-2.5 has-[>svg]:pr-2.5 has-[>[data-slot=badge-icon]]:pr-2.5 [&>img]:size-4 [&>svg]:pointer-events-none [&>svg]:size-4 [&>svg]:antialiased [&>svg]:subpixel-antialiased`,
   {
     variants: {
       color: {
@@ -21,6 +21,7 @@ const badgeVariants = cva(
         purple: "bg-purple-100 text-purple-800",
         red: "bg-red-100 text-red-700",
         yellow: "bg-yellow-100 text-yellow-700",
+        coral: "bg-coral-600 text-white",
       },
       size: {
         small: "text-xs",
@@ -30,7 +31,7 @@ const badgeVariants = cva(
         true: "h-5 min-w-5 px-1",
       },
       iconOnly: {
-        true: "aspect-square px-0 has-[>img]:pl-0 has-[>svg]:pl-0",
+        true: "aspect-square px-0 has-[>[data-slot=badge-icon]]:px-0 has-[>img]:px-0 has-[>svg]:px-0",
       },
     },
     defaultVariants: {

@@ -31,6 +31,8 @@ const meta: Meta<typeof IconButton> = {
         "subtle",
         "destructive",
         "selected",
+        "chip",
+        "chipSelected",
       ],
       description: "IconButton visual style variant",
     },
@@ -104,6 +106,8 @@ const VARIANTS = [
   "destructive",
   "subtle",
   "selected",
+  "chip",
+  "chipSelected",
 ] as const;
 
 export const AllVariants = {

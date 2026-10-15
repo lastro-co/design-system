@@ -26,6 +26,7 @@ const meta: Meta<typeof Badge> = {
         "purple",
         "red",
         "yellow",
+        "coral",
       ],
       description: "Color variant of the badge",
     },
@@ -73,6 +74,7 @@ const COLORS = [
   "blue",
   "purple",
   "gray",
+  "coral",
 ] as const;
 
 export const AllVariants: Story = {

@@ -207,6 +207,15 @@ describe("IconButton", () => {
     expect(screen.getByRole("button")).toHaveClass("text-purple-800");
   });
 
+  it("renders the chip variants with the ToggleChip tokens", () => {
+    expect(iconButtonVariants({ variant: "chip" })).toContain(
+      "border-gray-200 bg-white text-gray-600 hover:border-purple-100"
+    );
+    expect(iconButtonVariants({ variant: "chipSelected" })).toContain(
+      "border-purple-800/10 bg-purple-100 text-purple-800"
+    );
+  });
+
   it("keeps the other variants free of the selected tokens", () => {
     for (const variant of [
       "default",

@@ -19,6 +19,11 @@ type EmptyStateProps = Omit<
   description?: React.ReactNode;
   /** Call to action, usually a `<Button variant="outline">`. */
   action?: React.ReactNode;
+  /**
+   * `card` (default) draws the bordered white surface. `plain` drops it, for
+   * a state that fills a pane which already provides its own surface.
+   */
+  variant?: "card" | "plain";
 };
 
 /**
@@ -31,12 +36,15 @@ function EmptyState({
   titleAs: TitleTag = "h2",
   description,
   action,
+  variant = "card",
   ...props
 }: EmptyStateProps) {
   return (
     <div
       className={cn(
-        "flex w-full flex-col items-center justify-center rounded-lg border border-gray-200 bg-white px-6 py-12 text-center shadow-xxs",
+        "flex w-full flex-col items-center justify-center px-6 py-12 text-center",
+        variant === "card" &&
+          "rounded-lg border border-gray-200 bg-white shadow-xxs",
         className
       )}
       data-slot="empty-state"
