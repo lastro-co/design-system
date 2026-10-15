@@ -65,6 +65,16 @@ describe("EmptyState", () => {
     ).toBeVisible();
   });
 
+  it("wraps the description without leaving a single word on the last line", () => {
+    const { container } = render(
+      <EmptyState description="Selecione uma conversa na lista ao lado para que ela apareça aqui." />
+    );
+
+    expect(
+      container.querySelector('[data-slot="empty-state-description"]')
+    ).toHaveClass("max-w-96", "text-pretty");
+  });
+
   it("renders the description alone, without a heading or top spacing", () => {
     render(<EmptyState description={DESCRIPTION} />);
 

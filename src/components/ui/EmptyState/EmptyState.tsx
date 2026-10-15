@@ -70,7 +70,7 @@ function EmptyState({
       {description && (
         <p
           className={cn(
-            "max-w-96 font-normal font-text text-gray-600 text-sm leading-5",
+            "max-w-96 text-pretty font-normal font-text text-gray-600 text-sm leading-5",
             title && "mt-1.5"
           )}
           data-slot="empty-state-description"
