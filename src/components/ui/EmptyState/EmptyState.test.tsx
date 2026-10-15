@@ -104,6 +104,17 @@ describe("EmptyState", () => {
     );
   });
 
+  it("drops the card surface in the plain variant", () => {
+    const { container } = render(<EmptyState title={TITLE} variant="plain" />);
+
+    const root = getRoot(container);
+    expect(root).not.toHaveClass("rounded-lg");
+    expect(root).not.toHaveClass("border");
+    expect(root).not.toHaveClass("bg-white");
+    expect(root).not.toHaveClass("shadow-xxs");
+    expect(root).toHaveClass("px-6", "py-12", "text-center");
+  });
+
   it("merges className and forwards native props", () => {
     const { container } = render(
       <EmptyState className="min-h-80" id="empty" title={TITLE} />
