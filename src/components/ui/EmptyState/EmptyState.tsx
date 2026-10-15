@@ -44,7 +44,7 @@ function EmptyState({
       className={cn(
         "flex w-full flex-col items-center justify-center px-6 py-12 text-center",
         variant === "card" &&
-          "rounded-lg border border-gray-200 bg-white shadow-xxs",
+          "rounded-lg border border-gray-200 bg-white shadow-xxs transition-colors hover:border-gray-300",
         className
       )}
       data-slot="empty-state"

@@ -114,6 +114,15 @@ describe("EmptyState", () => {
     );
   });
 
+  it("darkens the card border on hover, like the Card", () => {
+    const { container } = render(<EmptyState title={TITLE} />);
+
+    expect(getRoot(container)).toHaveClass(
+      "transition-colors",
+      "hover:border-gray-300"
+    );
+  });
+
   it("drops the card surface in the plain variant", () => {
     const { container } = render(<EmptyState title={TITLE} variant="plain" />);
 
@@ -122,6 +131,7 @@ describe("EmptyState", () => {
     expect(root).not.toHaveClass("border");
     expect(root).not.toHaveClass("bg-white");
     expect(root).not.toHaveClass("shadow-xxs");
+    expect(root).not.toHaveClass("hover:border-gray-300");
     expect(root).toHaveClass("px-6", "py-12", "text-center");
   });
 
