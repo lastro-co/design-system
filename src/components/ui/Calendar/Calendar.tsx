@@ -677,20 +677,18 @@ function CalendarDay({
 }: React.ComponentProps<typeof Day>) {
   // A one-day range is both start and end: it has nothing to connect to.
   const isSingleDayRange = modifiers.range_start && modifiers.range_end;
+  const isRangeEndpoint =
+    !isSingleDayRange && (modifiers.range_start || modifiers.range_end);
 
   return (
     <td
       className={cn(
         className,
-        modifiers.range_middle && "bg-purple-50",
-        // Endpoints get a half-band on the inner side so the band reaches the
-        // circle instead of stopping at the cell edge.
-        !isSingleDayRange &&
-          modifiers.range_start &&
-          "bg-linear-to-r from-50% from-transparent to-50% to-purple-50",
-        !isSingleDayRange &&
-          modifiers.range_end &&
-          "bg-linear-to-l from-50% from-transparent to-50% to-purple-50"
+        (modifiers.range_middle || isRangeEndpoint) && "bg-purple-50",
+        // The outer corner (away from the rest of the range) rounds off; the
+        // inner corner stays square so the band meets the next cell flush.
+        !isSingleDayRange && modifiers.range_start && "rounded-l-full",
+        !isSingleDayRange && modifiers.range_end && "rounded-r-full"
       )}
       {...props}
     />

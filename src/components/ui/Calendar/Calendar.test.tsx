@@ -737,7 +737,7 @@ describe("Calendar plain header and Figma states", () => {
 
     expect(start).toHaveAttribute("data-range-start", "true");
     expect(start).toHaveClass("bg-purple-800", "text-white");
-    expect(start.closest("td")).toHaveClass("bg-linear-to-r", "to-purple-50");
+    expect(start.closest("td")).toHaveClass("bg-purple-50", "rounded-l-full");
 
     expect(middle).toHaveAttribute("data-range-middle", "true");
     expect(middle).toHaveClass(
@@ -750,7 +750,7 @@ describe("Calendar plain header and Figma states", () => {
 
     expect(end).toHaveAttribute("data-range-end", "true");
     expect(end).toHaveClass("bg-purple-800", "text-white");
-    expect(end.closest("td")).toHaveClass("bg-linear-to-l", "to-purple-50");
+    expect(end.closest("td")).toHaveClass("bg-purple-50", "rounded-r-full");
   });
 
   it("keeps outside days grayed on the range band", () => {
@@ -782,7 +782,7 @@ describe("Calendar plain header and Figma states", () => {
     );
   });
 
-  it("draws no half-band on a one-day range", () => {
+  it("draws no band on a one-day range", () => {
     const day = new Date(2026, 8, 3);
     const { container } = render(
       <Calendar
@@ -792,8 +792,8 @@ describe("Calendar plain header and Figma states", () => {
       />
     );
     const cell = getDayButton(container, day).closest("td");
-    expect(cell).not.toHaveClass("bg-linear-to-r");
-    expect(cell).not.toHaveClass("bg-linear-to-l");
+    expect(cell).not.toHaveClass("bg-purple-50");
+    expect(cell).not.toHaveClass("rounded-l-full", "rounded-r-full");
   });
 
   it("renders two grids with nav only at the outer edges when numberOfMonths=2", () => {
