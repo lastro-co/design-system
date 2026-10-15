@@ -74,6 +74,22 @@ describe("Badge", () => {
     expect(badge).not.toHaveClass("has-[>svg]:pr-2.5");
   });
 
+  it("treats a wrapped icon marked as badge-icon like a direct svg", () => {
+    const { container } = render(
+      <Badge>
+        <div data-slot="badge-icon">
+          <svg aria-hidden="true" />
+        </div>
+        Visita
+      </Badge>
+    );
+    const badge = container.querySelector('[data-slot="badge"]');
+    expect(badge).toHaveClass(
+      "has-[>[data-slot=badge-icon]]:pl-1.5",
+      "has-[>[data-slot=badge-icon]]:pr-2.5"
+    );
+  });
+
   it("should use 8px horizontal padding when the badge has no icon", () => {
     const { container } = render(<Badge>Aluguel</Badge>);
     const badge = container.querySelector('[data-slot="badge"]');
