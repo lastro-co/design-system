@@ -1,5 +1,5 @@
 import userEvent from "@testing-library/user-event";
-import { render, screen, waitFor } from "@/tests/app-test-utils";
+import { act, render, screen, waitFor } from "@/tests/app-test-utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -265,5 +265,196 @@ describe("DropdownMenu", () => {
     expect(indexExports.DropdownMenuItem).toBeDefined();
     expect(indexExports.DropdownMenuSeparator).toBeDefined();
     expect(indexExports.DropdownMenuLabel).toBeDefined();
+  });
+
+  it("respects a controlled open prop", async () => {
+    const user = userEvent.setup();
+    const handleOpenChange = jest.fn();
+
+    const { rerender } = render(
+      <DropdownMenu onOpenChange={handleOpenChange} open={false}>
+        <DropdownMenuTrigger>Trigger</DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem>Option 1</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+
+    await user.click(screen.getByText("Trigger"));
+    expect(handleOpenChange).toHaveBeenCalledWith(true);
+    expect(screen.queryByText("Option 1")).not.toBeInTheDocument();
+
+    rerender(
+      <DropdownMenu onOpenChange={handleOpenChange} open={true}>
+        <DropdownMenuTrigger>Trigger</DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem>Option 1</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("Option 1")).toBeInTheDocument();
+    });
+  });
+
+  describe("openOnHover", () => {
+    beforeEach(() => {
+      jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+      jest.useRealTimers();
+    });
+
+    it("does not open on hover when openOnHover is not set", async () => {
+      const user = userEvent.setup({ delay: null });
+      render(
+        <DropdownMenu>
+          <DropdownMenuTrigger>Trigger</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Option 1</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+
+      await user.hover(screen.getByText("Trigger"));
+      act(() => {
+        jest.advanceTimersByTime(1000);
+      });
+
+      expect(screen.queryByText("Option 1")).not.toBeInTheDocument();
+    });
+
+    it("opens after openDelay when hovering the trigger", async () => {
+      const user = userEvent.setup({ delay: null });
+      render(
+        <DropdownMenu openDelay={150} openOnHover>
+          <DropdownMenuTrigger>Trigger</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Option 1</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+
+      await user.hover(screen.getByText("Trigger"));
+
+      act(() => {
+        jest.advanceTimersByTime(100);
+      });
+      expect(screen.queryByText("Option 1")).not.toBeInTheDocument();
+
+      act(() => {
+        jest.advanceTimersByTime(100);
+      });
+      await waitFor(() => {
+        expect(screen.getByText("Option 1")).toBeInTheDocument();
+      });
+    });
+
+    it("closes after closeDelay when the pointer leaves the trigger", async () => {
+      const user = userEvent.setup({ delay: null });
+      render(
+        <DropdownMenu closeDelay={150} modal={false} openDelay={0} openOnHover>
+          <DropdownMenuTrigger>Trigger</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Option 1</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+
+      await user.hover(screen.getByText("Trigger"));
+      act(() => {
+        jest.advanceTimersByTime(0);
+      });
+      await waitFor(() => {
+        expect(screen.getByText("Option 1")).toBeInTheDocument();
+      });
+
+      await user.unhover(screen.getByText("Trigger"));
+      act(() => {
+        jest.advanceTimersByTime(150);
+      });
+
+      await waitFor(() => {
+        expect(screen.queryByText("Option 1")).not.toBeInTheDocument();
+      });
+    });
+
+    it("stays open when the pointer moves from the trigger to the content", async () => {
+      const user = userEvent.setup({ delay: null });
+      render(
+        <DropdownMenu closeDelay={150} modal={false} openDelay={0} openOnHover>
+          <DropdownMenuTrigger>Trigger</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Option 1</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+
+      await user.hover(screen.getByText("Trigger"));
+      act(() => {
+        jest.advanceTimersByTime(0);
+      });
+      await waitFor(() => {
+        expect(screen.getByText("Option 1")).toBeInTheDocument();
+      });
+
+      await user.unhover(screen.getByText("Trigger"));
+      await user.hover(screen.getByText("Option 1"));
+      act(() => {
+        jest.advanceTimersByTime(150);
+      });
+
+      expect(screen.getByText("Option 1")).toBeInTheDocument();
+    });
+
+    it("closes after closeDelay when the pointer leaves the content", async () => {
+      const user = userEvent.setup({ delay: null });
+      render(
+        <DropdownMenu closeDelay={150} modal={false} openDelay={0} openOnHover>
+          <DropdownMenuTrigger>Trigger</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Option 1</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+
+      await user.hover(screen.getByText("Trigger"));
+      act(() => {
+        jest.advanceTimersByTime(0);
+      });
+      await waitFor(() => {
+        expect(screen.getByText("Option 1")).toBeInTheDocument();
+      });
+
+      await user.hover(screen.getByText("Option 1"));
+      await user.unhover(screen.getByText("Option 1"));
+      act(() => {
+        jest.advanceTimersByTime(150);
+      });
+
+      await waitFor(() => {
+        expect(screen.queryByText("Option 1")).not.toBeInTheDocument();
+      });
+    });
+
+    it("still opens on click even when openOnHover is set", async () => {
+      const user = userEvent.setup({ delay: null });
+      render(
+        <DropdownMenu openOnHover>
+          <DropdownMenuTrigger>Trigger</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Option 1</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+
+      await user.click(screen.getByText("Trigger"));
+
+      await waitFor(() => {
+        expect(screen.getByText("Option 1")).toBeInTheDocument();
+      });
+    });
   });
 });

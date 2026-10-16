@@ -1,21 +1,117 @@
 "use client";
 
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
-import type * as React from "react";
+import * as React from "react";
 import { cn } from "@/lib/utils";
 
+type DropdownMenuHoverContextValue = (hovering: boolean) => void;
+
+const DropdownMenuHoverContext =
+  React.createContext<DropdownMenuHoverContextValue | null>(null);
+
+export interface DropdownMenuProps
+  extends React.ComponentProps<typeof DropdownMenuPrimitive.Root> {
+  /**
+   * When `true`, hovering the trigger opens the menu (in addition to the
+   * default click/keyboard activation, which keeps working). Hovering the
+   * content keeps it open; moving the pointer away from both closes it after
+   * `closeDelay`. Ignored when `open` is controlled by the consumer.
+   */
+  openOnHover?: boolean;
+  /** Delay (ms) before hover opens the menu. Default: `150`. */
+  openDelay?: number;
+  /** Delay (ms) before hover closes the menu. Default: `150`. */
+  closeDelay?: number;
+}
+
 function DropdownMenu({
+  openOnHover = false,
+  openDelay = 150,
+  closeDelay = 150,
+  open: openProp,
+  defaultOpen,
+  onOpenChange,
   ...props
-}: React.ComponentProps<typeof DropdownMenuPrimitive.Root>) {
-  return <DropdownMenuPrimitive.Root data-slot="dropdown-menu" {...props} />;
+}: DropdownMenuProps) {
+  const [open, setOpen] = React.useState(defaultOpen ?? false);
+  const closeTimeoutRef =
+    React.useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  const isControlled = openProp !== undefined;
+  const effectiveOpen = isControlled ? openProp : open;
+
+  const handleOpenChange = React.useCallback(
+    (next: boolean) => {
+      if (!isControlled) {
+        setOpen(next);
+      }
+      onOpenChange?.(next);
+    },
+    [isControlled, onOpenChange]
+  );
+
+  const handleTriggerHoverChange = React.useCallback(
+    (hovering: boolean) => {
+      if (closeTimeoutRef.current) {
+        clearTimeout(closeTimeoutRef.current);
+        closeTimeoutRef.current = undefined;
+      }
+      if (hovering) {
+        closeTimeoutRef.current = setTimeout(
+          () => handleOpenChange(true),
+          openDelay
+        );
+      } else {
+        closeTimeoutRef.current = setTimeout(
+          () => handleOpenChange(false),
+          closeDelay
+        );
+      }
+    },
+    [handleOpenChange, openDelay, closeDelay]
+  );
+
+  React.useEffect(
+    () => () => {
+      if (closeTimeoutRef.current) {
+        clearTimeout(closeTimeoutRef.current);
+      }
+    },
+    []
+  );
+
+  const hoverContextValue = openOnHover ? handleTriggerHoverChange : null;
+
+  return (
+    <DropdownMenuHoverContext.Provider value={hoverContextValue}>
+      <DropdownMenuPrimitive.Root
+        data-slot="dropdown-menu"
+        onOpenChange={handleOpenChange}
+        open={effectiveOpen}
+        {...props}
+      />
+    </DropdownMenuHoverContext.Provider>
+  );
 }
 
 function DropdownMenuTrigger({
+  onMouseEnter,
+  onMouseLeave,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Trigger>) {
+  const hoverCtx = React.useContext(DropdownMenuHoverContext);
+
   return (
     <DropdownMenuPrimitive.Trigger
       data-slot="dropdown-menu-trigger"
+      onMouseEnter={(event) => {
+        onMouseEnter?.(event);
+        hoverCtx?.(true);
+      }}
+      onMouseLeave={(event) => {
+        onMouseLeave?.(event);
+        hoverCtx?.(false);
+      }}
       {...props}
     />
   );
@@ -32,8 +128,12 @@ function DropdownMenuContent({
   align = "start",
   side = "bottom",
   sideOffset = 4,
+  onMouseEnter,
+  onMouseLeave,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Content>) {
+  const hoverCtx = React.useContext(DropdownMenuHoverContext);
+
   return (
     <DropdownMenuPrimitive.Portal>
       <DropdownMenuPrimitive.Content
@@ -46,6 +146,14 @@ function DropdownMenuContent({
           className
         )}
         data-slot="dropdown-menu-content"
+        onMouseEnter={(event) => {
+          onMouseEnter?.(event);
+          hoverCtx?.(true);
+        }}
+        onMouseLeave={(event) => {
+          onMouseLeave?.(event);
+          hoverCtx?.(false);
+        }}
         side={side}
         sideOffset={sideOffset}
         {...props}

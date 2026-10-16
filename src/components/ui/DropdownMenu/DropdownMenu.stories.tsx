@@ -24,6 +24,9 @@ interface DropdownMenuStoryArgs {
   sideOffset: number;
   modal: boolean;
   triggerDisabled: boolean;
+  openOnHover: boolean;
+  openDelay: number;
+  closeDelay: number;
 }
 
 function alertItemClicked(label: string): () => void {
@@ -46,6 +49,9 @@ const meta: Meta<DropdownMenuStoryArgs> = {
     sideOffset: 4,
     modal: true,
     triggerDisabled: false,
+    openOnHover: false,
+    openDelay: 150,
+    closeDelay: 150,
   },
   argTypes: {
     icon: {
@@ -88,6 +94,22 @@ const meta: Meta<DropdownMenuStoryArgs> = {
         "When `true` (default), interaction with the rest of the page is disabled and outside scroll is blocked while the menu is open.",
       table: { category: "DropdownMenu" },
     },
+    openOnHover: {
+      control: "boolean",
+      description:
+        "When `true`, hovering the trigger opens the menu in addition to click/keyboard, which keep working. Hovering the content keeps it open.",
+      table: { category: "DropdownMenu" },
+    },
+    openDelay: {
+      control: { type: "number", min: 0, max: 1000, step: 50 },
+      description: "Delay (ms) before hover opens the menu.",
+      table: { category: "DropdownMenu" },
+    },
+    closeDelay: {
+      control: { type: "number", min: 0, max: 1000, step: 50 },
+      description: "Delay (ms) before hover closes the menu.",
+      table: { category: "DropdownMenu" },
+    },
     triggerDisabled: {
       control: "boolean",
       description:
@@ -102,7 +124,12 @@ type Story = StoryObj<DropdownMenuStoryArgs>;
 
 export const Default: Story = {
   render: (args) => (
-    <DropdownMenu modal={args.modal}>
+    <DropdownMenu
+      closeDelay={args.closeDelay}
+      modal={args.modal}
+      openDelay={args.openDelay}
+      openOnHover={args.openOnHover}
+    >
       <DropdownMenuTrigger asChild disabled={args.triggerDisabled}>
         <Button variant="outline">Open menu</Button>
       </DropdownMenuTrigger>
@@ -135,7 +162,12 @@ export const WithIcons: Story = {
     icon: true,
   },
   render: (args) => (
-    <DropdownMenu modal={args.modal}>
+    <DropdownMenu
+      closeDelay={args.closeDelay}
+      modal={args.modal}
+      openDelay={args.openDelay}
+      openOnHover={args.openOnHover}
+    >
       <DropdownMenuTrigger asChild disabled={args.triggerDisabled}>
         <IconButton aria-label="More options">
           <EllipsisIcon />
@@ -171,7 +203,12 @@ export const DestructiveItem: Story = {
     variant: "destructive",
   },
   render: (args) => (
-    <DropdownMenu modal={args.modal}>
+    <DropdownMenu
+      closeDelay={args.closeDelay}
+      modal={args.modal}
+      openDelay={args.openDelay}
+      openOnHover={args.openOnHover}
+    >
       <DropdownMenuTrigger asChild disabled={args.triggerDisabled}>
         <IconButton aria-label="More options">
           <EllipsisIcon />
@@ -201,7 +238,12 @@ export const CompleteExample: Story = {
     variant: "destructive",
   },
   render: (args) => (
-    <DropdownMenu modal={args.modal}>
+    <DropdownMenu
+      closeDelay={args.closeDelay}
+      modal={args.modal}
+      openDelay={args.openDelay}
+      openOnHover={args.openOnHover}
+    >
       <DropdownMenuTrigger asChild disabled={args.triggerDisabled}>
         <IconButton aria-label="More options">
           <EllipsisIcon />
@@ -243,7 +285,12 @@ export const DisabledItem: Story = {
     disabled: true,
   },
   render: (args) => (
-    <DropdownMenu modal={args.modal}>
+    <DropdownMenu
+      closeDelay={args.closeDelay}
+      modal={args.modal}
+      openDelay={args.openDelay}
+      openOnHover={args.openOnHover}
+    >
       <DropdownMenuTrigger asChild disabled={args.triggerDisabled}>
         <Button variant="outline">Open menu</Button>
       </DropdownMenuTrigger>
@@ -284,7 +331,12 @@ export const AlignEnd: Story = {
     },
   },
   render: (args) => (
-    <DropdownMenu modal={args.modal}>
+    <DropdownMenu
+      closeDelay={args.closeDelay}
+      modal={args.modal}
+      openDelay={args.openDelay}
+      openOnHover={args.openOnHover}
+    >
       <DropdownMenuTrigger asChild disabled={args.triggerDisabled}>
         <IconButton aria-label="More options">
           <EllipsisIcon />
@@ -315,6 +367,51 @@ export const AlignEnd: Story = {
           variant={args.variant}
         >
           Delete
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  ),
+};
+
+export const OpenOnHover: Story = {
+  args: {
+    modal: false,
+    openOnHover: true,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Use `openOnHover` so the menu also opens when the trigger is hovered — click and keyboard activation keep working as usual. Hovering into the content keeps it open; moving the pointer away from both closes it after `closeDelay`. `modal={false}` is recommended alongside `openOnHover` so hovering around the page isn't blocked while the menu is open.",
+      },
+    },
+  },
+  render: (args) => (
+    <DropdownMenu
+      closeDelay={args.closeDelay}
+      modal={args.modal}
+      openDelay={args.openDelay}
+      openOnHover={args.openOnHover}
+    >
+      <DropdownMenuTrigger asChild disabled={args.triggerDisabled}>
+        <Button variant="outline">Hover or click me</Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        align={args.align}
+        side={args.side}
+        sideOffset={args.sideOffset}
+      >
+        <DropdownMenuItem
+          icon={args.icon ? <PencilIcon /> : undefined}
+          onSelect={alertItemClicked("Edit")}
+        >
+          Edit
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          icon={args.icon ? <CopyIcon /> : undefined}
+          onSelect={alertItemClicked("Duplicate")}
+        >
+          Duplicate
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
