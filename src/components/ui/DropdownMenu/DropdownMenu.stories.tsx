@@ -11,7 +11,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./DropdownMenu";
 
@@ -266,7 +265,6 @@ export const CompleteExample: Story = {
         >
           Duplicate
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
         <DropdownMenuItem
           disabled={args.disabled}
           icon={args.icon ? <TrashIcon /> : undefined}
@@ -359,7 +357,6 @@ export const AlignEnd: Story = {
         >
           Duplicate
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
         <DropdownMenuItem
           disabled={args.disabled}
           icon={args.icon ? <TrashIcon /> : undefined}

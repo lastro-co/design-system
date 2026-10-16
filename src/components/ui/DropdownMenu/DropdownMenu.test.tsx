@@ -5,7 +5,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./DropdownMenu";
 
@@ -148,28 +147,6 @@ describe("DropdownMenu", () => {
     });
   });
 
-  it("renders separator", async () => {
-    const user = userEvent.setup();
-    render(
-      <DropdownMenu>
-        <DropdownMenuTrigger>Trigger</DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem>First</DropdownMenuItem>
-          <DropdownMenuSeparator data-testid="separator" />
-          <DropdownMenuItem>Second</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    );
-
-    await user.click(screen.getByText("Trigger"));
-
-    await waitFor(() => {
-      expect(screen.getByText("First")).toBeInTheDocument();
-      expect(screen.getByTestId("separator")).toBeInTheDocument();
-      expect(screen.getByTestId("separator")).toHaveClass("h-px");
-    });
-  });
-
   it("renders label", async () => {
     const user = userEvent.setup();
     render(
@@ -263,7 +240,6 @@ describe("DropdownMenu", () => {
     expect(indexExports.DropdownMenuTrigger).toBeDefined();
     expect(indexExports.DropdownMenuContent).toBeDefined();
     expect(indexExports.DropdownMenuItem).toBeDefined();
-    expect(indexExports.DropdownMenuSeparator).toBeDefined();
     expect(indexExports.DropdownMenuLabel).toBeDefined();
   });
 

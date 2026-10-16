@@ -197,22 +197,6 @@ function DropdownMenuItem({
   );
 }
 
-function DropdownMenuSeparator({
-  className,
-  ...props
-}: React.ComponentProps<typeof DropdownMenuPrimitive.Separator>) {
-  return (
-    <DropdownMenuPrimitive.Separator
-      className={cn(
-        "-mx-1 pointer-events-none my-1 h-px bg-gray-300",
-        className
-      )}
-      data-slot="dropdown-menu-separator"
-      {...props}
-    />
-  );
-}
-
 function DropdownMenuLabel({
   className,
   ...props
@@ -234,6 +218,5 @@ export {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 };
