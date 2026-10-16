@@ -5,7 +5,6 @@ import {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuLabel,
-  ContextMenuSeparator,
   ContextMenuTrigger,
 } from "./ContextMenu";
 
@@ -85,13 +84,13 @@ describe("ContextMenu", () => {
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
-  it("renders menu item with left icon", async () => {
+  it("renders menu item with icon", async () => {
     render(
       <ContextMenu>
         <ContextMenuTrigger>Trigger</ContextMenuTrigger>
         <ContextMenuContent>
-          <ContextMenuItem leftIcon={<span data-testid="left-icon">🔧</span>}>
-            With Left Icon
+          <ContextMenuItem icon={<span data-testid="item-icon">🔧</span>}>
+            With Icon
           </ContextMenuItem>
         </ContextMenuContent>
       </ContextMenu>
@@ -100,37 +99,17 @@ describe("ContextMenu", () => {
     fireEvent.contextMenu(screen.getByText("Trigger"));
 
     await waitFor(() => {
-      expect(screen.getByTestId("left-icon")).toBeInTheDocument();
-      expect(screen.getByText("With Left Icon")).toBeInTheDocument();
+      expect(screen.getByTestId("item-icon")).toBeInTheDocument();
+      expect(screen.getByText("With Icon")).toBeInTheDocument();
     });
   });
 
-  it("renders menu item with right icon", async () => {
+  it("applies destructive styling when variant is destructive", async () => {
     render(
       <ContextMenu>
         <ContextMenuTrigger>Trigger</ContextMenuTrigger>
         <ContextMenuContent>
-          <ContextMenuItem rightIcon={<span data-testid="right-icon">→</span>}>
-            With Right Icon
-          </ContextMenuItem>
-        </ContextMenuContent>
-      </ContextMenu>
-    );
-
-    fireEvent.contextMenu(screen.getByText("Trigger"));
-
-    await waitFor(() => {
-      expect(screen.getByTestId("right-icon")).toBeInTheDocument();
-      expect(screen.getByText("With Right Icon")).toBeInTheDocument();
-    });
-  });
-
-  it("applies destructive styling when destructive prop is true", async () => {
-    render(
-      <ContextMenu>
-        <ContextMenuTrigger>Trigger</ContextMenuTrigger>
-        <ContextMenuContent>
-          <ContextMenuItem destructive>Delete</ContextMenuItem>
+          <ContextMenuItem variant="destructive">Delete</ContextMenuItem>
         </ContextMenuContent>
       </ContextMenu>
     );
@@ -142,47 +121,6 @@ describe("ContextMenu", () => {
       expect(
         destructiveItem.closest('[data-slot="context-menu-item"]')
       ).toHaveClass("text-red-600");
-    });
-  });
-
-  it("applies inset padding when inset prop is true", async () => {
-    render(
-      <ContextMenu>
-        <ContextMenuTrigger>Trigger</ContextMenuTrigger>
-        <ContextMenuContent>
-          <ContextMenuItem inset>Inset Item</ContextMenuItem>
-        </ContextMenuContent>
-      </ContextMenu>
-    );
-
-    fireEvent.contextMenu(screen.getByText("Trigger"));
-
-    await waitFor(() => {
-      const insetItem = screen.getByText("Inset Item");
-      expect(insetItem.closest('[data-slot="context-menu-item"]')).toHaveClass(
-        "pl-8"
-      );
-    });
-  });
-
-  it("renders separator", async () => {
-    render(
-      <ContextMenu>
-        <ContextMenuTrigger>Trigger</ContextMenuTrigger>
-        <ContextMenuContent>
-          <ContextMenuItem>First</ContextMenuItem>
-          <ContextMenuSeparator data-testid="separator" />
-          <ContextMenuItem>Second</ContextMenuItem>
-        </ContextMenuContent>
-      </ContextMenu>
-    );
-
-    fireEvent.contextMenu(screen.getByText("Trigger"));
-
-    await waitFor(() => {
-      expect(screen.getByText("First")).toBeInTheDocument();
-      expect(screen.getByTestId("separator")).toBeInTheDocument();
-      expect(screen.getByTestId("separator")).toHaveClass("h-px");
     });
   });
 
@@ -202,24 +140,6 @@ describe("ContextMenu", () => {
     await waitFor(() => {
       expect(screen.getByText("Actions")).toBeInTheDocument();
       expect(screen.getByText("Actions")).toHaveClass("font-semibold");
-    });
-  });
-
-  it("renders label with inset", async () => {
-    render(
-      <ContextMenu>
-        <ContextMenuTrigger>Trigger</ContextMenuTrigger>
-        <ContextMenuContent>
-          <ContextMenuLabel inset>Inset Label</ContextMenuLabel>
-        </ContextMenuContent>
-      </ContextMenu>
-    );
-
-    fireEvent.contextMenu(screen.getByText("Trigger"));
-
-    await waitFor(() => {
-      const label = screen.getByText("Inset Label");
-      expect(label).toHaveClass("pl-8");
     });
   });
 
@@ -293,7 +213,6 @@ describe("ContextMenu", () => {
     expect(indexExports.ContextMenuTrigger).toBeDefined();
     expect(indexExports.ContextMenuContent).toBeDefined();
     expect(indexExports.ContextMenuItem).toBeDefined();
-    expect(indexExports.ContextMenuSeparator).toBeDefined();
     expect(indexExports.ContextMenuLabel).toBeDefined();
   });
 
@@ -396,23 +315,6 @@ describe("ContextMenu", () => {
         .getByText("Disabled Item")
         .closest('[data-slot="context-menu-item"]');
       expect(item).toHaveAttribute("data-disabled");
-    });
-  });
-
-  it("applies custom className to separator", async () => {
-    render(
-      <ContextMenu>
-        <ContextMenuTrigger>Trigger</ContextMenuTrigger>
-        <ContextMenuContent>
-          <ContextMenuSeparator className="custom-sep" data-testid="sep" />
-        </ContextMenuContent>
-      </ContextMenu>
-    );
-
-    fireEvent.contextMenu(screen.getByText("Trigger"));
-
-    await waitFor(() => {
-      expect(screen.getByTestId("sep")).toHaveClass("custom-sep");
     });
   });
 });
