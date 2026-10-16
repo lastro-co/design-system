@@ -21,6 +21,9 @@ interface DropdownMenuStoryArgs {
   disabled: boolean;
   align: "start" | "center" | "end";
   side: "top" | "right" | "bottom" | "left";
+  sideOffset: number;
+  modal: boolean;
+  triggerDisabled: boolean;
 }
 
 function alertItemClicked(label: string): () => void {
@@ -40,6 +43,9 @@ const meta: Meta<DropdownMenuStoryArgs> = {
     disabled: false,
     align: "start",
     side: "bottom",
+    sideOffset: 4,
+    modal: true,
+    triggerDisabled: false,
   },
   argTypes: {
     icon: {
@@ -71,6 +77,23 @@ const meta: Meta<DropdownMenuStoryArgs> = {
       description: "Side of the trigger the menu opens on.",
       table: { category: "DropdownMenuContent" },
     },
+    sideOffset: {
+      control: { type: "number", min: 0, max: 32, step: 1 },
+      description: "Distance in pixels between the trigger and the menu.",
+      table: { category: "DropdownMenuContent" },
+    },
+    modal: {
+      control: "boolean",
+      description:
+        "When `true` (default), interaction with the rest of the page is disabled and outside scroll is blocked while the menu is open.",
+      table: { category: "DropdownMenu" },
+    },
+    triggerDisabled: {
+      control: "boolean",
+      description:
+        "Disables the trigger itself, preventing the menu from opening.",
+      table: { category: "DropdownMenuTrigger" },
+    },
   },
 };
 
@@ -79,11 +102,15 @@ type Story = StoryObj<DropdownMenuStoryArgs>;
 
 export const Default: Story = {
   render: (args) => (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+    <DropdownMenu modal={args.modal}>
+      <DropdownMenuTrigger asChild disabled={args.triggerDisabled}>
         <Button variant="outline">Open menu</Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align={args.align} side={args.side}>
+      <DropdownMenuContent
+        align={args.align}
+        side={args.side}
+        sideOffset={args.sideOffset}
+      >
         <DropdownMenuItem onSelect={alertItemClicked("View details")}>
           View details
         </DropdownMenuItem>
@@ -108,13 +135,17 @@ export const WithIcons: Story = {
     icon: true,
   },
   render: (args) => (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+    <DropdownMenu modal={args.modal}>
+      <DropdownMenuTrigger asChild disabled={args.triggerDisabled}>
         <IconButton aria-label="More options">
           <EllipsisIcon />
         </IconButton>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align={args.align} side={args.side}>
+      <DropdownMenuContent
+        align={args.align}
+        side={args.side}
+        sideOffset={args.sideOffset}
+      >
         <DropdownMenuItem
           disabled={args.disabled}
           icon={args.icon ? <PencilIcon /> : undefined}
@@ -140,13 +171,17 @@ export const DestructiveItem: Story = {
     variant: "destructive",
   },
   render: (args) => (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+    <DropdownMenu modal={args.modal}>
+      <DropdownMenuTrigger asChild disabled={args.triggerDisabled}>
         <IconButton aria-label="More options">
           <EllipsisIcon />
         </IconButton>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align={args.align} side={args.side}>
+      <DropdownMenuContent
+        align={args.align}
+        side={args.side}
+        sideOffset={args.sideOffset}
+      >
         <DropdownMenuItem
           disabled={args.disabled}
           icon={args.icon ? <TrashIcon /> : undefined}
@@ -166,13 +201,17 @@ export const CompleteExample: Story = {
     variant: "destructive",
   },
   render: (args) => (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+    <DropdownMenu modal={args.modal}>
+      <DropdownMenuTrigger asChild disabled={args.triggerDisabled}>
         <IconButton aria-label="More options">
           <EllipsisIcon />
         </IconButton>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align={args.align} side={args.side}>
+      <DropdownMenuContent
+        align={args.align}
+        side={args.side}
+        sideOffset={args.sideOffset}
+      >
         <DropdownMenuItem
           icon={args.icon ? <PencilIcon /> : undefined}
           onSelect={alertItemClicked("Edit")}
@@ -204,11 +243,15 @@ export const DisabledItem: Story = {
     disabled: true,
   },
   render: (args) => (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+    <DropdownMenu modal={args.modal}>
+      <DropdownMenuTrigger asChild disabled={args.triggerDisabled}>
         <Button variant="outline">Open menu</Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align={args.align} side={args.side}>
+      <DropdownMenuContent
+        align={args.align}
+        side={args.side}
+        sideOffset={args.sideOffset}
+      >
         <DropdownMenuItem
           icon={args.icon ? <PencilIcon /> : undefined}
           onSelect={alertItemClicked("Available action")}
@@ -241,13 +284,17 @@ export const AlignEnd: Story = {
     },
   },
   render: (args) => (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+    <DropdownMenu modal={args.modal}>
+      <DropdownMenuTrigger asChild disabled={args.triggerDisabled}>
         <IconButton aria-label="More options">
           <EllipsisIcon />
         </IconButton>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align={args.align} side={args.side}>
+      <DropdownMenuContent
+        align={args.align}
+        side={args.side}
+        sideOffset={args.sideOffset}
+      >
         <DropdownMenuItem
           icon={args.icon ? <PencilIcon /> : undefined}
           onSelect={alertItemClicked("Edit")}
