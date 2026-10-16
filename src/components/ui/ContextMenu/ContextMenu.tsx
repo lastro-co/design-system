@@ -100,19 +100,6 @@ function ContextMenuItem({
   );
 }
 
-function ContextMenuSeparator({
-  className,
-  ...props
-}: React.ComponentProps<typeof ContextMenuPrimitive.Separator>) {
-  return (
-    <ContextMenuPrimitive.Separator
-      className={cn("m-0 h-px bg-gray-300", className)}
-      data-slot="context-menu-separator"
-      {...props}
-    />
-  );
-}
-
 function ContextMenuLabel({
   className,
   inset,
@@ -138,6 +125,5 @@ export {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuLabel,
-  ContextMenuSeparator,
   ContextMenuTrigger,
 };

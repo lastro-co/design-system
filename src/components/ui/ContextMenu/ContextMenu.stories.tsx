@@ -11,7 +11,6 @@ import {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuLabel,
-  ContextMenuSeparator,
   ContextMenuTrigger,
 } from "./ContextMenu";
 
@@ -32,7 +31,6 @@ Componente de menu contextual baseado no Radix UI que exibe opções ao clicar c
 - **ContextMenuTrigger**: Elemento que dispara a abertura do menu (clique direito)
 - **ContextMenuContent**: Container do conteúdo do menu
 - **ContextMenuItem**: Item individual do menu
-- **ContextMenuSeparator**: Separador visual entre itens
 - **ContextMenuLabel**: Label/título para grupos de itens
 
 ## Props do ContextMenuItem
@@ -93,11 +91,8 @@ export const Default: Story = {
       </ContextMenuTrigger>
       <ContextMenuContent>
         <ContextMenuItem>Ver conversa</ContextMenuItem>
-        <ContextMenuSeparator />
         <ContextMenuItem>Chamar no WhatsApp</ContextMenuItem>
-        <ContextMenuSeparator />
         <ContextMenuItem>Copiar telefone</ContextMenuItem>
-        <ContextMenuSeparator />
         <ContextMenuItem>Cancelar solicitação</ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>
@@ -117,15 +112,12 @@ export const WithIcons: Story = {
         >
           Ver conversa
         </ContextMenuItem>
-        <ContextMenuSeparator />
         <ContextMenuItem leftIcon={<WhatsAppIcon className="size-4" />}>
           Chamar no WhatsApp
         </ContextMenuItem>
-        <ContextMenuSeparator />
         <ContextMenuItem leftIcon={<SearchIcon className="size-4" />}>
           Buscar
         </ContextMenuItem>
-        <ContextMenuSeparator />
         <ContextMenuItem leftIcon={<SettingsIcon className="size-4" />}>
           Configurações
         </ContextMenuItem>
@@ -148,7 +140,6 @@ export const WithRightIcons: Story = {
         >
           Ver conversa
         </ContextMenuItem>
-        <ContextMenuSeparator />
         <ContextMenuItem
           leftIcon={<SettingsIcon className="size-4" />}
           rightIcon={<span className="text-gray-400 text-xs">⌘,</span>}
@@ -169,11 +160,8 @@ export const WithCustomColors: Story = {
       </ContextMenuTrigger>
       <ContextMenuContent>
         <ContextMenuItem color="#49317a">Ação Primária</ContextMenuItem>
-        <ContextMenuSeparator />
         <ContextMenuItem color="#2563EB">Ação Azul</ContextMenuItem>
-        <ContextMenuSeparator />
         <ContextMenuItem color="#16A34A">Ação Verde</ContextMenuItem>
-        <ContextMenuSeparator />
         <ContextMenuItem color="#DC2626">Ação Vermelha</ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>
@@ -189,11 +177,8 @@ export const WithDisabledItems: Story = {
       </ContextMenuTrigger>
       <ContextMenuContent>
         <ContextMenuItem>Ação disponível</ContextMenuItem>
-        <ContextMenuSeparator />
         <ContextMenuItem disabled>Ação desabilitada</ContextMenuItem>
-        <ContextMenuSeparator />
         <ContextMenuItem>Outra ação disponível</ContextMenuItem>
-        <ContextMenuSeparator />
         <ContextMenuItem disabled>Outra ação desabilitada</ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>
@@ -209,11 +194,8 @@ export const DestructiveAction: Story = {
       </ContextMenuTrigger>
       <ContextMenuContent>
         <ContextMenuItem>Ver detalhes</ContextMenuItem>
-        <ContextMenuSeparator />
         <ContextMenuItem>Editar</ContextMenuItem>
-        <ContextMenuSeparator />
         <ContextMenuItem>Duplicar</ContextMenuItem>
-        <ContextMenuSeparator />
         <ContextMenuItem
           color="#DC2626"
           leftIcon={<XIcon className="size-4" />}
@@ -238,15 +220,11 @@ export const CompleteExample: Story = {
         >
           Ver conversa
         </ContextMenuItem>
-        <ContextMenuSeparator />
         <ContextMenuItem leftIcon={<WhatsAppIcon className="size-4" />}>
           Chamar no WhatsApp
         </ContextMenuItem>
-        <ContextMenuSeparator />
         <ContextMenuItem>Copiar telefone</ContextMenuItem>
-        <ContextMenuSeparator />
         <ContextMenuItem>Copiar CPF</ContextMenuItem>
-        <ContextMenuSeparator />
         <ContextMenuItem
           color="#DC2626"
           leftIcon={<XIcon className="size-4" />}
@@ -275,7 +253,6 @@ export const WithLabels: Story = {
         <ContextMenuItem leftIcon={<WhatsAppIcon className="size-4" />}>
           Chamar no WhatsApp
         </ContextMenuItem>
-        <ContextMenuSeparator />
         <ContextMenuLabel>Ações</ContextMenuLabel>
         <ContextMenuItem leftIcon={<SearchIcon className="size-4" />}>
           Buscar
@@ -283,7 +260,6 @@ export const WithLabels: Story = {
         <ContextMenuItem leftIcon={<SettingsIcon className="size-4" />}>
           Configurações
         </ContextMenuItem>
-        <ContextMenuSeparator />
         <ContextMenuLabel>Zona de Perigo</ContextMenuLabel>
         <ContextMenuItem destructive leftIcon={<XIcon className="size-4" />}>
           Excluir

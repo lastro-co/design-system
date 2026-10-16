@@ -62,7 +62,6 @@ export {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuLabel,
-  ContextMenuSeparator,
   ContextMenuTrigger,
 } from "./ContextMenu";
 export { CopyButton } from "./CopyButton";
