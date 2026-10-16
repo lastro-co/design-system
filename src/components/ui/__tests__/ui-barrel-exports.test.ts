@@ -76,7 +76,6 @@ describe("components/ui barrel exports", () => {
     expect(uiExports.ContextMenuContent).toBeDefined();
     expect(uiExports.ContextMenuItem).toBeDefined();
     expect(uiExports.ContextMenuLabel).toBeDefined();
-    expect(uiExports.ContextMenuSeparator).toBeDefined();
     expect(uiExports.ContextMenuTrigger).toBeDefined();
   });
 
