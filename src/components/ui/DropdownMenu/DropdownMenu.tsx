@@ -221,7 +221,7 @@ function DropdownMenuSubTrigger({
       className={cn(
         "relative flex h-10 w-full cursor-pointer select-none items-center gap-2 rounded-[2px] px-2 py-1.5 text-gray-900 text-sm outline-hidden transition-colors",
         "data-disabled:pointer-events-none data-disabled:opacity-50",
-        "data-highlighted:bg-purple-50",
+        "data-[state=open]:bg-purple-50 data-highlighted:bg-purple-50",
         "[&_svg]:size-4 [&_svg]:shrink-0",
         className
       )}

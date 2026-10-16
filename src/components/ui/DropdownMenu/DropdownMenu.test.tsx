@@ -464,6 +464,38 @@ describe("DropdownMenu", () => {
       });
     });
 
+    it("keeps the sub-trigger highlighted while the submenu is open", async () => {
+      const user = userEvent.setup();
+      render(
+        <DropdownMenu>
+          <DropdownMenuTrigger>Trigger</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>More actions</DropdownMenuSubTrigger>
+              <DropdownMenuSubContent>
+                <DropdownMenuItem>Duplicate</DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+
+      await user.click(screen.getByText("Trigger"));
+      const subTrigger = await screen.findByText("More actions");
+      expect(
+        subTrigger.closest('[data-slot="dropdown-menu-sub-trigger"]')
+      ).toHaveClass("data-[state=open]:bg-purple-50");
+
+      await user.hover(subTrigger);
+
+      await waitFor(() => {
+        expect(screen.getByText("Duplicate")).toBeInTheDocument();
+        expect(
+          subTrigger.closest('[data-slot="dropdown-menu-sub-trigger"]')
+        ).toHaveAttribute("data-state", "open");
+      });
+    });
+
     it("opens the sub-content when hovering the sub-trigger", async () => {
       const user = userEvent.setup();
       render(
