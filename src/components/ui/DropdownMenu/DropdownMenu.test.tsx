@@ -280,6 +280,60 @@ describe("DropdownMenu", () => {
     });
   });
 
+  describe("onCloseAutoFocus", () => {
+    // Selecting an item commonly opens another overlay (Drawer, Dialog,
+    // AlertDialog) in the same tick the menu closes. Radix's default
+    // behavior moves focus back to the trigger, which races the new overlay
+    // taking focus and can leave the trigger stuck under an inert tree.
+    it("prevents the default auto-focus-back to the trigger", async () => {
+      const user = userEvent.setup();
+      render(
+        <DropdownMenu>
+          <DropdownMenuTrigger>Trigger</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Option 1</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+
+      await user.click(screen.getByText("Trigger"));
+      await waitFor(() => {
+        expect(screen.getByText("Option 1")).toBeInTheDocument();
+      });
+
+      await user.click(screen.getByText("Option 1"));
+
+      await waitFor(() => {
+        expect(screen.queryByText("Option 1")).not.toBeInTheDocument();
+      });
+      expect(screen.getByText("Trigger")).not.toHaveFocus();
+    });
+
+    it("still auto-focuses the trigger when a consumer opts back in", async () => {
+      const user = userEvent.setup();
+      const onCloseAutoFocus = jest.fn();
+      render(
+        <DropdownMenu>
+          <DropdownMenuTrigger>Trigger</DropdownMenuTrigger>
+          <DropdownMenuContent onCloseAutoFocus={onCloseAutoFocus}>
+            <DropdownMenuItem>Option 1</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+
+      await user.click(screen.getByText("Trigger"));
+      await waitFor(() => {
+        expect(screen.getByText("Option 1")).toBeInTheDocument();
+      });
+
+      await user.click(screen.getByText("Option 1"));
+
+      await waitFor(() => {
+        expect(onCloseAutoFocus).toHaveBeenCalled();
+      });
+    });
+  });
+
   describe("openOnHover", () => {
     beforeEach(() => {
       jest.useFakeTimers();
