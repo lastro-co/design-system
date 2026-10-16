@@ -268,14 +268,26 @@ export const CompleteExample: Story = {
         >
           Duplicate
         </DropdownMenuItem>
-        <DropdownMenuItem
-          disabled={args.disabled}
-          icon={args.icon ? <TrashIcon /> : undefined}
-          onSelect={alertItemClicked("Delete")}
-          variant={args.variant}
-        >
-          Delete
-        </DropdownMenuItem>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger
+            icon={args.icon ? <EllipsisIcon /> : undefined}
+          >
+            More actions
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent>
+            <DropdownMenuItem onSelect={alertItemClicked("Archive")}>
+              Archive
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={args.disabled}
+              icon={args.icon ? <TrashIcon /> : undefined}
+              onSelect={alertItemClicked("Delete")}
+              variant={args.variant}
+            >
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
       </DropdownMenuContent>
     </DropdownMenu>
   ),
