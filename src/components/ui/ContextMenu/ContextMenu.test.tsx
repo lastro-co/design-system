@@ -5,6 +5,7 @@ import {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuLabel,
+  ContextMenuSeparator,
   ContextMenuTrigger,
 } from "./ContextMenu";
 
@@ -164,6 +165,27 @@ describe("ContextMenu", () => {
     });
   });
 
+  it("renders separator", async () => {
+    render(
+      <ContextMenu>
+        <ContextMenuTrigger>Trigger</ContextMenuTrigger>
+        <ContextMenuContent>
+          <ContextMenuItem>First</ContextMenuItem>
+          <ContextMenuSeparator data-testid="separator" />
+          <ContextMenuItem>Second</ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenu>
+    );
+
+    fireEvent.contextMenu(screen.getByText("Trigger"));
+
+    await waitFor(() => {
+      expect(screen.getByText("First")).toBeInTheDocument();
+      expect(screen.getByTestId("separator")).toBeInTheDocument();
+      expect(screen.getByTestId("separator")).toHaveClass("h-px");
+    });
+  });
+
   it("renders label", async () => {
     render(
       <ContextMenu>
@@ -271,6 +293,7 @@ describe("ContextMenu", () => {
     expect(indexExports.ContextMenuTrigger).toBeDefined();
     expect(indexExports.ContextMenuContent).toBeDefined();
     expect(indexExports.ContextMenuItem).toBeDefined();
+    expect(indexExports.ContextMenuSeparator).toBeDefined();
     expect(indexExports.ContextMenuLabel).toBeDefined();
   });
 
@@ -373,6 +396,23 @@ describe("ContextMenu", () => {
         .getByText("Disabled Item")
         .closest('[data-slot="context-menu-item"]');
       expect(item).toHaveAttribute("data-disabled");
+    });
+  });
+
+  it("applies custom className to separator", async () => {
+    render(
+      <ContextMenu>
+        <ContextMenuTrigger>Trigger</ContextMenuTrigger>
+        <ContextMenuContent>
+          <ContextMenuSeparator className="custom-sep" data-testid="sep" />
+        </ContextMenuContent>
+      </ContextMenu>
+    );
+
+    fireEvent.contextMenu(screen.getByText("Trigger"));
+
+    await waitFor(() => {
+      expect(screen.getByTestId("sep")).toHaveClass("custom-sep");
     });
   });
 });

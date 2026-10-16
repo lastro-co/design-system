@@ -4,5 +4,6 @@ export {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuLabel,
+  ContextMenuSeparator,
   ContextMenuTrigger,
 } from "./ContextMenu";
