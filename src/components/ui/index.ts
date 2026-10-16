@@ -95,12 +95,18 @@ export {
   DrawerTitle,
   DrawerTrigger,
 } from "./Drawer";
-export type { DropdownMenuItemProps } from "./DropdownMenu";
+export type {
+  DropdownMenuItemProps,
+  DropdownMenuSubTriggerProps,
+} from "./DropdownMenu";
 export {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "./DropdownMenu";
 export type {

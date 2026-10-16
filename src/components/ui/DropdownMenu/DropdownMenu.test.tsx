@@ -5,6 +5,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "./DropdownMenu";
 
@@ -241,6 +244,9 @@ describe("DropdownMenu", () => {
     expect(indexExports.DropdownMenuContent).toBeDefined();
     expect(indexExports.DropdownMenuItem).toBeDefined();
     expect(indexExports.DropdownMenuLabel).toBeDefined();
+    expect(indexExports.DropdownMenuSub).toBeDefined();
+    expect(indexExports.DropdownMenuSubTrigger).toBeDefined();
+    expect(indexExports.DropdownMenuSubContent).toBeDefined();
   });
 
   it("respects a controlled open prop", async () => {
@@ -430,6 +436,226 @@ describe("DropdownMenu", () => {
 
       await waitFor(() => {
         expect(screen.getByText("Option 1")).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe("submenu", () => {
+    it("renders the sub-trigger inside the open menu", async () => {
+      const user = userEvent.setup();
+      render(
+        <DropdownMenu>
+          <DropdownMenuTrigger>Trigger</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>More actions</DropdownMenuSubTrigger>
+              <DropdownMenuSubContent>
+                <DropdownMenuItem>Duplicate</DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+
+      await user.click(screen.getByText("Trigger"));
+
+      await waitFor(() => {
+        expect(screen.getByText("More actions")).toBeInTheDocument();
+      });
+    });
+
+    it("opens the sub-content when hovering the sub-trigger", async () => {
+      const user = userEvent.setup();
+      render(
+        <DropdownMenu>
+          <DropdownMenuTrigger>Trigger</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>More actions</DropdownMenuSubTrigger>
+              <DropdownMenuSubContent>
+                <DropdownMenuItem>Duplicate</DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+
+      await user.click(screen.getByText("Trigger"));
+      await waitFor(() => {
+        expect(screen.getByText("More actions")).toBeInTheDocument();
+      });
+
+      await user.hover(screen.getByText("More actions"));
+
+      await waitFor(() => {
+        expect(screen.getByText("Duplicate")).toBeInTheDocument();
+      });
+    });
+
+    it("calls onSelect when a sub-item is clicked", async () => {
+      const user = userEvent.setup({ pointerEventsCheck: 0 });
+      const handleSelect = jest.fn();
+
+      render(
+        <DropdownMenu>
+          <DropdownMenuTrigger>Trigger</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>More actions</DropdownMenuSubTrigger>
+              <DropdownMenuSubContent>
+                <DropdownMenuItem onSelect={handleSelect}>
+                  Duplicate
+                </DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+
+      await user.click(screen.getByText("Trigger"));
+      await waitFor(() => {
+        expect(screen.getByText("More actions")).toBeInTheDocument();
+      });
+
+      await user.hover(screen.getByText("More actions"));
+      await waitFor(() => {
+        expect(screen.getByText("Duplicate")).toBeInTheDocument();
+      });
+
+      // userEvent.click() moves the pointer across the sub-trigger before
+      // clicking, which re-triggers Radix's hover-close timer for the
+      // sub-content mid-click. A direct pointer press/release avoids that.
+      await user.pointer({
+        keys: "[MouseLeft]",
+        target: screen.getByText("Duplicate"),
+      });
+
+      await waitFor(() => {
+        expect(handleSelect).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    it("renders the sub-trigger icon", async () => {
+      const user = userEvent.setup();
+      render(
+        <DropdownMenu>
+          <DropdownMenuTrigger>Trigger</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger
+                icon={<span data-testid="sub-trigger-icon">🔧</span>}
+              >
+                More actions
+              </DropdownMenuSubTrigger>
+              <DropdownMenuSubContent>
+                <DropdownMenuItem>Duplicate</DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+
+      await user.click(screen.getByText("Trigger"));
+
+      await waitFor(() => {
+        expect(screen.getByTestId("sub-trigger-icon")).toBeInTheDocument();
+      });
+    });
+
+    it("renders with data-slot attributes", async () => {
+      const user = userEvent.setup();
+      render(
+        <DropdownMenu>
+          <DropdownMenuTrigger>Trigger</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>More actions</DropdownMenuSubTrigger>
+              <DropdownMenuSubContent>
+                <DropdownMenuItem>Duplicate</DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+
+      await user.click(screen.getByText("Trigger"));
+
+      await waitFor(() => {
+        const subTrigger = screen
+          .getByText("More actions")
+          .closest('[data-slot="dropdown-menu-sub-trigger"]');
+        expect(subTrigger).toBeInTheDocument();
+      });
+
+      await user.hover(screen.getByText("More actions"));
+
+      await waitFor(() => {
+        const subContent = screen
+          .getByText("Duplicate")
+          .closest("[role='menu']");
+        expect(subContent).toHaveAttribute(
+          "data-slot",
+          "dropdown-menu-sub-content"
+        );
+      });
+    });
+
+    it("renders disabled sub-trigger", async () => {
+      const user = userEvent.setup();
+      render(
+        <DropdownMenu>
+          <DropdownMenuTrigger>Trigger</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger disabled>
+                More actions
+              </DropdownMenuSubTrigger>
+              <DropdownMenuSubContent>
+                <DropdownMenuItem>Duplicate</DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+
+      await user.click(screen.getByText("Trigger"));
+
+      await waitFor(() => {
+        const subTrigger = screen
+          .getByText("More actions")
+          .closest('[data-slot="dropdown-menu-sub-trigger"]');
+        expect(subTrigger).toHaveAttribute("data-disabled");
+      });
+    });
+
+    it("applies custom className to sub-content", async () => {
+      const user = userEvent.setup();
+      render(
+        <DropdownMenu>
+          <DropdownMenuTrigger>Trigger</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>More actions</DropdownMenuSubTrigger>
+              <DropdownMenuSubContent className="custom-sub-content">
+                <DropdownMenuItem>Duplicate</DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+
+      await user.click(screen.getByText("Trigger"));
+      await waitFor(() => {
+        expect(screen.getByText("More actions")).toBeInTheDocument();
+      });
+
+      await user.hover(screen.getByText("More actions"));
+
+      await waitFor(() => {
+        const subContent = screen
+          .getByText("Duplicate")
+          .closest("[role='menu']");
+        expect(subContent).toHaveClass("custom-sub-content");
       });
     });
   });

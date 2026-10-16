@@ -2,6 +2,7 @@
 
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import * as React from "react";
+import { ChevronRightIcon } from "@/components/icons.v2";
 import { cn } from "@/lib/utils";
 
 type DropdownMenuHoverContextValue = (hovering: boolean) => void;
@@ -197,6 +198,66 @@ function DropdownMenuItem({
   );
 }
 
+function DropdownMenuSub({
+  ...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Sub>) {
+  return <DropdownMenuPrimitive.Sub data-slot="dropdown-menu-sub" {...props} />;
+}
+
+export interface DropdownMenuSubTriggerProps
+  extends React.ComponentProps<typeof DropdownMenuPrimitive.SubTrigger> {
+  /** Icon shown to the left of the label. */
+  icon?: React.ReactNode;
+}
+
+function DropdownMenuSubTrigger({
+  className,
+  icon,
+  children,
+  ...props
+}: DropdownMenuSubTriggerProps) {
+  return (
+    <DropdownMenuPrimitive.SubTrigger
+      className={cn(
+        "relative flex h-10 w-full cursor-pointer select-none items-center gap-2 rounded-[2px] px-2 py-1.5 text-gray-900 text-sm outline-hidden transition-colors",
+        "data-disabled:pointer-events-none data-disabled:opacity-50",
+        "data-highlighted:bg-purple-50",
+        "[&_svg]:size-4 [&_svg]:shrink-0",
+        className
+      )}
+      data-slot="dropdown-menu-sub-trigger"
+      {...props}
+    >
+      {icon}
+      <span className="flex-1 truncate">{children}</span>
+      <ChevronRightIcon className="ml-auto text-gray-400" />
+    </DropdownMenuPrimitive.SubTrigger>
+  );
+}
+
+function DropdownMenuSubContent({
+  className,
+  sideOffset = 4,
+  ...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.SubContent>) {
+  return (
+    <DropdownMenuPrimitive.Portal>
+      <DropdownMenuPrimitive.SubContent
+        className={cn(
+          "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
+          "data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+          "data-[state=closed]:animate-out data-[state=open]:animate-in",
+          "z-50 min-w-[8rem] overflow-hidden rounded-md border border-gray-300 bg-white p-1 font-text text-gray-900 shadow-sx",
+          className
+        )}
+        data-slot="dropdown-menu-sub-content"
+        sideOffset={sideOffset}
+        {...props}
+      />
+    </DropdownMenuPrimitive.Portal>
+  );
+}
+
 function DropdownMenuLabel({
   className,
   ...props
@@ -218,5 +279,8 @@ export {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 };

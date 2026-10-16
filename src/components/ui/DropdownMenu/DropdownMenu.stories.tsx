@@ -11,6 +11,9 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "./DropdownMenu";
 
@@ -365,6 +368,55 @@ export const AlignEnd: Story = {
         >
           Delete
         </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  ),
+};
+
+export const WithSubmenu: Story = {
+  args: {
+    icon: true,
+    variant: "destructive",
+  },
+  render: (args) => (
+    <DropdownMenu
+      closeDelay={args.closeDelay}
+      modal={args.modal}
+      openDelay={args.openDelay}
+      openOnHover={args.openOnHover}
+    >
+      <DropdownMenuTrigger asChild disabled={args.triggerDisabled}>
+        <Button variant="outline">Open menu</Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        align={args.align}
+        side={args.side}
+        sideOffset={args.sideOffset}
+      >
+        <DropdownMenuItem
+          icon={args.icon ? <PencilIcon /> : undefined}
+          onSelect={alertItemClicked("Edit")}
+        >
+          Edit
+        </DropdownMenuItem>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger icon={args.icon ? <CopyIcon /> : undefined}>
+            More actions
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent>
+            <DropdownMenuItem onSelect={alertItemClicked("Duplicate")}>
+              Duplicate
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={args.disabled}
+              icon={args.icon ? <TrashIcon /> : undefined}
+              onSelect={alertItemClicked("Delete")}
+              variant={args.variant}
+            >
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
       </DropdownMenuContent>
     </DropdownMenu>
   ),
