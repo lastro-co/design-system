@@ -131,6 +131,7 @@ function DropdownMenuContent({
   sideOffset = 4,
   onMouseEnter,
   onMouseLeave,
+  onCloseAutoFocus,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Content>) {
   const hoverCtx = React.useContext(DropdownMenuHoverContext);
@@ -147,6 +148,21 @@ function DropdownMenuContent({
           className
         )}
         data-slot="dropdown-menu-content"
+        onCloseAutoFocus={(event) => {
+          if (onCloseAutoFocus) {
+            onCloseAutoFocus(event);
+            return;
+          }
+          // Selecting an item commonly opens another overlay (Drawer,
+          // Dialog, AlertDialog) in the same tick this menu closes. Radix's
+          // default behavior moves focus back to the trigger, which races
+          // the new overlay taking focus and can leave the trigger stuck
+          // under an inert tree — the menu won't reopen until the page is
+          // interacted with elsewhere. Skip the auto-focus-back by default;
+          // pass `onCloseAutoFocus` to opt back into Radix's default when an
+          // item never opens another overlay.
+          event.preventDefault();
+        }}
         onMouseEnter={(event) => {
           onMouseEnter?.(event);
           hoverCtx?.(true);
