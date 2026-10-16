@@ -1,5 +1,18 @@
 import userEvent from "@testing-library/user-event";
+import { useState } from "react";
 import { render, screen, waitFor } from "@/tests/app-test-utils";
+import {
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogRoot,
+  AlertDialogTitle,
+} from "../AlertDialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../DropdownMenu";
 import {
   Drawer,
   DrawerClose,
@@ -499,6 +512,134 @@ describe("Drawer", () => {
       await waitFor(() => {
         expect(screen.queryByText("Drawer Body")).not.toBeInTheDocument();
       });
+    });
+  });
+
+  describe("body pointer-events cleanup", () => {
+    // vaul and Radix's scroll-lock can race when this drawer closes right as
+    // another Radix overlay (e.g. a DropdownMenu item) closed in the same
+    // tick to open it — the lock ref-count desyncs and
+    // `<body style="pointer-events: none">` is left stuck forever, freezing
+    // the whole page (nothing in the document is clickable anymore).
+    function DropdownOpenedDrawerScenario() {
+      const [open, setOpen] = useState(false);
+      return (
+        <div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button type="button">Trigger</button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem onSelect={() => setOpen(true)}>
+                Open drawer
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <Drawer onOpenChange={setOpen} open={open}>
+            <DrawerContent>
+              <DrawerMain>
+                <DrawerTitle>Title</DrawerTitle>
+                <DrawerDescription>Description</DrawerDescription>
+                <p>Drawer Body</p>
+              </DrawerMain>
+            </DrawerContent>
+          </Drawer>
+        </div>
+      );
+    }
+
+    it("clears a stuck body pointer-events after opening from a DropdownMenu item closes", async () => {
+      const user = userEvent.setup();
+
+      render(<DropdownOpenedDrawerScenario />);
+
+      await user.click(screen.getByText("Trigger"));
+      await waitFor(() => {
+        expect(screen.getByText("Open drawer")).toBeInTheDocument();
+      });
+
+      await user.click(screen.getByText("Open drawer"));
+      await waitFor(() => {
+        expect(screen.getByText("Drawer Body")).toBeVisible();
+      });
+
+      await user.keyboard("{Escape}");
+      await waitFor(() => {
+        expect(screen.queryByText("Drawer Body")).not.toBeInTheDocument();
+      });
+
+      await waitFor(() => {
+        expect(document.body.style.pointerEvents).not.toBe("none");
+      });
+
+      // The page must be interactive again: the trigger reopens the menu.
+      await user.click(screen.getByText("Trigger"));
+      await waitFor(() => {
+        expect(screen.getByText("Open drawer")).toBeInTheDocument();
+      });
+    });
+
+    // Guards the inverse failure mode: if this drawer closes to make way for
+    // an AlertDialog (e.g. a delete confirmation triggered from inside the
+    // drawer, as TeamCard does), the cleanup must NOT clear the lock the
+    // AlertDialog still legitimately needs — that would let clicks reach
+    // the page behind an open confirmation dialog.
+    function DrawerToAlertDialogScenario() {
+      const [drawerOpen, setDrawerOpen] = useState(true);
+      const [alertOpen, setAlertOpen] = useState(false);
+      return (
+        <div>
+          <button type="button">Background button</button>
+
+          <Drawer onOpenChange={setDrawerOpen} open={drawerOpen}>
+            <DrawerContent>
+              <DrawerMain>
+                <DrawerTitle>Title</DrawerTitle>
+                <DrawerDescription>Description</DrawerDescription>
+                <button
+                  onClick={() => {
+                    setDrawerOpen(false);
+                    setAlertOpen(true);
+                  }}
+                  type="button"
+                >
+                  Delete
+                </button>
+              </DrawerMain>
+            </DrawerContent>
+          </Drawer>
+
+          <AlertDialogRoot onOpenChange={setAlertOpen} open={alertOpen}>
+            <AlertDialogContent>
+              <AlertDialogTitle>Confirm</AlertDialogTitle>
+              <AlertDialogAction onClick={() => setAlertOpen(false)}>
+                Confirm delete
+              </AlertDialogAction>
+            </AlertDialogContent>
+          </AlertDialogRoot>
+        </div>
+      );
+    }
+
+    it("does not clear the lock while an AlertDialog opened from this drawer is still open", async () => {
+      const user = userEvent.setup();
+      render(<DrawerToAlertDialogScenario />);
+
+      await waitFor(() => {
+        expect(screen.getByText("Delete")).toBeVisible();
+      });
+
+      // Closes this drawer and opens the AlertDialog in the same handler —
+      // the exact race the cleanup frame has to resolve correctly.
+      await user.click(screen.getByText("Delete"));
+
+      await waitFor(() => {
+        expect(screen.queryByText("Delete")).not.toBeInTheDocument();
+        expect(screen.getByText("Confirm delete")).toBeVisible();
+      });
+
+      expect(document.body.style.pointerEvents).toBe("none");
     });
   });
 
