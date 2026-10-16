@@ -123,7 +123,7 @@ function DynamicPagination({
   };
 
   const PAGINATION_BUTTON_BASE_STYLES =
-    "inline-flex size-6 cursor-pointer items-center justify-center rounded-md font-normal text-purple-800 text-sm transition-colors hover:bg-purple-100 focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50";
+    "inline-flex size-6 cursor-pointer items-center justify-center rounded-md font-normal text-purple-800 text-sm transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50";
   return (
     <nav
       aria-label="pagination"
@@ -160,7 +160,8 @@ function DynamicPagination({
                 aria-current={currentPage === page ? "page" : undefined}
                 className={cn(
                   PAGINATION_BUTTON_BASE_STYLES,
-                  currentPage === page && "bg-purple-100"
+                  currentPage === page &&
+                    "bg-purple-800 text-white hover:bg-purple-800"
                 )}
                 onClick={() => onPageChange(page)}
                 type="button"
