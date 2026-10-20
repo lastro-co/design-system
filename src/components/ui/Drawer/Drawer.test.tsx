@@ -725,7 +725,9 @@ describe("Drawer", () => {
       renderDrawer();
       await openDrawer(user);
 
-      await user.click(screen.getByRole("button", { name: CLOSE_BUTTON_REGEX }));
+      await user.click(
+        screen.getByRole("button", { name: CLOSE_BUTTON_REGEX })
+      );
       await waitFor(() => {
         expect(screen.queryByText("Drawer Title")).not.toBeInTheDocument();
       });
