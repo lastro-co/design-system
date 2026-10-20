@@ -1,7 +1,13 @@
 "use client";
 
 import type * as React from "react";
-import { createContext, useContext, useEffect, useRef } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+} from "react";
 import { Drawer as DrawerPrimitive } from "vaul";
 import { cn } from "@/lib/utils";
 import { ChevronLeftIcon, XIcon } from "../../icons.v2";
@@ -73,10 +79,14 @@ function Drawer({
     []
   );
 
-  const handleOpenChange = (open: boolean) => {
-    onOpenChange?.(open);
-    if (open) {
-      return;
+  // Shared by both the vaul-internal close path (handleOpenChange) and the
+  // externally-controlled close path below (the `open` prop flipping to
+  // `false` without vaul ever calling onOpenChange). Cancels any pending
+  // frame first so the two triggers never leak a stale rAF handle when both
+  // fire for the same logical close.
+  const scheduleBodyCleanup = useCallback(() => {
+    if (cleanupFrameRef.current !== undefined) {
+      cancelAnimationFrame(cleanupFrameRef.current);
     }
     // vaul and Radix's scroll-lock (react-remove-scroll) can race when this
     // drawer closes while another Radix overlay (e.g. a DropdownMenu item)
@@ -94,7 +104,32 @@ function Drawer({
         document.body.style.pointerEvents = "";
       }
     });
+  }, []);
+
+  const handleOpenChange = (open: boolean) => {
+    onOpenChange?.(open);
+    if (!open) {
+      scheduleBodyCleanup();
+    }
   };
+
+  const previousOpenPropRef = useRef(props.open);
+
+  // vaul only calls `onOpenChange` from its own internal close paths (Esc,
+  // outside-click, drag dismiss, close button) — see vaul's
+  // useControllableState: a controlled `open` prop that the parent flips to
+  // `false` itself (e.g. after an async save resolves) flows straight
+  // through on the next render without going through vaul's `setValue`, so
+  // `onOpenChange` never fires and handleOpenChange's cleanup never runs.
+  // Mirror that cleanup here, keyed on the `open` prop. Guarded so it never
+  // fires for uncontrolled drawers (`open` stays `undefined` the whole time).
+  useEffect(() => {
+    const previousOpen = previousOpenPropRef.current;
+    previousOpenPropRef.current = props.open;
+    if (previousOpen && props.open === false) {
+      scheduleBodyCleanup();
+    }
+  }, [props.open, scheduleBodyCleanup]);
 
   return (
     <DrawerContext.Provider value={{ width }}>

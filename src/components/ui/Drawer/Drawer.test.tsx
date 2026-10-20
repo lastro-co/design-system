@@ -641,6 +641,97 @@ describe("Drawer", () => {
 
       expect(document.body.style.pointerEvents).toBe("none");
     });
+
+    // vaul only calls `onOpenChange` for its own internal close paths (Esc,
+    // outside-click, drag, close button). When a controlled `open` prop is
+    // flipped to `false` by the parent itself — e.g. after an async save
+    // resolves — vaul never calls `onOpenChange`, so the cleanup in
+    // `handleOpenChange` alone would never run. This scenario reproduces
+    // that: the Drawer is opened from a DropdownMenu item (the same race as
+    // above), then closed via a "Save" button whose handler flips `open` to
+    // `false` asynchronously, mirroring a real `await save(); onClose()`
+    // pattern — never through vaul's internal Esc/X/outside-click paths.
+    function DropdownOpenedDrawerClosedExternallyScenario() {
+      const [open, setOpen] = useState(false);
+      return (
+        <div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button type="button">Trigger</button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem onSelect={() => setOpen(true)}>
+                Open drawer
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <Drawer onOpenChange={setOpen} open={open}>
+            <DrawerContent>
+              <DrawerMain>
+                <DrawerTitle>Title</DrawerTitle>
+                <DrawerDescription>Description</DrawerDescription>
+                <button
+                  onClick={async () => {
+                    await Promise.resolve();
+                    setOpen(false);
+                  }}
+                  type="button"
+                >
+                  Save
+                </button>
+              </DrawerMain>
+            </DrawerContent>
+          </Drawer>
+        </div>
+      );
+    }
+
+    it("clears a stuck body pointer-events after an externally-controlled close (no Esc/X/outside-click)", async () => {
+      const user = userEvent.setup();
+
+      render(<DropdownOpenedDrawerClosedExternallyScenario />);
+
+      await user.click(screen.getByText("Trigger"));
+      await waitFor(() => {
+        expect(screen.getByText("Open drawer")).toBeInTheDocument();
+      });
+
+      await user.click(screen.getByText("Open drawer"));
+      await waitFor(() => {
+        expect(screen.getByText("Save")).toBeVisible();
+      });
+
+      // Closes the drawer via a parent state update after an await — never
+      // through vaul's internal onOpenChange path.
+      await user.click(screen.getByText("Save"));
+      await waitFor(() => {
+        expect(screen.queryByText("Save")).not.toBeInTheDocument();
+      });
+
+      await waitFor(() => {
+        expect(document.body.style.pointerEvents).not.toBe("none");
+      });
+
+      // The page must be interactive again: the trigger reopens the menu.
+      await user.click(screen.getByText("Trigger"));
+      await waitFor(() => {
+        expect(screen.getByText("Open drawer")).toBeInTheDocument();
+      });
+    });
+
+    it("does not run external-close cleanup for an uncontrolled drawer", async () => {
+      const user = userEvent.setup();
+      renderDrawer();
+      await openDrawer(user);
+
+      await user.click(screen.getByRole("button", { name: CLOSE_BUTTON_REGEX }));
+      await waitFor(() => {
+        expect(screen.queryByText("Drawer Title")).not.toBeInTheDocument();
+      });
+
+      expect(document.body.style.pointerEvents).not.toBe("none");
+    });
   });
 
   describe("barrel exports", () => {
