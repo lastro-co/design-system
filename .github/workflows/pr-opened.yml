@@ -1,0 +1,14 @@
+name: PR opened
+
+# Atribui o autor e põe o label "production" em PR para prod, num job só
+# (PLAT-913). A regra fica no eks-gitops.
+on:
+  pull_request_target:
+    types: [opened, reopened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  setup:
+    uses: lastro-co/eks-gitops/.github/workflows/pr-opened.yml@main
