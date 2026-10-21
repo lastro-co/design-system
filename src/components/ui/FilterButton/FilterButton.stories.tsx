@@ -4,7 +4,7 @@ import { SearchIcon, SettingsIcon } from "@/components/icons.v2";
 import { FilterButton } from "./FilterButton";
 
 const meta: Meta<typeof FilterButton> = {
-  title: "Components/FilterButton",
+  title: "Sobreposição/FilterButton",
   component: FilterButton,
   parameters: {
     jest: "FilterButton.test.tsx",

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { SegmentedControl } from "./SegmentedControl";
 
 const meta: Meta<typeof SegmentedControl> = {
-  title: "Components/SegmentedControl",
+  title: "Navegação/SegmentedControl",
   component: SegmentedControl,
   parameters: {
     jest: "SegmentedControl.test.tsx",

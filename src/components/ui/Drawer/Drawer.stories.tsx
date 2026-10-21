@@ -109,7 +109,7 @@ function DrawerStory({
 DrawerStory.displayName = "Drawer";
 
 const meta: Meta<typeof DrawerStory> = {
-  title: "Components/Drawer",
+  title: "Sobreposição/Drawer",
   component: DrawerStory,
   parameters: {
     jest: "Drawer.test.tsx",

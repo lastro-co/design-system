@@ -3,7 +3,7 @@ import { useState } from "react";
 import { ColorPickerPanel } from "./ColorPickerPanel";
 
 const meta: Meta<typeof ColorPickerPanel> = {
-  title: "Components/ColorPicker/ColorPickerPanel",
+  title: "Entrada de Dados/ColorPicker/ColorPickerPanel",
   component: ColorPickerPanel,
   parameters: {
     jest: "ColorPickerPanel.test.tsx",

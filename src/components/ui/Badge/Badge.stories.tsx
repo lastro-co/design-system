@@ -4,7 +4,7 @@ import { CheckIcon, ZapIcon } from "@/components/icons.v2";
 import { Badge } from "./Badge";
 
 const meta: Meta<typeof Badge> = {
-  title: "Components/Badge",
+  title: "Geral/Badge",
   component: Badge,
   parameters: {
     jest: "Badge.test.tsx",

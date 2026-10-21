@@ -7,7 +7,7 @@ const noop = () => {
 };
 
 const meta: Meta<typeof OpportunityCard> = {
-  title: "Components/OpportunityCard",
+  title: "Exibição de Dados/OpportunityCard",
   component: OpportunityCard,
   parameters: {
     jest: "OpportunityCard.test.tsx",

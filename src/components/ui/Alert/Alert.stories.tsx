@@ -5,7 +5,7 @@ import { Button } from "../Button";
 import { Alert, AlertDescription, AlertTitle } from "./Alert";
 
 const meta: Meta<typeof Alert> = {
-  title: "Components/Alert",
+  title: "Feedback/Alert",
   component: Alert,
   parameters: {
     jest: "Alert.test.tsx",

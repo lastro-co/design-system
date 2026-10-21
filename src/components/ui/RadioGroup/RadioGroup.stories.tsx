@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { RadioGroup, RadioGroupItem } from "./RadioGroup";
 
 const meta: Meta<typeof RadioGroup> = {
-  title: "Components/RadioGroup",
+  title: "Entrada de Dados/RadioGroup",
   component: RadioGroup,
   parameters: {
     jest: "RadioGroup.test.tsx",

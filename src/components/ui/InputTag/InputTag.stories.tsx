@@ -7,7 +7,7 @@ import { Label } from "../Label";
 import { InputTag } from "./InputTag";
 
 const meta: Meta<typeof InputTag> = {
-  title: "Components/InputTag",
+  title: "Entrada de Dados/InputTag",
   component: InputTag,
   parameters: {
     jest: "InputTag.test.tsx",

@@ -12,7 +12,7 @@ const PORTRAIT_IMAGE =
   "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=900&h=1600&fit=crop";
 
 const meta: Meta<typeof ImageLightbox> = {
-  title: "Components/ImageLightbox",
+  title: "Exibição de Dados/ImageLightbox",
   component: ImageLightbox,
   parameters: {
     jest: "ImageLightbox.test.tsx",

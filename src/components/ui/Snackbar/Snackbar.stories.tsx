@@ -2,7 +2,7 @@ import type { Meta } from "@storybook/react-vite";
 import { Snackbar } from "./Snackbar";
 
 const meta: Meta<typeof Snackbar> = {
-  title: "Components/Snackbar",
+  title: "Feedback/Snackbar",
   component: Snackbar,
   parameters: {
     jest: "Snackbar.test.tsx",

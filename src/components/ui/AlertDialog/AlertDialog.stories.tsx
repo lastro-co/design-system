@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/Button";
 import { AlertDialog } from "./AlertDialog";
 
 const meta: Meta<typeof AlertDialog> = {
-  title: "Components/AlertDialog",
+  title: "Sobreposição/AlertDialog",
   component: AlertDialog,
   parameters: {
     jest: "AlertDialog.test.tsx",

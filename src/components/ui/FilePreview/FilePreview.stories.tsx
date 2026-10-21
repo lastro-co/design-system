@@ -5,7 +5,7 @@ import { FilePreview } from "./FilePreview";
 const noop = () => {};
 
 const meta: Meta<typeof FilePreview> = {
-  title: "Components/FilePreview",
+  title: "Exibição de Dados/FilePreview",
   component: FilePreview,
   parameters: {
     layout: "centered",

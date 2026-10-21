@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { Stepper } from "./Stepper";
 
 const meta: Meta<typeof Stepper> = {
-  title: "Components/Stepper",
+  title: "Navegação/Stepper",
   component: Stepper,
   parameters: {
     jest: "Stepper.test.tsx",

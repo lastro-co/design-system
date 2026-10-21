@@ -25,7 +25,7 @@ import {
 } from "./Menu";
 
 const meta: Meta<typeof Menu> = {
-  title: "Menu",
+  title: "Navegação/Menu",
   component: Menu,
   parameters: {
     jest: "Menu.test.tsx",
