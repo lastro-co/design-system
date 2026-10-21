@@ -3,7 +3,7 @@ import { useState } from "react";
 import { NumberInput } from "./NumberInput";
 
 const meta: Meta<typeof NumberInput> = {
-  title: "Components/NumberInput",
+  title: "Entrada de Dados/NumberInput",
   component: NumberInput,
   parameters: {
     jest: "NumberInput.test.tsx",

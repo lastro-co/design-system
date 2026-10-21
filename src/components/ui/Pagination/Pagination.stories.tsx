@@ -3,7 +3,7 @@ import React from "react";
 import { DynamicPagination } from "./pagination";
 
 const meta: Meta<typeof DynamicPagination> = {
-  title: "Components/Pagination",
+  title: "Navegação/Pagination",
   component: DynamicPagination,
   parameters: {
     jest: "Pagination.test.tsx",

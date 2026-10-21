@@ -3,7 +3,7 @@ import { useState } from "react";
 import { ToggleButtonGroup } from "./ToggleButtonGroup";
 
 const meta: Meta<typeof ToggleButtonGroup> = {
-  title: "Components/ToggleButtonGroup",
+  title: "Entrada de Dados/ToggleButtonGroup",
   component: ToggleButtonGroup,
   parameters: {
     jest: "ToggleButtonGroup.test.tsx",

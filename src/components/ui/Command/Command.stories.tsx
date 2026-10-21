@@ -14,7 +14,7 @@ import {
 } from "./Command";
 
 const meta: Meta<typeof Command> = {
-  title: "Components/Command",
+  title: "Sobreposição/Command",
   component: Command,
   parameters: {
     jest: "Command.test.tsx",

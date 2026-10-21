@@ -16,7 +16,7 @@ const LAST_30_DAYS: DateRange = {
 };
 
 const meta: Meta<typeof DateRangePicker> = {
-  title: "Components/DateRangePicker",
+  title: "Entrada de Dados/DateRangePicker",
   component: DateRangePicker,
   parameters: {
     jest: "DateRangePicker.test.tsx",

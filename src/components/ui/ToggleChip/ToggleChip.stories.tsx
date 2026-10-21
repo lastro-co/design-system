@@ -3,7 +3,7 @@ import { useState } from "react";
 import { ToggleChip } from "./ToggleChip";
 
 const meta: Meta<typeof ToggleChip> = {
-  title: "Components/ToggleChip",
+  title: "Entrada de Dados/ToggleChip",
   component: ToggleChip,
   parameters: {
     jest: "ToggleChip.test.tsx",

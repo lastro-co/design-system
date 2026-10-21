@@ -3,7 +3,7 @@ import { Fragment } from "react";
 import { Button } from "./Button";
 
 const meta: Meta<typeof Button> = {
-  title: "Components/Button",
+  title: "Geral/Button",
   component: Button,
   parameters: {
     jest: "Button.test.tsx",

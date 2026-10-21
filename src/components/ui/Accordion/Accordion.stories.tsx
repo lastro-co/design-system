@@ -7,7 +7,7 @@ import {
 } from "./Accordion";
 
 const meta: Meta<typeof Accordion> = {
-  title: "Components/Accordion",
+  title: "Exibição de Dados/Accordion",
   component: Accordion,
   parameters: {
     jest: "Accordion.test.tsx",

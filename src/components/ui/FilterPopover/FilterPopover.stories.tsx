@@ -11,7 +11,7 @@ import { FilterPopover } from "./FilterPopover";
 const noop = () => {};
 
 const meta: Meta<typeof FilterPopover> = {
-  title: "Components/FilterPopover",
+  title: "Sobreposição/FilterPopover",
   component: FilterPopover,
   parameters: {
     jest: "FilterPopover.test.tsx",

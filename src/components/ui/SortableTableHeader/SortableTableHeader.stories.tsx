@@ -3,7 +3,7 @@ import { useState } from "react";
 import { SortableTableHeader } from "./SortableTableHeader";
 
 const meta: Meta<typeof SortableTableHeader> = {
-  title: "Components/SortableTableHeader",
+  title: "Exibição de Dados/SortableTableHeader",
   component: SortableTableHeader,
   parameters: {
     jest: "SortableTableHeader.test.tsx",

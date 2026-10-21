@@ -15,7 +15,7 @@ import {
 } from "./index";
 
 const meta: Meta<typeof MapComponent> = {
-  title: "Components/Map",
+  title: "Exibição de Dados/Map",
   component: MapComponent,
   args: {
     theme: "light",

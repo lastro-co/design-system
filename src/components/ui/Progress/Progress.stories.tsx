@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Progress } from "./Progress";
 
 const meta: Meta<typeof Progress> = {
-  title: "Components/Progress",
+  title: "Exibição de Dados/Progress",
   component: Progress,
   parameters: {
     jest: "Progress.test.tsx",

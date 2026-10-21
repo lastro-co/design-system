@@ -36,7 +36,7 @@ function alertItemClicked(label: string): () => void {
 }
 
 const meta: Meta<DropdownMenuStoryArgs> = {
-  title: "Components/DropdownMenu",
+  title: "Entrada de Dados/DropdownMenu",
   parameters: {
     jest: "DropdownMenu.test.tsx",
     layout: "centered",

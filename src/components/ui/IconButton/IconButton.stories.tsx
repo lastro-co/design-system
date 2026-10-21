@@ -4,7 +4,7 @@ import { ChevronDownIcon, InfoIcon, PlusIcon } from "@/components/icons.v2";
 import { IconButton } from "./IconButton";
 
 const meta: Meta<typeof IconButton> = {
-  title: "Components/IconButton",
+  title: "Geral/IconButton",
   component: IconButton,
   parameters: {
     jest: "IconButton.test.tsx",

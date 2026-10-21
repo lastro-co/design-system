@@ -6,7 +6,7 @@ import { Label } from "../Label";
 import { Input } from "./Input";
 
 const meta: Meta<typeof Input> = {
-  title: "Components/Input",
+  title: "Entrada de Dados/Input",
   component: Input,
   parameters: {
     jest: "Input.test.tsx",
