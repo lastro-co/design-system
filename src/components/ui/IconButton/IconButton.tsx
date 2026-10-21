@@ -42,20 +42,8 @@ const iconButtonVariants = cva(
       },
     },
     compoundVariants: [
-      // square radius scales with size
       {
         shape: "square",
-        size: "small",
-        class: "rounded-lg",
-      },
-      {
-        shape: "square",
-        size: "medium",
-        class: "rounded-[10px]",
-      },
-      {
-        shape: "square",
-        size: "large",
         class: "rounded-xl",
       },
     ],
