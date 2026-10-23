@@ -54,6 +54,7 @@ export interface MultiSelectProps {
   "aria-invalid"?: boolean;
   state?: "default" | "error" | "success";
   id?: string;
+  emptyMessage?: string;
 }
 
 function MultiSelect({
@@ -69,6 +70,7 @@ function MultiSelect({
   state = "default",
   "aria-invalid": ariaInvalid,
   id,
+  emptyMessage = "Nenhum resultado encontrado.",
 }: MultiSelectProps) {
   const [open, setOpen] = React.useState(false);
   const [search, setSearch] = React.useState("");
@@ -178,7 +180,7 @@ function MultiSelect({
         <div className="scrollbar-none min-h-0 w-full flex-1 scroll-my-1 overflow-y-auto p-1">
           {visibleOptions.length === 0 ? (
             <p className="px-2 py-4 text-center text-gray-500 text-sm">
-              Nenhum resultado encontrado.
+              {emptyMessage}
             </p>
           ) : (
             visibleOptions.map((option) => {
