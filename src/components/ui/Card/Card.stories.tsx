@@ -10,7 +10,7 @@ import {
 } from "./Card";
 
 const meta: Meta<typeof Card> = {
-  title: "Components/Card",
+  title: "Geral/Card",
   component: Card,
   parameters: {
     jest: "Card.test.tsx",

@@ -7,7 +7,7 @@ import {
 } from "./Tooltip";
 
 const meta = {
-  title: "Components/Tooltip",
+  title: "Feedback/Tooltip",
   component: TooltipContent,
   parameters: {
     jest: "Tooltip.test.tsx",

@@ -3,7 +3,7 @@ import { LaisLogo } from "../LaisLogo";
 import { Switch, type SwitchProps } from "./Switch";
 
 const meta: Meta<typeof Switch> = {
-  title: "Components/Switch",
+  title: "Entrada de Dados/Switch",
   component: Switch,
   parameters: {
     jest: "Switch.test.tsx",

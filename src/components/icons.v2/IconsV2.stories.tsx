@@ -12,7 +12,7 @@ const iconEntries = (
 const LUCIDE_URL = "https://lucide.dev/icons/";
 
 const meta: Meta = {
-  title: "Icons V2",
+  title: "Geral/Icons",
   parameters: {
     jest: "IconsV2.test.tsx",
     layout: "centered",

@@ -8,7 +8,7 @@ const noop = () => {};
 const noopBlob = (_blob: Blob) => {};
 
 const meta: Meta<typeof WaveformRecorder> = {
-  title: "Components/WaveformRecorder",
+  title: "Exibição de Dados/WaveformRecorder",
   component: WaveformRecorder,
   parameters: {
     layout: "centered",

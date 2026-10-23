@@ -5,7 +5,7 @@ import { ImagePreview } from "./ImagePreview";
 const noop = () => {};
 
 const meta: Meta<typeof ImagePreview> = {
-  title: "Components/ImagePreview",
+  title: "Exibição de Dados/ImagePreview",
   component: ImagePreview,
   parameters: {
     layout: "centered",

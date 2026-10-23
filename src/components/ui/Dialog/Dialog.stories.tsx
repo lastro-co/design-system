@@ -14,7 +14,7 @@ import {
 } from "./Dialog";
 
 const meta: Meta<typeof Dialog> = {
-  title: "Components/Dialog",
+  title: "Sobreposição/Dialog",
   component: Dialog,
   parameters: {
     jest: "Dialog.test.tsx",

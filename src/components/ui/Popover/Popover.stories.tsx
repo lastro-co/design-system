@@ -2,7 +2,7 @@ import type { Meta } from "@storybook/react-vite";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
 
 const meta = {
-  title: "Components/Popover",
+  title: "Sobreposição/Popover",
   component: PopoverContent,
   parameters: {
     jest: "Popover.test.tsx",

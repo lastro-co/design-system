@@ -15,7 +15,7 @@ import {
 } from "./ContextMenu";
 
 const meta: Meta<typeof ContextMenuItem> = {
-  title: "Components/ContextMenu",
+  title: "Sobreposição/ContextMenu",
   component: ContextMenuItem,
   parameters: {
     jest: "ContextMenu.test.tsx",

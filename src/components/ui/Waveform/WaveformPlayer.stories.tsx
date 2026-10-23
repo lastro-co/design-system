@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { WaveformPlayer } from "./WaveformPlayer";
 
 const meta: Meta<typeof WaveformPlayer> = {
-  title: "Components/WaveformPlayer",
+  title: "Exibição de Dados/WaveformPlayer",
   component: WaveformPlayer,
   parameters: {
     layout: "centered",

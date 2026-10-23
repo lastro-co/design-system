@@ -3,7 +3,7 @@ import { UndoIcon } from "@/components/icons.v2";
 import { LaisSuggestionButton } from "./LaisSuggestionButton";
 
 const meta: Meta<typeof LaisSuggestionButton> = {
-  title: "Components/LaisSuggestionButton",
+  title: "Exibição de Dados/LaisSuggestionButton",
   component: LaisSuggestionButton,
   parameters: {
     jest: "LaisSuggestionButton.test.tsx",

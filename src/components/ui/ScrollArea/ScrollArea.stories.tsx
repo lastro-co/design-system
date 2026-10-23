@@ -9,7 +9,7 @@ const generateItems = (count: number, prefix = "item") =>
   }));
 
 const meta: Meta<typeof ScrollArea> = {
-  title: "Components/ScrollArea",
+  title: "Navegação/ScrollArea",
   component: ScrollArea,
   parameters: {
     jest: "ScrollArea.test.tsx",

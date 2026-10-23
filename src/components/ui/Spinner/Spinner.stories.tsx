@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Spinner } from "./Spinner";
 
 const meta: Meta<typeof Spinner> = {
-  title: "Components/Spinner",
+  title: "Exibição de Dados/Spinner",
   component: Spinner,
   parameters: {
     jest: "Spinner.test.tsx",

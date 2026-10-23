@@ -3,7 +3,7 @@ import { Badge } from "../Badge";
 import { ImageGallery } from "./ImageGallery";
 
 const meta: Meta<typeof ImageGallery> = {
-  title: "Components/ImageGallery",
+  title: "Exibição de Dados/ImageGallery",
   component: ImageGallery,
   parameters: {
     jest: "ImageGallery.test.tsx",

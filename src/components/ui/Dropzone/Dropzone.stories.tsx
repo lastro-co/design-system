@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { Dropzone, DropzoneContent, DropzoneEmptyState } from "./Dropzone";
 
 const meta: Meta<typeof Dropzone> = {
-  title: "Components/Dropzone",
+  title: "Entrada de Dados/Dropzone",
   component: Dropzone,
   parameters: {
     layout: "centered",

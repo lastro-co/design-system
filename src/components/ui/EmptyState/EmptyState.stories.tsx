@@ -4,7 +4,7 @@ import { Button } from "../Button";
 import { EmptyState } from "./EmptyState";
 
 const meta: Meta<typeof EmptyState> = {
-  title: "Components/EmptyState",
+  title: "Exibição de Dados/EmptyState",
   component: EmptyState,
   parameters: {
     jest: "EmptyState.test.tsx",

@@ -28,7 +28,7 @@ type SelectStoryArgs = React.ComponentProps<typeof Select> & {
 };
 
 const meta: Meta<SelectStoryArgs> = {
-  title: "Components/Select",
+  title: "Entrada de Dados/Select",
   component: Select,
   parameters: {
     jest: "Select.test.tsx",
