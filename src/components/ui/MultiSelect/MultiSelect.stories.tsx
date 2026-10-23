@@ -112,6 +112,26 @@ export const Searchable: Story = {
   },
 };
 
+export const CustomEmptyMessage: Story = {
+  render: (args) => {
+    const [value, setValue] = useState<string[]>([]);
+    return (
+      <div className="w-96">
+        <MultiSelect
+          {...args}
+          emptyMessage="Nenhuma campanha encontrada"
+          onValueChange={setValue}
+          options={CITY_OPTIONS}
+          placeholder="Buscar campanhas por nome"
+          searchable
+          searchPlaceholder="Buscar campanhas"
+          value={value}
+        />
+      </div>
+    );
+  },
+};
+
 export const AllVariants: Story = {
   render: () => {
     function Example({

@@ -178,6 +178,27 @@ describe("MultiSelect", () => {
     });
   });
 
+  it("shows custom empty message when provided", async () => {
+    const user = userEvent.setup();
+    render(
+      <ControlledMultiSelect
+        emptyMessage="Nenhuma campanha encontrada"
+        searchable
+      />
+    );
+
+    await user.click(screen.getByRole("button"));
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText("Buscar...")).toBeVisible();
+    });
+
+    await user.type(screen.getByPlaceholderText("Buscar..."), "zzz");
+
+    await waitFor(() => {
+      expect(screen.getByText("Nenhuma campanha encontrada")).toBeVisible();
+    });
+  });
+
   it("does not render search input when searchable is false", async () => {
     const user = userEvent.setup();
     render(<ControlledMultiSelect />);
