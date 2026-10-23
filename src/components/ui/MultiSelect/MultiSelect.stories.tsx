@@ -31,7 +31,7 @@ const CITY_OPTIONS: MultiSelectOption[] = [
 ];
 
 const meta: Meta<typeof MultiSelect> = {
-  title: "Components/MultiSelect",
+  title: "Entrada de Dados/MultiSelect",
   component: MultiSelect,
   parameters: {
     jest: "MultiSelect.test.tsx",
