@@ -80,16 +80,31 @@ export default {
       <h3 style={h3Style}>
         UI Components (<code style={codeStyle}>@lastro-co/design-system</code>)
       </h3>
-      <p>47 componentes reutilizáveis:</p>
+      <p>64 componentes reutilizáveis:</p>
       <ul style={ulStyle}>
         <li>
-          Formulários — Input, Textarea, Checkbox, RadioGroup, Select, Switch
+          Formulários — Input, Textarea, Checkbox, RadioGroup, Select, Switch,
+          DatePicker, DateRangePicker, MultiSelect, NumberInput, InputTag,
+          ColorPicker, Dropzone, Command, Form
         </li>
-        <li>Feedback — Alert, Dialog, Tooltip, Spinner, Toast</li>
-        <li>Navegação — Accordion, Tabs, ScrollArea, Breadcrumb</li>
-        <li>Mídia — Icon, FilePreview, ImagePreview, Waveform, Map</li>
-        <li>Layout — Card, Separator, AspectRatio, Sheet, Drawer</li>
-        <li>Dados — Table, Badge, Avatar, Calendar</li>
+        <li>
+          Feedback — Alert, AlertDialog, Toaster, Snackbar, Spinner, Progress,
+          Skeleton, EmptyState, ErrorState, LoadingOverlay
+        </li>
+        <li>
+          Navegação — Accordion, Tabs, ScrollArea, Breadcrumb, DropdownMenu,
+          Menu, Pagination, Stepper, SortableTableHeader
+        </li>
+        <li>Overlays — Dialog, Drawer, Popover, Tooltip, ContextMenu</li>
+        <li>
+          Mídia — Icon, FilePreview, ImagePreview, ImageGallery, ImageLightbox,
+          Waveform, Map
+        </li>
+        <li>Layout — Card, Badge, Calendar, FilterButton, FilterPopover</li>
+        <li>
+          Marca Lastro — LaisLogo, LaisGlow, LaisSuggestionCard,
+          LaisSuggestionButton, OpportunityCard
+        </li>
       </ul>
       <h3 style={h3Style}>
         Ícones (<code style={codeStyle}>@lastro-co/design-system/icons.v2</code>
@@ -119,8 +134,8 @@ export default {
           <strong>Estilização:</strong> Tailwind CSS v4 + tailwind-merge + clsx
         </li>
         <li>
-          <strong>Testes:</strong> Jest 30 + @swc/jest + Testing Library (892
-          tests)
+          <strong>Testes:</strong> Jest 30 + @swc/jest + Testing Library (2285
+          tests, 87 suites, cobertura mínima 85%)
         </li>
         <li>
           <strong>Storybook:</strong> v10 com @storybook/react-vite
@@ -136,22 +151,33 @@ export default {
 
     <Section title="CI/CD">
       <p>
-        Um único workflow (
-        <code style={codeStyle}>.github/workflows/publish.yml</code>) é acionado
-        por tags <code style={codeStyle}>v*</code> e executa em paralelo:
+        Quatro workflows em <code style={codeStyle}>.github/workflows/</code>:
       </p>
       <ul style={ulStyle}>
         <li>
-          <strong>publish</strong> — build e publicação no GitHub Packages
+          <strong>ci.yml</strong> — em cada PR: Biome, testes, type-check e
+          build
         </li>
         <li>
-          <strong>storybook</strong> — build e deploy no GitHub Pages
+          <strong>publish.yml</strong> — acionado por GitHub Release publicada
+          (não mais por tag <code style={codeStyle}>v*</code> direto): build e
+          publicação no GitHub Packages
+        </li>
+        <li>
+          <strong>claude-code-review.yml</strong> — revisão automatizada de PR
+          (Cora)
+        </li>
+        <li>
+          <strong>pr-opened.yml</strong> — atribuição de autor e labels
         </li>
       </ul>
-      <CodeBlock
-        code={`pnpm version patch  # ou minor, major
-git push --follow-tags`}
-      />
+      <p>
+        Para publicar: criar uma GitHub Release com tag semver{" "}
+        <code style={codeStyle}>vX.Y.Z</code> em{" "}
+        <code style={codeStyle}>main</code> — a versão do{" "}
+        <code style={codeStyle}>package.json</code> não é bumpada manualmente. O
+        Storybook é publicado na Vercel, com preview automático por PR.
+      </p>
     </Section>
 
     <Section last title="Recursos Úteis">
