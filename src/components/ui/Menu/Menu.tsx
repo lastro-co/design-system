@@ -832,7 +832,7 @@ function MenuItem({
             type="button"
           >
             <ActiveIndicator visible={active} />
-            <span className="relative z-10 flex items-center justify-center">
+            <span className="relative z-10 flex h-11 items-center justify-center">
               <MenuItemIcon
                 animatedIcon={animatedIcon}
                 animation={animation}
@@ -856,7 +856,7 @@ function MenuItem({
     <button
       aria-current={active ? "page" : undefined}
       className={cn(
-        "relative flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-left text-[13px] transition-all duration-150",
+        "relative flex min-h-10 w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-left text-[13px] transition-all duration-150",
         active
           ? cn(
               activeBg,
@@ -1252,7 +1252,7 @@ function MenuAccordionItem({
               <button
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "group flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-left text-[13px] transition-all duration-150",
+                  "group flex min-h-10 w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-left text-[13px] transition-all duration-150",
                   active
                     ? "font-medium text-black hover:bg-gray-50"
                     : "text-gray-600 hover:bg-gray-50 hover:text-gray-800",
