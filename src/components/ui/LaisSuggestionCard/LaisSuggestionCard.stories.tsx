@@ -6,7 +6,7 @@ const noop = () => {
 };
 
 const meta: Meta<typeof LaisSuggestionCard> = {
-  title: "Components/LaisSuggestionCard",
+  title: "Exibição de Dados/LaisSuggestionCard",
   component: LaisSuggestionCard,
   parameters: {
     jest: "LaisSuggestionCard.test.tsx",

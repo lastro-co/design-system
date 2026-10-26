@@ -41,7 +41,7 @@ const chatBubbleFilled = (
 );
 
 const meta = {
-  title: "Components/Icon",
+  title: "Geral/Icon",
   component: Icon,
   parameters: {
     jest: "Icon.test.tsx",

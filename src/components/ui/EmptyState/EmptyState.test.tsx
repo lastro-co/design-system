@@ -65,6 +65,16 @@ describe("EmptyState", () => {
     ).toBeVisible();
   });
 
+  it("wraps the description without leaving a single word on the last line", () => {
+    const { container } = render(
+      <EmptyState description="Selecione uma conversa na lista ao lado para que ela apareça aqui." />
+    );
+
+    expect(
+      container.querySelector('[data-slot="empty-state-description"]')
+    ).toHaveClass("max-w-96", "text-pretty");
+  });
+
   it("renders the description alone, without a heading or top spacing", () => {
     render(<EmptyState description={DESCRIPTION} />);
 
@@ -102,6 +112,27 @@ describe("EmptyState", () => {
       "bg-white",
       "shadow-xxs"
     );
+  });
+
+  it("darkens the card border on hover, like the Card", () => {
+    const { container } = render(<EmptyState title={TITLE} />);
+
+    expect(getRoot(container)).toHaveClass(
+      "transition-colors",
+      "hover:border-gray-300"
+    );
+  });
+
+  it("drops the card surface in the plain variant", () => {
+    const { container } = render(<EmptyState title={TITLE} variant="plain" />);
+
+    const root = getRoot(container);
+    expect(root).not.toHaveClass("rounded-lg");
+    expect(root).not.toHaveClass("border");
+    expect(root).not.toHaveClass("bg-white");
+    expect(root).not.toHaveClass("shadow-xxs");
+    expect(root).not.toHaveClass("hover:border-gray-300");
+    expect(root).toHaveClass("px-6", "py-12", "text-center");
   });
 
   it("merges className and forwards native props", () => {

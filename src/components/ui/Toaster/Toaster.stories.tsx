@@ -5,7 +5,7 @@ import { Button } from "../Button/Button";
 import { Toaster, toast } from ".";
 
 const meta: Meta<typeof Toaster> = {
-  title: "Components/Toaster (Sonner)",
+  title: "Entrada de Dados/Toaster (Sonner)",
   component: Toaster,
   parameters: {
     jest: "Toaster.test.tsx",

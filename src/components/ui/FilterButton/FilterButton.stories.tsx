@@ -4,7 +4,7 @@ import { SearchIcon, SettingsIcon } from "@/components/icons.v2";
 import { FilterButton } from "./FilterButton";
 
 const meta: Meta<typeof FilterButton> = {
-  title: "Components/FilterButton",
+  title: "Sobreposição/FilterButton",
   component: FilterButton,
   parameters: {
     jest: "FilterButton.test.tsx",
@@ -29,6 +29,11 @@ const meta: Meta<typeof FilterButton> = {
       control: "boolean",
       description:
         "Whether to show the icon when count > 0 (default: false, shows counter instead)",
+    },
+    active: {
+      control: "boolean",
+      description:
+        "Tints the background to signal that filters are applied (default: false)",
     },
     disabled: {
       control: "boolean",
@@ -55,6 +60,15 @@ export const WithActiveFilters = {
   args: {
     label: "Filtros",
     count: 3,
+  },
+};
+
+export const Active = {
+  args: {
+    label: "",
+    count: 2,
+    active: true,
+    showIconWithCount: true,
   },
 };
 
@@ -121,6 +135,14 @@ export const AllVariants = {
         <div className="flex flex-wrap gap-4">
           <FilterButton count={3} label="Default" showIconWithCount={false} />
           <FilterButton count={3} label="With Icon" showIconWithCount={true} />
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <h3 className="font-medium text-lg">Active</h3>
+        <div className="flex flex-wrap gap-4">
+          <FilterButton active count={3} label="Filtros" />
+          <FilterButton active count={2} label="" showIconWithCount />
         </div>
       </div>
 

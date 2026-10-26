@@ -4,7 +4,7 @@ import { ChevronDownIcon, InfoIcon, PlusIcon } from "@/components/icons.v2";
 import { IconButton } from "./IconButton";
 
 const meta: Meta<typeof IconButton> = {
-  title: "Components/IconButton",
+  title: "Geral/IconButton",
   component: IconButton,
   parameters: {
     jest: "IconButton.test.tsx",
@@ -31,6 +31,8 @@ const meta: Meta<typeof IconButton> = {
         "subtle",
         "destructive",
         "selected",
+        "chip",
+        "chipSelected",
       ],
       description: "IconButton visual style variant",
     },
@@ -104,6 +106,8 @@ const VARIANTS = [
   "destructive",
   "subtle",
   "selected",
+  "chip",
+  "chipSelected",
 ] as const;
 
 export const AllVariants = {

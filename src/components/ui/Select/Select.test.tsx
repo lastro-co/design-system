@@ -175,6 +175,30 @@ describe("Select", () => {
     expect(selectedItem.querySelector("svg")).toBeInTheDocument();
   });
 
+  it("hides the check indicator when indicator is false", async () => {
+    const user = userEvent.setup();
+    render(
+      <Select defaultValue="option1">
+        <SelectTrigger>
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem indicator={false} value="option1">
+            Opção 1
+          </SelectItem>
+          <SelectItem indicator={false} value="option2">
+            Opção 2
+          </SelectItem>
+        </SelectContent>
+      </Select>
+    );
+
+    await user.click(screen.getByRole("combobox"));
+    const selectedItem = screen.getByRole("option", { name: "Opção 1" });
+    expect(selectedItem).toHaveAttribute("data-state", "checked");
+    expect(selectedItem.querySelector("svg")).not.toBeInTheDocument();
+  });
+
   it("renders SelectGroup with data-slot", async () => {
     const user = userEvent.setup();
     render(

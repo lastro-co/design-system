@@ -3,7 +3,7 @@ import { useState } from "react";
 import { ToggleChip } from "./ToggleChip";
 
 const meta: Meta<typeof ToggleChip> = {
-  title: "Components/ToggleChip",
+  title: "Entrada de Dados/ToggleChip",
   component: ToggleChip,
   parameters: {
     jest: "ToggleChip.test.tsx",
@@ -38,7 +38,7 @@ const ChipGroup = () => {
     { value: "ended", label: "Encerrada" },
   ];
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-1">
       {options.map((option) => (
         <ToggleChip
           key={option.value}

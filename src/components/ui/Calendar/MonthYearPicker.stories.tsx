@@ -12,7 +12,7 @@ const FIGMA_YEAR = 2026;
 const FIGMA_MAX_YEAR = 2030;
 
 const meta: Meta<typeof MonthYearPicker> = {
-  title: "Components/Calendar/MonthYearPicker",
+  title: "Entrada de Dados/Calendar/MonthYearPicker",
   component: MonthYearPicker,
   parameters: {
     jest: "MonthYearPicker.test.tsx",

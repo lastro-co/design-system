@@ -438,6 +438,16 @@ const ColorPalettePage = () => (
           tailwindName: "coral-500",
         },
         {
+          name: "Coral 600",
+          cssVar: "--color-coral-600",
+          tailwindName: "coral-600",
+        },
+        {
+          name: "Coral 700",
+          cssVar: "--color-coral-700",
+          tailwindName: "coral-700",
+        },
+        {
           name: "Indigo 400",
           cssVar: "--color-indigo-400",
           tailwindName: "indigo-400",

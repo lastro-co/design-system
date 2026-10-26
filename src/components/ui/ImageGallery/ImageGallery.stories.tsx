@@ -3,7 +3,7 @@ import { Badge } from "../Badge";
 import { ImageGallery } from "./ImageGallery";
 
 const meta: Meta<typeof ImageGallery> = {
-  title: "Components/ImageGallery",
+  title: "Exibição de Dados/ImageGallery",
   component: ImageGallery,
   parameters: {
     jest: "ImageGallery.test.tsx",
@@ -74,7 +74,7 @@ export const WithOverlays: Story = {
       </div>
     ),
     topRightOverlay: (
-      <Badge color="green" showDot size="medium">
+      <Badge color="green" size="medium">
         Ativo
       </Badge>
     ),
@@ -86,7 +86,7 @@ export const WithInactiveStatus: Story = {
     images: SAMPLE_IMAGES.slice(0, 3),
     alt: "Propriedade inativa",
     topRightOverlay: (
-      <Badge color="red" showDot size="medium">
+      <Badge color="red" size="medium">
         Inativo
       </Badge>
     ),

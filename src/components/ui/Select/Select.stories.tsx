@@ -28,7 +28,7 @@ type SelectStoryArgs = React.ComponentProps<typeof Select> & {
 };
 
 const meta: Meta<SelectStoryArgs> = {
-  title: "Components/Select",
+  title: "Entrada de Dados/Select",
   component: Select,
   parameters: {
     jest: "Select.test.tsx",
@@ -73,6 +73,30 @@ export const Default: Story = {
           <SelectItem value="option1">Opção 1</SelectItem>
           <SelectItem value="option2">Opção 2</SelectItem>
           <SelectItem value="option3">Opção 3</SelectItem>
+        </SelectContent>
+      </Select>
+    );
+  },
+};
+
+export const WithoutIndicator: Story = {
+  render: (args) => {
+    const { "aria-invalid": ariaInvalid, variant, ...selectArgs } = args;
+    return (
+      <Select defaultValue="option1" {...selectArgs}>
+        <SelectTrigger aria-invalid={ariaInvalid} variant={variant}>
+          <SelectValue placeholder="Selecione uma opção" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem indicator={false} value="option1">
+            Opção 1
+          </SelectItem>
+          <SelectItem indicator={false} value="option2">
+            Opção 2
+          </SelectItem>
+          <SelectItem indicator={false} value="option3">
+            Opção 3
+          </SelectItem>
         </SelectContent>
       </Select>
     );

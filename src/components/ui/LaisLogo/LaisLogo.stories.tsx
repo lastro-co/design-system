@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { LaisLogo } from "./LaisLogo";
 
 const meta: Meta<typeof LaisLogo> = {
-  title: "Lais Logo",
+  title: "Geral/Lais Logo",
   component: LaisLogo,
   parameters: {
     jest: "LaisLogo.test.tsx",

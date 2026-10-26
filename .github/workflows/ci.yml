@@ -3,6 +3,20 @@ name: CI
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
+    # Push/PR que só muda docs ou config de CI não roda este workflow (PLAT-911).
+    # Lista de exclusão: arquivo novo que o build/teste leia continua disparando.
+    paths:
+      - "**"
+      - "!*.md"
+      - "!**/README.md"
+      - "!**/CLAUDE.md"
+      - "!**/AGENTS.md"
+      - "!docs/**"
+      - "!.claude/**"
+      - "!.coderabbit.yaml"
+      - "!.github/**"
+      - ".github/workflows/ci.yml"
+      - ".github/actions/**"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -10,14 +24,14 @@ concurrency:
 
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.RUNNER_X64 || 'ubuntu-26.04' }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Enable Corepack
         run: corepack enable
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: '24'
           cache: 'pnpm'

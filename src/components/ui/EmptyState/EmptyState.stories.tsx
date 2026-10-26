@@ -4,7 +4,7 @@ import { Button } from "../Button";
 import { EmptyState } from "./EmptyState";
 
 const meta: Meta<typeof EmptyState> = {
-  title: "Components/EmptyState",
+  title: "Exibição de Dados/EmptyState",
   component: EmptyState,
   parameters: {
     jest: "EmptyState.test.tsx",
@@ -51,6 +51,12 @@ export const WithoutIcon: Story = {
 };
 
 /** The three combinations from the DS 2026.2 Figma section. */
+export const Plain: Story = {
+  args: {
+    variant: "plain",
+  },
+};
+
 export const FigmaExamples: Story = {
   render: (args) => (
     <div className="flex flex-col gap-10 bg-gray-50 p-15">

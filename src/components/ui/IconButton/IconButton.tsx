@@ -35,23 +35,15 @@ const iconButtonVariants = cva(
         // mirrors ToggleChip's selected state so the button reads as an active chip
         selected:
           "border border-purple-600 bg-purple-50 text-purple-800 hover:bg-purple-100 active:bg-purple-100 disabled:border-purple-600 disabled:bg-purple-50",
+        // same tokens as ToggleChip, so a menu trigger sits in a chip row
+        chip: "border border-gray-200 bg-white text-gray-600 hover:border-purple-100",
+        chipSelected:
+          "border border-purple-800/10 bg-purple-100 text-purple-800",
       },
     },
     compoundVariants: [
-      // square radius scales with size
       {
         shape: "square",
-        size: "small",
-        class: "rounded-lg",
-      },
-      {
-        shape: "square",
-        size: "medium",
-        class: "rounded-[10px]",
-      },
-      {
-        shape: "square",
-        size: "large",
         class: "rounded-xl",
       },
     ],

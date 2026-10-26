@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Tabs } from "./Tabs";
 
 const meta: Meta<typeof Tabs> = {
-  title: "Components/Tabs",
+  title: "Navegação/Tabs",
   component: Tabs,
   parameters: {
     jest: "Tabs.test.tsx",

@@ -5,7 +5,7 @@ import { Calendar } from "./Calendar";
 import { getDefaultCalendarPresets } from "./presets";
 
 const meta: Meta<typeof Calendar> = {
-  title: "Components/Calendar",
+  title: "Entrada de Dados/Calendar",
   component: Calendar,
   parameters: {
     jest: "Calendar.test.tsx",

@@ -17,7 +17,7 @@ import {
 } from "./Form";
 
 const meta: Meta<typeof Form> = {
-  title: "Components/Form",
+  title: "Entrada de Dados/Form",
   component: Form,
   parameters: {
     jest: "Form.test.tsx",

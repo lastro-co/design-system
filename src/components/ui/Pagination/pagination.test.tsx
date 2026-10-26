@@ -212,6 +212,25 @@ describe("DynamicPagination", () => {
 
     const page3Button = screen.getByRole("button", { name: "3" });
     expect(page3Button).toHaveAttribute("aria-current", "page");
-    expect(page3Button).toHaveClass("bg-purple-100");
+    expect(page3Button).toHaveClass(
+      "bg-purple-800",
+      "text-white",
+      "hover:bg-purple-800"
+    );
+    expect(page3Button).not.toHaveClass("text-purple-800", "hover:bg-gray-100");
+  });
+
+  it("uses the gray hover on pages that are not selected", () => {
+    render(
+      <DynamicPagination
+        currentPage={3}
+        onPageChange={jest.fn()}
+        totalPages={5}
+      />
+    );
+
+    const page2Button = screen.getByRole("button", { name: "2" });
+    expect(page2Button).toHaveClass("text-purple-800", "hover:bg-gray-100");
+    expect(page2Button).not.toHaveClass("bg-purple-800");
   });
 });

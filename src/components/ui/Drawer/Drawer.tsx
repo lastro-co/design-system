@@ -1,7 +1,13 @@
 "use client";
 
 import type * as React from "react";
-import { createContext, useContext } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+} from "react";
 import { Drawer as DrawerPrimitive } from "vaul";
 import { keepOpenOnToasterPointerDown } from "@/lib/toaster-guard";
 import { cn } from "@/lib/utils";
@@ -9,6 +15,21 @@ import { ChevronLeftIcon, XIcon } from "../../icons.v2";
 import { Button } from "../Button";
 import { IconButton } from "../IconButton";
 import { ScrollArea } from "../ScrollArea";
+
+// Every ARIA role/attribute a Radix overlay primitive can render as its open
+// root: Dialog/AlertDialog (`dialog`/`alertdialog`), DropdownMenu/Menubar/
+// ContextMenu (`menu`), Select (`listbox`), Combobox-style popovers
+// (`data-radix-popper-content-wrapper`, used by Popover/Tooltip/Select/
+// HoverCard). Keep this in sync with any new Radix overlay the DS adopts —
+// an under-matched selector here would wrongly clear a lock a still-open
+// overlay (e.g. a confirmation AlertDialog opened from this drawer) needs.
+const OPEN_RADIX_OVERLAY_SELECTOR = [
+  '[data-state="open"][role="dialog"]',
+  '[data-state="open"][role="alertdialog"]',
+  '[data-state="open"][role="menu"]',
+  '[data-state="open"][role="listbox"]',
+  '[data-state="open"][data-radix-popper-content-wrapper]',
+].join(", ");
 
 const DRAWER_WIDTH_CLASSES = {
   default: "w-3/4 sm:max-w-[600px]",
@@ -40,16 +61,84 @@ type DrawerProps = OmitDistributive<
 function Drawer({
   width = "default",
   handleOnly = true,
+  onOpenChange,
   ...props
 }: DrawerProps & {
   width?: DrawerWidth;
 }) {
+  const cleanupFrameRef = useRef<number | undefined>(undefined);
+
+  // Cancel a pending cleanup frame if this drawer unmounts before it runs —
+  // it would otherwise still fire and touch `document.body` on behalf of a
+  // component that's no longer there.
+  useEffect(
+    () => () => {
+      if (cleanupFrameRef.current !== undefined) {
+        cancelAnimationFrame(cleanupFrameRef.current);
+      }
+    },
+    []
+  );
+
+  // Shared by both the vaul-internal close path (handleOpenChange) and the
+  // externally-controlled close path below (the `open` prop flipping to
+  // `false` without vaul ever calling onOpenChange). Cancels any pending
+  // frame first so the two triggers never leak a stale rAF handle when both
+  // fire for the same logical close.
+  const scheduleBodyCleanup = useCallback(() => {
+    if (cleanupFrameRef.current !== undefined) {
+      cancelAnimationFrame(cleanupFrameRef.current);
+    }
+    // vaul and Radix's scroll-lock (react-remove-scroll) can race when this
+    // drawer closes while another Radix overlay (e.g. a DropdownMenu item)
+    // closed in the same tick to open it: the lock ref-count gets out of
+    // sync and `<body style="pointer-events: none">` is left stuck forever,
+    // freezing the whole page. Wait a frame for both locks to settle, then
+    // force-clear it if it's still there and nothing else legitimately needs
+    // it (no other open Radix overlay in the document — including one just
+    // opened from this drawer's own close handler, e.g. a confirmation
+    // AlertDialog).
+    cleanupFrameRef.current = requestAnimationFrame(() => {
+      cleanupFrameRef.current = undefined;
+      const stillLocked = document.querySelector(OPEN_RADIX_OVERLAY_SELECTOR);
+      if (!stillLocked && document.body.style.pointerEvents === "none") {
+        document.body.style.pointerEvents = "";
+      }
+    });
+  }, []);
+
+  const handleOpenChange = (open: boolean) => {
+    onOpenChange?.(open);
+    if (!open) {
+      scheduleBodyCleanup();
+    }
+  };
+
+  const previousOpenPropRef = useRef(props.open);
+
+  // vaul only calls `onOpenChange` from its own internal close paths (Esc,
+  // outside-click, drag dismiss, close button) — see vaul's
+  // useControllableState: a controlled `open` prop that the parent flips to
+  // `false` itself (e.g. after an async save resolves) flows straight
+  // through on the next render without going through vaul's `setValue`, so
+  // `onOpenChange` never fires and handleOpenChange's cleanup never runs.
+  // Mirror that cleanup here, keyed on the `open` prop. Guarded so it never
+  // fires for uncontrolled drawers (`open` stays `undefined` the whole time).
+  useEffect(() => {
+    const previousOpen = previousOpenPropRef.current;
+    previousOpenPropRef.current = props.open;
+    if (previousOpen && props.open === false) {
+      scheduleBodyCleanup();
+    }
+  }, [props.open, scheduleBodyCleanup]);
+
   return (
     <DrawerContext.Provider value={{ width }}>
       <DrawerPrimitive.Root
         data-slot="drawer"
         direction="right"
         handleOnly={handleOnly}
+        onOpenChange={handleOpenChange}
         {...props}
       />
     </DrawerContext.Provider>

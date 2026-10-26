@@ -4,7 +4,7 @@ import { Label } from "../Label";
 import { Textarea } from "./Textarea";
 
 const meta: Meta<typeof Textarea> = {
-  title: "Components/Textarea",
+  title: "Entrada de Dados/Textarea",
   component: Textarea,
   parameters: {
     jest: "Textarea.test.tsx",

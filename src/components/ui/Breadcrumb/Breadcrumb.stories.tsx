@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Breadcrumb } from "./Breadcrumb";
 
 const meta: Meta<typeof Breadcrumb> = {
-  title: "Components/Breadcrumb",
+  title: "Navegação/Breadcrumb",
   component: Breadcrumb,
   parameters: {
     jest: "Breadcrumb.test.tsx",

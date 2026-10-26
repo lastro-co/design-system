@@ -128,4 +128,23 @@ describe("Accordion", () => {
     const contentWrapper = container.querySelector(".custom-content");
     expect(contentWrapper).toBeVisible();
   });
+
+  it("should render the chevron as a decorative ghost icon button", () => {
+    render(
+      <Accordion type="single">
+        <AccordionItem value="item-1">
+          <AccordionTrigger>Question 1</AccordionTrigger>
+          <AccordionContent>Answer 1</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    );
+
+    const trigger = screen.getByRole("button", { name: "Question 1" });
+    const icon = trigger.querySelector('[data-slot="accordion-icon"]');
+
+    expect(icon).toHaveAttribute("aria-hidden", "true");
+    expect(icon).toHaveClass("size-8", "rounded-xl", "text-gray-600");
+    expect(icon?.tagName).toBe("SPAN");
+    expect(trigger.querySelectorAll("button")).toHaveLength(0);
+  });
 });

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import LoadingOverlay from "./LoadingOverlay";
 
 const meta: Meta<typeof LoadingOverlay> = {
-  title: "Components/LoadingOverlay",
+  title: "Feedback/LoadingOverlay",
   component: LoadingOverlay,
   parameters: {
     jest: "LoadingOverlay.test.tsx",

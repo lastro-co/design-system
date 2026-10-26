@@ -62,7 +62,6 @@ export {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuLabel,
-  ContextMenuSeparator,
   ContextMenuTrigger,
 } from "./ContextMenu";
 export { CopyButton } from "./CopyButton";
@@ -95,6 +94,20 @@ export {
   DrawerTitle,
   DrawerTrigger,
 } from "./Drawer";
+export type {
+  DropdownMenuItemProps,
+  DropdownMenuSubTriggerProps,
+} from "./DropdownMenu";
+export {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "./DropdownMenu";
 export type {
   DropzoneContentProps,
   DropzoneEmptyStateProps,
@@ -199,6 +212,8 @@ export {
   MenuSeparator,
   MenuSubItem,
 } from "./Menu";
+export type { MultiSelectOption, MultiSelectProps } from "./MultiSelect";
+export { MultiSelect } from "./MultiSelect";
 export type { NumberInputProps } from "./NumberInput";
 export { NumberInput } from "./NumberInput";
 export type {

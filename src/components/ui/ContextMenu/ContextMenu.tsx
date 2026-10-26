@@ -34,8 +34,9 @@ function ContextMenuContent({
       <ContextMenuPrimitive.Content
         className={cn(
           "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
-          "z-50 min-w-[200px] overflow-hidden rounded-lg border border-gray-300 bg-white shadow-lg",
-          "animate-in data-[state=closed]:animate-out",
+          "data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+          "data-[state=closed]:animate-out data-[state=open]:animate-in",
+          "z-50 min-w-[8rem] overflow-hidden rounded-md border border-gray-300 bg-white p-1 font-text text-gray-900 shadow-sx",
           className
         )}
         data-slot="context-menu-content"
@@ -48,22 +49,16 @@ function ContextMenuContent({
 
 export interface ContextMenuItemProps
   extends React.ComponentProps<typeof ContextMenuPrimitive.Item> {
-  /** Icon to display on the left side */
-  leftIcon?: React.ReactNode;
-  /** Icon to display on the right side */
-  rightIcon?: React.ReactNode;
-  /** Inset padding on the left */
-  inset?: boolean;
-  /** Destructive styling (for delete/cancel actions) */
-  destructive?: boolean;
+  /** Icon shown to the left of the label. */
+  icon?: React.ReactNode;
+  /** `destructive` applies red styling for actions like delete/cancel. Default: `default`. */
+  variant?: "default" | "destructive";
 }
 
 function ContextMenuItem({
   className,
-  inset,
-  destructive,
-  leftIcon,
-  rightIcon,
+  icon,
+  variant = "default",
   onClick,
   children,
   ...props
@@ -76,55 +71,32 @@ function ContextMenuItem({
   return (
     <ContextMenuPrimitive.Item
       className={cn(
-        "relative flex cursor-pointer select-none items-center gap-2 outline-none transition-colors",
-        "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-        "px-3 py-4 font-normal text-base",
-        destructive
-          ? "text-red-600 hover:bg-red-50 focus:bg-red-50"
-          : "text-gray-900 hover:bg-gray-100 focus:bg-gray-100",
-        inset && "pl-8",
+        "relative flex h-10 w-full cursor-pointer select-none items-center gap-2 rounded-[2px] px-2 py-1.5 text-gray-900 text-sm outline-hidden transition-colors",
+        "data-disabled:pointer-events-none data-disabled:opacity-50",
+        "[&_svg]:size-4 [&_svg]:shrink-0",
+        variant === "destructive"
+          ? "text-red-600 data-highlighted:bg-red-50"
+          : "data-highlighted:bg-purple-50",
         className
       )}
       data-slot="context-menu-item"
       onClick={handleClick}
       {...props}
     >
-      {leftIcon && (
-        <span className="flex shrink-0 items-center">{leftIcon}</span>
-      )}
-      <span className="flex-1">{children}</span>
-      {rightIcon && (
-        <span className="flex shrink-0 items-center">{rightIcon}</span>
-      )}
+      {icon}
+      <span className="flex-1 truncate">{children}</span>
     </ContextMenuPrimitive.Item>
-  );
-}
-
-function ContextMenuSeparator({
-  className,
-  ...props
-}: React.ComponentProps<typeof ContextMenuPrimitive.Separator>) {
-  return (
-    <ContextMenuPrimitive.Separator
-      className={cn("m-0 h-px bg-gray-300", className)}
-      data-slot="context-menu-separator"
-      {...props}
-    />
   );
 }
 
 function ContextMenuLabel({
   className,
-  inset,
   ...props
-}: React.ComponentProps<typeof ContextMenuPrimitive.Label> & {
-  inset?: boolean;
-}) {
+}: React.ComponentProps<typeof ContextMenuPrimitive.Label>) {
   return (
     <ContextMenuPrimitive.Label
       className={cn(
-        "px-3 py-1.5 font-semibold text-gray-500 text-xs",
-        inset && "pl-8",
+        "px-2 py-1.5 font-semibold text-gray-500 text-xs",
         className
       )}
       data-slot="context-menu-label"
@@ -138,6 +110,5 @@ export {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuLabel,
-  ContextMenuSeparator,
   ContextMenuTrigger,
 };

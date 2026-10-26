@@ -3,7 +3,7 @@ import type { Meta } from "@storybook/react-vite";
 import { CopyButton } from "./CopyButton";
 
 const meta: Meta<typeof CopyButton> = {
-  title: "Components/CopyButton",
+  title: "Geral/CopyButton",
   component: CopyButton,
   parameters: {
     jest: "CopyButton.test.tsx",

@@ -1,35 +1,44 @@
-import { Slot } from "@radix-ui/react-slot";
+import { Slot, Slottable } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import type * as React from "react";
 
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex h-6 w-fit shrink-0 select-none items-center justify-center gap-1.5 overflow-hidden whitespace-nowrap rounded-full border py-0.5 font-medium has-[>img]:pl-[3px] has-[>svg]:pl-[3px] [&>img]:size-4 [&>svg]:pointer-events-none [&>svg]:size-4 [&>svg]:antialiased [&>svg]:subpixel-antialiased",
+  `inline-flex h-5 w-fit shrink-0 select-none items-center justify-center gap-1 overflow-hidden whitespace-nowrap rounded-full border border-transparent py-0.5 font-medium px-2 py-0 leading-none
+  has-[>img]:pl-1.5 has-[>svg]:pl-1.5 has-[>[data-slot=badge-icon]]:pl-1.5 has-[>img]:pr-2.5 has-[>svg]:pr-2.5 has-[>[data-slot=badge-icon]]:pr-2.5 [&>img]:size-4 [&>svg]:pointer-events-none [&>svg]:size-4 [&>svg]:antialiased [&>svg]:subpixel-antialiased`,
   {
     variants: {
       color: {
-        blue: "border-blue-700/10 bg-blue-50 text-blue-700",
-        gray: "border-gray-800/10 bg-gray-100 text-gray-800",
-        green: "border-green-700/10 bg-green-50 text-green-700",
-        orange: "border-orange-700/10 bg-orange-50 text-orange-700",
-        purple: "border-purple-800/10 bg-purple-100 text-purple-800",
-        red: "border-red-700/10 bg-red-50 text-red-700",
-        white: "border-gray-800/10 bg-white text-gray-800",
-        yellow: "border-yellow-700/10 bg-yellow-50 text-yellow-700",
+        default: "bg-purple-800 text-white",
+        secondary: "bg-white text-gray-700",
+        destructive: "bg-red-600 text-white",
+        outline: "border-gray-800 bg-white text-gray-800",
+        blue: "bg-blue-100 text-blue-700",
+        gray: "bg-gray-100 text-gray-700",
+        green: "bg-green-100 text-green-700",
+        orange: "bg-orange-100 text-orange-700",
+        purple: "bg-purple-100 text-purple-800",
+        red: "bg-red-100 text-red-700",
+        yellow: "bg-yellow-100 text-yellow-700",
+        coral: "bg-coral-600 text-white",
       },
       size: {
-        small: "px-2 text-xs",
-        medium: "px-3 text-sm",
+        small: "text-xs",
+        medium: "h-6 text-xs",
       },
       isNumber: {
-        true: "h-5 min-w-5 p-1",
+        true: "h-5 min-w-5 px-1",
+      },
+      iconOnly: {
+        true: "aspect-square px-0 has-[>[data-slot=badge-icon]]:px-0 has-[>img]:px-0 has-[>svg]:px-0",
       },
     },
     defaultVariants: {
       color: "gray",
       size: "small",
       isNumber: false,
+      iconOnly: false,
     },
   }
 );
@@ -38,10 +47,6 @@ interface BadgeProps
   extends Omit<React.ComponentProps<"span">, "color">,
     VariantProps<typeof badgeVariants> {
   asChild?: boolean;
-  /** Show a dot indicator before the badge text */
-  showDot?: boolean;
-  /** Custom color for the dot (defaults to currentColor) */
-  dotColor?: string;
 }
 
 function Badge({
@@ -49,9 +54,8 @@ function Badge({
   color,
   size,
   isNumber,
+  iconOnly,
   asChild = false,
-  showDot = false,
-  dotColor,
   children,
   ...props
 }: BadgeProps) {
@@ -59,17 +63,14 @@ function Badge({
 
   return (
     <Comp
-      className={cn(badgeVariants({ color, size, isNumber }), className)}
+      className={cn(
+        badgeVariants({ color, size, isNumber, iconOnly }),
+        className
+      )}
       data-slot="badge"
       {...props}
     >
-      {showDot && (
-        <span
-          className="h-2 w-2 shrink-0 rounded-full"
-          style={{ backgroundColor: dotColor || "currentColor" }}
-        />
-      )}
-      {children}
+      <Slottable>{children}</Slottable>
     </Comp>
   );
 }
