@@ -1,7 +1,17 @@
-import type { Meta } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { ReactNode } from "react";
-import { fn } from "storybook/test";
+import { fn, within } from "storybook/test";
 import { Button } from "../Button/Button";
+import { DialogContent, DialogRoot, DialogTrigger } from "../Dialog";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerMain,
+  DrawerTitle,
+  DrawerTrigger,
+} from "../Drawer";
 import { Toaster, toast } from ".";
 
 const meta: Meta<typeof Toaster> = {
@@ -46,6 +56,7 @@ const meta: Meta<typeof Toaster> = {
 };
 
 export default meta;
+type Story = StoryObj<typeof Toaster>;
 
 const EVENT = "Evento criado";
 const EVENT_DATE = "Segunda-feira, 3 de Janeiro às 18:00";
@@ -408,4 +419,85 @@ export const Positions = {
       </Section>
     </Demo>
   ),
+};
+
+const MODAL_TOAST_DESCRIPTION =
+  "Dispare o toast com o modal aberto: o X fecha o toast e a ação mostra outro toast, sem fechar o modal. Overlay e Esc continuam fechando o modal.";
+
+const fireModalToast = () =>
+  toast(EVENT, {
+    description: EVENT_DATE,
+    duration: Number.POSITIVE_INFINITY,
+    closeButton: true,
+    action: {
+      label: "Desfazer",
+      onClick: () => toast("Criação desfeita."),
+    },
+  });
+
+const openModalAndFireToast =
+  (trigger: string): Story["play"] =>
+  async ({ canvas, canvasElement, userEvent }) => {
+    await userEvent.click(canvas.getByRole("button", { name: trigger }));
+    const page = within(canvasElement.ownerDocument.body);
+    await userEvent.click(
+      await page.findByRole("button", { name: "Disparar toast" })
+    );
+  };
+
+/** Toast over an open modal Drawer: its X and action respond and the drawer stays open. */
+export const OverDrawer: Story = {
+  name: "Sobre um Drawer aberto",
+  render: () => (
+    <Demo>
+      <Section
+        description={MODAL_TOAST_DESCRIPTION}
+        title="Sobre um Drawer aberto"
+      >
+        <Drawer>
+          <DrawerTrigger asChild>
+            <Button variant="outline">Abrir drawer</Button>
+          </DrawerTrigger>
+          <DrawerContent>
+            <DrawerHeader hideBackButton>
+              <DrawerTitle>Novo evento</DrawerTitle>
+              <DrawerDescription>
+                O toast abre por cima deste drawer.
+              </DrawerDescription>
+            </DrawerHeader>
+            <DrawerMain>
+              <Button onClick={fireModalToast}>Disparar toast</Button>
+            </DrawerMain>
+          </DrawerContent>
+        </Drawer>
+      </Section>
+    </Demo>
+  ),
+  play: openModalAndFireToast("Abrir drawer"),
+};
+
+/** Same check over an open modal Dialog. */
+export const OverDialog: Story = {
+  name: "Sobre um Dialog aberto",
+  render: () => (
+    <Demo>
+      <Section
+        description={MODAL_TOAST_DESCRIPTION}
+        title="Sobre um Dialog aberto"
+      >
+        <DialogRoot>
+          <DialogTrigger asChild>
+            <Button variant="outline">Abrir dialog</Button>
+          </DialogTrigger>
+          <DialogContent
+            description="O toast abre por cima deste dialog."
+            title="Novo evento"
+          >
+            <Button onClick={fireModalToast}>Disparar toast</Button>
+          </DialogContent>
+        </DialogRoot>
+      </Section>
+    </Demo>
+  ),
+  play: openModalAndFireToast("Abrir dialog"),
 };
