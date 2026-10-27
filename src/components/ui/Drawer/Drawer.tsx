@@ -9,6 +9,7 @@ import {
   useRef,
 } from "react";
 import { Drawer as DrawerPrimitive } from "vaul";
+import { keepOpenOnToasterPointerDown } from "@/lib/toaster-guard";
 import { cn } from "@/lib/utils";
 import { ChevronLeftIcon, XIcon } from "../../icons.v2";
 import { Button } from "../Button";
@@ -182,6 +183,7 @@ function DrawerContent({
   className,
   children,
   container,
+  onPointerDownOutside,
   ...props
 }: React.ComponentProps<typeof DrawerPrimitive.Content> & {
   container?: HTMLElement | null;
@@ -197,6 +199,9 @@ function DrawerContent({
           className
         )}
         data-slot="drawer-content"
+        onPointerDownOutside={keepOpenOnToasterPointerDown(
+          onPointerDownOutside
+        )}
         {...props}
       >
         {children}

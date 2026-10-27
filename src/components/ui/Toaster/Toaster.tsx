@@ -32,6 +32,12 @@ const DS_TOAST_VARS = {
   fontFamily: "var(--font-text)",
 } as React.CSSProperties;
 
+/*
+ * Modal Radix layers set `pointer-events: none` on <body>, and Sonner renders
+ * the toast list inline, so toasts would ignore clicks under a modal. Hidden
+ * toasts keep Sonner's own `none`. A click on a toast then counts as outside
+ * the modal: modal contents need `keepOpenOnToasterPointerDown` too.
+ */
 const Toaster = ({
   closeButton = false,
   position = "top-center",
@@ -51,7 +57,7 @@ const Toaster = ({
       error: <CircleXIcon className="text-red-400" size={16} />,
     }}
     position={position}
-    style={{ ...DS_TOAST_VARS, ...style }}
+    style={{ ...DS_TOAST_VARS, pointerEvents: "auto", ...style }}
     theme={theme}
     toastOptions={{
       ...toastOptions,
