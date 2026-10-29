@@ -1,4 +1,5 @@
 import { act, renderHook } from "@testing-library/react";
+import type * as maplibregl from "maplibre-gl";
 import type { ReactNode } from "react";
 import { createElement } from "react";
 import { MapContext, MarkerContext } from "./context";

@@ -1,6 +1,6 @@
 "use client";
 
-import MapLibreGL from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { XIcon } from "@/components/icons.v2";
@@ -20,7 +20,7 @@ export function MapPopup({
   ...popupOptions
 }: MapPopupProps) {
   const { map } = useMap();
-  const popupRef = useRef<MapLibreGL.Popup | null>(null);
+  const popupRef = useRef<maplibregl.Popup | null>(null);
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
 
   // Create container element on client-side only
@@ -39,7 +39,7 @@ export function MapPopup({
       return;
     }
 
-    popupRef.current = new MapLibreGL.Popup({
+    popupRef.current = new maplibregl.Popup({
       offset: 16,
       ...popupOptions,
       closeButton: false,
