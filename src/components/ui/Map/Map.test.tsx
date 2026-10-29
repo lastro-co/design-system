@@ -74,22 +74,20 @@ jest.mock("maplibre-gl", () => {
   };
   return {
     __esModule: true,
-    default: {
-      Marker: jest.fn().mockImplementation(() => markerInstance),
-      Popup: jest.fn().mockImplementation(() => popupInstance),
-      Map: jest.fn().mockImplementation(() => mapInstance),
-      setWorkerUrl: jest.fn(),
-      _markerInstance: markerInstance,
-      _popupInstance: popupInstance,
-      _mapInstance: mapInstance,
-    },
+    Marker: jest.fn().mockImplementation(() => markerInstance),
+    Popup: jest.fn().mockImplementation(() => popupInstance),
+    Map: jest.fn().mockImplementation(() => mapInstance),
+    setWorkerUrl: jest.fn(),
+    _markerInstance: markerInstance,
+    _popupInstance: popupInstance,
+    _mapInstance: mapInstance,
   };
 });
 
 // Retrieve the shared mock instances created inside the factory
-import MapLibreGL from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
 
-const mockMapLibreGL = MapLibreGL as unknown as {
+const mockMapLibreGL = maplibregl as unknown as {
   _markerInstance: Record<string, jest.Mock>;
   _popupInstance: Record<string, jest.Mock>;
   _mapInstance: Record<string, jest.Mock>;

@@ -49,10 +49,3 @@ export const Popup = jest.fn().mockImplementation(() => ({
 }));
 
 export const setWorkerUrl = jest.fn();
-
-export default {
-  Map,
-  Marker,
-  Popup,
-  setWorkerUrl,
-};

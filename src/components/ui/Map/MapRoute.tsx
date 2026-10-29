@@ -1,6 +1,6 @@
 "use client";
 
-import type MapLibreGL from "maplibre-gl";
+import type * as maplibregl from "maplibre-gl";
 import { useEffect, useId } from "react";
 
 import { useMap } from "./hooks";
@@ -73,7 +73,7 @@ export function MapRoute({
       return;
     }
 
-    const source = map.getSource(sourceId) as MapLibreGL.GeoJSONSource;
+    const source = map.getSource(sourceId) as maplibregl.GeoJSONSource;
     if (source) {
       source.setData({
         type: "Feature",

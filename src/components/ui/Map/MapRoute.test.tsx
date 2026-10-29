@@ -1,4 +1,5 @@
 import { act, render } from "@testing-library/react";
+import type * as maplibregl from "maplibre-gl";
 import { createElement } from "react";
 import { MapContext } from "./context";
 import { MapRoute } from "./MapRoute";
