@@ -117,6 +117,11 @@ export interface FileTypeIconProps {
   mimeType?: string;
   /** Size of the icon */
   size?: FileTypeIconSize;
+  /**
+   * Fills the parent container instead of the fixed square box.
+   * `size` still sets the label and icon size.
+   */
+  fill?: boolean;
   /** Additional CSS classes */
   className?: string;
 }
@@ -134,6 +139,7 @@ export default function FileTypeIcon({
   fileName,
   mimeType,
   size = "md",
+  fill = false,
   className,
 }: FileTypeIconProps) {
   const fileType = getFileType(fileName, mimeType);
@@ -144,7 +150,7 @@ export default function FileTypeIcon({
     <div
       className={cn(
         "flex shrink-0 items-center justify-center rounded-lg",
-        sizeConfig.container,
+        fill ? "size-full" : sizeConfig.container,
         config.bgColor,
         className
       )}
