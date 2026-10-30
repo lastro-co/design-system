@@ -38,6 +38,7 @@ const meta: Meta<typeof IconButton> = {
         "selected",
         "chip",
         "chipSelected",
+        "overlay",
       ],
       description: "IconButton visual style variant",
     },
@@ -113,6 +114,7 @@ const VARIANTS = [
   "selected",
   "chip",
   "chipSelected",
+  "overlay",
 ] as const;
 
 export const AllVariants = {
