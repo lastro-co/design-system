@@ -190,6 +190,12 @@ export {
   useMap,
   useMarkerContext,
 } from "./Map";
+export type { MediaGridItem, MediaGridProps } from "./MediaGrid";
+export { MediaGrid } from "./MediaGrid";
+export type { MediaKind, MediaThumbnailProps } from "./MediaThumbnail";
+export { MediaThumbnail } from "./MediaThumbnail";
+export type { MediaTrayItem, MediaTrayProps } from "./MediaTray";
+export { MediaTray, moveItem } from "./MediaTray";
 export type {
   MenuAccordionItemProps,
   MenuHeaderProps,

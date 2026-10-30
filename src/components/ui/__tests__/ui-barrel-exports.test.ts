@@ -207,6 +207,19 @@ describe("components/ui barrel exports", () => {
     expect(uiExports.useMarkerContext).toBeDefined();
   });
 
+  it("exports MediaGrid", () => {
+    expect(uiExports.MediaGrid).toBeDefined();
+  });
+
+  it("exports MediaThumbnail", () => {
+    expect(uiExports.MediaThumbnail).toBeDefined();
+  });
+
+  it("exports MediaTray and moveItem", () => {
+    expect(uiExports.MediaTray).toBeDefined();
+    expect(uiExports.moveItem).toBeDefined();
+  });
+
   it("exports Pagination components", () => {
     expect(uiExports.DynamicPagination).toBeDefined();
     expect(uiExports.generatePaginationRange).toBeDefined();
