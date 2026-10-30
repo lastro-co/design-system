@@ -76,21 +76,24 @@ export function MediaTray({
   const itemRefs = useRef(new Map<string, HTMLLIElement>());
   const dragRef = useRef<DragState | null>(null);
   const suppressClickRef = useRef(false);
-  const pendingFocusIdRef = useRef<string | null>(null);
+  const pendingFocusRef = useRef<{ id: string; index: number } | null>(null);
   const [draggingId, setDraggingId] = useState<string | null>(null);
-  const [announcement, setAnnouncement] = useState("");
+  const [announcement, setAnnouncement] = useState({ text: "", count: 0 });
 
   const canReorder = Boolean(onReorder) && !disabled;
   const limitReached = maxItems !== undefined && items.length >= maxItems;
 
   useEffect(() => {
-    const id = pendingFocusIdRef.current;
-    if (!(id && items.some((item) => item.id === id))) {
+    const pending = pendingFocusRef.current;
+    if (!pending) {
       return;
     }
-    pendingFocusIdRef.current = null;
+    pendingFocusRef.current = null;
+    if (items[pending.index]?.id !== pending.id) {
+      return;
+    }
     itemRefs.current
-      .get(id)
+      .get(pending.id)
       ?.querySelector<HTMLElement>(SELECT_BUTTON_SELECTOR)
       ?.focus();
   }, [items]);
@@ -100,10 +103,11 @@ export function MediaTray({
       return;
     }
     const moved = items[from];
-    pendingFocusIdRef.current = moved.id;
-    setAnnouncement(
-      `${moved.fileName} movido para a posição ${to + 1} de ${items.length}`
-    );
+    pendingFocusRef.current = { id: moved.id, index: to };
+    setAnnouncement((prev) => ({
+      text: `${moved.fileName} movido para a posição ${to + 1} de ${items.length}`,
+      count: prev.count + 1,
+    }));
     onReorder(moveItem(items, from, to));
   };
 
@@ -126,6 +130,7 @@ export function MediaTray({
     id: string,
     index: number
   ) => {
+    suppressClickRef.current = false;
     const target = event.target as HTMLElement;
     if (
       !canReorder ||
@@ -252,7 +257,7 @@ export function MediaTray({
                   index={index}
                   onRemove={onRemove ? () => onRemove(id) : undefined}
                   onSelect={hasSelectButton ? () => onSelect?.(id) : undefined}
-                  selected={selectedId === id}
+                  selected={onSelect ? selectedId === id : undefined}
                 />
               </li>
             );
@@ -272,7 +277,7 @@ export function MediaTray({
       )}
 
       <span aria-live="polite" className="sr-only">
-        {announcement}
+        <span key={announcement.count}>{announcement.text}</span>
       </span>
     </div>
   );

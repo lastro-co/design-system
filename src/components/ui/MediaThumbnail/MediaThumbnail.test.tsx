@@ -126,6 +126,7 @@ describe("MediaThumbnail", () => {
           fileName="foto.jpg"
           kind="image"
           onSelect={jest.fn()}
+          selected={false}
           src="a.jpg"
         />
       );

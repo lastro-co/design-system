@@ -76,7 +76,7 @@ export function MediaThumbnail({
   fileName,
   mimeType,
   index,
-  selected = false,
+  selected,
   invalid = false,
   invalidMessage,
   onSelect,

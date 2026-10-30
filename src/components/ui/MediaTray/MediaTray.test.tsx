@@ -124,6 +124,13 @@ describe("MediaTray", () => {
       expect(screen.getByRole("img", { name: "um.jpg" })).toBeVisible();
     });
 
+    it("does not expose a toggle state when only reordering", () => {
+      render(<MediaTray items={buildItems()} onReorder={jest.fn()} />);
+      expect(
+        screen.getByRole("button", { name: "um.jpg" })
+      ).not.toHaveAttribute("aria-pressed");
+    });
+
     it("marks the selected item", () => {
       render(
         <MediaTray items={buildItems()} onSelect={jest.fn()} selectedId="2" />
@@ -299,6 +306,22 @@ describe("MediaTray", () => {
       expect(onSelect).toHaveBeenCalledWith("1");
     });
 
+    it("does not swallow a later click when no click followed the drag", () => {
+      const onSelect = jest.fn();
+      render(<ControlledTray onSelect={onSelect} />);
+      const [first] = mockTileRects();
+
+      fireEvent.pointerDown(first, { button: 0, clientX: 40, pointerId: 1 });
+      fireEvent.pointerMove(first, { clientX: 150, pointerId: 1 });
+      fireEvent.pointerUp(first, { clientX: 150, pointerId: 1 });
+
+      const button = screen.getByRole("button", { name: "um.jpg" });
+      fireEvent.pointerDown(button, { button: 0, clientX: 140, pointerId: 2 });
+      fireEvent.pointerUp(button, { clientX: 140, pointerId: 2 });
+      fireEvent.click(button);
+      expect(onSelect).toHaveBeenCalledWith("1");
+    });
+
     it("treats a movement below the threshold as a click", () => {
       const onReorder = jest.fn();
       const onSelect = jest.fn();
@@ -404,6 +427,23 @@ describe("MediaTray", () => {
       expect(onAdd).not.toHaveBeenCalled();
       expect(screen.getByRole("button", { name: ADD_LABEL })).toBeDisabled();
     });
+  });
+
+  it("does not steal focus later when the parent ignores the reorder", () => {
+    const { rerender } = render(
+      <MediaTray items={buildItems()} onReorder={jest.fn()} />
+    );
+    const first = screen.getByRole("button", { name: "um.jpg" });
+    first.focus();
+    fireEvent.keyDown(first, { key: "ArrowRight", altKey: true });
+    const third = screen.getByRole("button", { name: "tres.pdf" });
+    third.focus();
+
+    act(() => {
+      rerender(<MediaTray items={buildItems()} onReorder={jest.fn()} />);
+    });
+
+    expect(third).toHaveFocus();
   });
 
   it("does not move focus when the moved item is no longer rendered", () => {
