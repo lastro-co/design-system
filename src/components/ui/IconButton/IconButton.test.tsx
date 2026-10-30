@@ -374,6 +374,7 @@ describe("IconButton", () => {
     expect(iconButtonVariants()).toContain("border");
 
     // Test size variants
+    expect(iconButtonVariants({ size: "xsmall" })).toContain("size-4.5");
     expect(iconButtonVariants({ size: "small" })).toContain("size-8");
     expect(iconButtonVariants({ size: "medium" })).toContain("size-10");
     expect(iconButtonVariants({ size: "large" })).toContain("size-12");

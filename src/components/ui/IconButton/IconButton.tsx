@@ -11,6 +11,8 @@ const iconButtonVariants = cva(
   {
     variants: {
       size: {
+        // 18px corner control (e.g. remove on a thumbnail), with a 14px icon
+        xsmall: "size-4.5 [&_svg:not([class*='size-'])]:size-3.5",
         small: "size-8",
         medium: "size-10",
         large: "size-12",
