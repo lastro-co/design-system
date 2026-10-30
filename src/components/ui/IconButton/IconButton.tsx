@@ -11,6 +11,8 @@ const iconButtonVariants = cva(
   {
     variants: {
       size: {
+        // 18px corner control (e.g. remove on a thumbnail), with a 14px icon
+        xsmall: "size-4.5 [&_svg:not([class*='size-'])]:size-3.5",
         small: "size-8",
         medium: "size-10",
         large: "size-12",
@@ -39,6 +41,9 @@ const iconButtonVariants = cva(
         chip: "border border-gray-200 bg-white text-gray-600 hover:border-purple-100",
         chipSelected:
           "border border-purple-800/10 bg-purple-100 text-purple-800",
+        // translucent control over media (e.g. prev/next on a preview)
+        overlay:
+          "border border-gray-200 bg-white/40 text-gray-700 backdrop-blur-[2px] hover:bg-white/70 active:bg-white/70 disabled:bg-white/40",
       },
     },
     compoundVariants: [

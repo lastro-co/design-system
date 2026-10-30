@@ -1,6 +1,11 @@
 import type { Meta } from "@storybook/react-vite";
 import { Fragment } from "react";
-import { ChevronDownIcon, InfoIcon, PlusIcon } from "@/components/icons.v2";
+import {
+  ChevronDownIcon,
+  InfoIcon,
+  PlusIcon,
+  XIcon,
+} from "@/components/icons.v2";
 import { IconButton } from "./IconButton";
 
 const meta: Meta<typeof IconButton> = {
@@ -14,7 +19,7 @@ const meta: Meta<typeof IconButton> = {
   argTypes: {
     size: {
       control: "select",
-      options: ["small", "medium", "large"],
+      options: ["xsmall", "small", "medium", "large"],
       description: "IconButton size variant",
     },
     shape: {
@@ -33,6 +38,7 @@ const meta: Meta<typeof IconButton> = {
         "selected",
         "chip",
         "chipSelected",
+        "overlay",
       ],
       description: "IconButton visual style variant",
     },
@@ -108,6 +114,7 @@ const VARIANTS = [
   "selected",
   "chip",
   "chipSelected",
+  "overlay",
 ] as const;
 
 export const AllVariants = {
@@ -159,6 +166,14 @@ export const AllVariants = {
       <div className="space-y-2">
         <h3 className="font-medium text-lg">Sizes</h3>
         <div className="flex flex-wrap items-center gap-4">
+          <IconButton
+            aria-label="Extra small"
+            shape="circular"
+            size="xsmall"
+            variant="default"
+          >
+            <XIcon />
+          </IconButton>
           <IconButton aria-label="Small" size="small">
             <PlusIcon />
           </IconButton>

@@ -194,6 +194,16 @@ describe("FileTypeIcon", () => {
     expect(wrapper).toHaveClass("h-12", "w-12");
   });
 
+  it("fills the parent container when fill is set", () => {
+    const { container } = render(
+      <FileTypeIcon fileName="document.pdf" fill size="sm" />
+    );
+    const wrapper = container.firstChild as HTMLElement;
+    expect(wrapper).toHaveClass("size-full");
+    expect(wrapper).not.toHaveClass("h-8", "w-8");
+    expect(screen.getByText("PDF")).toHaveClass("text-[10px]");
+  });
+
   it("uses mime type when file has no meaningful extension", () => {
     render(<FileTypeIcon fileName="upload" mimeType="application/pdf" />);
     expect(screen.getByText("PDF")).toBeInTheDocument();
