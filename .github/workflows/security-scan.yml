@@ -1,0 +1,25 @@
+# Varredura de segurança (PLAT-1099, PLAT-1100): gitleaks nos commits novos,
+# govulncheck e gosec só em issue nova. Roda em todo push, inclusive na base
+# (o relatório da base alimenta o DefectDojo), e uma vez por semana, para pegar
+# CVE publicada depois do último merge. A lógica fica no reutilizável do eks-gitops.
+name: Security scan
+
+on:
+  push:
+  schedule:
+    - cron: "26 11 * * 1"
+
+concurrency:
+  group: security-scan-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  security:
+    uses: lastro-co/eks-gitops/.github/workflows/security-scan.yml@main
+    secrets: inherit
+    # Sem go.mod na raiz: só o gitleaks.
+    with:
+      go: false
