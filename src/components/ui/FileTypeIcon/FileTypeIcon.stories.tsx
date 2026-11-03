@@ -22,6 +22,10 @@ const meta: Meta<typeof FileTypeIcon> = {
       options: ["sm", "md", "lg"],
       description: "Size of the icon",
     },
+    fill: {
+      control: "boolean",
+      description: "Fills the parent container instead of the fixed size box",
+    },
     className: {
       control: "text",
       description: "Additional CSS classes",
@@ -96,6 +100,18 @@ export const AllSizes: Story = {
         <FileTypeIcon fileName="document.pdf" size="lg" />
         <span className="text-gray-500 text-xs">Large</span>
       </div>
+    </div>
+  ),
+};
+
+export const Fill: Story = {
+  render: () => (
+    <div className="flex items-center gap-2">
+      {["planilha.xlsx", "contrato.pdf", "proposta.docx"].map((fileName) => (
+        <div className="h-11 w-21" key={fileName}>
+          <FileTypeIcon fileName={fileName} fill />
+        </div>
+      ))}
     </div>
   ),
 };

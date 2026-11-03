@@ -76,6 +76,7 @@ export {
   HousePlus as HousePlusIcon,
   IdCard as IdCardIcon,
   Image as ImageIcon,
+  ImageOff as ImageOffIcon,
   Images as ImagesIcon,
   ImageUp as ImageUpIcon,
   Inbox as InboxIcon,
