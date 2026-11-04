@@ -133,7 +133,6 @@
     "@testing-library/user-event": "^14.6.1",
     "@types/geojson": "7946.0.16",
     "@types/jest": "^30.0.0",
-    "@types/maplibre-gl": "^1.14.0",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "identity-obj-proxy": "^3.0.0",
