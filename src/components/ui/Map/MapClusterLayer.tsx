@@ -1,6 +1,6 @@
 "use client";
 
-import type MapLibreGL from "maplibre-gl";
+import type * as maplibregl from "maplibre-gl";
 import { useEffect, useId, useRef } from "react";
 
 import { useMap } from "./hooks";
@@ -180,7 +180,7 @@ export function MapClusterLayer<
       return;
     }
 
-    const source = map.getSource(sourceId) as MapLibreGL.GeoJSONSource;
+    const source = map.getSource(sourceId) as maplibregl.GeoJSONSource;
     if (source) {
       source.setData(data);
     }
@@ -291,8 +291,8 @@ export function MapClusterLayer<
 
     // Cluster click handler - zoom into cluster
     const handleClusterClick = async (
-      e: MapLibreGL.MapMouseEvent & {
-        features?: MapLibreGL.MapGeoJSONFeature[];
+      e: maplibregl.MapMouseEvent & {
+        features?: maplibregl.MapGeoJSONFeature[];
       }
     ) => {
       const features = map.queryRenderedFeatures(e.point, {
@@ -317,7 +317,7 @@ export function MapClusterLayer<
         onClusterClick(clusterId, coordinates, pointCount);
       } else {
         // Default behavior: zoom to cluster expansion zoom
-        const source = map.getSource(sourceId) as MapLibreGL.GeoJSONSource;
+        const source = map.getSource(sourceId) as maplibregl.GeoJSONSource;
         const zoom = await source.getClusterExpansionZoom(clusterId);
         map.easeTo({
           center: coordinates,
@@ -328,8 +328,8 @@ export function MapClusterLayer<
 
     // Unclustered point click handler
     const handlePointClick = (
-      e: MapLibreGL.MapMouseEvent & {
-        features?: MapLibreGL.MapGeoJSONFeature[];
+      e: maplibregl.MapMouseEvent & {
+        features?: maplibregl.MapGeoJSONFeature[];
       }
     ) => {
       if (!onPointClick || !e.features?.length) {

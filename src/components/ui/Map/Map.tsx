@@ -1,14 +1,15 @@
 "use client";
 
-import MapLibreGL from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 
-// Set the CSP worker URL before any Map instance is created.
-// The consumer app must serve this file at /maplibre-gl-csp-worker.js (via postinstall).
-// The Turbopack alias (maplibre-gl → maplibre-gl-csp.js) in the app's next.config.ts
-// activates the CSP build which uses this static worker instead of an inline blob.
+// Set the worker URL before any Map instance is created.
+// The consumer app must serve this file at /maplibre-gl-worker.mjs (via postinstall,
+// copied from node_modules/maplibre-gl/dist/maplibre-gl-worker.mjs). maplibre-gl v6 is
+// ESM-only and loads the worker as a same-origin module Worker when the URL is same-origin,
+// which satisfies a CSP `worker-src 'self'` without needing `blob:`.
 if (typeof window !== "undefined") {
-  MapLibreGL.setWorkerUrl("/maplibre-gl-csp-worker.js");
+  maplibregl.setWorkerUrl("/maplibre-gl-worker.mjs");
 }
 
 import {
@@ -36,7 +37,7 @@ export const Map = forwardRef<MapRef, MapProps>(function MapComponent(
   ref
 ) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [mapInstance, setMapInstance] = useState<MapLibreGL.Map | null>(null);
+  const [mapInstance, setMapInstance] = useState<maplibregl.Map | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isStyleLoaded, setIsStyleLoaded] = useState(false);
   const currentStyleRef = useRef<MapStyleOption | null>(null);
@@ -53,7 +54,7 @@ export const Map = forwardRef<MapRef, MapProps>(function MapComponent(
     [styles]
   );
 
-  useImperativeHandle(ref, () => mapInstance as MapLibreGL.Map, [mapInstance]);
+  useImperativeHandle(ref, () => mapInstance as maplibregl.Map, [mapInstance]);
 
   const clearStyleTimeout = useCallback(() => {
     if (styleTimeoutRef.current) {
@@ -73,7 +74,7 @@ export const Map = forwardRef<MapRef, MapProps>(function MapComponent(
       resolvedTheme === "dark" ? mapStyles.dark : mapStyles.light;
     currentStyleRef.current = initialStyle;
 
-    const map = new MapLibreGL.Map({
+    const map = new maplibregl.Map({
       container: containerRef.current,
       style: initialStyle,
       renderWorldCopies: false,

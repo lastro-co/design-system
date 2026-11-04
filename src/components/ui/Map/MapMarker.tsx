@@ -1,6 +1,6 @@
 "use client";
 
-import MapLibreGL from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
 import { useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
 import { XIcon } from "@/components/icons.v2";
@@ -31,11 +31,11 @@ export function MapMarker({
   ...markerOptions
 }: MapMarkerProps) {
   const { map } = useMap();
-  const markerRef = useRef<MapLibreGL.Marker | null>(null);
+  const markerRef = useRef<maplibregl.Marker | null>(null);
 
   // Create marker instance once
   if (!markerRef.current) {
-    markerRef.current = new MapLibreGL.Marker({
+    markerRef.current = new maplibregl.Marker({
       ...markerOptions,
       element: document.createElement("div"),
       draggable,
@@ -184,7 +184,7 @@ export function MarkerPopup({
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally only create popup once
   const popup = useMemo(() => {
-    const popupInstance = new MapLibreGL.Popup({
+    const popupInstance = new maplibregl.Popup({
       offset: 16,
       ...popupOptions,
       closeButton: false,
@@ -259,7 +259,7 @@ export function MarkerTooltip({
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally only create tooltip once
   const tooltip = useMemo(() => {
-    const tooltipInstance = new MapLibreGL.Popup({
+    const tooltipInstance = new maplibregl.Popup({
       offset: 16,
       ...popupOptions,
       closeOnClick: true,

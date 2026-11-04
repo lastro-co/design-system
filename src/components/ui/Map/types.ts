@@ -1,22 +1,22 @@
-import type MapLibreGL from "maplibre-gl";
+import type * as maplibregl from "maplibre-gl";
 import type { MarkerOptions, PopupOptions } from "maplibre-gl";
 import type { ReactNode } from "react";
 
 export type Theme = "light" | "dark";
 
-export type MapStyleOption = string | MapLibreGL.StyleSpecification;
+export type MapStyleOption = string | maplibregl.StyleSpecification;
 
 export type MapContextValue = {
-  map: MapLibreGL.Map | null;
+  map: maplibregl.Map | null;
   isLoaded: boolean;
 };
 
 export type MarkerContextValue = {
-  marker: MapLibreGL.Marker;
-  map: MapLibreGL.Map | null;
+  marker: maplibregl.Marker;
+  map: maplibregl.Map | null;
 };
 
-export type MapRef = MapLibreGL.Map;
+export type MapRef = maplibregl.Map;
 
 export type MapProps = {
   children?: ReactNode;
@@ -31,8 +31,8 @@ export type MapProps = {
     dark?: MapStyleOption;
   };
   /** Map projection type. Use `{ type: "globe" }` for 3D globe view. */
-  projection?: MapLibreGL.ProjectionSpecification;
-} & Omit<MapLibreGL.MapOptions, "container" | "style">;
+  projection?: maplibregl.ProjectionSpecification;
+} & Omit<maplibregl.MapOptions, "container" | "style">;
 
 export type MapMarkerProps = {
   /** Longitude coordinate for marker position */

@@ -1,11 +1,9 @@
 jest.mock("maplibre-gl", () => ({
   __esModule: true,
-  default: {
-    Map: jest.fn(),
-    Marker: jest.fn(),
-    Popup: jest.fn(),
-    setWorkerUrl: jest.fn(),
-  },
+  Map: jest.fn(),
+  Marker: jest.fn(),
+  Popup: jest.fn(),
+  setWorkerUrl: jest.fn(),
 }));
 
 describe("components/ui barrel exports", () => {

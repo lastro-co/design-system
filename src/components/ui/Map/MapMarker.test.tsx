@@ -1,5 +1,6 @@
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import type * as maplibregl from "maplibre-gl";
 import { createElement } from "react";
 import { MapContext, MarkerContext } from "./context";
 import {
@@ -61,12 +62,10 @@ const mockPopupInstance = {
 
 jest.mock("maplibre-gl", () => ({
   __esModule: true,
-  default: {
-    Marker: jest.fn().mockImplementation(() => mockMarkerInstance),
-    Popup: jest.fn().mockImplementation(() => mockPopupInstance),
-    Map: jest.fn(),
-    setWorkerUrl: jest.fn(),
-  },
+  Marker: jest.fn().mockImplementation(() => mockMarkerInstance),
+  Popup: jest.fn().mockImplementation(() => mockPopupInstance),
+  Map: jest.fn(),
+  setWorkerUrl: jest.fn(),
 }));
 
 const createMockMap = () => ({
