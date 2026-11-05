@@ -4,6 +4,8 @@ on:
   release:
     types: [published]
 
+# Sem cache de dependências: um cache envenenado por outro run entraria no
+# pacote publicado (zizmor cache-poisoning).
 permissions:
   contents: read
   packages: write
@@ -19,10 +21,10 @@ jobs:
 
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
+          package-manager-cache: false
           node-version: '24'
           registry-url: 'https://npm.pkg.github.com'
           scope: '@lastro-co'
-          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
