@@ -86,6 +86,7 @@ jobs:
           echo "range=$range" >> "$GITHUB_OUTPUT"
 
       - name: Run gitleaks
+        id: gitleaks
         env:
           RANGE: ${{ steps.range.outputs.range }}
         run: |
@@ -95,6 +96,30 @@ jobs:
             --report-format json --report-path "$RUNNER_TEMP/report/gitleaks.json")
           if [ -n "$RANGE" ]; then args+=(--log-opts="$RANGE"); fi
           "$RUNNER_TEMP/gitleaks" "${args[@]}"
+
+      # Mostra no PR o que o gitleaks achou: anotação no arquivo e na linha, e uma
+      # tabela no resumo do run. Só regra, arquivo, linha, commit e fingerprint;
+      # nunca Secret nem Match, mesmo redigidos.
+      - name: Report findings
+        if: failure() && steps.gitleaks.outcome == 'failure'
+        run: |
+          set -euo pipefail
+          report="$RUNNER_TEMP/report/gitleaks.json"
+          [ -s "$report" ] || exit 0
+          # Escapa %, CR e LF, como pede o formato dos workflow commands.
+          jq -r '.[] | "::error file=\(.File),line=\(.StartLine),title=gitleaks \(.RuleID)::\(.Description) (commit \(.Commit[0:8])). Fingerprint: \(.Fingerprint)"
+            | gsub("%"; "%25") | gsub("\r"; "%0D") | gsub("\n"; "%0A")' "$report"
+          {
+            echo "### gitleaks: $(jq length "$report") achado(s)"
+            echo
+            echo "| Regra | Arquivo | Linha | Commit |"
+            echo "|---|---|---|---|"
+            jq -r '.[] | "| \(.RuleID) | `\(.File)` | \(.StartLine) | `\(.Commit[0:8])` |"' "$report"
+            echo
+            echo "O valor não aparece aqui nem no artifact \`security-scan-gitleaks\` (\`--redact\`)."
+            echo "Credencial real: rotacionar e tirar do código."
+            echo "Falso positivo (fixture de teste): \`gitleaks:allow\` no fim da linha, ou o fingerprint no \`.gitleaksignore\` do repo."
+          } >> "$GITHUB_STEP_SUMMARY"
 
       # Também quando o gitleaks achou algo (é quando o relatório importa). --redact
       # troca o segredo por REDACTED no JSON.
