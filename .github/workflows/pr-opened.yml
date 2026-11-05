@@ -3,7 +3,9 @@ name: PR opened
 # Atribui o autor e põe o label "production" em PR para prod, num job só
 # (PLAT-913). A regra fica no eks-gitops.
 on:
-  pull_request_target:
+  # pull_request_target é seguro aqui: o reutilizável do eks-gitops não faz
+  # checkout nem roda código do PR, só chama a API para atribuir e rotular.
+  pull_request_target:  # zizmor: ignore[dangerous-triggers]
     types: [opened, reopened]
 
 permissions:
