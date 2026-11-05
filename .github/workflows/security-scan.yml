@@ -106,16 +106,20 @@ jobs:
           set -euo pipefail
           report="$RUNNER_TEMP/report/gitleaks.json"
           [ -s "$report" ] || exit 0
-          # Escapa %, CR e LF, como pede o formato dos workflow commands.
-          jq -r '.[] | "::error file=\(.File),line=\(.StartLine),title=gitleaks \(.RuleID)::\(.Description) (commit \(.Commit[0:8])). Fingerprint: \(.Fingerprint)"
-            | gsub("%"; "%25") | gsub("\r"; "%0D") | gsub("\n"; "%0A")' "$report"
+          # Escape dos workflow commands: na mensagem, %, CR e LF; nas propriedades
+          # (file, title), também , e :.
+          jq -r '
+            def esc: gsub("%"; "%25") | gsub("\r"; "%0D") | gsub("\n"; "%0A");
+            def prop: esc | gsub(":"; "%3A") | gsub(","; "%2C");
+            .[] | "::error file=\(.File | prop),line=\(.StartLine),title=\("gitleaks " + .RuleID | prop)::\("\(.Description) (commit \(.Commit[0:8])). Fingerprint: \(.Fingerprint)" | esc)"' "$report"
           {
             echo "### gitleaks: $(jq length "$report") achado(s)"
             echo
             echo "| Regra | Arquivo | Linha | Commit |"
             echo "|---|---|---|---|"
-            jq -r '.[] | "| \(.RuleID) | `\(.File)` | \(.StartLine) | `\(.Commit[0:8])` |"' "$report"
+            jq -r '.[] | "| \(.RuleID) | `\(.File | gsub("\\|"; "\\|"))` | \(.StartLine) | `\(.Commit[0:8])` |"' "$report"
             echo
+            echo "Arquivo e linha são os do commit da tabela. Se o segredo já saiu do HEAD, ele continua no histórico da branch: reescrever o histórico ou usar o \`.gitleaksignore\`."
             echo "O valor não aparece aqui nem no artifact \`security-scan-gitleaks\` (\`--redact\`)."
             echo "Credencial real: rotacionar e tirar do código."
             echo "Falso positivo (fixture de teste): \`gitleaks:allow\` no fim da linha, ou o fingerprint no \`.gitleaksignore\` do repo."
