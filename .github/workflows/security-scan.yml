@@ -1,7 +1,7 @@
 # Varredura de segurança (PLAT-1099): gitleaks nos commits novos, em todo push
 # (inclusive na base) e uma vez por semana. O relatório vai para o DefectDojo.
 #
-# Cópia do job "secrets" de lastro-co/eks-gitops/.github/workflows/security-scan.yml:
+# Cópia dos jobs "secrets" e "zizmor" de lastro-co/eks-gitops/.github/workflows/security-scan.yml:
 # repo público não pode chamar workflow de repo internal. Mudou lá, copiar aqui.
 # Runner hospedado pelo GitHub: runner self-hosted não roda código de repo público.
 name: Security scan
@@ -25,6 +25,7 @@ env:
   GITLEAKS_SHA256: "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb"
   # Relatórios lidos pelo importer do DefectDojo a cada 30 min; não precisam durar.
   REPORT_RETENTION_DAYS: "7"
+  ZIZMOR_VERSION: "1.31.1"
 
 jobs:
   secrets:
@@ -105,3 +106,62 @@ jobs:
           path: ${{ runner.temp }}/report/gitleaks.json
           retention-days: ${{ env.REPORT_RETENTION_DAYS }}
           if-no-files-found: ignore
+
+  zizmor:
+    name: Workflows (zizmor)
+    runs-on: ubuntu-26.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # Política padrão, a do .github/zizmor.yml do eks-gitops: desliga os 6
+      # audits abaixo e mantém o resto do persona padrão (dangerous-triggers,
+      # cache-poisoning, unpinned-images etc.). O unpinned-uses exige Action de
+      # terceiro fixada por SHA e deixa livres as da org (@main de propósito).
+      # O repo que tiver .github/zizmor.yml usa o dele.
+      #
+      # --no-online-audits: o GITHUB_TOKEN do caller não lê os repos privados da
+      # org, e um audit online (known-vulnerable-actions, ref-confusion) que
+      # consulta lastro-co/eks-gitops aborta o run inteiro ("no audit was
+      # performed"). O unpinned-uses não depende da API.
+      - name: Run zizmor
+        env:
+          # Só aviso até zerar os achados (cache-poisoning, use-trusted-publishing).
+          ENFORCE: "false"
+        run: |
+          set -euo pipefail
+          if ! find .github -name '*.yml' -o -name '*.yaml' 2>/dev/null | grep -q .; then
+            echo "Sem YAML em .github/: nada a auditar."; exit 0
+          fi
+          cfg=.github/zizmor.yml
+          if [ ! -f "$cfg" ]; then
+            cfg="$RUNNER_TEMP/zizmor.yml"
+            cat > "$cfg" <<'YAML'
+          rules:
+            unpinned-uses:
+              config:
+                policies:
+                  "lastro-co/*": any
+                  "*": hash-pin
+            ref-confusion: { disable: true }
+            template-injection: { disable: true }
+            artipacked: { disable: true }
+            github-env: { disable: true }
+            excessive-permissions: { disable: true }
+            secrets-inherit: { disable: true }
+          YAML
+          fi
+          echo "Config: $cfg"
+          rc=0
+          pipx run "zizmor==${ZIZMOR_VERSION}" --no-online-audits --config "$cfg" --format github .github || rc=$?
+          # 10 a 14: achado (o código sobe com a severidade máxima). Qualquer
+          # outro diferente de 0 é erro do zizmor (config, API, pipx) e falha o
+          # job mesmo sem enforce, para o scanner não ficar quebrado em silêncio.
+          case "$rc" in
+            0) echo "zizmor: nenhum achado." ;;
+            1[0-4])
+              if [ "$ENFORCE" = true ]; then exit "$rc"; fi
+              echo "::warning title=zizmor::Achados nos workflows (exit $rc). Só aviso: ENFORCE ainda é false neste repo." ;;
+            *) echo "::error title=zizmor::zizmor terminou com código $rc (erro de execução, não achado)."; exit "$rc" ;;
+          esac
