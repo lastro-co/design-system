@@ -127,8 +127,8 @@ jobs:
       # performed"). O unpinned-uses não depende da API.
       - name: Run zizmor
         env:
-          # Só aviso até zerar os achados (cache-poisoning, use-trusted-publishing).
-          ENFORCE: "false"
+          # Workflows sem achado médio ou alto: achado novo falha o job.
+          ENFORCE: "true"
         run: |
           set -euo pipefail
           if ! find .github -name '*.yml' -o -name '*.yaml' 2>/dev/null | grep -q .; then
@@ -154,7 +154,7 @@ jobs:
           fi
           echo "Config: $cfg"
           rc=0
-          pipx run "zizmor==${ZIZMOR_VERSION}" --no-online-audits --config "$cfg" --format github .github || rc=$?
+          pipx run "zizmor==${ZIZMOR_VERSION}" --no-online-audits --min-severity medium --config "$cfg" --format github .github || rc=$?
           # 10 a 14: achado (o código sobe com a severidade máxima). Qualquer
           # outro diferente de 0 é erro do zizmor (config, API, pipx) e falha o
           # job mesmo sem enforce, para o scanner não ficar quebrado em silêncio.
