@@ -1,38 +1,81 @@
 "use client";
 
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
-import { cva } from "class-variance-authority";
+import { cva, type VariantProps } from "class-variance-authority";
 import type * as React from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/Tooltip/Tooltip";
 import { cn } from "@/lib/utils";
 
 const segmentedControlVariants = cva(
-  "inline-flex w-fit items-center gap-1 rounded-lg bg-gray-100 p-1"
+  "inline-flex w-fit items-center gap-1 rounded-lg p-1",
+  {
+    variants: {
+      variant: {
+        default: "bg-gray-100",
+        // Icon-only options read against a white surface with a hairline,
+        // as the Facelift Conversas attendance selector draws it.
+        icon: "border border-gray-200 bg-white",
+      },
+    },
+    defaultVariants: { variant: "default" },
+  }
 );
 
-const segmentVariants = cva([
-  "cursor-pointer rounded-md px-3 py-1.5 font-medium text-sm",
-  "outline-none transition-colors",
-  "focus-visible:ring-2 focus-visible:ring-purple-400 focus-visible:ring-offset-1",
-  // `disabled` blocks the click but not `:hover`; without this the hover below applies.
-  "disabled:pointer-events-none disabled:opacity-45",
-  "data-[state=checked]:bg-white data-[state=checked]:text-gray-900",
-  // xxs, not sm: --shadow-sm here is a 16px blur with no offset.
-  "data-[state=checked]:shadow-xxs",
-  "data-[state=unchecked]:bg-transparent data-[state=unchecked]:text-gray-600",
-  "data-[state=unchecked]:hover:text-gray-800",
-]);
+const segmentVariants = cva(
+  [
+    "cursor-pointer rounded-md",
+    "outline-none transition-colors",
+    "focus-visible:ring-2 focus-visible:ring-purple-400 focus-visible:ring-offset-1",
+    // `disabled` blocks the click but not `:hover`; without this the hover below applies.
+    "disabled:pointer-events-none disabled:opacity-45",
+  ],
+  {
+    variants: {
+      variant: {
+        default: [
+          "px-3 py-1.5 font-medium text-sm",
+          "data-[state=checked]:bg-white data-[state=checked]:text-gray-900",
+          // xxs, not sm: --shadow-sm here is a 16px blur with no offset.
+          "data-[state=checked]:shadow-xxs",
+          "data-[state=unchecked]:bg-transparent data-[state=unchecked]:text-gray-600",
+          "data-[state=unchecked]:hover:text-gray-800",
+        ],
+        icon: [
+          "inline-flex h-7 w-10 shrink-0 items-center justify-center px-2",
+          "[&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0",
+          // aria-checked, not data-state: the tooltip trigger wrapping each
+          // item writes its own data-state (closed/open) over Radix's.
+          "aria-checked:bg-purple-100 aria-checked:text-purple-800",
+          "aria-[checked=false]:bg-transparent aria-[checked=false]:text-gray-400",
+          "aria-[checked=false]:hover:text-gray-600",
+        ],
+      },
+    },
+    defaultVariants: { variant: "default" },
+  }
+);
 
 interface SegmentedControlOption<T extends string> {
   value: T;
   label: string;
   disabled?: boolean;
+  /**
+   * Glyph for the `icon` variant, which shows it in place of the label. The
+   * label still names the option to assistive tech and shows in a tooltip.
+   */
+  icon?: React.ReactNode;
 }
 
 interface SegmentedControlProps<T extends string>
   extends Omit<
-    React.ComponentProps<typeof RadioGroupPrimitive.Root>,
-    "value" | "onValueChange" | "children" | "orientation"
-  > {
+      React.ComponentProps<typeof RadioGroupPrimitive.Root>,
+      "value" | "onValueChange" | "children" | "orientation"
+    >,
+    VariantProps<typeof segmentedControlVariants> {
   options: SegmentedControlOption<T>[];
   value: T;
   onValueChange: (value: T) => void;
@@ -51,34 +94,54 @@ interface SegmentedControlProps<T extends string>
  * reach assistive tech as `aria-checked`, which a row of buttons conveys by
  * colour alone. Radix also gives arrow-key navigation, which is what users of
  * this pattern expect.
+ *
+ * The `icon` variant draws each option as a 40×28 glyph; its label becomes the
+ * option's accessible name and a tooltip, so it needs a `TooltipProvider`.
  */
 function SegmentedControl<T extends string>({
   options,
   value,
   onValueChange,
   className,
+  variant,
   ...props
 }: SegmentedControlProps<T>) {
+  const iconOnly = variant === "icon";
   return (
     <RadioGroupPrimitive.Root
-      className={cn(segmentedControlVariants(), className)}
+      className={cn(segmentedControlVariants({ variant }), className)}
       data-slot="segmented-control"
       onValueChange={(next) => onValueChange(next as T)}
       orientation="horizontal"
       value={value}
       {...props}
     >
-      {options.map((option) => (
-        <RadioGroupPrimitive.Item
-          className={cn(segmentVariants())}
-          data-slot="segment"
-          disabled={option.disabled}
-          key={option.value}
-          value={option.value}
-        >
-          {option.label}
-        </RadioGroupPrimitive.Item>
-      ))}
+      {options.map((option) => {
+        const item = (
+          <RadioGroupPrimitive.Item
+            aria-label={iconOnly ? option.label : undefined}
+            className={cn(segmentVariants({ variant }))}
+            data-slot="segment"
+            disabled={option.disabled}
+            key={option.value}
+            value={option.value}
+          >
+            {iconOnly ? option.icon : option.label}
+          </RadioGroupPrimitive.Item>
+        );
+        if (!iconOnly) {
+          return item;
+        }
+        // A glyph alone does not say what it picks; the tooltip does, to the eye.
+        return (
+          <Tooltip key={option.value}>
+            <TooltipTrigger asChild>{item}</TooltipTrigger>
+            <TooltipContent hideArrow side="top">
+              {option.label}
+            </TooltipContent>
+          </Tooltip>
+        );
+      })}
     </RadioGroupPrimitive.Root>
   );
 }

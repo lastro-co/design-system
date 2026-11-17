@@ -142,6 +142,7 @@ export {
   Smartphone as SmartphoneIcon,
   SmartphoneNfc as SmartphoneNfcIcon,
   Smile as SmileIcon,
+  Sparkle as SparkleIcon,
   Sparkles as SparklesIcon,
   Speech as SpeechIcon,
   Split as SplitIcon,

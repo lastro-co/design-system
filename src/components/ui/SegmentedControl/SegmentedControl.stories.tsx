@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
+import { SparkleIcon, UserRoundIcon } from "@/components/icons.v2";
+import { TooltipProvider } from "@/components/ui/Tooltip/Tooltip";
 import { SegmentedControl } from "./SegmentedControl";
 
 const meta: Meta<typeof SegmentedControl> = {
@@ -87,4 +89,34 @@ const WithDisabled = () => {
 
 export const DisabledSegment: Story = {
   render: () => <WithDisabled />,
+};
+
+const Attendance = () => {
+  const [value, setValue] = useState("lais");
+  return (
+    <TooltipProvider>
+      <SegmentedControl
+        aria-label="Quem atende a conversa"
+        onValueChange={setValue}
+        options={[
+          {
+            value: "lais",
+            label: "Atendimento da Lais",
+            icon: <SparkleIcon />,
+          },
+          {
+            value: "human",
+            label: "Atendimento humano",
+            icon: <UserRoundIcon />,
+          },
+        ]}
+        value={value}
+        variant="icon"
+      />
+    </TooltipProvider>
+  );
+};
+
+export const IconOnly: Story = {
+  render: () => <Attendance />,
 };
