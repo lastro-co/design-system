@@ -67,6 +67,10 @@ export {
   type ClipboardListIconHandle as AnimatedClipboardListIconHandle,
 } from "./ClipboardList";
 export {
+  CreditCardCheckIcon as AnimatedCreditCardCheckIcon,
+  type CreditCardCheckIconHandle as AnimatedCreditCardCheckIconHandle,
+} from "./CreditCardCheck";
+export {
   DollarSignIcon as AnimatedDollarSignIcon,
   type DollarSignIconHandle as AnimatedDollarSignIconHandle,
 } from "./DollarSign";
@@ -102,6 +106,10 @@ export {
   HomeIcon as AnimatedHomeIcon,
   type HomeIconHandle as AnimatedHomeIconHandle,
 } from "./Home";
+export {
+  HousePlusIcon as AnimatedHousePlusIcon,
+  type HousePlusIconHandle as AnimatedHousePlusIconHandle,
+} from "./HousePlus";
 export {
   LayersIcon as AnimatedLayersIcon,
   type LayersIconHandle as AnimatedLayersIconHandle,
