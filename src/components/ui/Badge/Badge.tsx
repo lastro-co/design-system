@@ -33,20 +33,33 @@ const badgeVariants = cva(
       iconOnly: {
         true: "aspect-square px-0 has-[>[data-slot=badge-icon]]:px-0 has-[>img]:px-0 has-[>svg]:px-0",
       },
+      // A circle around the icon that opens into a pill with `expandLabel` on
+      // hover or keyboard focus. 3px padding plus the 1px border keeps it a 24px circle at
+      // medium size while closed.
+      expandable: {
+        true: "group/badge gap-0 px-0.75 has-[>[data-slot=badge-icon]]:px-0.75 has-[>img]:px-0.75 has-[>svg]:px-0.75",
+      },
     },
     defaultVariants: {
       color: "gray",
       size: "small",
       isNumber: false,
       iconOnly: false,
+      expandable: false,
     },
   }
 );
 
 interface BadgeProps
   extends Omit<React.ComponentProps<"span">, "color">,
-    VariantProps<typeof badgeVariants> {
+    Omit<VariantProps<typeof badgeVariants>, "expandable"> {
   asChild?: boolean;
+  /**
+   * Text the badge reveals on hover or keyboard focus. Closed, it is an
+   * icon-only circle (`iconOnly` is ignored); open, a pill with icon and text.
+   * Give the badge an `aria-label` too: the text is clipped while closed.
+   */
+  expandLabel?: string;
 }
 
 function Badge({
@@ -56,21 +69,41 @@ function Badge({
   isNumber,
   iconOnly,
   asChild = false,
+  expandLabel,
   children,
   ...props
 }: BadgeProps) {
   const Comp = asChild ? Slot : "span";
+  const expandable = Boolean(expandLabel);
 
   return (
     <Comp
       className={cn(
-        badgeVariants({ color, size, isNumber, iconOnly }),
+        badgeVariants({
+          color,
+          size,
+          isNumber,
+          iconOnly: expandable ? false : iconOnly,
+          expandable,
+        }),
         className
       )}
       data-slot="badge"
       {...props}
     >
       <Slottable>{children}</Slottable>
+      {expandable && (
+        // A 0fr -> 1fr grid track animates to the text's own width, which a
+        // width transition cannot do without a fixed size.
+        <span
+          className="grid grid-cols-[0fr] transition-[grid-template-columns] duration-200 ease-out group-hover/badge:grid-cols-[1fr] group-focus-visible/badge:grid-cols-[1fr] motion-reduce:transition-none"
+          data-slot="badge-expand-label"
+        >
+          <span className="min-w-0 overflow-hidden">
+            <span className="block pr-1.5 pl-1">{expandLabel}</span>
+          </span>
+        </span>
+      )}
     </Comp>
   );
 }
