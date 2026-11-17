@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { SparkleIcon, UserRoundIcon } from "@/components/icons.v2";
+import { AstroidIcon, UserRoundIcon } from "@/components/icons.v2";
 import { TooltipProvider } from "@/components/ui/Tooltip/Tooltip";
 import { SegmentedControl } from "./SegmentedControl";
 
@@ -102,7 +102,7 @@ const Attendance = () => {
           {
             value: "lais",
             label: "Atendimento da Lais",
-            icon: <SparkleIcon />,
+            icon: <AstroidIcon />,
           },
           {
             value: "human",
