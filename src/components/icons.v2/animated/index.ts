@@ -139,6 +139,10 @@ export {
   type ReceiptIconHandle as AnimatedReceiptIconHandle,
 } from "./Receipt";
 export {
+  RocketIcon as AnimatedRocketIcon,
+  type RocketIconHandle as AnimatedRocketIconHandle,
+} from "./Rocket";
+export {
   SearchIcon as AnimatedSearchIcon,
   type SearchIconHandle as AnimatedSearchIconHandle,
 } from "./Search";
