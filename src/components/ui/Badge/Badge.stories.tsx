@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Fragment } from "react";
-import { CheckIcon, ZapIcon } from "@/components/icons.v2";
+import { CalendarDaysIcon, CheckIcon, ZapIcon } from "@/components/icons.v2";
 import { Badge } from "./Badge";
 
 const meta: Meta<typeof Badge> = {
@@ -209,5 +209,16 @@ export const IconOnlyBadge: Story = {
     children: <CheckIcon />,
     color: "green",
     iconOnly: true,
+  },
+};
+
+export const ExpandOnHover: Story = {
+  args: {
+    "aria-label": "Visita solicitada",
+    children: <CalendarDaysIcon />,
+    color: "purple",
+    expandLabel: "Visita solicitada",
+    role: "img",
+    size: "medium",
   },
 };

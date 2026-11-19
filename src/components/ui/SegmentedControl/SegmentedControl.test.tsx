@@ -1,4 +1,5 @@
 import userEvent from "@testing-library/user-event";
+import { TooltipProvider } from "@/components/ui/Tooltip/Tooltip";
 import { render, screen } from "@/tests/app-test-utils";
 import { SegmentedControl } from "./SegmentedControl";
 
@@ -140,5 +141,69 @@ describe("SegmentedControl", () => {
   it("index.ts exports work correctly", () => {
     const indexExports = require("./index");
     expect(indexExports.SegmentedControl).toBeDefined();
+  });
+
+  describe("icon variant", () => {
+    const iconOptions = [
+      {
+        value: "lais",
+        label: "Atendimento da Lais",
+        icon: <svg data-testid="lais-glyph" />,
+      },
+      {
+        value: "human",
+        label: "Atendimento humano",
+        icon: <svg data-testid="human-glyph" />,
+      },
+    ];
+
+    function setupIcons(onValueChange = jest.fn()) {
+      render(
+        <TooltipProvider>
+          <SegmentedControl
+            aria-label="Quem atende"
+            onValueChange={onValueChange}
+            options={iconOptions}
+            value="lais"
+            variant="icon"
+          />
+        </TooltipProvider>
+      );
+      return onValueChange;
+    }
+
+    it("shows the glyph and keeps the label as the accessible name", () => {
+      setupIcons();
+
+      const lais = screen.getByRole("radio", { name: "Atendimento da Lais" });
+      expect(lais).toBeChecked();
+      expect(lais).toContainElement(screen.getByTestId("lais-glyph"));
+      expect(lais).not.toHaveTextContent("Atendimento da Lais");
+      expect(
+        screen.getByRole("radio", { name: "Atendimento humano" })
+      ).not.toBeChecked();
+    });
+
+    it("shows the label in a tooltip on hover", async () => {
+      setupIcons();
+
+      await userEvent.hover(
+        screen.getByRole("radio", { name: "Atendimento humano" })
+      );
+
+      expect(await screen.findByRole("tooltip")).toHaveTextContent(
+        "Atendimento humano"
+      );
+    });
+
+    it("reports the picked option", async () => {
+      const onValueChange = setupIcons();
+
+      await userEvent.click(
+        screen.getByRole("radio", { name: "Atendimento humano" })
+      );
+
+      expect(onValueChange).toHaveBeenCalledWith("human");
+    });
   });
 });

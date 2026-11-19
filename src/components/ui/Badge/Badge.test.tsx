@@ -142,4 +142,59 @@ describe("Badge", () => {
     );
     expect(screen.getByRole("button", { name: "Preço" })).toBeVisible();
   });
+
+  describe("expandLabel", () => {
+    function renderExpandable() {
+      const { container } = render(
+        <Badge
+          aria-label="Visita solicitada"
+          color="purple"
+          expandLabel="Visita solicitada"
+          iconOnly
+          role="img"
+          size="medium"
+        >
+          <svg data-testid="glyph" />
+        </Badge>
+      );
+      return container.querySelector('[data-slot="badge"]');
+    }
+
+    it("keeps the icon and adds the text it opens to", () => {
+      const badge = renderExpandable();
+
+      expect(badge).toContainElement(screen.getByTestId("glyph"));
+      expect(
+        badge?.querySelector('[data-slot="badge-expand-label"]')
+      ).toHaveTextContent("Visita solicitada");
+    });
+
+    // Closed it is a 24px circle: 3px padding and 1px border around the 16px icon, not the square
+    // iconOnly shape, which could not widen into a pill.
+    it("drops the iconOnly square so it can widen", () => {
+      const badge = renderExpandable();
+
+      expect(badge).not.toHaveClass("aspect-square");
+      expect(badge).toHaveClass("group/badge", "px-0.75");
+    });
+
+    it("opens on hover and on keyboard focus", () => {
+      renderExpandable();
+      const track = document.querySelector('[data-slot="badge-expand-label"]');
+
+      expect(track).toHaveClass(
+        "grid-cols-[0fr]",
+        "group-hover/badge:grid-cols-[1fr]",
+        "group-focus-visible/badge:grid-cols-[1fr]"
+      );
+    });
+
+    it("renders no label track without expandLabel", () => {
+      const { container } = render(<Badge iconOnly>x</Badge>);
+
+      expect(
+        container.querySelector('[data-slot="badge-expand-label"]')
+      ).toBeNull();
+    });
+  });
 });

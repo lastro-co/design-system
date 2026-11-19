@@ -5,6 +5,7 @@ export {
   ArrowLeft as ArrowLeftIcon,
   ArrowRight as ArrowRightIcon,
   ArrowRightLeft as ArrowRightLeftIcon,
+  Astroid as AstroidIcon,
   AudioLines as AudioLinesIcon,
   BedDouble as BedDoubleIcon,
   Bell as BellIcon,
