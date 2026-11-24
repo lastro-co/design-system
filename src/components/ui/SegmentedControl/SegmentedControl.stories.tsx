@@ -1,6 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { AstroidIcon, UserRoundIcon } from "@/components/icons.v2";
+import {
+  AstroidIcon,
+  Columns3Icon,
+  ListIcon,
+  UserRoundIcon,
+} from "@/components/icons.v2";
 import { TooltipProvider } from "@/components/ui/Tooltip/Tooltip";
 import { SegmentedControl } from "./SegmentedControl";
 
@@ -119,4 +124,26 @@ const Attendance = () => {
 
 export const IconOnly: Story = {
   render: () => <Attendance />,
+};
+
+const ViewMode = () => {
+  const [value, setValue] = useState("list");
+  return (
+    <TooltipProvider>
+      <SegmentedControl
+        aria-label="Modo de visualização"
+        onValueChange={setValue}
+        options={[
+          { value: "list", label: "Ver como lista", icon: <ListIcon /> },
+          { value: "kanban", label: "Ver como kanban", icon: <Columns3Icon /> },
+        ]}
+        value={value}
+        variant="iconSubtle"
+      />
+    </TooltipProvider>
+  );
+};
+
+export const IconSubtle: Story = {
+  render: () => <ViewMode />,
 };

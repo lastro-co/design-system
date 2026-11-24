@@ -196,6 +196,15 @@ describe("SegmentedControl", () => {
       );
     });
 
+    // Facelift Conversas attendance selector: the checked option filled.
+    it("fills the checked option in purple-800 with a white glyph", () => {
+      setupIcons();
+
+      expect(
+        screen.getByRole("radio", { name: "Atendimento da Lais" })
+      ).toHaveClass("aria-checked:bg-purple-800", "aria-checked:text-white");
+    });
+
     it("reports the picked option", async () => {
       const onValueChange = setupIcons();
 
@@ -204,6 +213,69 @@ describe("SegmentedControl", () => {
       );
 
       expect(onValueChange).toHaveBeenCalledWith("human");
+    });
+  });
+
+  describe("iconSubtle variant", () => {
+    function setupSubtle(onValueChange = jest.fn()) {
+      render(
+        <TooltipProvider>
+          <SegmentedControl
+            aria-label="Modo de visualização"
+            onValueChange={onValueChange}
+            options={[
+              {
+                value: "list",
+                label: "Ver como lista",
+                icon: <svg data-testid="list-glyph" />,
+              },
+              {
+                value: "kanban",
+                label: "Ver como kanban",
+                icon: <svg data-testid="kanban-glyph" />,
+              },
+            ]}
+            value="list"
+            variant="iconSubtle"
+          />
+        </TooltipProvider>
+      );
+      return onValueChange;
+    }
+
+    it("draws 24px glyphs on the gray track, the label as the name", () => {
+      setupSubtle();
+
+      expect(
+        screen.getByRole("radiogroup", { name: "Modo de visualização" })
+      ).toHaveClass("bg-gray-100");
+      const list = screen.getByRole("radio", { name: "Ver como lista" });
+      expect(list).toBeChecked();
+      expect(list).toContainElement(screen.getByTestId("list-glyph"));
+      expect(list).not.toHaveTextContent("Ver como lista");
+      expect(list).toHaveClass("size-6", "aria-checked:bg-white");
+    });
+
+    it("shows the label in a tooltip on hover", async () => {
+      setupSubtle();
+
+      await userEvent.hover(
+        screen.getByRole("radio", { name: "Ver como kanban" })
+      );
+
+      expect(await screen.findByRole("tooltip")).toHaveTextContent(
+        "Ver como kanban"
+      );
+    });
+
+    it("reports the picked option", async () => {
+      const onValueChange = setupSubtle();
+
+      await userEvent.click(
+        screen.getByRole("radio", { name: "Ver como kanban" })
+      );
+
+      expect(onValueChange).toHaveBeenCalledWith("kanban");
     });
   });
 });
