@@ -113,6 +113,7 @@ const Attendance = () => {
             value: "human",
             label: "Atendimento humano",
             icon: <UserRoundIcon />,
+            tone: "neutral",
           },
         ]}
         value={value}
