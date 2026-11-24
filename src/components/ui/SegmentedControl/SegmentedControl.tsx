@@ -80,6 +80,13 @@ interface SegmentedControlOption<T extends string> {
    * label still names the option to assistive tech and shows in a tooltip.
    */
   icon?: React.ReactNode;
+  /**
+   * `icon` variant only: how the option reads when checked. `accent`
+   * (default) fills it in purple-800 with a white glyph; `neutral` in
+   * gray-100 with a gray-800 glyph (e.g. the human side of the attendance
+   * selector, Figma 219:17743).
+   */
+  tone?: "accent" | "neutral";
 }
 
 interface SegmentedControlProps<T extends string>
@@ -134,7 +141,12 @@ function SegmentedControl<T extends string>({
         const item = (
           <RadioGroupPrimitive.Item
             aria-label={iconOnly ? option.label : undefined}
-            className={cn(segmentVariants({ variant }))}
+            className={cn(
+              segmentVariants({ variant }),
+              variant === "icon" &&
+                option.tone === "neutral" &&
+                "aria-checked:bg-gray-100 aria-checked:text-gray-800"
+            )}
             data-slot="segment"
             disabled={option.disabled}
             key={option.value}

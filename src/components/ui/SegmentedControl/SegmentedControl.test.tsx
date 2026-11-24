@@ -205,6 +205,34 @@ describe("SegmentedControl", () => {
       ).toHaveClass("aria-checked:bg-purple-800", "aria-checked:text-white");
     });
 
+    // Figma 219:17743: the human side checked reads gray, not purple.
+    it("checks a neutral option in gray-100 with a gray-800 glyph", () => {
+      render(
+        <TooltipProvider>
+          <SegmentedControl
+            aria-label="Quem atende"
+            onValueChange={jest.fn()}
+            options={[
+              iconOptions[0],
+              { ...iconOptions[1], tone: "neutral" as const },
+            ]}
+            value="human"
+            variant="icon"
+          />
+        </TooltipProvider>
+      );
+
+      const human = screen.getByRole("radio", { name: "Atendimento humano" });
+      expect(human).toHaveClass(
+        "aria-checked:bg-gray-100",
+        "aria-checked:text-gray-800"
+      );
+      expect(human).not.toHaveClass("aria-checked:bg-purple-800");
+      expect(
+        screen.getByRole("radio", { name: "Atendimento da Lais" })
+      ).toHaveClass("aria-checked:bg-purple-800");
+    });
+
     it("reports the picked option", async () => {
       const onValueChange = setupIcons();
 
