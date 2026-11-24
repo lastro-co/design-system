@@ -128,6 +128,7 @@ export {
   ReplyAll as ReplyAllIcon,
   Rocket as RocketIcon,
   RotateCcw as RotateCcwIcon,
+  Rows3 as Rows3Icon,
   Ruler as RulerIcon,
   ScanBarcode as ScanBarcodeIcon,
   Search as SearchIcon,

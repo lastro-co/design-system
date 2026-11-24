@@ -3,7 +3,7 @@ import { useState } from "react";
 import {
   AstroidIcon,
   Columns3Icon,
-  ListIcon,
+  Rows3Icon,
   UserRoundIcon,
 } from "@/components/icons.v2";
 import { TooltipProvider } from "@/components/ui/Tooltip/Tooltip";
@@ -134,8 +134,9 @@ const ViewMode = () => {
         aria-label="Modo de visualização"
         onValueChange={setValue}
         options={[
-          { value: "list", label: "Ver como lista", icon: <ListIcon /> },
-          { value: "kanban", label: "Ver como kanban", icon: <Columns3Icon /> },
+          // Figma 6:1207: the list tab shows Columns3, the kanban tab Rows3.
+          { value: "list", label: "Ver como lista", icon: <Columns3Icon /> },
+          { value: "kanban", label: "Ver como kanban", icon: <Rows3Icon /> },
         ]}
         value={value}
         variant="iconSubtle"
