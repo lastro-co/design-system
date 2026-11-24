@@ -1,6 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { AstroidIcon, UserRoundIcon } from "@/components/icons.v2";
+import {
+  AstroidIcon,
+  Columns3Icon,
+  Rows3Icon,
+  UserRoundIcon,
+} from "@/components/icons.v2";
 import { TooltipProvider } from "@/components/ui/Tooltip/Tooltip";
 import { SegmentedControl } from "./SegmentedControl";
 
@@ -119,4 +124,27 @@ const Attendance = () => {
 
 export const IconOnly: Story = {
   render: () => <Attendance />,
+};
+
+const ViewMode = () => {
+  const [value, setValue] = useState("list");
+  return (
+    <TooltipProvider>
+      <SegmentedControl
+        aria-label="Modo de visualização"
+        onValueChange={setValue}
+        options={[
+          // Figma 6:1207: the list tab shows Columns3, the kanban tab Rows3.
+          { value: "list", label: "Ver como lista", icon: <Columns3Icon /> },
+          { value: "kanban", label: "Ver como kanban", icon: <Rows3Icon /> },
+        ]}
+        value={value}
+        variant="iconSubtle"
+      />
+    </TooltipProvider>
+  );
+};
+
+export const IconSubtle: Story = {
+  render: () => <ViewMode />,
 };

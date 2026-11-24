@@ -19,6 +19,9 @@ const segmentedControlVariants = cva(
         // Icon-only options read against a white surface with a hairline,
         // as the Facelift Conversas attendance selector draws it.
         icon: "border border-gray-200 bg-white",
+        // Icon-only view switch on the gray track (Facelift Conversas
+        // list/Kanban toggle).
+        iconSubtle: "bg-gray-100",
       },
     },
     defaultVariants: { variant: "default" },
@@ -49,9 +52,18 @@ const segmentVariants = cva(
           "[&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0",
           // aria-checked, not data-state: the tooltip trigger wrapping each
           // item writes its own data-state (closed/open) over Radix's.
-          "aria-checked:bg-purple-100 aria-checked:text-purple-800",
+          "aria-checked:bg-purple-800 aria-checked:text-white",
           "aria-[checked=false]:bg-transparent aria-[checked=false]:text-gray-400",
           "aria-[checked=false]:hover:text-gray-600",
+        ],
+        // 24px squares; the checked one lifts on white like the `default`
+        // variant's, with no accent color.
+        iconSubtle: [
+          "inline-flex size-6 shrink-0 items-center justify-center p-1",
+          "[&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0",
+          "aria-checked:bg-white aria-checked:text-gray-800 aria-checked:shadow-xxs",
+          "aria-[checked=false]:bg-transparent aria-[checked=false]:text-gray-600",
+          "aria-[checked=false]:hover:text-gray-800",
         ],
       },
     },
@@ -95,8 +107,10 @@ interface SegmentedControlProps<T extends string>
  * colour alone. Radix also gives arrow-key navigation, which is what users of
  * this pattern expect.
  *
- * The `icon` variant draws each option as a 40×28 glyph; its label becomes the
- * option's accessible name and a tooltip, so it needs a `TooltipProvider`.
+ * The `icon` variant draws each option as a 40×28 glyph on a white track, the
+ * checked one filled in purple-800; `iconSubtle` draws 24px glyphs on the gray
+ * track, the checked one lifted on white. In both the label becomes the
+ * option's accessible name and a tooltip, so they need a `TooltipProvider`.
  */
 function SegmentedControl<T extends string>({
   options,
@@ -106,7 +120,7 @@ function SegmentedControl<T extends string>({
   variant,
   ...props
 }: SegmentedControlProps<T>) {
-  const iconOnly = variant === "icon";
+  const iconOnly = variant === "icon" || variant === "iconSubtle";
   return (
     <RadioGroupPrimitive.Root
       className={cn(segmentedControlVariants({ variant }), className)}
