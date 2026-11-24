@@ -150,6 +150,7 @@ export {
   Square as SquareIcon,
   SquareArrowUpRight as SquareArrowUpRightIcon,
   SquareCheck as SquareCheckIcon,
+  SquareMenu as SquareMenuIcon,
   SquarePen as SquarePenIcon,
   SquareSlash as SquareSlashIcon,
   Star as StarIcon,

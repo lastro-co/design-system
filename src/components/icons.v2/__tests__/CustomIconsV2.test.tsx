@@ -6,7 +6,6 @@ import {
   IaMicIcon,
   LastroLoaderIcon,
   MoneyBagIcon,
-  NoteTextIcon,
   SupportNotificationIcon,
   WhatsAppIcon,
 } from "../index";
@@ -17,7 +16,6 @@ const GLYPH_ICONS = [
   ["IaMicIcon", IaMicIcon],
   ["LastroLoaderIcon", LastroLoaderIcon],
   ["MoneyBagIcon", MoneyBagIcon],
-  ["NoteTextIcon", NoteTextIcon],
   ["SupportNotificationIcon", SupportNotificationIcon],
   ["WhatsAppIcon", WhatsAppIcon],
 ] as const;
