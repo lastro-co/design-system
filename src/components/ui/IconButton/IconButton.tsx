@@ -32,8 +32,9 @@ const iconButtonVariants = cva(
         // ghost colors on a resting gray-50 surface
         subtle:
           "border border-transparent bg-gray-50 text-gray-600 hover:text-gray-800 active:text-gray-800",
+        // `active` keeps a red tint while on (e.g. a call muted)
         destructive:
-          "border-0 bg-white text-red-600 hover:bg-red-50 hover:text-red-700 active:bg-red-50 active:text-red-700",
+          "border-0 bg-white text-red-600 hover:bg-red-50 hover:text-red-700 active:bg-red-50 active:text-red-700 data-[active=true]:bg-red-50 data-[active=true]:text-red-800",
         // filled red, same tokens as Button `destructive` (e.g. hang up a call)
         danger:
           "border-0 bg-red-600 text-white hover:bg-red-700 active:bg-red-700 disabled:bg-gray-300",
@@ -69,7 +70,7 @@ export interface IconButtonProps
   children: ReactNode;
   loading?: boolean;
   asChild?: boolean;
-  /** Keeps the pressed look while on. Styled by the `ghost` variant. */
+  /** Keeps the pressed look while on. Styled by the `ghost` and `destructive` variants. */
   active?: boolean;
   "aria-label": string;
 }

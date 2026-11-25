@@ -3,6 +3,8 @@ import { Fragment } from "react";
 import {
   ChevronDownIcon,
   InfoIcon,
+  MicOffIcon,
+  PhoneOffIcon,
   PlusIcon,
   XIcon,
 } from "@/components/icons.v2";
@@ -103,6 +105,28 @@ export const GhostActive = {
     children: <PlusIcon />,
     size: "small",
     variant: "ghost",
+  },
+};
+
+// e.g. a call's mute toggle while the microphone is off
+export const DestructiveActive = {
+  args: {
+    active: true,
+    "aria-label": "Ativar microfone",
+    children: <MicOffIcon />,
+    shape: "circular",
+    size: "small",
+    variant: "destructive",
+  },
+};
+
+export const Danger = {
+  args: {
+    "aria-label": "Encerrar chamada",
+    children: <PhoneOffIcon />,
+    shape: "circular",
+    size: "small",
+    variant: "danger",
   },
 };
 

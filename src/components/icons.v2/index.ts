@@ -106,6 +106,7 @@ export {
   MessageSquareMore as MessageSquareMoreIcon,
   MessageSquareText as MessageSquareTextIcon,
   Mic as MicIcon,
+  MicOff as MicOffIcon,
   Minus as MinusIcon,
   Navigation as NavigationIcon,
   Newspaper as NewspaperIcon,

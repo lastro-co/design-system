@@ -161,6 +161,21 @@ describe("IconButton", () => {
     expect(button).toHaveAttribute("data-active", "true");
   });
 
+  it("keeps a red tint on the destructive variant while active", () => {
+    render(
+      <IconButton active aria-label="Microfone desligado" variant="destructive">
+        <XIcon />
+      </IconButton>
+    );
+
+    const button = screen.getByRole("button");
+    expect(button).toHaveAttribute("data-active", "true");
+    expect(button).toHaveClass(
+      "data-[active=true]:bg-red-50",
+      "data-[active=true]:text-red-800"
+    );
+  });
+
   it("forwards active to the child element when asChild is true", () => {
     render(
       <IconButton active aria-label="Notificações" asChild variant="ghost">
