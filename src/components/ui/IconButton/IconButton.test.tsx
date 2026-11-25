@@ -216,6 +216,23 @@ describe("IconButton", () => {
     );
   });
 
+  it("renders the danger variant as a filled red button", () => {
+    render(
+      <IconButton aria-label="Hang up" shape="circular" variant="danger">
+        <XIcon />
+      </IconButton>
+    );
+
+    const button = screen.getByRole("button");
+    expect(button).toHaveClass(
+      "rounded-full",
+      "bg-red-600",
+      "text-white",
+      "hover:bg-red-700"
+    );
+    expect(button).not.toHaveClass("bg-white");
+  });
+
   it("keeps the other variants free of the selected tokens", () => {
     for (const variant of [
       "default",

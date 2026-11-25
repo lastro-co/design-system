@@ -117,6 +117,7 @@ export {
   PhoneCall as PhoneCallIcon,
   PhoneIncoming as PhoneIncomingIcon,
   PhoneMissed as PhoneMissedIcon,
+  PhoneOff as PhoneOffIcon,
   PhoneOutgoing as PhoneOutgoingIcon,
   Pin as PinIcon,
   Play as PlayIcon,

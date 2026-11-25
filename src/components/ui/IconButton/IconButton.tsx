@@ -34,6 +34,9 @@ const iconButtonVariants = cva(
           "border border-transparent bg-gray-50 text-gray-600 hover:text-gray-800 active:text-gray-800",
         destructive:
           "border-0 bg-white text-red-600 hover:bg-red-50 hover:text-red-700 active:bg-red-50 active:text-red-700",
+        // filled red, same tokens as Button `destructive` (e.g. hang up a call)
+        danger:
+          "border-0 bg-red-600 text-white hover:bg-red-700 active:bg-red-700 disabled:bg-gray-300",
         // mirrors ToggleChip's selected state so the button reads as an active chip
         selected:
           "border border-purple-600 bg-purple-50 text-purple-800 hover:bg-purple-100 active:bg-purple-100 disabled:border-purple-600 disabled:bg-purple-50",
