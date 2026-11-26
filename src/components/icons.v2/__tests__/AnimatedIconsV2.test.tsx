@@ -3,6 +3,7 @@ import { act, fireEvent, render } from "@/tests/app-test-utils";
 import {
   AnimatedActivityIcon,
   AnimatedAlarmClockIcon,
+  AnimatedAudioLinesIcon,
   AnimatedBellIcon,
   AnimatedBookOpenIcon,
   AnimatedBriefcaseBusinessIcon,
@@ -34,6 +35,7 @@ import {
   AnimatedMegaphoneIcon,
   AnimatedMessageCircleIcon,
   AnimatedMessageSquareIcon,
+  AnimatedPhoneCallIcon,
   AnimatedPhoneIcon,
   AnimatedPlugZapIcon,
   AnimatedReceiptIcon,
@@ -58,6 +60,7 @@ import {
 const ANIMATED_ICONS = [
   ["AnimatedActivityIcon", AnimatedActivityIcon],
   ["AnimatedAlarmClockIcon", AnimatedAlarmClockIcon],
+  ["AnimatedAudioLinesIcon", AnimatedAudioLinesIcon],
   ["AnimatedBellIcon", AnimatedBellIcon],
   ["AnimatedBookOpenIcon", AnimatedBookOpenIcon],
   ["AnimatedBriefcaseBusinessIcon", AnimatedBriefcaseBusinessIcon],
@@ -90,6 +93,7 @@ const ANIMATED_ICONS = [
   ["AnimatedMessageCircleIcon", AnimatedMessageCircleIcon],
   ["AnimatedMessageSquareIcon", AnimatedMessageSquareIcon],
   ["AnimatedPhoneIcon", AnimatedPhoneIcon],
+  ["AnimatedPhoneCallIcon", AnimatedPhoneCallIcon],
   ["AnimatedPlugZapIcon", AnimatedPlugZapIcon],
   ["AnimatedReceiptIcon", AnimatedReceiptIcon],
   ["AnimatedRocketIcon", AnimatedRocketIcon],
