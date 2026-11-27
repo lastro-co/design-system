@@ -75,6 +75,10 @@ export {
   type CreditCardCheckIconHandle as AnimatedCreditCardCheckIconHandle,
 } from "./CreditCardCheck";
 export {
+  CreditCardXIcon as AnimatedCreditCardXIcon,
+  type CreditCardXIconHandle as AnimatedCreditCardXIconHandle,
+} from "./CreditCardX";
+export {
   DollarSignIcon as AnimatedDollarSignIcon,
   type DollarSignIconHandle as AnimatedDollarSignIconHandle,
 } from "./DollarSign";
