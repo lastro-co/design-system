@@ -127,6 +127,39 @@ export const IconOnly: Story = {
   render: () => <Attendance />,
 };
 
+const AttendanceToned = () => {
+  const [value, setValue] = useState("lais");
+  return (
+    <TooltipProvider>
+      <SegmentedControl
+        aria-label="Quem atende a conversa"
+        onValueChange={setValue}
+        options={[
+          {
+            value: "lais",
+            label: "Atendimento da Lais",
+            icon: <AstroidIcon />,
+            tone: "gradient",
+          },
+          {
+            value: "human",
+            label: "Atendimento humano",
+            icon: <UserRoundIcon />,
+            tone: "dusk",
+          },
+        ]}
+        value={value}
+        variant="icon"
+      />
+    </TooltipProvider>
+  );
+};
+
+/** Lais checked in the purple gradient, the human in purple-dusk. */
+export const IconGradientAndDusk: Story = {
+  render: () => <AttendanceToned />,
+};
+
 const ViewMode = () => {
   const [value, setValue] = useState("list");
   return (
