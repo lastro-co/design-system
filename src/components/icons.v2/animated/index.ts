@@ -11,6 +11,10 @@ export {
   type AlarmClockIconHandle as AnimatedAlarmClockIconHandle,
 } from "./AlarmClock";
 export {
+  AudioLinesIcon as AnimatedAudioLinesIcon,
+  type AudioLinesIconHandle as AnimatedAudioLinesIconHandle,
+} from "./AudioLines";
+export {
   BellIcon as AnimatedBellIcon,
   type BellIconHandle as AnimatedBellIconHandle,
 } from "./Bell";
@@ -70,6 +74,10 @@ export {
   CreditCardCheckIcon as AnimatedCreditCardCheckIcon,
   type CreditCardCheckIconHandle as AnimatedCreditCardCheckIconHandle,
 } from "./CreditCardCheck";
+export {
+  CreditCardXIcon as AnimatedCreditCardXIcon,
+  type CreditCardXIconHandle as AnimatedCreditCardXIconHandle,
+} from "./CreditCardX";
 export {
   DollarSignIcon as AnimatedDollarSignIcon,
   type DollarSignIconHandle as AnimatedDollarSignIconHandle,
@@ -138,6 +146,10 @@ export {
   PhoneIcon as AnimatedPhoneIcon,
   type PhoneIconHandle as AnimatedPhoneIconHandle,
 } from "./Phone";
+export {
+  PhoneCallIcon as AnimatedPhoneCallIcon,
+  type PhoneCallIconHandle as AnimatedPhoneCallIconHandle,
+} from "./PhoneCall";
 export {
   PlugZapIcon as AnimatedPlugZapIcon,
   type PlugZapIconHandle as AnimatedPlugZapIconHandle,
