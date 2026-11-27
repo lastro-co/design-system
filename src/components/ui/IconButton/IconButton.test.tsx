@@ -161,6 +161,21 @@ describe("IconButton", () => {
     expect(button).toHaveAttribute("data-active", "true");
   });
 
+  it("keeps a red tint on the destructive variant while active", () => {
+    render(
+      <IconButton active aria-label="Microfone desligado" variant="destructive">
+        <XIcon />
+      </IconButton>
+    );
+
+    const button = screen.getByRole("button");
+    expect(button).toHaveAttribute("data-active", "true");
+    expect(button).toHaveClass(
+      "data-[active=true]:bg-red-50",
+      "data-[active=true]:text-red-800"
+    );
+  });
+
   it("forwards active to the child element when asChild is true", () => {
     render(
       <IconButton active aria-label="Notificações" asChild variant="ghost">
@@ -214,6 +229,23 @@ describe("IconButton", () => {
     expect(iconButtonVariants({ variant: "chipSelected" })).toContain(
       "border-purple-800/10 bg-purple-100 text-purple-800"
     );
+  });
+
+  it("renders the danger variant as a filled red button", () => {
+    render(
+      <IconButton aria-label="Hang up" shape="circular" variant="danger">
+        <XIcon />
+      </IconButton>
+    );
+
+    const button = screen.getByRole("button");
+    expect(button).toHaveClass(
+      "rounded-full",
+      "bg-red-600",
+      "text-white",
+      "hover:bg-red-700"
+    );
+    expect(button).not.toHaveClass("bg-white");
   });
 
   it("keeps the other variants free of the selected tokens", () => {
