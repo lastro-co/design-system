@@ -233,6 +233,43 @@ describe("SegmentedControl", () => {
       ).toHaveClass("aria-checked:bg-purple-800");
     });
 
+    // Attendance selector: Lais checked in a purple-900 to purple-700
+    // gradient, the human in the desaturated purple-dusk.
+    it.each([
+      [
+        "gradient" as const,
+        [
+          "aria-checked:bg-linear-to-r",
+          "aria-checked:from-purple-900",
+          "aria-checked:to-purple-700",
+        ],
+      ],
+      ["dusk" as const, ["aria-checked:bg-purple-dusk"]],
+    ])("checks a %s option in its fill with a white glyph", (tone, classes) => {
+      render(
+        <TooltipProvider>
+          <SegmentedControl
+            aria-label="Quem atende"
+            onValueChange={jest.fn()}
+            options={[{ ...iconOptions[0], tone }, iconOptions[1]]}
+            value="lais"
+            variant="icon"
+          />
+        </TooltipProvider>
+      );
+
+      const lais = screen.getByRole("radio", { name: "Atendimento da Lais" });
+      expect(lais).toHaveClass(...classes, "aria-checked:text-white");
+      // Unchecked, both tones share the variant's look and hover.
+      expect(lais).toHaveClass(
+        "aria-[checked=false]:bg-transparent",
+        "aria-[checked=false]:hover:text-gray-600"
+      );
+      if (tone === "dusk") {
+        expect(lais).not.toHaveClass("aria-checked:bg-purple-800");
+      }
+    });
+
     it("reports the picked option", async () => {
       const onValueChange = setupIcons();
 

@@ -83,11 +83,23 @@ interface SegmentedControlOption<T extends string> {
   /**
    * `icon` variant only: how the option reads when checked. `accent`
    * (default) fills it in purple-800 with a white glyph; `neutral` in
-   * gray-100 with a gray-800 glyph (e.g. the human side of the attendance
-   * selector, Figma 219:17743).
+   * gray-100 with a gray-800 glyph; `gradient` in a purple-900 to purple-700
+   * gradient and `dusk` in purple-dusk, both with a white glyph (the Lais and
+   * human sides of the attendance selector).
    */
-  tone?: "accent" | "neutral";
+  tone?: SegmentTone;
 }
+
+type SegmentTone = "accent" | "neutral" | "gradient" | "dusk";
+
+/** Checked fill of an `icon` option per tone, over the variant's accent. */
+const ICON_TONE_CLASSES: Record<SegmentTone, string | undefined> = {
+  accent: undefined,
+  neutral: "aria-checked:bg-gray-100 aria-checked:text-gray-800",
+  gradient:
+    "aria-checked:bg-linear-to-r aria-checked:from-purple-900 aria-checked:to-purple-700",
+  dusk: "aria-checked:bg-purple-dusk",
+};
 
 interface SegmentedControlProps<T extends string>
   extends Omit<
@@ -143,9 +155,7 @@ function SegmentedControl<T extends string>({
             aria-label={iconOnly ? option.label : undefined}
             className={cn(
               segmentVariants({ variant }),
-              variant === "icon" &&
-                option.tone === "neutral" &&
-                "aria-checked:bg-gray-100 aria-checked:text-gray-800"
+              variant === "icon" && ICON_TONE_CLASSES[option.tone ?? "accent"]
             )}
             data-slot="segment"
             disabled={option.disabled}
@@ -173,4 +183,4 @@ function SegmentedControl<T extends string>({
 }
 
 export { SegmentedControl, segmentedControlVariants, segmentVariants };
-export type { SegmentedControlOption, SegmentedControlProps };
+export type { SegmentedControlOption, SegmentedControlProps, SegmentTone };

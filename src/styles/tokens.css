@@ -10,6 +10,9 @@
   --color-purple-200: #cebafc;
   --color-purple-100: #e6dbfe;
   --color-purple-50: #f4f0ff;
+  /* Desaturated purple between 800 and 900: the human side of the
+     attendance selector (Facelift Conversas). */
+  --color-purple-dusk: #48326e;
 
   --color-gray-900: #1a1a2e;
   --color-gray-800: #2d2d3f;
